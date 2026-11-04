@@ -1,0 +1,23 @@
+# Keep API keys and local settings out of Git.
+.env
+.env.*
+!.env.example
+
+# Ignore generated Python files.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Ignore local virtual environments.
+.venv/
+venv/
+
+# Ignore downloaded data and generated results.
+data/
+outputs/
+logs/
+
+# Ignore local databases.
+*.db
+*.sqlite
+*.sqlite3
