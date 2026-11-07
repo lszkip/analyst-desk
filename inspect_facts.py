@@ -28,3 +28,24 @@ for record in records[-5:]:
     print("Report type:", record["form"])
     print("Filed on:", record["filed"])
     print("Filing identifier:", record["accn"])
+
+# Find the annual-report entries for this exact twelve-month period.
+annual_records = [
+    record
+    for record in records
+    if record["form"] == "10-K"
+    and record.get("start") == "2025-07-01"
+    and record["end"] == "2026-06-30"
+]
+
+print("\n--- Selected full-year net income ---")
+
+if not annual_records:
+    print("No matching annual-report entry was found.")
+else:
+    # Show every match, keeping its filing information for verification.
+    for record in annual_records:
+        print(f"Net income: USD {record['val']:,}")
+        print("Period:", record["start"], "to", record["end"])
+        print("Filed on:", record["filed"])
+        print("Filing identifier:", record["accn"])
