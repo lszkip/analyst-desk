@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
+
 from fastapi import FastAPI, HTTPException
 from openai import OpenAI, APIError
 from pydantic import BaseModel, Field
@@ -39,17 +40,14 @@ client = OpenAI(
 
 app = FastAPI(title="Analyst Desk")
 
-
 # Describe the data someone must send to /ask.
 class AskRequest(BaseModel):
     question: str = Field(min_length=1, max_length=2000)
-
 
 # Keep our original health check.
 @app.get("/health")
 def health():
     return {"status": "ok"}
-
 
 # Run this function when someone sends a POST request to /ask.
 @app.post("/ask")
