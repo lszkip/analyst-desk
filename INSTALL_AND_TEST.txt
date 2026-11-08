@@ -1,0 +1,88 @@
+ANALYST DESK - FINANCIAL OUTPUT GUARDRAIL
+
+This update is based on the main.py and financial_tools.py shown in our chat.
+It contains complete replacement main.py and test_api.py files, plus a new
+output_guardrails.py. Keep your existing financial_tools.py, .env,
+requirements.txt and data folder.
+
+INSTALL
+1. Stop Uvicorn by pressing Ctrl+C in its terminal.
+2. Extract the downloaded ZIP.
+3. Copy the three .py files into /home/ls/projects/analyst-desk.
+   Replace main.py and test_api.py; add output_guardrails.py.
+   Put the files beside financial_tools.py, not in a nested subfolder.
+   From Windows File Explorer, you can open:
+   \\wsl.localhost\Ubuntu\home\ls\projects\analyst-desk
+4. In your VS Code command terminal:
+   cd ~/projects/analyst-desk
+   conda activate analyst-desk
+   python -m unittest -v test_api
+5. Expect 18 tests and OK. Messages saying 'Output guardrail blocked a response'
+   are expected during tests that deliberately introduce bad claims.
+6. Restart Uvicorn:
+   python -m uvicorn main:app --reload
+7. Open http://127.0.0.1:8000/docs and execute POST /ask with:
+   {"question": "What was Microsoft's annual net income in fiscal year 2025?"}
+   Expect guardrail.status = passed and checked_claims = 1, plus the evidence.
+8. Also try the two-year, missing-year and future-year questions below.
+   Real AI calls use your existing approved OpenRouter model and key.
+
+LIVE CHECKS
+- Show Microsoft's annual net income for fiscal years 2024 and 2025.
+  Expect two evidence entries and checked_claims = 2.
+- What was Microsoft's annual net income?
+  Expect a clarification and guardrail.status = not_applicable.
+  There is no chat memory yet: repeat the FULL question with the year included.
+- What was Microsoft's annual net income in fiscal year 2099?
+  A direct future-year reply is allowed: evidence empty, not_applicable.
+  A lookup returning not_found is also allowed: no invented figure,
+  guardrail.status = passed and checked_claims = 0.
+
+AFTER LOCAL TESTS AND LIVE CHECKS PASS
+git add main.py output_guardrails.py test_api.py
+git commit -m "Validate Microsoft financial claims against tool evidence"
+git push
+No new packages were added, so requirements.txt does not need regeneration.
+
+HOW IT WORKS
+- The model can select the existing financial tool or a supported direct reply.
+- Final AI responses are structured JSON drafts, not unrestricted prose.
+- Python checks claim company, concept, fiscal year, dates, exact integer amount,
+  currency and evidence reference against the tool results.
+- All successful tool results must be represented exactly once.
+- Python renders the final answer from the evidence after validation.
+- Without tool evidence, only predefined clarification/explanation replies can
+  be returned. This prevents unverified financial figures in free-form text.
+- Missing/conflicting tool results produce fixed, honest status explanations.
+- An invalid draft is blocked with HTTP 502 and code output_guardrail_blocked.
+  There is no automatic correction retry yet.
+
+SCOPE AND LIMITS
+This is a deliberately bounded first guardrail for Microsoft annual net income.
+Basic definitions of revenue, profit and net income have predefined wording.
+Other companies, metrics, calculations and broad free-form explanations are not
+supported by this version. We will extend these capabilities in later steps.
+
+The check establishes agreement with retrieved tool evidence. It does not
+independently authenticate SEC files, prove the source figure is correct,
+prove the model chose the right tool/year for the user's intent, or check
+which requested years the model omitted before retrieval. These need separate
+data-selection tests and live evaluation. The current lookup uses the latest
+matching filing, not an 'as known at that time' historical policy.
+
+VALIDATION
+18 offline tests passed locally before packaging. They use simulated AI and
+lookup responses and make no external calls. They test both successful answers
+and deliberate wrong amounts, years, companies, concepts, dates, currencies,
+references, missing evidence, duplicate/omitted claims and malformed output.
+These are software checks, not an evaluation of live model accuracy.
+The local validation imported a reconstruction of the previously supplied
+financial_tools.py; your real tool and file must be checked on your laptop.
+No live request using your IIT key was performed while preparing this update.
+
+The current OpenRouter documentation describes JSON-schema structured output:
+https://openrouter.ai/docs/guides/features/structured-outputs
+The model page lists tool calling and structured-output support:
+https://openrouter.ai/openai/gpt-4.1-mini
+main.py requires a provider supporting the requested parameters. If the live
+request returns HTTP 502, share the response and terminal error (not your key).
