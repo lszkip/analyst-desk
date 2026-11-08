@@ -1,88 +1,330 @@
-ANALYST DESK - FINANCIAL OUTPUT GUARDRAIL
+ANALYST DESK — CONNECT THE SHARED FINANCIAL LOOKUP TO /ask
+Updated: 9 November 2026 — missing-year regression fix
 
-This update is based on the main.py and financial_tools.py shown in our chat.
-It contains complete replacement main.py and test_api.py files, plus a new
-output_guardrails.py. Keep your existing financial_tools.py, .env,
-requirements.txt and data folder.
+MISSING-YEAR FIX IN THIS VERSION
 
-INSTALL
-1. Stop Uvicorn by pressing Ctrl+C in its terminal.
-2. Extract the downloaded ZIP.
-3. Copy the three .py files into /home/ls/projects/analyst-desk.
-   Replace main.py and test_api.py; add output_guardrails.py.
-   Put the files beside financial_tools.py, not in a nested subfolder.
-   From Windows File Explorer, you can open:
-   \\wsl.localhost\Ubuntu\home\ls\projects\analyst-desk
-4. In your VS Code command terminal:
-   cd ~/projects/analyst-desk
-   conda activate analyst-desk
-   python -m unittest -v test_api
-5. Expect 18 tests and OK. Messages saying 'Output guardrail blocked a response'
-   are expected during tests that deliberately introduce bad claims.
-6. Restart Uvicorn:
-   python -m uvicorn main:app --reload
-7. Open http://127.0.0.1:8000/docs and execute POST /ask with:
-   {"question": "What was Microsoft's annual net income in fiscal year 2025?"}
-   Expect guardrail.status = passed and checked_claims = 1, plus the evidence.
-8. Also try the two-year, missing-year and future-year questions below.
-   Real AI calls use your existing approved OpenRouter model and key.
+The live question "What was Google's annual revenue?" caused the model to
+choose 2023 and then 2025 in separate requests. The numbers matched the tool
+evidence, so the output guardrail passed. The missing check was whether the
+user had actually supplied a fiscal year.
 
-LIVE CHECKS
-- Show Microsoft's annual net income for fiscal years 2024 and 2025.
-  Expect two evidence entries and checked_claims = 2.
-- What was Microsoft's annual net income?
-  Expect a clarification and guardrail.status = not_applicable.
-  There is no chat memory yet: repeat the FULL question with the year included.
-- What was Microsoft's annual net income in fiscal year 2099?
-  A direct future-year reply is allowed: evidence empty, not_applicable.
-  A lookup returning not_found is also allowed: no invented figure,
-  guardrail.status = passed and checked_claims = 0.
+New request_guardrails.py recognises explicit four-digit year mentions and
+ascending ranges, such as FY2025 and 2023 through 2025. Before ANY lookup runs:
+- No recognised fiscal year: Python returns the fixed request for a year,
+  evidence [], guardrail not_applicable, checked_claims 0. A guessed model
+  tool call cannot bypass this. There is only one model request in this path.
+- A proposed year outside the recognised set: the whole batch is rejected
+  with HTTP 502 and code request_guardrail_blocked. No financial lookup runs.
+- Supported years: the existing lookup and evidence checks proceed.
 
-AFTER LOCAL TESTS AND LIVE CHECKS PASS
-git add main.py output_guardrails.py test_api.py
-git commit -m "Validate Microsoft financial claims against tool evidence"
-git push
-No new packages were added, so requirements.txt does not need regeneration.
+Common dates such as 2025-12-31 do not count as fiscal-year requests. Relative
+expressions (latest, last year), written-out years and abbreviated/reversed
+ranges require clarification rather than an inferred default. Definitions do
+not need a year because they do not request a financial lookup.
 
-HOW IT WORKS
-- The model can select the existing financial tool or a supported direct reply.
-- Final AI responses are structured JSON drafts, not unrestricted prose.
-- Python checks claim company, concept, fiscal year, dates, exact integer amount,
-  currency and evidence reference against the tool results.
-- All successful tool results must be represented exactly once.
-- Python renders the final answer from the evidence after validation.
-- Without tool evidence, only predefined clarification/explanation replies can
-  be returned. This prevents unverified financial figures in free-form text.
-- Missing/conflicting tool results produce fixed, honest status explanations.
-- An invalid draft is blocked with HTTP 502 and code output_guardrail_blocked.
-  There is no automatic correction retry yet.
+This is a narrow year-mention check, not complete question understanding.
+A mentioned year can still be associated with the wrong company or measure,
+and a model can omit a requested figure. Those are separate evaluation tasks.
 
-SCOPE AND LIMITS
-This is a deliberately bounded first guardrail for Microsoft annual net income.
-Basic definitions of revenue, profit and net income have predefined wording.
-Other companies, metrics, calculations and broad free-form explanations are not
-supported by this version. We will extend these capabilities in later steps.
+WHAT CHANGES IN THE SHARED API
 
-The check establishes agreement with retrieved tool evidence. It does not
-independently authenticate SEC files, prove the source figure is correct,
-prove the model chose the right tool/year for the user's intent, or check
-which requested years the model omitted before retrieval. These need separate
-data-selection tests and live evaluation. The current lookup uses the latest
-matching filing, not an 'as known at that time' historical policy.
+Before: /ask could call the earlier Microsoft annual-net-income function.
+After: /ask can call get_annual_financial_fact(ticker, metric, year, as_of).
+The same route supports every company configured in companies.json, provided
+its required facts and filing history are present. Data gaps remain explicit.
 
-VALIDATION
-18 offline tests passed locally before packaging. They use simulated AI and
-lookup responses and make no external calls. They test both successful answers
-and deliberate wrong amounts, years, companies, concepts, dates, currencies,
-references, missing evidence, duplicate/omitted claims and malformed output.
-These are software checks, not an evaluation of live model accuracy.
-The local validation imported a reconstruction of the previously supplied
-financial_tools.py; your real tool and file must be checked on your laptop.
-No live request using your IIT key was performed while preparing this update.
+This package requires the SEC generalisation update you already installed:
+company_registry.py, companies.json, sec_periods.py, financial_data.py and the
+other supporting files. Your 53 passing tests and 18 successful Microsoft/
+Alphabet coverage checks were the checkpoint before this integration.
 
-The current OpenRouter documentation describes JSON-schema structured output:
+The API tests require httpx==0.28.1, which you installed after the earlier
+missing-dependency error. Ensure requirements.txt includes that line once.
+If needed, install it in the active analyst-desk environment:
+
+    python -m pip install "httpx==0.28.1"
+
+This fix adds no further dependencies. No new API keys or data downloads are
+required for the two companies already prepared. The model stays
+openai/gpt-4.1-mini.
+
+INSTALL THE SIX COMPLETE FILES
+
+Stay on feature/company-financials. This ZIP replaces the previous API package.
+
+1. If Uvicorn is running, select its terminal (the one displaying server logs)
+   and press Ctrl+C once. Wait for the normal shell prompt.
+
+2. Extract this ZIP and copy all six files into ~/projects/analyst-desk,
+   beside your existing financial_data.py:
+
+   REPLACE main.py
+       Connects /ask to the shared lookup; validates the whole tool batch.
+
+   REPLACE output_guardrails.py
+       Checks company/measure/year evidence against the cache, then checks
+       the model's claims and renders an answer with SEC filing links.
+
+   REPLACE test_api.py
+       52 offline API, request/evidence guardrail and transport tests.
+
+   REPLACE INSTALL_AND_TEST.txt
+       These current instructions replace the earlier guardrail instructions.
+
+   REPLACE financial_contracts.py
+       Shared argument schema, tool name and six-lookup limit (unchanged).
+
+   ADD request_guardrails.py
+       Checks year mentions before any financial lookup is executed.
+
+Leave the existing data layer and test_financial_data.py in place. The old
+financial_tools.py may remain as a historical file; /ask no longer imports it.
+Do not delete files just to install this update.
+
+RUN THE OFFLINE TESTS
+
+In your project folder with the analyst-desk Conda environment active:
+
+    python -m unittest -v test_api.py test_financial_data.py
+
+Expected: 87 tests, ending with OK.
+That is 52 API/request/evidence/transport tests plus the existing 35 data tests.
+Fifteen tests were added for the year fix. The regression tests deliberately
+make the simulated AI guess a year and verify that no lookup executes.
+Negative cases deliberately print "Output guardrail blocked a response" or
+"Request guardrail blocked an unrequested fiscal year". These messages are
+expected when the final summary says OK.
+
+The tests use temporary invented company data. They do not change your real
+data/raw files, call the SEC or spend OpenRouter credits. One test uses the
+actual OpenAI SDK with an in-memory fake HTTP response, so it checks request
+serialization and response parsing without contacting OpenRouter.
+
+START THE SERVER
+
+    python -m uvicorn main:app --reload
+
+Leave that terminal running. Wait for "Application startup complete".
+Open http://127.0.0.1:8000/docs in your browser, expand POST /ask, click
+"Try it out", replace the request body, then click "Execute".
+
+If port 8000 is already in use, another Uvicorn process may still be running.
+Use its existing terminal and Ctrl+C before starting one replacement server.
+
+FIRST LIVE RETEST — MISSING YEAR
+
+    {"question": "What was Google's annual revenue?"}
+
+Expected HTTP 200, a request for the fiscal year, evidence [], and
+    "guardrail": {"status": "not_applicable", "checked_claims": 0}
+
+Then repeat with an explicit year:
+
+    {"question": "What was Google's annual revenue in fiscal year 2025?"}
+
+Expected one GOOGL revenue lookup for 2025 and guardrail passed/1.
+Download the responses and share them with the updated test summary.
+These live retests remain to be done on your laptop after copying the files.
+
+OTHER LIVE CHECKS — GOOGLE REVENUE
+
+    {
+      "question": "What was Google's annual revenue in fiscal year 2025?"
+    }
+
+Expected HTTP 200. Check the response body:
+    evidence[0].tool                 get_annual_financial_fact
+    evidence[0].arguments.ticker     GOOGL
+    evidence[0].arguments.metric     revenue
+    evidence[0].arguments.year       2025
+    evidence[0].arguments.as_of      null
+    evidence[0].result.status        ok
+    evidence[0].result.period_start  2025-01-01
+    evidence[0].result.period_end    2025-12-31
+    guardrail.status                passed
+    guardrail.checked_claims        1
+
+The answer should include the cached value, reporting dates, filing date and
+an SEC filing link. Swagger shows the answer as a JSON string; the link's
+Markdown syntax may be visible rather than clickable in that view. The same
+URL is available under evidence[0].result.sources.
+
+SECOND LIVE TEST — MICROSOFT OPERATING INCOME
+
+    {
+      "question": "What was Microsoft's annual operating income in fiscal year 2025?"
+    }
+
+Expected ticker MSFT, metric operating_income, year 2025, status ok,
+reporting period 2024-07-01 through 2025-06-30, and one checked claim.
+
+The earlier successful live examples below remain useful regression checks.
+
+ADDITIONAL LIVE CHECKS
+
+Each live /ask question makes one or two paid model requests. The following
+are useful next checks; the offline tests do not establish live routing quality.
+
+A. Four figures for two companies and two years:
+
+    {"question": "Show Microsoft's and Google's annual net income for fiscal years 2024 and 2025."}
+
+    Expect four evidence entries and four checked claims, one per company/year.
+    Google and Microsoft have different reporting dates. The output discloses
+    those dates; matching fiscal-year labels do not imply identical time periods.
+
+B. Specified future year with no cached record:
+
+    {"question": "What was Microsoft's annual net income in fiscal year 2099?"}
+
+    Expected: a lookup with year 2099, status not_found, no financial figure,
+    guardrail passed and checked_claims 0. This prompt now explicitly instructs
+    the model to perform complete supported lookup requests, including this
+    missing-data case. The guardrail does not itself prove that every possible
+    question was routed correctly; that requires separate evaluation.
+
+C. Missing year:
+
+    {"question": "What was Google's annual revenue?"}
+
+    Expected: a request for the fiscal year, evidence [], guardrail status
+    not_applicable and checked_claims 0. There is no conversation memory yet:
+    send the full question again, not just "2025".
+
+D. Explicit cutoff:
+
+    {"question": "What was Microsoft's annual net income for fiscal year 2025, using only filings dated on or before 2025-12-31?"}
+
+    Expected: arguments.as_of = "2025-12-31". The selected filing must not be
+    later than that cutoff. Values may differ from a later comparative filing.
+
+E. Definition:
+
+    {"question": "What is operating income?"}
+
+    Expected: a fixed explanation with no lookup and no numerical company claim.
+
+SAVE AFTER YOUR LIVE CHECKS PASS
+
+    git add main.py output_guardrails.py financial_contracts.py request_guardrails.py test_api.py INSTALL_AND_TEST.txt requirements.txt
+    git commit -m "Stop Microsoft and Google lookups from guessing missing years"
+    git push
+    git status
+
+Stay on feature/company-financials until we review this integration. A pull
+request can then describe both the shared data layer and the API connection.
+
+HOW THE REQUEST WORKS
+
+1. FastAPI accepts {"question": "..."} at /ask.
+2. The first model request selects tool arguments or a fixed clarification/
+   definition reply. Local validation rejects unknown companies or measures,
+   invalid dates, noninteger years, duplicate calls and extra arguments.
+   The request guardrail then checks all proposed years against explicit year
+   mentions in the original question before any lookup runs.
+3. Python executes at most six distinct cached lookups, in one tool round.
+   Example: two companies x three years x one measure = six lookups.
+4. A second model request proposes structured claims for successful results.
+   Missing/conflicting/unsupported results must not have numerical claims.
+5. The output gate repeats each requested lookup against the local cache and
+   requires exact agreement with the evidence, including snapshot hashes.
+   It then requires every successful result to have one matching AI claim.
+6. Python builds the final English answer from the verified results, including
+   source links. Unchecked AI prose is never returned as the answer.
+
+There is no second tool round and no unbounded retry loop. At most two model
+requests are made, each with a 30-second client timeout, zero automatic retries
+and a 4,000-output-token ceiling. These are per-request controls, not an overall
+account spending limit. Financial lookups and cache verification are local.
+
+WHY THE CACHE CHECK WAS ADDED
+
+The previous guardrail knew Microsoft's July-to-June calendar. A general tool
+cannot validate every company by using that same fixed calendar. This version
+compares each tool result with a deterministic lookup using the same requested
+company, measure, year and cutoff against the cached source files.
+
+This detects changed values, company/metric swaps, incorrect reporting periods,
+altered links, incomplete evidence and fabricated not_found results, even when
+the model copies the altered result. It also rejects a cache change between
+lookup and answer verification. Avoid refreshing data while requests run; retry
+after the refresh finishes if an in-flight request is blocked.
+
+The check reuses the same lookup algorithm. It is not an independent audit of
+the algorithm, accounting interpretation or original SEC data. A shared bug
+or bad source data still requires source review and evaluation to uncover.
+Hashes identify the bytes used; they are not proof of SEC authenticity.
+
+WHAT "PASSED" DOES AND DOES NOT MEAN
+
+guardrail passed means the returned numerical claims agree with the retrieved
+results and the current local snapshots under our selection rules. Zero checked
+claims is valid when all lookups returned missing/conflict/unsupported statuses.
+
+The guardrail does not independently establish that the model understood every
+part of the question or requested all required figures. For example, a model
+could select the wrong supported metric; its evidence might still be internally
+consistent. Live routing checks and the later labelled evaluation must assess
+that separate property. Definitions and clarification choices also need testing.
+
+SUPPORTED SCOPE AND KNOWN GAPS
+
+Supported: configured company + annual revenue, operating income or net income
+attributable to the parent + specified fiscal year, optionally with a filing-date
+cutoff. A bare year is interpreted as the company's fiscal year; actual start
+and end dates are included. Fiscal and calendar years are not interchangeable.
+
+Not yet implemented: calculated margins, growth or differences; forecasts;
+quarters; narrative filing retrieval; conversation memory; the full agent graph.
+Requests requiring those features should receive a fixed unsupported response.
+
+The configuration contains 15 distinct companies; only downloaded and supported
+data is available. This update does not fix the previously documented gaps:
+    AVGO FY2025 net_income: not_found under the parent-net-income definition.
+    IBM FY2023–FY2025 operating_income: not_found under the supported tag.
+    CRM FY2025 all three measures: conflicting annual-period labels.
+
+No alternative accounting measure or calendar is silently substituted.
+
+HTTP OUTCOMES
+
+200: A verified answer, an explicit missing/conflict/unsupported data result,
+     or a fixed clarification/definition/unsupported-request reply.
+422: Invalid input or a model-generated batch exceeding six lookups.
+503: Required local data is missing, unreadable or invalid. No final answer is
+     produced. The response identifies the company and gives controlled guidance.
+502: Model/provider failure, malformed tool calls, an unrequested fiscal year,
+     or failed output verification.
+     No unverified final answer is returned.
+
+If a result is missing in a valid cache, that is not_found (200). If the cache
+itself is missing, that is an operational data error (503), not evidence that
+the company has no financial data.
+
+VALIDATION PERFORMED WHILE PREPARING THIS PACKAGE
+
+Environment: separate Linux Python 3.12.14 test environment, not your laptop.
+87 offline tests passed: 52 API/request/evidence/transport + 35 data tests.
+The regression reproduces guessed 2023 and 2025 tool calls for the exact
+missing-year Google question. Both produce clarification with no data lookup.
+Explicit years, ranges, cutoff handling, future-year lookups and definitions
+are also covered. The model is simulated; this does not establish all live
+routing behaviour.
+
+The earlier API package, before this year fix, was exercised against the
+previously downloaded SEC snapshots for all 15 configured companies:
+    30 HTTP requests, each containing at most six scripted tool calls
+    135 financial lookups
+    128 ok, 4 not_found, 3 conflict
+    all 30 requests returned HTTP 200 with the corresponding checked statuses
+
+Those snapshot checks used scripted model responses. They verify integration
+with cached data, not the model's ability to interpret questions. No live
+OpenRouter calls or SEC downloads were made for this package's validation.
+The two live retests listed near the top are required to confirm this fix
+in your running app. Existing passing offline tests did not catch the original
+live-model error because the old clarification test supplied a correct reply.
+
+Official protocol references checked during implementation:
+https://openrouter.ai/docs/guides/features/tool-calling
 https://openrouter.ai/docs/guides/features/structured-outputs
-The model page lists tool calling and structured-output support:
-https://openrouter.ai/openai/gpt-4.1-mini
-main.py requires a provider supporting the requested parameters. If the live
-request returns HTTP 502, share the response and terminal error (not your key).

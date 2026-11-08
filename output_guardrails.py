@@ -1,22 +1,31 @@
-"""Check financial claims against tool evidence, then render trusted values."""
+"""Verify tool evidence against local snapshots, check claims, render facts.
 
-from datetime import date
-import re
+The cache replay detects changed/mislabelled tool results. It reuses the same
+deterministic lookup; it is NOT an independent audit of that lookup or SEC data.
+"""
+
+import json
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, ValidationError
 
+from company_registry import COMPANIES, DATA_DIR, filing_url
+from financial_contracts import FinancialFactArguments, TOOL_NAME, MAX_LOOKUPS
+from financial_data import get_annual_financial_fact
+
 
 class GuardrailError(ValueError):
-    """The draft must not be returned as an answer."""
+    """A draft or its evidence must not be returned as an answer."""
 
 
 class FinancialClaim(BaseModel):
-    # These fields describe one proposed financial claim from the AI.
     model_config = ConfigDict(extra="forbid", strict=True)
 
     evidence_id: str
+    ticker: str
     company: str
+    cik: str
+    metric: str
     concept: str
     fiscal_year: int
     period_start: str
@@ -26,157 +35,132 @@ class FinancialClaim(BaseModel):
 
 
 class AnswerDraft(BaseModel):
-    # There is deliberately no unrestricted answer-text field.
+    # The model selects claims or a fixed reply; it cannot add arbitrary prose.
     model_config = ConfigDict(extra="forbid", strict=True)
 
     kind: Literal[
-        "financial", "ask_year", "future_year", "unsupported",
-        "define_net_income", "define_revenue", "define_profit",
-        "compare_revenue_profit",
+        "financial", "ask_company", "ask_metric", "ask_year", "clarify_request",
+        "unsupported", "define_net_income", "define_operating_income",
+        "define_revenue", "define_profit", "compare_revenue_profit",
     ]
     claims: list[FinancialClaim]
 
 
-# The AI selects an appropriate reply; Python supplies its actual text.
+METRIC_LABELS = {
+    "revenue": "revenue",
+    "operating_income": "operating income",
+    "net_income": "net income attributable to the parent",
+}
+
 DIRECT_REPLIES = {
-    "ask_year": (
-        "Which Microsoft fiscal year would you like? "
-        "Please send the full question again with the year included."
-    ),
-    "future_year": (
-        "Actual reported financial results are not available for future "
-        "fiscal years. This tool does not provide forecasts."
-    ),
+    "ask_company": "Which company would you like? Please send the full question again with the company included.",
+    "ask_metric": "Which measure would you like: revenue, operating income or net income? Please send the full question again.",
+    "ask_year": "Which fiscal year would you like? Please send the full question again with a four-digit fiscal year, such as FY2025.",
+    "clarify_request": "Please specify the company, annual financial measure and fiscal year in one complete question.",
     "unsupported": (
-        "This version supports Microsoft's annual net income for up to "
-        "three specified fiscal years, plus basic definitions of revenue "
-        "and profit. It does not yet support other companies, metrics, "
-        "or calculated comparisons."
+        f"This version retrieves annual revenue, operating income and net income for configured companies, "
+        f"with up to {MAX_LOOKUPS} company/measure/year lookups per question. Available data varies by company. "
+        "It does not yet calculate growth, margins or differences, retrieve quarters, or provide forecasts. "
+        "Configured tickers: " + ", ".join(COMPANIES) + "."
     ),
     "define_net_income": (
-        "Net income is the profit or loss remaining after a company's "
-        "expenses, including interest and taxes, are accounted for."
+        "Net income is profit or loss after expenses, including interest and taxes. "
+        "This lookup uses net income attributable to the parent, excluding the portion attributable to noncontrolling interests."
     ),
-    "define_revenue": (
-        "Revenue is the income a business earns from selling goods "
-        "or services, before deducting its expenses."
-    ),
-    "define_profit": (
-        "Profit is income minus the relevant costs. Gross profit, "
-        "operating profit and net income subtract different sets of costs."
-    ),
-    "compare_revenue_profit": (
-        "Revenue is income from selling goods or services before expenses "
-        "are deducted. Profit is what remains after the relevant costs "
-        "are deducted."
-    ),
+    "define_operating_income": "Operating income is profit or loss from operations after operating expenses; it generally excludes interest and income taxes.",
+    "define_revenue": "Revenue is income from selling goods or services before the associated expenses are deducted.",
+    "define_profit": "Profit is income minus the relevant costs. Gross profit, operating income and net income subtract different sets of costs.",
+    "compare_revenue_profit": "Revenue is income from selling goods or services before expenses. Profit is what remains after the relevant costs are deducted.",
 }
 
 
-def check_and_render(draft_json: str, evidence: list[dict]) -> tuple[str, dict]:
-    # Local validation is required even when the provider promises JSON.
+def _canonical_json(value):
+    # Unlike Python equality, JSON distinguishes True from 1 and 1.0 from 1.
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+
+
+def verify_evidence(evidence, *, data_dir=None):
+    """Check request/result binding and exact agreement with the current cache.
+
+No network or model calls. Snapshot hashes are included in the comparison,
+so a cache change during a request causes rejection rather than mixed evidence.
+"""
+    if not isinstance(evidence, list) or len(evidence) > MAX_LOOKUPS:
+        raise GuardrailError("Invalid evidence collection.")
+    seen_ids, seen_requests = set(), set()
+    for item in evidence:
+        try:
+            if not isinstance(item, dict) or set(item) != {"id", "tool", "arguments", "result"}:
+                raise ValueError("Invalid evidence envelope")
+            evidence_id = item["id"]
+            if (not isinstance(evidence_id, str) or evidence_id != f"e{len(seen_ids) + 1}"
+                    or evidence_id in seen_ids or item["tool"] != TOOL_NAME):
+                raise ValueError("Invalid evidence identity")
+            arguments = FinancialFactArguments.model_validate(item["arguments"]).model_dump()
+            if _canonical_json(arguments) != _canonical_json(item["arguments"]):
+                raise ValueError("Arguments must be canonical")
+            request_key = _canonical_json(arguments)
+            if request_key in seen_requests:
+                raise ValueError("Duplicate financial request")
+            result = item["result"]
+            if not isinstance(result, dict) or result.get("status") not in {"ok", "not_found", "conflict", "unsupported_period"}:
+                raise ValueError("Invalid result status")
+            verified = get_annual_financial_fact(**arguments, data_dir=DATA_DIR if data_dir is None else data_dir)
+            if verified.get("status") == "error" or _canonical_json(result) != _canonical_json(verified):
+                raise ValueError("Result differs from the local snapshots")
+            seen_ids.add(evidence_id)
+            seen_requests.add(request_key)
+        except (OSError, ValueError, TypeError, KeyError):
+            raise GuardrailError("The tool evidence does not match its request and local SEC snapshots.") from None
+
+
+def check_and_render(draft_json: str, evidence: list[dict], *, data_dir=None) -> tuple[str, dict]:
     try:
         draft = AnswerDraft.model_validate_json(draft_json)
-    except ValidationError:
+    except (ValidationError, TypeError):
         raise GuardrailError("The AI returned an invalid answer structure.") from None
 
     if not evidence:
         if draft.kind == "financial" or draft.claims:
             raise GuardrailError("A financial claim has no retrieved evidence.")
-        return DIRECT_REPLIES[draft.kind], {
-            "status": "not_applicable",
-            "checked_claims": 0,
-        }
+        return DIRECT_REPLIES[draft.kind], {"status": "not_applicable", "checked_claims": 0}
 
-    # After a lookup, the draft must account for the retrieved results.
     if draft.kind != "financial":
         raise GuardrailError("The draft did not account for the tool results.")
+    verify_evidence(evidence, data_dir=data_dir)
 
-    expected = {}
-    lines = []
-    seen_evidence = set()
-    claim_fields = set(FinancialClaim.model_fields) - {"evidence_id"}
-
+    expected, lines = {}, []
+    fields = set(FinancialClaim.model_fields) - {"evidence_id"}
     for item in evidence:
-        try:
-            evidence_id = item["id"]
-            year = item["arguments"]["year"]
-            result = item["result"]
-            status = result["status"]
-
-            if (
-                item["tool"] != "get_msft_annual_net_income"
-                or type(year) is not int
-                or not 1900 <= year <= 2100
-                or not isinstance(evidence_id, str)
-                or not evidence_id
-                or evidence_id in seen_evidence
-            ):
-                raise ValueError("Invalid evidence metadata")
-            seen_evidence.add(evidence_id)
-
-            if status == "not_found":
-                lines.append(
-                    f"No matching annual net income record for Microsoft "
-                    f"FY{year} was found in the downloaded data. [{evidence_id}]"
-                )
-                continue
-
-            if status == "conflict":
-                lines.append(
-                    f"The matching Microsoft FY{year} records contain "
-                    f"conflicting net income values. No figure is reported. "
-                    f"[{evidence_id}]"
-                )
-                continue
-
-            if status != "ok":
-                raise ValueError("Unexpected tool status")
-
-            # Validate the evidence's types before comparing it with the draft.
-            fact = FinancialClaim.model_validate({
-                "evidence_id": evidence_id,
-                **{field: result[field] for field in claim_fields},
-            })
-
-            # These rules deliberately match our current Microsoft-only tool.
-            if (
-                fact.company != "MICROSOFT CORP"
-                or fact.concept != "NetIncomeLoss"
-                or fact.unit != "USD"
-                or fact.fiscal_year != year
-                or fact.period_start != f"{year - 1}-07-01"
-                or fact.period_end != f"{year}-06-30"
-            ):
-                raise ValueError("Unexpected company, concept or period")
-
-            filed = result["filed"]
-            date.fromisoformat(filed)
-            filing_ids = result["filing_identifiers"]
-            if (
-                not isinstance(filing_ids, list)
-                or not filing_ids
-                or any(
-                    not isinstance(value, str)
-                    or not re.fullmatch(r"\d{10}-\d{2}-\d{6}", value)
-                    for value in filing_ids
-                )
-            ):
-                raise ValueError("Invalid filing identifiers")
-
-            expected[evidence_id] = fact
-            # Render from the tool evidence, never from unchecked AI prose.
-            lines.append(
-                f"Microsoft's annual net income for FY{year} was "
-                f"{fact.unit} {fact.value:,}. Reporting period: "
-                f"{fact.period_start} to {fact.period_end}. "
-                f"Source filing(s): {', '.join(filing_ids)}; "
-                f"filed {filed}. [{evidence_id}]"
+        evidence_id, result, arguments = item["id"], item["result"], item["arguments"]
+        ticker, year, metric = arguments["ticker"], arguments["year"], arguments["metric"]
+        subject = f"{COMPANIES[ticker]['name']} ({ticker}), FY{year} {METRIC_LABELS[metric]}"
+        cutoff = f" using filings dated on or before {arguments['as_of']}" if arguments["as_of"] else ""
+        status = result["status"]
+        if status == "not_found":
+            lines.append(f"{subject}: no supported matching annual record was found in the cached SEC data{cutoff}. [{evidence_id}]")
+        elif status == "conflict":
+            lines.append(f"{subject}: conflicting records or reporting periods prevent a reliable selection{cutoff}. No figure is reported. [{evidence_id}]")
+        elif status == "unsupported_period":
+            lines.append(f"{subject}: a supported full-year reporting period could not be established{cutoff}. No figure is reported. [{evidence_id}]")
+        else:
+            try:
+                expected[evidence_id] = FinancialClaim.model_validate({
+                    "evidence_id": evidence_id, **{key: result[key] for key in fields},
+                })
+            except (KeyError, ValidationError):
+                raise GuardrailError("The successful result has invalid financial fields.") from None
+            links = "; ".join(
+                f"[SEC filing {accession}]({filing_url(ticker, accession)})"
+                for accession in result["filing_identifiers"]
             )
-        except (KeyError, TypeError, ValueError):
-            raise GuardrailError("The tool evidence is incomplete or invalid.") from None
+            lines.append(
+                f"{subject}: {result['unit']} {result['value']:,}. "
+                f"Reporting period: {result['period_start']} to {result['period_end']}. "
+                f"Latest matching annual filing in the cache{cutoff}, filed {result['filed']}. "
+                f"{links}. [{evidence_id}]"
+            )
 
-    # Each successful result must be represented exactly once in the draft.
     seen_claims = set()
     for claim in draft.claims:
         evidence_id = claim.evidence_id
@@ -185,11 +169,7 @@ def check_and_render(draft_json: str, evidence: list[dict]) -> tuple[str, dict]:
         if claim.model_dump() != expected[evidence_id].model_dump():
             raise GuardrailError("A financial claim does not match its evidence.")
         seen_claims.add(evidence_id)
-
     if seen_claims != set(expected):
         raise GuardrailError("The draft omitted a retrieved financial result.")
 
-    return "\n\n".join(lines), {
-        "status": "passed",
-        "checked_claims": len(seen_claims),
-    }
+    return "\n\n".join(lines), {"status": "passed", "checked_claims": len(seen_claims)}
