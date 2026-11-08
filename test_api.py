@@ -23,6 +23,7 @@ with patch.dict(os.environ, {"OPENROUTER_API_KEY": "test-placeholder"}), patch("
 from company_registry import COMPANIES
 from financial_data import get_annual_financial_fact
 from output_guardrails import FinancialClaim, GuardrailError, check_and_render
+from request_guardrails import requested_fiscal_years
 
 
 def args(ticker="MSFT", metric="net_income", year=2025, as_of=None):
@@ -191,13 +192,13 @@ class AskEndpointTests(unittest.TestCase):
     def test_missing_metric_is_distinct_from_missing_cache(self):
         self.change_facts(lambda tags: tags.pop("OperatingIncomeLoss"))
         self.prepare([args(metric="operating_income")])
-        response = self.ask()
+        response = self.ask("Microsoft operating income for FY2025?")
         self.assertEqual(response.status_code, 200, response.text)
         self.assertEqual(response.json()["evidence"][0]["result"]["code"], "metric_not_found")
 
     def test_mixed_found_and_missing_results_are_both_reported(self):
         self.prepare([args(), args("GOOGL", "net_income", 2099)])
-        response = self.ask()
+        response = self.ask("Show Microsoft net income for FY2025 and Google net income for FY2099.")
         self.assertEqual(response.status_code, 200, response.text)
         self.assertEqual(response.json()["guardrail"]["checked_claims"], 1)
         self.assertIn("USD 250", response.json()["answer"])
@@ -229,7 +230,7 @@ class AskEndpointTests(unittest.TestCase):
         for cutoff, status in (("2025-07-31", "not_found"), ("2025-08-01", "ok")):
             with self.subTest(cutoff=cutoff):
                 self.prepare([args(as_of=cutoff)])
-                response = self.ask()
+                response = self.ask(f"Microsoft net income for FY2025 using filings on or before {cutoff}?")
                 self.assertEqual(response.status_code, 200, response.text)
                 self.assertEqual(response.json()["evidence"][0]["result"]["status"], status)
                 self.assertIn(cutoff, response.json()["answer"])
@@ -266,6 +267,90 @@ class AskEndpointTests(unittest.TestCase):
                 self.assertEqual(response.status_code, 200, response.text)
                 self.assertEqual(response.json()["evidence"], [])
                 self.assertEqual(response.json()["guardrail"]["status"], "not_applicable")
+        self.lookup.assert_not_called()
+
+    def test_missing_year_overrides_guessed_2023_and_2025_before_lookup(self):
+        # Reproduces both live failures: the model ignores the clarification rule.
+        for guessed_year in (2023, 2025):
+            with self.subTest(guessed_year=guessed_year):
+                self.ai.reset_mock()
+                self.prepare([args("GOOGL", "revenue", guessed_year)])
+                response = self.ask("What was Google's annual revenue?")
+                self.assertEqual(response.status_code, 200, response.text)
+                body = response.json()
+                self.assertIn("Which fiscal year", body["answer"])
+                self.assertEqual(body["evidence"], [])
+                self.assertEqual(body["guardrail"], {"status": "not_applicable", "checked_claims": 0})
+                self.assertNotIn("USD", body["answer"])
+                self.lookup.assert_not_called()
+                self.ai.assert_called_once()
+
+    def test_missing_year_stops_the_entire_batch_before_lookup(self):
+        self.ai.return_value = fake_response(tool_calls=[
+            fake_tool_call(args(), 1), fake_tool_call(args("GOOGL"), 2)
+        ])
+        response = self.ask("Show Microsoft and Google annual net income.")
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(response.json()["evidence"], [])
+        self.lookup.assert_not_called()
+        self.ai.assert_called_once()
+
+    def test_relative_years_and_cutoff_only_require_a_fiscal_year(self):
+        questions = (
+            "What was Google's latest annual revenue?",
+            "What was Google's annual revenue last year?",
+            "Google annual revenue using filings on or before 2025-12-31?",
+            "Google annual revenue as of December 31, 2025?",
+            "Google annual revenue for FY2023-25?",
+            "Google annual revenue for 2025 through 2023?",
+        )
+        for question in questions:
+            with self.subTest(question=question):
+                self.ai.return_value = fake_response(tool_calls=[fake_tool_call(args("GOOGL", "revenue"))])
+                response = self.ask(question)
+                self.assertEqual(response.status_code, 200, response.text)
+                self.assertIn("Which fiscal year", response.json()["answer"])
+                self.assertEqual(response.json()["evidence"], [])
+        self.lookup.assert_not_called()
+
+    def test_unrequested_year_blocks_every_call_including_valid_first_call(self):
+        self.ai.return_value = fake_response(tool_calls=[
+            fake_tool_call(args(year=2024), 1), fake_tool_call(args("GOOGL", year=2025), 2)
+        ])
+        response = self.ask("Show Microsoft and Google annual net income for FY2024.")
+        self.assertEqual(response.status_code, 502, response.text)
+        self.assertEqual(response.json()["detail"]["code"], "request_guardrail_blocked")
+        self.assertNotIn("answer", response.json())
+        self.lookup.assert_not_called()
+        self.ai.assert_called_once()
+
+    def test_cutoff_year_cannot_replace_the_requested_fiscal_year(self):
+        self.ai.return_value = fake_response(tool_calls=[fake_tool_call(args(year=2025, as_of="2025-12-31"))])
+        response = self.ask("Microsoft net income for FY2024 using filings on or before 2025-12-31?")
+        self.assertEqual(response.status_code, 502, response.text)
+        self.assertEqual(response.json()["detail"]["code"], "request_guardrail_blocked")
+        self.lookup.assert_not_called()
+
+    def test_explicit_year_notations_still_allow_lookup(self):
+        for expression in ("2025", "FY2025", "FY 2025", "fiscal year 2025"):
+            with self.subTest(expression=expression):
+                self.prepare([args("GOOGL", "revenue")])
+                response = self.ask(f"What was Google's annual revenue in {expression}?")
+                self.assertEqual(response.status_code, 200, response.text)
+                self.assertEqual(response.json()["guardrail"]["checked_claims"], 1)
+
+    def test_explicit_year_range_allows_the_middle_year(self):
+        self.prepare([args("GOOGL", "revenue", year) for year in (2023, 2024, 2025)])
+        response = self.ask("Show Google's annual revenue for 2023 through 2025.")
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(response.json()["guardrail"]["checked_claims"], 3)
+
+    def test_definition_without_year_still_returns_definition(self):
+        self.ai.return_value = fake_response(content=draft("define_revenue"))
+        response = self.ask("What is revenue?")
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertIn("Revenue is", response.json()["answer"])
+        self.assertEqual(response.json()["evidence"], [])
         self.lookup.assert_not_called()
 
     def test_invalid_arguments_rejected_before_any_lookup(self):
@@ -361,7 +446,7 @@ class AskEndpointTests(unittest.TestCase):
 
     def test_claim_for_missing_result_is_blocked(self):
         self.prepare([args(year=2099)], content=draft(claims=[make_claim(self.result())]))
-        self.assert_blocked(self.ask())
+        self.assert_blocked(self.ask("Microsoft net income for FY2099?"))
 
     def test_cross_company_evidence_swap_is_blocked(self):
         msft, google = self.result(), self.result(args("GOOGL"))
@@ -458,6 +543,42 @@ class AskEndpointTests(unittest.TestCase):
         self.assertEqual(requests[0]["provider"], {"require_parameters": True})
         self.assertEqual(requests[0]["response_format"]["type"], "json_schema")
         self.assertEqual(requests[1]["tool_choice"], "none")
+
+
+class RequestedFiscalYearTests(unittest.TestCase):
+    def test_explicit_year_labels_and_lists(self):
+        for question in (
+            "Google revenue for 2023, 2024 and 2025",
+            "Google revenue for FY2023, FY 2024 and fiscal year 2025",
+        ):
+            self.assertEqual(requested_fiscal_years(question), {2023, 2024, 2025})
+
+    def test_inclusive_ranges_keep_middle_year(self):
+        for expression in ("2023-2025", "2023–2025", "2023—2025", "FY2023 to FY2025", "2023 through 2025"):
+            self.assertEqual(requested_fiscal_years(f"Google revenue {expression}"), {2023, 2024, 2025})
+
+    def test_dates_are_not_fiscal_year_labels(self):
+        for cutoff in ("2025-12-31", "2025/12/31", "31/12/2025", "December 31, 2025", "31 December 2025", "December 2025"):
+            with self.subTest(cutoff=cutoff):
+                self.assertEqual(requested_fiscal_years(f"Google revenue as of {cutoff}"), set())
+                self.assertEqual(requested_fiscal_years(f"Google FY2024 revenue as of {cutoff}"), {2024})
+
+    def test_missing_relative_and_word_years_do_not_invent_defaults(self):
+        for expression in ("", "latest", "last year", "twenty twenty-five"):
+            self.assertEqual(requested_fiscal_years(f"Google revenue {expression}"), set())
+
+    def test_short_or_reversed_ranges_require_clarification(self):
+        for expression in ("2023-25", "FY2023-25", "FY2023/24", "2025 through 2023"):
+            self.assertEqual(requested_fiscal_years(f"Google revenue {expression}"), set())
+
+    def test_urls_amounts_and_long_identifiers_do_not_supply_years(self):
+        for expression in ("https://example.invalid/2025/report", "USD 2025", "$2025", "2025 million", "2025.50", "120250", "report2025"):
+            with self.subTest(expression=expression):
+                self.assertEqual(requested_fiscal_years(f"Google revenue {expression}"), set())
+
+    def test_normalised_text_and_specified_future_year_are_supported(self):
+        self.assertEqual(requested_fiscal_years("Google revenue in FY２０２５"), {2025})
+        self.assertEqual(requested_fiscal_years("Microsoft net income for FY2099"), {2099})
 
 
 if __name__ == "__main__":

@@ -55,7 +55,7 @@ METRIC_LABELS = {
 DIRECT_REPLIES = {
     "ask_company": "Which company would you like? Please send the full question again with the company included.",
     "ask_metric": "Which measure would you like: revenue, operating income or net income? Please send the full question again.",
-    "ask_year": "Which fiscal year would you like? Please send the full question again with the year included.",
+    "ask_year": "Which fiscal year would you like? Please send the full question again with a four-digit fiscal year, such as FY2025.",
     "clarify_request": "Please specify the company, annual financial measure and fiscal year in one complete question.",
     "unsupported": (
         f"This version retrieves annual revenue, operating income and net income for configured companies, "

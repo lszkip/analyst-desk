@@ -15,6 +15,7 @@ from company_registry import COMPANIES, DATA_DIR
 from financial_contracts import FinancialFactArguments, TOOL_NAME, MAX_LOOKUPS
 from financial_data import get_annual_financial_fact
 from output_guardrails import AnswerDraft, GuardrailError, check_and_render
+from request_guardrails import requested_fiscal_years
 
 load_dotenv(Path(__file__).resolve().parent / ".env")
 api_key = os.getenv("OPENROUTER_API_KEY")
@@ -67,6 +68,9 @@ Supported measures are revenue, operating_income, and net_income (attributable
 to the parent). Do not silently substitute other measures or companies.
 Interpret a bare year as that company's FISCAL year and disclose actual dates.
 Do not guess a missing year, company, measure or an unspecified 'latest' year.
+Fiscal years must be explicitly written as four digits, such as FY2025 or
+2023 through 2025. A filing-date cutoff alone does not specify a fiscal year.
+Ask for an explicit year for relative dates such as 'last year' or 'latest'.
 For 'profit' without a clear definition, ask which measure is intended.
 
 Request ALL necessary lookups in one tool round, at most {MAX_LOOKUPS} distinct
@@ -156,6 +160,19 @@ def ask(request: AskRequest):
         message = request_ai(messages, "auto")
         if message.tool_calls:
             validated = validate_tool_calls(message.tool_calls)
+            # A valid tool schema does not prove that the user chose its year.
+            # Check the entire batch BEFORE reading any financial data.
+            requested_years = requested_fiscal_years(question)
+            if not requested_years:
+                clarification = AnswerDraft(kind="ask_year", claims=[]).model_dump_json()
+                answer, guardrail = check_and_render(clarification, [], data_dir=DATA_DIR)
+                return {"answer": answer, "model": MODEL, "evidence": [], "guardrail": guardrail}
+            if any(arguments.year not in requested_years for _, arguments in validated):
+                logger.warning("Request guardrail blocked an unrequested fiscal year.")
+                raise HTTPException(status_code=502, detail={
+                    "code": "request_guardrail_blocked",
+                    "message": "The AI requested a fiscal year that could not be matched to your question. No financial lookup was run. Please state each fiscal year using four digits and try again.",
+                })
             messages.append({"role": "assistant", "content": message.content,
                              "tool_calls": [call.model_dump(exclude_none=True) for call, _ in validated]})
             for call, arguments in validated:
