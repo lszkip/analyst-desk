@@ -21,3 +21,6 @@ logs/
 *.db
 *.sqlite
 *.sqlite3
+
+# Ignore Windows download metadata
+*:Zone.Identifier

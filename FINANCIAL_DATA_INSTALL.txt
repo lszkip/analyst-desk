@@ -1,0 +1,163 @@
+ANALYST DESK: MULTI-COMPANY FINANCIAL DATA FOUNDATION
+
+What this step adds
+-------------------
+One reusable Python function:
+    get_annual_financial_fact(ticker, metric, year)
+
+Companies: MSFT (Microsoft), GOOGL (Alphabet). GOOG is an alias for GOOGL.
+Metrics: revenue, operating_income, net_income.
+The requested year is an input, not a hard-coded test year. Results depend on
+which annual records are available in the downloaded SEC data.
+
+This is the data foundation. /ask still uses the existing Microsoft-only tool
+and guardrail. API integration is the next step after verifying these files.
+These are four NEW files; no existing application files need replacing.
+
+1. Create the feature branch BEFORE adding these files
+-----------------------------------------------------
+In the VS Code terminal, from ~/projects/analyst-desk:
+
+    git switch -c feature/company-financials
+
+Your previous screenshot confirmed that main includes the merged guardrail.
+If this branch already exists, use git switch feature/company-financials.
+
+2. Copy ALL four files from this ZIP into the project root
+--------------------------------------------------------
+    financial_data.py
+    download_company_facts.py
+    test_financial_data.py
+    FINANCIAL_DATA_INSTALL.txt
+
+Put them beside main.py, not inside data/raw or a new nested folder.
+Windows Explorer project path:
+    \\wsl.localhost\Ubuntu\home\ls\projects\analyst-desk
+
+No new packages are required. The downloader uses python-dotenv, which your
+project already has. Use your activated analyst-desk conda environment.
+Uvicorn can continue running while these independent files are added.
+
+3. Run the automated tests
+-------------------------
+    python -m unittest -v test_api.py test_financial_data.py
+
+Expected for the current project version: Ran 45 tests, then OK.
+These are 18 existing tests plus 27 new tests. They use invented/mocked records
+and do not contact OpenRouter or SEC. "Output guardrail blocked..." messages
+are expected in negative API tests when the final test result is OK.
+
+4. Prepare the actual company data
+---------------------------------
+Your existing .env should already contain SEC_USER_AGENT with your project name
+and contact email. This downloader does not use your OpenRouter API key.
+
+    python download_company_facts.py MSFT GOOGL
+
+This reuses your existing MSFT_companyfacts.json after checking its company ID
+and structure, and downloads GOOGL_companyfacts.json if it is missing.
+The command downloads a company's available facts together, not one file for
+each year. Files are stored in data/raw beside the existing Microsoft data.
+New downloads include a metadata JSON file with source URL, UTC download time
+and a SHA-256 fingerprint. Reusing a cache never invents a new download time.
+
+To explicitly update a cached snapshot later:
+    python download_company_facts.py GOOGL --refresh
+
+If an HTTP error occurs, keep the output and check your SEC_USER_AGENT and
+connection. An invalid or failed response is not installed over the cache.
+The downloader validates before saving and writes each file atomically. The
+data file and metadata file are separate writes, not a two-file transaction.
+
+5. Try the lookup directly, without the AI
+----------------------------------------
+    python financial_data.py MSFT net_income 2025
+    python financial_data.py GOOGL revenue 2025
+    python financial_data.py GOOGL operating_income 2024
+
+Expect status "ok", the requested company and metric, reporting dates, an
+integer USD value, filing identifiers and SEC filing links under "sources".
+
+Try another year by changing only the last argument. For example:
+    python financial_data.py MSFT revenue 2023
+
+Missing-data example:
+    python financial_data.py MSFT net_income 2099
+
+Expect status "not_found" and no top-level value. The CLI returns exit code 1
+for not_found/conflict/error; a terminal may show a red exit marker for these.
+
+6. Save the verified feature on its branch
+----------------------------------------
+After the tests and direct lookups work on your machine:
+
+    git add financial_data.py download_company_facts.py test_financial_data.py FINANCIAL_DATA_INSTALL.txt
+    git commit -m "Add annual financial lookup for Microsoft and Alphabet"
+    git push -u origin feature/company-financials
+
+Keep this branch for the next step: connecting the new function to /ask and
+extending its output guardrail. Merge when that complete feature is verified.
+Stage the named source files only. Cached company data belongs under data/,
+which is already ignored by the project's .gitignore. No pip freeze is needed
+because this update adds no dependencies.
+
+How selection works
+-------------------
+- Explicit supported-company configuration: Microsoft ends June 30; Alphabet
+  ends December 31. Adding other companies requires checking their calendars
+  and financial concept mappings first.
+- Full-year reporting dates must match exactly. Quarterly and year-to-date
+  records, proxy statements and other forms are not selected.
+- Only 10-K and 10-K/A annual filings, standard US-GAAP concepts and USD units
+  are used. This does not retrieve segments or custom company-specific tags.
+- The filing's fy field can describe a later filing that repeats earlier-year
+  results. The lookup uses start/end dates to select the requested fiscal year.
+- Revenue has a small, explicit list of alternative concept names. The latest
+  filing date is selected across all mapped names, so an older tag cannot hide
+  a newer annual filing. Disagreement on that latest date returns conflict.
+- By default, the latest matching filing in the local snapshot is used. It may
+  repeat or restate an earlier year. This is not necessarily the original value
+  first published for that year.
+- An optional filing-date cutoff is supported:
+    python financial_data.py MSFT net_income 2025 --as-of 2025-08-01
+  This restricts selection to filings dated on or before that date. It is not
+  a complete historical reconstruction of the SEC API as it looked that day.
+- The snapshot hash identifies the exact local bytes. JSON indentation does
+  not change the extracted values, but does change the byte fingerprint.
+- The fiscal calendars differ: FY2025 is not the same time window for these
+  two companies. Any later comparison must display the actual reporting dates.
+
+Status meanings
+---------------
+ok: a value was selected with its filing references.
+not_found: no matching annual USD fact exists within the requested selection.
+conflict: latest matching records disagree; no single value is reported.
+error: the cached file is missing, unreadable, invalid or for another company.
+Invalid company/metric/year arguments are rejected before reading any file.
+
+Validation performed before delivery
+------------------------------------
+- 27 new offline tests passed.
+- 18 existing API/guardrail tests passed alongside them: 45 total.
+  Local regression validation used the previously supplied application files
+  and a reconstruction of the existing financial_tools.py. Run the command in
+  step 3 against your own project to confirm your exact checkout.
+- Fresh SEC companyfacts downloads for both CIKs were exercised for 2023, 2024
+  and 2025, for all three metrics: 18 successful real-data lookups.
+- Future FY2099 returned not_found. No model/API credits were used.
+- Real-data lookups are smoke checks, not a comprehensive accounting audit or
+  a substitute for the capstone's broader held-out evaluation.
+
+Official sources
+----------------
+SEC companyfacts API and scope:
+https://www.sec.gov/search-filings/edgar-application-programming-interfaces
+SEC fair-access guidance:
+https://www.sec.gov/about/developer-resources
+Microsoft annual report, fiscal year ending June 30:
+https://www.microsoft.com/investor/reports/ar25/index.html
+Alphabet annual report, fiscal year ending December 31:
+https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm
+Companyfacts data sources:
+https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json
+https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json
