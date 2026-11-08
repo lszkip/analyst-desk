@@ -1,163 +1,260 @@
-ANALYST DESK: MULTI-COMPANY FINANCIAL DATA FOUNDATION
+ANALYST DESK — SHARED SEC COMPANY AND FISCAL-PERIOD LOOKUP
+Prepared: 8 November 2026
 
-What this step adds
--------------------
-One reusable Python function:
-    get_annual_financial_fact(ticker, metric, year)
+WHAT THIS STEP DOES
 
-Companies: MSFT (Microsoft), GOOGL (Alphabet). GOOG is an alias for GOOGL.
-Metrics: revenue, operating_income, net_income.
-The requested year is an input, not a hard-coded test year. Results depend on
-which annual records are available in the downloaded SEC data.
+Your previous checkpoint is commit 22ee67c on feature/company-financials:
+"Add Microsoft and Alphabet (Google) financial lookups".
 
-This is the data foundation. /ask still uses the existing Microsoft-only tool
-and guardrail. API integration is the next step after verifying these files.
-These are four NEW files; no existing application files need replacing.
+This update removes the fixed company calendars from the financial lookup.
+One shared function accepts a configured company, financial measure and fiscal
+year. Company identities are configuration; their annual reporting dates come
+from cached SEC facts and filing-history metadata.
 
-1. Create the feature branch BEFORE adding these files
------------------------------------------------------
-In the VS Code terminal, from ~/projects/analyst-desk:
+First validate Microsoft and Alphabet again. The configuration also contains
+15 candidate companies for the capstone, but configuration is NOT proof of
+complete data coverage. The known gaps below remain work to resolve.
 
-    git switch -c feature/company-financials
+The /ask endpoint is unchanged at this step. It still uses the earlier
+Microsoft-only function. Connecting the shared lookup to /ask also requires
+updating its tool schema, evidence checks and API tests; that is a separate step.
 
-Your previous screenshot confirmed that main includes the merged guardrail.
-If this branch already exists, use git switch feature/company-financials.
+1. INSTALL THE EIGHT COMPLETE FILES
 
-2. Copy ALL four files from this ZIP into the project root
---------------------------------------------------------
-    financial_data.py
-    download_company_facts.py
-    test_financial_data.py
-    FINANCIAL_DATA_INSTALL.txt
+Stay on feature/company-financials. Do not create another branch for this step.
+Extract this ZIP and copy these files beside main.py in:
 
-Put them beside main.py, not inside data/raw or a new nested folder.
-Windows Explorer project path:
-    \\wsl.localhost\Ubuntu\home\ls\projects\analyst-desk
+    ~/projects/analyst-desk
 
-No new packages are required. The downloader uses python-dotenv, which your
-project already has. Use your activated analyst-desk conda environment.
-Uvicorn can continue running while these independent files are added.
+Replace these four existing files:
+    financial_data.py             Shared annual-value lookup
+    download_company_facts.py     Facts and filing-history downloader
+    test_financial_data.py        Offline tests for the new data layer
+    FINANCIAL_DATA_INSTALL.txt    These instructions
 
-3. Run the automated tests
--------------------------
+Add these four files:
+    companies.json               Company names, tickers, CIKs and aliases
+    company_registry.py          Loads and validates that configuration
+    sec_periods.py               Finds annual periods from SEC records
+    check_financial_coverage.py   Checks many cached lookups automatically
+
+No changes are needed to main.py, output_guardrails.py, test_api.py,
+financial_tools.py, requirements.txt or .env for this step.
+There are no new third-party dependencies. The downloader continues to use
+python-dotenv and your existing SEC_USER_AGENT setting.
+
+2. RUN THE OFFLINE TESTS
+
+Use the terminal with a normal prompt, not the one occupied by Uvicorn.
+From your project folder, with the analyst-desk environment active:
+
     python -m unittest -v test_api.py test_financial_data.py
 
-Expected for the current project version: Ran 45 tests, then OK.
-These are 18 existing tests plus 27 new tests. They use invented/mocked records
-and do not contact OpenRouter or SEC. "Output guardrail blocked..." messages
-are expected in negative API tests when the final test result is OK.
+Expected: 53 tests and OK (18 existing API tests plus 35 data-layer tests).
+Some API tests intentionally trigger "Output guardrail blocked a response".
+Those messages are expected when the final test result is OK.
 
-4. Prepare the actual company data
----------------------------------
-Your existing .env should already contain SEC_USER_AGENT with your project name
-and contact email. This downloader does not use your OpenRouter API key.
+These tests use invented SEC fixtures and mocked model/network responses.
+They do not spend OpenRouter credits or make live SEC requests.
+
+3. PREPARE MICROSOFT AND ALPHABET'S FILING HISTORY
 
     python download_company_facts.py MSFT GOOGL
 
-This reuses your existing MSFT_companyfacts.json after checking its company ID
-and structure, and downloads GOOGL_companyfacts.json if it is missing.
-The command downloads a company's available facts together, not one file for
-each year. Files are stored in data/raw beside the existing Microsoft data.
-New downloads include a metadata JSON file with source URL, UTC download time
-and a SHA-256 fingerprint. Reusing a cache never invents a new download time.
+The downloader reuses existing company-facts files and prepares the additional
+filing-history files. For each company it needs:
 
-To explicitly update a cached snapshot later:
-    python download_company_facts.py GOOGL --refresh
+    data/raw/MSFT_companyfacts.json
+    data/raw/MSFT_filings.json
 
-If an HTTP error occurs, keep the output and check your SEC_USER_AGENT and
-connection. An invalid or failed response is not installed over the cache.
-The downloader validates before saving and writes each file atomically. The
-data file and metadata file are separate writes, not a two-file transaction.
+Equivalent GOOGL files are created too. The raw SEC submissions responses and
+their metadata are kept under data/raw/sec_submissions/. Old annual filings
+can live on separate SEC history pages, so the downloader follows every page
+listed by the company's submissions response.
 
-5. Try the lookup directly, without the AI
-----------------------------------------
+Your existing readable/indented company-facts JSON remains valid. Formatting
+changes its byte hash, but not its financial content.
+
+If downloading is interrupted, rerun the same command. Completed raw downloads
+are cached. A new complete filing index is written only after its pages succeed.
+
+4. CHECK TWO INDIVIDUAL RESULTS
+
     python financial_data.py MSFT net_income 2025
     python financial_data.py GOOGL revenue 2025
-    python financial_data.py GOOGL operating_income 2024
 
-Expect status "ok", the requested company and metric, reporting dates, an
-integer USD value, filing identifiers and SEC filing links under "sources".
+Check status="ok", the company, fiscal year, reporting dates and sources.
+MSFT FY2025 should cover 2024-07-01 through 2025-06-30.
+GOOGL FY2025 should cover 2025-01-01 through 2025-12-31.
 
-Try another year by changing only the last argument. For example:
-    python financial_data.py MSFT revenue 2023
+The response now distinguishes:
 
-Missing-data example:
-    python financial_data.py MSFT net_income 2099
+    period_sources: filings used to establish which dates belong to the year.
+    sources: filings supplying the selected financial value for those dates.
 
-Expect status "not_found" and no top-level value. The CLI returns exit code 1
-for not_found/conflict/error; a terminal may show a red exit marker for these.
+A later annual filing may report an older year's comparative figure. Therefore
+the filing date supplying the value can be later than the fiscal year requested.
+This is intentional and is disclosed by selection_policy and the source links.
 
-6. Save the verified feature on its branch
-----------------------------------------
-After the tests and direct lookups work on your machine:
+5. CHECK ALL THREE MEASURES FOR BOTH COMPANIES
 
-    git add financial_data.py download_company_facts.py test_financial_data.py FINANCIAL_DATA_INSTALL.txt
-    git commit -m "Add annual financial lookup for Microsoft and Alphabet"
-    git push -u origin feature/company-financials
+    python check_financial_coverage.py --tickers MSFT GOOGL --years 2023 2024 2025
 
-Keep this branch for the next step: connecting the new function to /ask and
-extending its output guardrail. Merge when that complete feature is verified.
-Stage the named source files only. Cached company data belongs under data/,
-which is already ignored by the project's .gitignore. No pip freeze is needed
-because this update adds no dependencies.
+This runs 2 companies x 3 years x 3 measures = 18 lookups.
+Expected with the validated snapshots: "Checked 18 lookups: ok=18".
+It reads the local cache; it does not call AI or download anything.
 
-How selection works
--------------------
-- Explicit supported-company configuration: Microsoft ends June 30; Alphabet
-  ends December 31. Adding other companies requires checking their calendars
-  and financial concept mappings first.
-- Full-year reporting dates must match exactly. Quarterly and year-to-date
-  records, proxy statements and other forms are not selected.
-- Only 10-K and 10-K/A annual filings, standard US-GAAP concepts and USD units
-  are used. This does not retrieve segments or custom company-specific tags.
-- The filing's fy field can describe a later filing that repeats earlier-year
-  results. The lookup uses start/end dates to select the requested fiscal year.
-- Revenue has a small, explicit list of alternative concept names. The latest
-  filing date is selected across all mapped names, so an older tag cannot hide
-  a newer annual filing. Disagreement on that latest date returns conflict.
-- By default, the latest matching filing in the local snapshot is used. It may
-  repeat or restate an earlier year. This is not necessarily the original value
-  first published for that year.
-- An optional filing-date cutoff is supported:
-    python financial_data.py MSFT net_income 2025 --as-of 2025-08-01
-  This restricts selection to filings dated on or before that date. It is not
-  a complete historical reconstruction of the SEC API as it looked that day.
-- The snapshot hash identifies the exact local bytes. JSON indentation does
-  not change the extracted values, but does change the byte fingerprint.
-- The fiscal calendars differ: FY2025 is not the same time window for these
-  two companies. Any later comparison must display the actual reporting dates.
+At this point, share the test summary and coverage summary before moving on.
 
-Status meanings
----------------
-ok: a value was selected with its filing references.
-not_found: no matching annual USD fact exists within the requested selection.
-conflict: latest matching records disagree; no single value is reported.
-error: the cached file is missing, unreadable, invalid or for another company.
-Invalid company/metric/year arguments are rejected before reading any file.
+6. SAVE THIS STEP AFTER YOUR CHECKS PASS
 
-Validation performed before delivery
-------------------------------------
-- 27 new offline tests passed.
-- 18 existing API/guardrail tests passed alongside them: 45 total.
-  Local regression validation used the previously supplied application files
-  and a reconstruction of the existing financial_tools.py. Run the command in
-  step 3 against your own project to confirm your exact checkout.
-- Fresh SEC companyfacts downloads for both CIKs were exercised for 2023, 2024
-  and 2025, for all three metrics: 18 successful real-data lookups.
-- Future FY2099 returned not_found. No model/API credits were used.
-- Real-data lookups are smoke checks, not a comprehensive accounting audit or
-  a substitute for the capstone's broader held-out evaluation.
+    git add companies.json company_registry.py sec_periods.py financial_data.py download_company_facts.py test_financial_data.py check_financial_coverage.py FINANCIAL_DATA_INSTALL.txt
+    git diff --cached --stat
+    git commit -m "Use SEC reporting periods for Microsoft, Google and other configured companies"
+    git push
 
-Official sources
-----------------
-SEC companyfacts API and scope:
+Only the eight intended files should appear in the staged summary.
+Keep feature/company-financials open while we integrate and test /ask.
+
+HOW AN ANNUAL PERIOD IS CHOSEN
+
+1. Load the company's SEC identity from companies.json.
+2. Join annual facts to filing metadata using their accession number.
+3. Use records whose filing fiscal-year label matches the requested year and
+   whose end date matches that filing's reportDate. This avoids mistaking an
+   older comparative figure for the filing's current year.
+4. Require a full-year duration of 350–380 days. This covers ordinary calendar
+   years and 52/53-week years without writing a calendar formula per company.
+5. If more than one annual period matches, return conflict; do not guess.
+6. Select the requested measure for the exact start/end dates, using the latest
+   matching annual filing in the snapshot (subject to an optional as-of cutoff).
+7. Return source links and hashes of both input snapshots.
+
+The fiscal-year label is not assumed to equal the calendar year of the end date.
+The accepted input range is 1900–2100, but actual availability depends on the
+cached SEC records. Passing a year does not create data for it.
+
+SUPPORTED MEASURES AND LIMITATIONS
+
+revenue:
+    RevenueFromContractWithCustomerExcludingAssessedTax, Revenues or
+    SalesRevenueNet. Latest matching filing date is considered across tags;
+    disagreement on that date produces conflict.
+
+operating_income:
+    OperatingIncomeLoss.
+
+net_income:
+    NetIncomeLoss (net income/loss attributable to the parent).
+    ProfitLoss, which includes the noncontrolling-interest portion, is not
+    silently treated as the same measure.
+
+This version handles supported US-GAAP USD facts in 10-K and 10-K/A filings.
+It does not yet handle custom company tags, IFRS/20-F, quarterly data, segments,
+derived measures or unusual short/long transition years. Choosing a familiar
+tag is not a substitute for independently checking its accounting meaning.
+
+Status meanings:
+    ok                  A supported value and reporting period were selected.
+    not_found           No supported matching period or measure in this cache.
+    conflict            Available matching records disagree; no value selected.
+    unsupported_period  Only a nonstandard/shorter period could be established.
+    error               A required local file is missing, invalid or inconsistent.
+
+not_found does not assert that the company's filing contains no such information.
+It states that this lookup could not find it under its supported definitions.
+
+An as-of example:
+
+    python financial_data.py MSFT net_income 2025 --as-of 2025-12-31
+
+This filters by SEC filing date within the downloaded snapshot. It is not a
+reconstruction of every byte the SEC website served on that historical date.
+
+OPTIONAL LATER STEP: PREPARE THE 15-COMPANY COVERAGE LIST
+
+Information Technology (project grouping):
+    MSFT Microsoft, AAPL Apple, NVDA NVIDIA, AVGO Broadcom, ORCL Oracle,
+    ADBE Adobe, CRM Salesforce, CSCO Cisco, INTU Intuit, IBM IBM.
+
+Communication Services (project grouping):
+    GOOGL Alphabet/Google, META Meta, NFLX Netflix, DIS Disney, CMCSA Comcast.
+
+Company CIKs were checked against the SEC's company_tickers.json. Sector labels
+are project-maintained groupings, not a field taken from that SEC identity file.
+GOOG and Google are aliases for GOOGL here; they do not count as extra companies.
+
+After the two-company checks, the same code can prepare and check the full list:
+
+    python download_company_facts.py --all
+    python check_financial_coverage.py --years 2023 2024 2025 --output data/validation/financial_coverage.json
+
+The report contains 135 requests and their full results. The command exits 1
+when any request is not ok so that incomplete coverage is visible.
+
+VALIDATION PERFORMED DURING PREPARATION
+
+Environment: isolated Linux Python 3.12.14 environment, separate from your WSL
+project. This is not a claim that your working tree was executed or changed.
+The existing 18 API tests were run using the earlier delivered API package and
+a local compatible Microsoft lookup fixture; the 35 new tests use this package.
+
+Offline: 53 tests passed. Coverage includes fiscal-year labels, calendar and
+52/53-week years, comparative records, amendments, cutoff dates, missing data,
+conflicting records, wrong identities, archived filing pages and failed refresh.
+
+Downloaded SEC snapshots: 15 companies x 3 years x 3 measures = 135 checks:
+    128 ok
+      4 not_found
+      3 conflict
+
+Microsoft and Alphabet: all 18 requested lookups returned ok.
+Apple and NVIDIA: the checks also exercised non-calendar/52–53-week periods.
+
+Known gaps in the checked snapshots:
+    AVGO net_income FY2025: no matching NetIncomeLoss fact. A ProfitLoss fact is
+    present, but it has a different attribution definition and is not substituted.
+
+    IBM operating_income FY2023, FY2024 and FY2025: no supported matching
+    OperatingIncomeLoss fact. Another accounting measure is not substituted.
+
+    CRM FY2025, all three measures: the snapshots associate the filing-year label
+    2025 with two current annual periods: 2024-02-01..2025-01-31 and
+    2025-02-01..2026-01-31. The lookup reports this conflict rather than choosing
+    a period by calendar assumption. Resolve against original filings before
+    presenting these cases as supported answers.
+
+These checks establish availability and internal consistency, not independently
+audited financial accuracy. They do not replace the capstone's labelled golden
+evaluation, manual source verification or multi-company /ask tests. The 15-company
+target is not yet complete. SEC updates can change future coverage results.
+
+CACHE AND REFRESH NOTES
+
+The default command reuses snapshots. To deliberately replace them:
+
+    python download_company_facts.py MSFT GOOGL --refresh
+
+Requests are spaced by at least 0.3 seconds in this process (about 3.3/second).
+Use one downloader process at a time; this limit is not coordinated across
+processes or other clients sharing your connection. Each response has a
+25 MiB size limit and a 30-second timeout. Do not commit .env or contact details.
+
+Each file is replaced atomically, but the entire collection of files is not one
+atomic transaction. If a refresh fails midway, facts and filing history can be
+from different downloads. Relevant inconsistencies cause a lookup error; rerun
+the refresh before treating the cache as a new complete snapshot.
+
+Hashes identify exact local bytes. They help reproducibility; they do not prove
+that a financial figure is correct or independently authenticate SEC content.
+
+OFFICIAL REFERENCES
+
+SEC company facts and submissions API documentation:
 https://www.sec.gov/search-filings/edgar-application-programming-interfaces
-SEC fair-access guidance:
+
+SEC developer access guidance:
 https://www.sec.gov/about/developer-resources
-Microsoft annual report, fiscal year ending June 30:
-https://www.microsoft.com/investor/reports/ar25/index.html
-Alphabet annual report, fiscal year ending December 31:
-https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm
-Companyfacts data sources:
-https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json
-https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json
+
+SEC company identity file:
+https://www.sec.gov/files/company_tickers.json

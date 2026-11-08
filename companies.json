@@ -1,0 +1,118 @@
+{
+  "identity_source": "https://www.sec.gov/files/company_tickers.json",
+  "identity_checked_on": "2026-11-08",
+  "sector_note": "Project coverage grouping; the SEC ticker file supplies identities, not these sector labels. Configuration is a target coverage list, not a claim that every company has been downloaded or validated.",
+  "companies": [
+    {
+      "ticker": "MSFT",
+      "name": "MICROSOFT CORP",
+      "cik": "0000789019",
+      "sector": "Information Technology",
+      "aliases": [
+        "Microsoft"
+      ]
+    },
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "cik": "0000320193",
+      "sector": "Information Technology",
+      "aliases": []
+    },
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA CORP",
+      "cik": "0001045810",
+      "sector": "Information Technology",
+      "aliases": []
+    },
+    {
+      "ticker": "AVGO",
+      "name": "Broadcom Inc.",
+      "cik": "0001730168",
+      "sector": "Information Technology",
+      "aliases": []
+    },
+    {
+      "ticker": "ORCL",
+      "name": "ORACLE CORP",
+      "cik": "0001341439",
+      "sector": "Information Technology",
+      "aliases": []
+    },
+    {
+      "ticker": "ADBE",
+      "name": "ADOBE INC.",
+      "cik": "0000796343",
+      "sector": "Information Technology",
+      "aliases": []
+    },
+    {
+      "ticker": "CRM",
+      "name": "Salesforce, Inc.",
+      "cik": "0001108524",
+      "sector": "Information Technology",
+      "aliases": []
+    },
+    {
+      "ticker": "CSCO",
+      "name": "CISCO SYSTEMS, INC.",
+      "cik": "0000858877",
+      "sector": "Information Technology",
+      "aliases": []
+    },
+    {
+      "ticker": "INTU",
+      "name": "INTUIT INC.",
+      "cik": "0000896878",
+      "sector": "Information Technology",
+      "aliases": []
+    },
+    {
+      "ticker": "IBM",
+      "name": "INTERNATIONAL BUSINESS MACHINES CORP",
+      "cik": "0000051143",
+      "sector": "Information Technology",
+      "aliases": []
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc.",
+      "cik": "0001652044",
+      "sector": "Communication Services",
+      "aliases": [
+        "GOOG",
+        "Google",
+        "Alphabet"
+      ]
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms, Inc.",
+      "cik": "0001326801",
+      "sector": "Communication Services",
+      "aliases": []
+    },
+    {
+      "ticker": "NFLX",
+      "name": "NETFLIX INC",
+      "cik": "0001065280",
+      "sector": "Communication Services",
+      "aliases": []
+    },
+    {
+      "ticker": "DIS",
+      "name": "Walt Disney Co",
+      "cik": "0001744489",
+      "sector": "Communication Services",
+      "aliases": []
+    },
+    {
+      "ticker": "CMCSA",
+      "name": "COMCAST CORP",
+      "cik": "0001166691",
+      "sector": "Communication Services",
+      "aliases": []
+    }
+  ]
+}
