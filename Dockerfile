@@ -36,5 +36,26 @@ COPY download_company_facts.py check_financial_coverage.py \
 HEALTHCHECK NONE
 CMD ["python", "-m", "unittest", "-v", "test_api.py", "test_financial_data.py"]
 
-# The default image contains the API, not the test modules or download commands.
+# A separate MCP target keeps its additional packages out of the API image.
+FROM app AS edgar
+ENV FASTMCP_HOME=/tmp/fastmcp \
+    XDG_DATA_HOME=/tmp/share
+USER root
+COPY requirements-mcp.txt ./
+RUN python -m pip install --no-cache-dir -r requirements-mcp.txt \
+    && python -m pip check
+COPY edgar_mcp.py check_edgar_mcp.py ./
+USER 10001:10001
+EXPOSE 8001
+HEALTHCHECK --interval=10s --timeout=3s --start-period=10s --retries=5 \
+    CMD ["python", "-c", "import json, urllib.request; response = urllib.request.urlopen('http://127.0.0.1:8001/health', timeout=2); assert response.status == 200 and json.load(response) == {'status': 'ok', 'service': 'edgar-mcp'}"]
+CMD ["python", "edgar_mcp.py", "--transport", "http", "--host", "0.0.0.0", "--port", "8001"]
+
+FROM edgar AS mcp-tests
+COPY download_company_facts.py check_financial_coverage.py \
+    test_api.py test_financial_data.py test_edgar_mcp.py ./
+HEALTHCHECK NONE
+CMD ["python", "-m", "unittest", "-v", "test_api.py", "test_financial_data.py", "test_edgar_mcp.py"]
+
+# The default target remains the existing API runtime.
 FROM app AS runtime

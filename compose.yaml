@@ -38,3 +38,35 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+  edgar:
+    build:
+      context: .
+      target: edgar
+    image: analyst-desk-edgar:local
+    user: "${ANALYST_UID:?Set ANALYST_UID using the Docker user setup step}:${ANALYST_GID:?Set ANALYST_GID using the Docker user setup step}"
+    # This service has no API key or other environment variables from .env.
+    ports:
+      - "127.0.0.1:8001:8001"
+    volumes:
+      - type: bind
+        source: ./data
+        target: /app/data
+        read_only: true
+        bind:
+          create_host_path: false
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

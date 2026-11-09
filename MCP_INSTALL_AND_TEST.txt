@@ -1,0 +1,193 @@
+ANALYST DESK - FIRST EDGAR MCP SERVICE
+Prepared 9 November 2026
+
+STARTING POINT AND PURPOSE
+
+Docker checkpoint merged as PR #5; local main and origin/main are at 43a28f0.
+This checkpoint adds a real FastMCP service around the existing SEC lookup.
+An MCP client discovers tool schemas and calls those tools using the protocol.
+This is the first tool service for the upcoming LangGraph research workflow.
+
+The existing /ask endpoint continues to use its current lookup and guardrails.
+This checkpoint validates MCP independently with a real client. Routing agent
+requests through MCP is a later integration step; no LangGraph team is claimed
+here. There is ONE MCP server with THREE tools. The other capstone servers
+(filings-kb, python-sandbox and research-portal) still need to be built.
+
+FILES IN THIS ZIP: EXACTLY NINE
+
+New files (six):
+  edgar_mcp.py
+  check_edgar_mcp.py
+  test_edgar_mcp.py
+  requirements-mcp.txt
+  .github/workflows/mcp.yml
+  MCP_INSTALL_AND_TEST.txt
+
+Updated existing files (three):
+  Dockerfile
+  .dockerignore
+  compose.yaml
+
+Keep requirements-ci.txt, requirements-docker.txt, .github/workflows/tests.yml
+and .github/workflows/docker.yml. No existing application Python file changes.
+requirements-mcp.txt reuses the existing pins and adds pinned MCP dependencies.
+The API image keeps its existing packages; the MCP packages are in a separate
+Docker target. FastMCP 4.1.6 and the MCP Python SDK 2.3.0 are pinned explicitly.
+
+WHAT THE THREE TOOLS DO
+
+list_companies()
+  Lists 15 configured companies, aliases and five exact metric definitions.
+  Configuration does not guarantee that every fact is present in the cache.
+
+list_annual_filings(ticker, as_of=null, limit=20)
+  Reads cached 10-K and 10-K/A filing metadata. Newest first; limit 1 to 100;
+  optional YYYY-MM-DD filing-date cutoff. Includes source URLs and a cache hash.
+  It returns reporting dates, not fiscal years guessed from those dates.
+  No matching filings gives an empty successful list; a missing/bad cache is
+  a structured error. Original fiscal-year evidence is checked when present.
+
+get_annual_financial_fact(ticker, metric, year, as_of=null)
+  Uses the existing verified lookup. Fiscal year is required; parent net income,
+  consolidated net income and pretax income remain different measures.
+  The result retains the shared lookup payload exactly, including source URLs
+  and fingerprints, so the existing replay guard can verify the same evidence.
+  not_found, conflict and unsupported_period remain explicit and have no amount.
+
+All tools advertise read-only annotations and have input and output schemas.
+Bad schema arguments return an MCP tool error; data/identity/cutoff failures
+return structured status/code/message results. The process stays running.
+There are no cache downloads, API-key requirements, model calls or write tools.
+The server does not load .env. Data paths are fixed by operator startup settings,
+not accepted as tool arguments. Tool annotations describe behaviour; the
+read-only Docker filesystem and mount enforce the file restrictions.
+
+1. CREATE THE NEXT BRANCH
+
+From your analyst-desk project folder in the normal VS Code WSL terminal:
+
+  git switch -c feature/edgar-mcp
+
+This starts from the main checkpoint you just pulled. Extract this ZIP and copy
+all NINE files into the project beside main.py. Merge .github/workflows with the
+existing folder; keep all three workflow files: tests.yml, docker.yml and mcp.yml.
+The existing .env already has OPENROUTER_API_KEY, ANALYST_UID and ANALYST_GID.
+Keep those local settings. No new API key or user-ID setup is needed.
+
+2. BUILD AND RUN THE FULL OFFLINE TEST SUITE INSIDE DOCKER
+
+Start Docker Desktop if needed, then run:
+
+  docker build --target mcp-tests -t analyst-desk-mcp-tests:local .
+  docker run --rm --network none --read-only --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 --cap-drop ALL --security-opt no-new-privileges:true analyst-desk-mcp-tests:local
+
+Expected: Ran 150 tests ... OK (133 existing + 17 MCP tests).
+The image build downloads packages. The test container has no external network,
+real API key or real SEC data. It uses invented financial fixtures. Loopback is
+still available for its real HTTP transport test. Validation warnings from tests
+that deliberately send invalid arguments are expected when the tests end in OK.
+
+3. START BOTH SERVICES
+
+  docker compose config --quiet
+  docker compose up --build --detach --wait --wait-timeout 90
+  docker compose ps
+
+Expected: BOTH api and edgar are healthy. The first MCP build can take a few
+minutes. The wait timeout applies after building, during service startup.
+
+The API remains at http://127.0.0.1:8000/docs.
+EDGAR MCP uses http://127.0.0.1:8001/mcp.
+Its liveness check is http://127.0.0.1:8001/health and returns:
+
+  {"status":"ok","service":"edgar-mcp"}
+
+The MCP endpoint is a protocol endpoint, not a Swagger page. Test it with the
+client below. Both services use your Linux user/group IDs and a read-only data/
+mount. The edgar container receives no OpenRouter key. Only localhost ports are
+published; this local checkpoint has no public authentication or internet hosting.
+
+4. CALL THE REAL MCP SERVER OVER HTTP
+
+  docker compose exec edgar python check_edgar_mcp.py --url http://edgar:8001/mcp --ticker MSFT --metric net_income --year 2025
+
+Expected:
+  Discovered MCP tools: get_annual_financial_fact, list_annual_filings, list_companies
+  Configured companies: 15
+  JSON result with status ok, ticker MSFT, fiscal_year 2025 and source evidence.
+
+This client runs inside the edgar container and connects to the running server
+over HTTP using Compose's edgar hostname. It performs protocol discovery and a
+real cached lookup. It uses no model credits and makes no SEC download.
+
+Also check the development transport:
+
+  docker compose exec -T edgar python check_edgar_mcp.py --stdio --ticker MSFT --metric net_income --year 2025
+
+The client starts a separate short-lived server subprocess and exchanges MCP
+messages through its input/output pipes. Expect the same fact and fingerprints.
+The HTTP service continues running independently.
+
+5. OPTIONAL HOST PYTHON DEVELOPMENT
+
+The Docker route above does not require installing MCP packages into your conda
+environment. For Python development outside Docker, use a separate environment:
+
+  python -m venv /tmp/analyst-desk-mcp-dev
+  /tmp/analyst-desk-mcp-dev/bin/python -m pip install -r requirements-mcp.txt
+  /tmp/analyst-desk-mcp-dev/bin/python -m pip check
+  /tmp/analyst-desk-mcp-dev/bin/python -m unittest -v test_api.py test_financial_data.py test_edgar_mcp.py
+  /tmp/analyst-desk-mcp-dev/bin/python check_edgar_mcp.py --stdio --ticker MSFT --metric net_income --year 2025
+
+This disposable environment stays outside the repository. Recreate it if /tmp
+is cleared. Do not commit virtual environments or cache files.
+
+6. SAVE AFTER LOCAL TESTS AND BOTH MCP CALLS PASS
+
+  git add edgar_mcp.py check_edgar_mcp.py test_edgar_mcp.py requirements-mcp.txt Dockerfile .dockerignore compose.yaml .github/workflows/mcp.yml MCP_INSTALL_AND_TEST.txt
+  git commit -m "Expose Microsoft and Google SEC lookups through MCP"
+  git push -u origin feature/edgar-mcp
+  git status
+
+Open https://github.com/lszkip/analyst-desk/actions and check the new workflow:
+  Analyst Desk MCP -> EDGAR MCP contracts and transports
+
+It runs the full 150-test suite inside Docker with external networking disabled,
+starts the actual MCP runtime image without a key or cache, checks health,
+discovers all three tools and verifies the structured missing-cache response.
+The existing Analyst Desk tests and Analyst Desk Docker workflows must also pass.
+Review the PR and all checks before merging this branch into main.
+
+TROUBLESHOOTING
+
+- Permission error: check that ANALYST_UID and ANALYST_GID still match your WSL
+  account, as in the previous Docker checkpoint. Do not use root or chmod 777.
+- data_file_missing: the MCP server is alive but the requested cache is absent.
+  Prepare the cache on the host using the existing downloader; this server never
+  downloads or repairs files itself.
+- Connection error: check docker compose ps and docker compose logs --tail=80 edgar.
+- Port 8001 allocated: stop the older MCP development server using that port.
+- A browser displays a protocol error at /mcp: use /health for a browser check
+  and check_edgar_mcp.py for actual MCP calls.
+- /health succeeds but a fact fails: liveness does not prove cache coverage.
+- This server intentionally accepts only localhost and the edgar service host
+  plus the actual listening interface; unrelated Host/Origin headers are rejected.
+
+VALIDATION BEFORE DELIVERY
+
+- Fresh Python 3.12 environment; pinned dependencies; pip check passed.
+- All 150 tests passed (133 original and 17 MCP tests).
+- Real stdio subprocess and local HTTP server were exercised, not just mocks.
+- The HTTP test includes the edgar Host header and rejects unrelated Host/Origin.
+- Existing lookup evidence and fingerprints survive the MCP boundary.
+- Workflow shell/Python syntax, Compose schema, Docker stage inputs and build
+  allowlist were checked.
+- The preparation workspace has no Docker engine. Actual new image/container
+  and GitHub results must be verified using the steps above.
+
+REFERENCES
+
+https://gofastmcp.com/docs/servers/tools
+https://gofastmcp.com/docs/clients/transports
+https://gofastmcp.com/docs/deployment/running-server
