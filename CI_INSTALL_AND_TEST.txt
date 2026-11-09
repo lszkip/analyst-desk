@@ -1,0 +1,134 @@
+ANALYST DESK - AUTOMATIC GITHUB TESTS
+Prepared: 9 November 2026 (Australia/Sydney)
+
+WHAT THIS ADDS
+
+CI means continuous integration: GitHub checks a proposed code change by running
+the tests on a separate computer. Your current command runs 133 offline tests.
+This update makes GitHub run those same two test modules for every branch push
+and pull request. It does not change application code or financial definitions.
+
+A test failure makes the job fail. The workflow does not hide failures or merge
+code automatically. Requiring this check before merging is a separate repository
+rule; adding the workflow alone does not enforce that rule.
+
+This is the first CI step. Evaluation thresholds, deployment and monitoring will
+be added with the later capstone components.
+
+EXACTLY THREE NEW FILES
+
+  .github/workflows/tests.yml   GitHub's instructions for running the tests
+  requirements-ci.txt          Fixed package versions for the test environment
+  CI_INSTALL_AND_TEST.txt       These instructions
+
+The .github folder is part of the ZIP. Preserve its nested workflows folder.
+The workflow file must not be copied beside main.py: it belongs under
+.github/workflows/ inside your existing analyst-desk project.
+
+No main.py, test_api.py or existing instruction files are replaced in this step.
+
+1. CREATE A BRANCH
+
+Start in ~/projects/analyst-desk. Your last checkpoint was on main, up to date
+with origin/main, with 133 passing tests.
+
+  git switch -c feature/ci-tests
+
+2. EXTRACT AND COPY
+
+Use Extract all on analyst_desk_ci_update.zip. Copy its .github folder and both
+text files into ~/projects/analyst-desk, beside main.py. If .github already exists,
+merge the folders, keeping other workflow files.
+
+Check the three paths in your terminal:
+
+  ls .github/workflows/tests.yml requirements-ci.txt CI_INSTALL_AND_TEST.txt
+
+3. TEST IN A SEPARATE ENVIRONMENT
+
+These commands use a temporary environment outside your project folder. They do
+not change the packages in your current analyst-desk conda environment. Run them
+from ~/projects/analyst-desk in a terminal with a normal prompt:
+
+  python -m venv /tmp/analyst-desk-ci
+  /tmp/analyst-desk-ci/bin/python -m pip install -r requirements-ci.txt
+  /tmp/analyst-desk-ci/bin/python -m pip check
+  /tmp/analyst-desk-ci/bin/python -m unittest -v test_api.py test_financial_data.py
+
+The install needs internet access to download packages. Expected test result:
+133 tests ending with OK. Expected pip check result: No broken requirements found.
+Some negative tests intentionally print guardrail-blocked messages. A Starlette
+warning about httpx deprecation is also possible; the final test result determines
+whether the tests passed.
+
+You do not need to start or stop Uvicorn for this step.
+
+4. COMMIT AND PUSH
+
+After the tests pass, run these four lines, one at a time:
+
+  git add .github/workflows/tests.yml requirements-ci.txt CI_INSTALL_AND_TEST.txt
+  git commit -m "Test Microsoft, Google and other company lookups on GitHub"
+  git push -u origin feature/ci-tests
+  git status
+
+5. CHECK THE FIRST GITHUB RUN
+
+Open https://github.com/lszkip/analyst-desk/actions
+
+Choose Analyst Desk tests, then the latest run for feature/ci-tests. Open the job
+named Python 3.12 offline tests. The last step, Run API and financial-data tests,
+should finish with 133 tests and OK. GitHub should show a green check.
+
+If the job is red, open the failed step and share its error output. Do not assume
+that a green result from your laptop is also a successful GitHub run.
+
+After the first run passes, create a pull request from feature/ci-tests to main.
+The pull request will also run the tests. The new Checks entry will show the CI
+result, unlike the earlier pull requests that had no configured checks.
+
+Suggested pull request title:
+  Run financial lookup and guardrail tests automatically on GitHub
+
+Suggested description:
+  Add a Python 3.12 GitHub Actions workflow for branch pushes and pull requests.
+  Install fixed test dependencies and run the API and financial-data test suites.
+  Tests use temporary fixtures and mocked model/network calls; no SEC download
+  or OpenRouter secret is required. A failing test fails the job.
+  Validation: 133 offline tests passed locally in an isolated environment.
+
+Add the actual GitHub result after observing it; do not claim that the remote
+workflow passed before its first run has completed.
+
+HOW THE WORKFLOW WORKS
+
+- Check out the code: fetch the branch code, or GitHub's test merge for a PR.
+- Set up Python: select Python 3.12 and reuse downloaded package files when cached.
+- Install dependencies: install requirements-ci.txt and check compatibility.
+- Run tests: run the same unittest command you already know.
+
+The test modules mock OpenRouter and SEC network access, create temporary data,
+and provide a dummy API key only within their tests. No repository secrets need
+to be configured. Downloading Python/packages during job setup still uses the
+network. The workflow only requests repository read access.
+
+requirements-ci.txt is a separate test-environment lock, not a replacement for
+your application's requirements.txt or proof of a production deployment build.
+When the project adds dependencies, update this file and rerun the tests.
+
+The two GitHub actions are pinned to full commit IDs. The runner image and Python
+3.12 patch version may receive updates. This is a repeatable test setup, not a
+bit-for-bit lock of the entire hosted runner.
+
+This update has been checked locally. The actual GitHub-hosted execution remains
+to be verified on your first push.
+
+REFERENCES
+
+GitHub Python CI guide:
+https://docs.github.com/en/actions/tutorials/build-and-test-code/python
+Workflow syntax:
+https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
+Pinned official action releases:
+https://github.com/actions/checkout/releases/tag/v7.0.1
+https://github.com/actions/setup-python/releases/tag/v7.0.0
