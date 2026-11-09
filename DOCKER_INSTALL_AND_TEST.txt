@@ -1,0 +1,251 @@
+ANALYST DESK - RUN THE API WITH DOCKER
+Prepared 9 November 2026
+
+WHAT THIS CHECKPOINT ADDS
+
+Docker packages the existing API, Python and its packages into an image.
+Docker Compose starts that image as a container with your local settings.
+The API still uses the same financial lookups, evidence checks and guardrails.
+This is a local Docker checkpoint. It does not deploy to AWS or add the
+remaining LangGraph, RAG, MCP, evaluation or monitoring components.
+
+The ZIP contains exactly SIX Docker files:
+  Dockerfile
+  compose.yaml
+  .dockerignore
+  requirements-docker.txt
+  .github/workflows/docker.yml
+  DOCKER_INSTALL_AND_TEST.txt
+
+Keep the existing .github/workflows/tests.yml. The new docker.yml sits beside it.
+Keep requirements-ci.txt from the previous merged CI checkpoint. The Docker
+requirements file reuses it, then adds pinned Uvicorn and Click versions.
+No application Python files or existing dependency files are replaced.
+
+PERMISSIONS FIX FOR AN EXISTING DOCKER INSTALLATION
+
+This revision changes THREE of the SIX included files: compose.yaml,
+.github/workflows/docker.yml and this guide. The other three are unchanged.
+Replace the six Docker files with this revision, preserving tests.yml. Stay on
+your existing feature/docker-api branch; do not create the branch again.
+
+The downloader can save SEC files with owner-only permissions (0600). The
+original image user, UID 10001, could not read files owned by your WSL user.
+Compose now requires your Linux user/group IDs and runs the API with those IDs.
+This preserves the original file permissions and the read-only data mount.
+
+In your normal VS Code WSL terminal, from the analyst-desk project folder,
+run the one-time setup command below. It APPENDS two numeric settings to your
+existing .env without replacing or printing your API key:
+
+  printf '\nANALYST_UID=%s\nANALYST_GID=%s\n' "$(id -u)" "$(id -g)" >> .env
+
+Then validate and recreate the running API so the new user setting takes effect:
+
+  docker compose config --quiet
+  docker compose up --build --detach --force-recreate --wait --wait-timeout 90
+  docker compose exec api python financial_data.py MSFT net_income 2025
+
+Expected: a normal lookup with status ok. The exec command deliberately has no
+--user override: the running service must now have the correct user itself.
+Retry the Microsoft request in section 6 and expect HTTP 200 with checked evidence.
+Do not refresh the SEC cache to fix a user-ID mismatch. The files already work
+when read by their owner. No host file permission or ownership changes are needed.
+
+For a new installation, follow all the numbered steps below instead.
+
+1. CREATE A BRANCH AND COPY THE FILES
+
+Run these commands in the VS Code WSL terminal, inside your analyst-desk folder:
+
+  git switch main
+  git pull --ff-only origin main
+  git switch -c feature/docker-api
+
+Extract the ZIP first. Copy its contents into the project beside main.py.
+Preserve the .github/workflows directory structure. Merge the .github folder's
+contents with the existing folder; retain both tests.yml and docker.yml.
+
+2. START DOCKER DESKTOP
+
+Open Docker Desktop from Windows and wait for the engine to finish starting.
+The engine must be running Linux containers. In the same VS Code WSL terminal:
+
+  docker version
+  docker compose version
+
+docker version must show both Client and Server information. If Docker is not
+available in Ubuntu/WSL, use Docker Desktop Settings > Resources > WSL Integration
+to enable your Ubuntu distribution, apply the change and reopen the terminal.
+If Docker Desktop is in Windows container mode, switch to Linux containers.
+
+3. CHECK THE EXISTING LOCAL INPUTS
+
+Your project must already contain its working .env with OPENROUTER_API_KEY and
+the downloaded data/ folder. Compose reads the key from that local .env when
+starting the container. You do not need to paste the key into another file.
+
+Use your normal WSL user, not sudo/root. Once per installation, append your Linux
+user and group IDs (skip this if you already did the permissions-fix setup above):
+
+  printf '\nANALYST_UID=%s\nANALYST_GID=%s\n' "$(id -u)" "$(id -g)" >> .env
+
+These settings persist across terminal sessions. Compose uses them to read SEC
+files owned by that user, including files the downloader saves with mode 0600.
+Keep .env local and ignored by Git, as before. If you move the project to another
+Linux account, update only ANALYST_UID and ANALYST_GID for that account.
+
+The entire data/ tree is mounted read-only, preserving the relative paths for
+facts, filing history and Salesforce's original fiscal-year evidence documents.
+Keep the downloaded directory structure intact.
+
+The build excludes .env, downloaded data, Git history and local editor files.
+Never put your API key in Dockerfile, requirements files, Git or this document.
+
+Validate the Compose settings without printing environment-variable values:
+
+  docker compose config --quiet
+
+No output means validation succeeded. Do not share the output of an unfiltered
+docker compose config or docker inspect command: it can include your key.
+
+4. RUN THE EXISTING TESTS INSIDE DOCKER
+
+  docker build --target tests -t analyst-desk-tests:local .
+  docker run --rm --network none --read-only --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 --cap-drop ALL --security-opt no-new-privileges:true analyst-desk-tests:local
+
+Expected: Ran 133 tests ... OK.
+The image build needs internet access to download the base image and packages.
+The test container itself has no external network access, API key or real data.
+The tests create their own temporary fixtures and mock model responses.
+A pip update notice or Starlette deprecation warning is not a failing test.
+
+5. START THE API CONTAINER
+
+If the earlier Uvicorn server is still running on port 8000, select its terminal
+and press Ctrl+C first. Do not close unrelated terminals.
+
+Run:
+
+  docker compose up --build --detach --wait --wait-timeout 90
+  docker compose ps
+
+Expected: the api service is running and reports healthy. The first build can
+take a few minutes; the 90-second wait applies to startup after the build.
+
+Compose runs the API with your non-root Linux user/group IDs. The image itself
+still defaults to UID 10001 when run without Compose. The application and SEC data
+are read-only; /tmp is temporary writable storage. It listens only on your
+laptop's 127.0.0.1:8000 through the published port.
+
+6. CHECK HEALTH AND MAKE ONE LIVE REQUEST
+
+Open in your browser:
+
+  http://127.0.0.1:8000/health
+
+Expected:
+
+  {"status":"ok"}
+
+/health checks that the API is responding. It does not validate your OpenRouter
+key, network connectivity, or the completeness of your SEC cache.
+
+Next open:
+
+  http://127.0.0.1:8000/docs
+
+Expand POST /ask, click Try it out, and submit:
+
+  {"question":"What was Microsoft's annual net income in fiscal year 2025?"}
+
+Expected: HTTP 200, an answer with source evidence, and guardrail.status passed
+with checked_claims equal to 1. This live request uses your existing OpenRouter
+key and credits, exactly as the previous local Uvicorn version did.
+
+7. NORMAL START, STOP AND LOG COMMANDS
+
+After a code change, rebuild and restart:
+
+  docker compose up --build --detach --wait --wait-timeout 90
+
+See recent server logs:
+
+  docker compose logs --tail=80 api
+
+Stop and remove this Compose application's containers and network:
+
+  docker compose down
+
+Your original data/ folder and .env remain on your laptop. This command does
+not delete them. The container does not refresh data; use the existing host
+download_company_facts.py command when you deliberately want to refresh it.
+There is no automatic source-code reload in this container setup.
+
+8. SAVE THE CHECKPOINT AFTER LOCAL TESTS AND THE LIVE REQUEST PASS
+
+  git add Dockerfile compose.yaml .dockerignore requirements-docker.txt .github/workflows/docker.yml DOCKER_INSTALL_AND_TEST.txt
+  git commit -m "Run Microsoft and Google financial lookups in Docker"
+  git push -u origin feature/docker-api
+  git status
+
+Open https://github.com/lszkip/analyst-desk/actions
+
+Expect the original Analyst Desk tests workflow and a new Analyst Desk Docker
+workflow. The new job is named Docker image and API health. It builds the test
+image, runs the 133 tests with networking disabled, builds the runtime image,
+and checks that Compose reads owner-only fictional SEC files with the host user
+while keeping their mount read-only. It also checks API startup, health, docs,
+invalid-request rejection, the default non-root image user, and exclusion of
+.env, cached data and test modules from the runtime image.
+
+GitHub uses a dummy key and makes no real model or SEC requests. It needs no
+GitHub secrets. The health check alone is not a live financial lookup test.
+
+Once both workflows pass, open a pull request from feature/docker-api into main.
+Review the six files and wait for the PR checks before merging. Then pull the
+merged main branch on your laptop, as in the previous checkpoint.
+
+TROUBLESHOOTING
+
+- Cannot connect to the Docker daemon: start Docker Desktop and check WSL
+  integration. Do not repeatedly reinstall Python or change the API code.
+- Port already allocated: stop the earlier Uvicorn server on port 8000.
+- OPENROUTER_API_KEY missing: check your existing local .env privately.
+- ANALYST_UID or ANALYST_GID missing: complete the one-time setup in section 3.
+- Bind mount path missing: run from the correct project folder and check that
+  its data/ folder exists. The mount deliberately does not create an empty one.
+- Container unhealthy or exited: run docker compose logs --tail=80 api.
+- HTTP 503 financial_data_unavailable: check the existing cache and its original
+  fiscal-year evidence. A healthy API does not prove that financial data exists.
+- data_file_unreadable or permission denied: compare the lookup with and without
+  docker compose exec --user "$(id -u):$(id -g)". If only the override succeeds,
+  check the two ANALYST settings and recreate the service using the command in
+  the permissions-fix section. Restart alone does not apply a changed user.
+  Do not make the project world-writable or run the application as root.
+- After editing code, use the rebuild command in section 7.
+
+VALIDATION STATUS
+
+In a fresh Python 3.12 environment using requirements-docker.txt:
+- pip check reported no broken requirements.
+- All 133 existing tests passed.
+- An actual Uvicorn process served /health, /docs and /openapi.json, and rejected
+  an empty /ask question with HTTP 422. Only a dummy key was used.
+Compose was checked against the official Compose JSON schema. Workflow shell
+syntax, Dockerfile COPY inputs, image targets and the build allowlist were checked.
+
+The first Docker image built and became healthy on the laptop. The laptop then
+reproduced data_file_unreadable with the default image user and returned Microsoft
+data when the command used the WSL user's UID/GID. This revision fixes that
+Compose setting and adds the owner-only fixture regression check described above.
+The updated Compose service, live /ask request and new GitHub Docker check still
+need execution on the laptop/GitHub: the preparation workspace has no Docker engine.
+
+REFERENCE DOCUMENTATION
+
+https://docs.docker.com/guides/python/
+https://docs.docker.com/reference/compose-file/services/
+https://docs.docker.com/compose/how-tos/environment-variables/variable-interpolation/
+https://docs.docker.com/reference/cli/docker/compose/up/
+https://fastapi.tiangolo.com/deployment/docker/

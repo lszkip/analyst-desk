@@ -1,0 +1,5 @@
+# Use the same application dependencies already checked by the offline CI job.
+# Add only the server and its CLI dependency. Python 3.12, Linux.
+-r requirements-ci.txt
+click==8.5.1
+uvicorn==0.54.0

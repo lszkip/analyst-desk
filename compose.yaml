@@ -1,0 +1,40 @@
+name: analyst-desk
+
+services:
+  api:
+    build:
+      context: .
+      target: runtime
+    image: analyst-desk-api:local
+    # Match the Linux owner of downloaded SEC files (which can be mode 0600).
+    # Set these IDs once in the existing local .env; see the install guide.
+    user: "${ANALYST_UID:?Set ANALYST_UID using the Docker user setup step}:${ANALYST_GID:?Set ANALYST_GID using the Docker user setup step}"
+    # Compose reads the existing .env file on the laptop at startup.
+    # The file and key are not sent to the image build.
+    environment:
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:?Set OPENROUTER_API_KEY in your existing .env file}
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      # Preserve relative paths for facts, filing history and original documents.
+      - type: bind
+        source: ./data
+        target: /app/data
+        read_only: true
+        bind:
+          create_host_path: false
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
