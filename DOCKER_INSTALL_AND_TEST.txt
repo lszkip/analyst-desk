@@ -22,10 +22,39 @@ Keep requirements-ci.txt from the previous merged CI checkpoint. The Docker
 requirements file reuses it, then adds pinned Uvicorn and Click versions.
 No application Python files or existing dependency files are replaced.
 
+CI COMMAND FIX FOR THE FIRST GITHUB DOCKER RUN
+
+This revision changes TWO of the SIX included files compared with the previous
+permissions-fix package: .github/workflows/docker.yml and this guide.
+Copy those two files into the project, preserving their paths. Stay on the
+existing feature/docker-api branch.
+
+The first GitHub run built both images and passed the offline tests. It failed
+in "Read owner-only SEC fixtures through Compose" with:
+
+  unknown flag: --no-build
+
+The workflow incorrectly passed --no-build to docker compose run. That command
+does not support the option. This revision removes it; the API image has already
+been built by the preceding step. The permissions regression check remains.
+
+Save and push this fix:
+
+  git add .github/workflows/docker.yml DOCKER_INSTALL_AND_TEST.txt
+  git commit -m "Fix Docker CI command for Microsoft and Google lookups"
+  git push
+  git status
+
+Open the NEW Analyst Desk Docker run for this new commit on GitHub Actions.
+The original failed run remains red as history. Wait for the new run and the
+Analyst Desk tests workflow to pass before merging.
+Your local user-ID setup and successful live Microsoft request remain valid;
+this workflow-only code correction does not require repeating the .env setup.
+
 PERMISSIONS FIX FOR AN EXISTING DOCKER INSTALLATION
 
-This revision changes THREE of the SIX included files: compose.yaml,
-.github/workflows/docker.yml and this guide. The other three are unchanged.
+The earlier permissions revision changed THREE of the SIX included files:
+compose.yaml, .github/workflows/docker.yml and this guide.
 Replace the six Docker files with this revision, preserving tests.yml. Stay on
 your existing feature/docker-api branch; do not create the branch again.
 
@@ -237,10 +266,18 @@ syntax, Dockerfile COPY inputs, image targets and the build allowlist were check
 
 The first Docker image built and became healthy on the laptop. The laptop then
 reproduced data_file_unreadable with the default image user and returned Microsoft
-data when the command used the WSL user's UID/GID. This revision fixes that
-Compose setting and adds the owner-only fixture regression check described above.
-The updated Compose service, live /ask request and new GitHub Docker check still
-need execution on the laptop/GitHub: the preparation workspace has no Docker engine.
+data when the command used the WSL user's UID/GID. After applying the Compose
+permissions fix, the normal exec lookup succeeded without a --user override.
+The live /ask request returned HTTP 200 with guardrail status passed and one
+checked claim.
+
+The first GitHub Docker run passed Compose validation, both image builds and
+the offline tests. It created owner-only fixtures and reproduced the unmatched
+user error, then stopped at the unsupported --no-build option. That option is
+now removed and the remaining run flags were checked against Docker's official
+compose run reference. Workflow shell/Python syntax and the Compose schema
+were rechecked. The complete corrected GitHub Docker run still needs verification;
+the preparation workspace has no Docker engine.
 
 REFERENCE DOCUMENTATION
 
@@ -248,4 +285,5 @@ https://docs.docker.com/guides/python/
 https://docs.docker.com/reference/compose-file/services/
 https://docs.docker.com/compose/how-tos/environment-variables/variable-interpolation/
 https://docs.docker.com/reference/cli/docker/compose/up/
+https://docs.docker.com/reference/cli/docker/compose/run/
 https://fastapi.tiangolo.com/deployment/docker/

@@ -92,7 +92,7 @@ jobs:
           {"services":{"api":{"image":"analyst-desk-api:ci","network_mode":"none","volumes":[{"type":"bind","source":"$fixture_dir/data","target":"/app/data","read_only":true,"bind":{"create_host_path":false}}]}}}
           JSON
           docker compose -p analyst-desk-permissions -f compose.yaml \
-            -f "$fixture_dir/override.json" run --rm --no-deps --no-build -T \
+            -f "$fixture_dir/override.json" run --rm --no-deps -T \
             -e EXPECTED_UID="$ANALYST_UID" -e EXPECTED_GID="$ANALYST_GID" api python - <<'PY'
           import errno
           import os
