@@ -1,0 +1,21 @@
+# Only these exact files may enter the Docker build context.
+# .env, data/, Git history, editor files, ZIPs and Windows metadata stay outside.
+**
+!Dockerfile
+!.dockerignore
+!requirements-ci.txt
+!requirements-docker.txt
+!main.py
+!company_registry.py
+!companies.json
+!financial_contracts.py
+!financial_data.py
+!financial_metrics.py
+!output_guardrails.py
+!request_guardrails.py
+!sec_periods.py
+!sec_fiscal_years.py
+!download_company_facts.py
+!check_financial_coverage.py
+!test_api.py
+!test_financial_data.py

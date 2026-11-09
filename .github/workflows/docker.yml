@@ -1,0 +1,180 @@
+name: Analyst Desk Docker
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docker:
+    name: Docker image and API health
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Validate Compose configuration without printing secrets
+        env:
+          OPENROUTER_API_KEY: ci-placeholder-not-a-real-key
+        run: |
+          export ANALYST_UID="$(id -u)" ANALYST_GID="$(id -g)"
+          docker compose config --quiet
+
+      - name: Build the test image
+        run: docker build --target tests --tag analyst-desk-tests:ci .
+
+      - name: Run offline tests inside Docker
+        run: |
+          docker run --rm --network none --read-only \
+            --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 \
+            --cap-drop ALL --security-opt no-new-privileges:true \
+            analyst-desk-tests:ci
+
+      - name: Build the API image
+        run: docker build --target runtime --tag analyst-desk-api:ci .
+
+      - name: Read owner-only SEC fixtures through Compose
+        env:
+          OPENROUTER_API_KEY: ci-placeholder-not-a-real-key
+        run: |
+          export ANALYST_UID="$(id -u)" ANALYST_GID="$(id -g)"
+          test "$ANALYST_UID" -ne 0
+          test "$ANALYST_UID" -ne 10001
+          fixture_dir=$(mktemp -d)
+          trap 'rm -rf "$fixture_dir"' EXIT
+
+          # Reuse the offline test fixture, owned by the runner, with mode 0600.
+          docker run --rm -i --network none --read-only \
+            --user "$ANALYST_UID:$ANALYST_GID" \
+            --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 \
+            --cap-drop ALL --security-opt no-new-privileges:true \
+            --mount "type=bind,src=$fixture_dir,dst=/fixtures" \
+            analyst-desk-tests:ci python - <<'PY'
+          from pathlib import Path
+          from test_api import write_fixture
+
+          data = Path('/fixtures/data')
+          raw = data / 'raw'
+          raw.mkdir(parents=True)
+          write_fixture(raw, 'MSFT')
+          data.chmod(0o755)
+          raw.chmod(0o755)
+          for path in raw.iterdir():
+              path.chmod(0o600)
+          print('Created fictional Microsoft fixtures with owner-only permissions.')
+          PY
+
+          # The default image user must reproduce the original permission error.
+          docker run --rm -i --network none --read-only \
+            --cap-drop ALL --security-opt no-new-privileges:true \
+            --mount "type=bind,src=$fixture_dir/data,dst=/app/data,readonly" \
+            analyst-desk-api:ci python - <<'PY'
+          from financial_data import get_annual_financial_fact
+          result = get_annual_financial_fact('MSFT', 'net_income', 2025)
+          assert result.get('code') == 'data_file_unreadable', result
+          print('Reproduced the permission error with the unmatched image user.')
+          PY
+
+          # Override only the CI image, network and fixture source. The user and
+          # remaining restrictions come from the actual shipped compose.yaml.
+          cat > "$fixture_dir/override.json" <<JSON
+          {"services":{"api":{"image":"analyst-desk-api:ci","network_mode":"none","volumes":[{"type":"bind","source":"$fixture_dir/data","target":"/app/data","read_only":true,"bind":{"create_host_path":false}}]}}}
+          JSON
+          docker compose -p analyst-desk-permissions -f compose.yaml \
+            -f "$fixture_dir/override.json" run --rm --no-deps -T \
+            -e EXPECTED_UID="$ANALYST_UID" -e EXPECTED_GID="$ANALYST_GID" api python - <<'PY'
+          import errno
+          import os
+          from pathlib import Path
+          from financial_data import get_annual_financial_fact
+
+          assert os.getuid() == int(os.environ['EXPECTED_UID']) != 0
+          assert os.getgid() == int(os.environ['EXPECTED_GID'])
+          files = list(Path('/app/data/raw').glob('*.json'))
+          assert len(files) == 2, files
+          assert all(p.stat().st_mode & 0o777 == 0o600 for p in files)
+          result = get_annual_financial_fact('MSFT', 'net_income', 2025)
+          assert result['status'] == 'ok', result
+          assert result['value'] == 250, result  # Fictional test value, not SEC data.
+          assert result['period_start'] == '2024-07-01', result
+          assert result['period_end'] == '2025-06-30', result
+          try:
+              Path('/app/data/raw/write-probe').write_text('must not be written')
+          except OSError as exc:
+              assert exc.errno == errno.EROFS, exc
+          else:
+              raise AssertionError('SEC bind mount must remain read-only')
+          print('Compose reads owner-only SEC fixtures and keeps the mount read-only.')
+          PY
+
+      - name: Start the API without external network access
+        run: |
+          docker run --detach --name analyst-desk-api-ci --network none \
+            --read-only --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 \
+            --cap-drop ALL --security-opt no-new-privileges:true \
+            --env OPENROUTER_API_KEY=ci-placeholder-not-a-real-key \
+            analyst-desk-api:ci
+
+      - name: Wait for the image health check
+        run: |
+          for attempt in $(seq 1 45); do
+            status=$(docker inspect --format '{{.State.Health.Status}}' analyst-desk-api-ci)
+            if [ "$status" = "healthy" ]; then
+              exit 0
+            fi
+            if [ "$status" = "unhealthy" ]; then
+              exit 1
+            fi
+            sleep 1
+          done
+          exit 1
+
+      - name: Check API routes and image contents
+        run: |
+          docker exec -i analyst-desk-api-ci python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from urllib.error import HTTPError
+          from urllib.request import Request, urlopen
+
+          assert os.getuid() == 10001, "The API must run as the application user"
+          assert not Path('/app/.env').exists(), "Do not bake .env into the image"
+          assert not any(p.is_file() for p in Path('/app/data').rglob('*')), "Do not bake SEC files into the image"
+          assert not Path('/app/test_api.py').exists(), "Runtime should exclude test modules"
+          with urlopen('http://127.0.0.1:8000/health', timeout=3) as response:
+              assert response.status == 200 and json.load(response) == {'status': 'ok'}
+          with urlopen('http://127.0.0.1:8000/openapi.json', timeout=3) as response:
+              schema = json.load(response)
+              assert 'post' in schema['paths']['/ask']
+          with urlopen('http://127.0.0.1:8000/docs', timeout=3) as response:
+              assert response.status == 200
+          invalid = Request('http://127.0.0.1:8000/ask', data=b'{"question":""}',
+                            headers={'Content-Type': 'application/json'}, method='POST')
+          try:
+              urlopen(invalid, timeout=3)
+          except HTTPError as exc:
+              assert exc.code == 422, exc.code
+          else:
+              raise AssertionError('An empty question must be rejected before a model call')
+          print('Container user, image contents, health, docs and request validation passed.')
+          PY
+
+      - name: Show API logs if a check failed
+        if: failure()
+        run: docker logs analyst-desk-api-ci || true
+
+      - name: Remove the CI container
+        if: always()
+        run: docker rm --force analyst-desk-api-ci || true
