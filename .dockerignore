@@ -19,3 +19,7 @@
 !check_financial_coverage.py
 !test_api.py
 !test_financial_data.py
+!requirements-mcp.txt
+!edgar_mcp.py
+!check_edgar_mcp.py
+!test_edgar_mcp.py

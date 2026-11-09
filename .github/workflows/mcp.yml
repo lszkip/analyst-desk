@@ -1,0 +1,105 @@
+name: Analyst Desk MCP
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  edgar:
+    name: EDGAR MCP contracts and transports
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Validate Compose configuration
+        env:
+          OPENROUTER_API_KEY: ci-placeholder-not-a-real-key
+        run: |
+          export ANALYST_UID="$(id -u)" ANALYST_GID="$(id -g)"
+          docker compose config --quiet
+
+      - name: Build MCP test image
+        run: docker build --target mcp-tests --tag analyst-desk-mcp-tests:ci .
+
+      - name: Run existing and MCP tests without external networking
+        run: |
+          docker run --rm --network none --read-only \
+            --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 \
+            --cap-drop ALL --security-opt no-new-privileges:true \
+            analyst-desk-mcp-tests:ci
+
+      - name: Build MCP runtime image
+        run: docker build --target edgar --tag analyst-desk-edgar:ci .
+
+      - name: Start MCP runtime without API keys or external networking
+        run: |
+          docker run --detach --name analyst-desk-edgar-ci --network none \
+            --read-only --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 \
+            --cap-drop ALL --security-opt no-new-privileges:true \
+            analyst-desk-edgar:ci
+
+      - name: Wait for MCP health check
+        run: |
+          for attempt in $(seq 1 45); do
+            status=$(docker inspect --format '{{.State.Health.Status}}' analyst-desk-edgar-ci)
+            if [ "$status" = "healthy" ]; then
+              exit 0
+            fi
+            if [ "$status" = "unhealthy" ]; then
+              exit 1
+            fi
+            sleep 1
+          done
+          exit 1
+
+      - name: Discover tools in the actual runtime container
+        run: |
+          docker exec -i analyst-desk-edgar-ci python - <<'PY'
+          import asyncio
+          import os
+          from pathlib import Path
+          from fastmcp import Client
+          from fastmcp.client.transports import StreamableHttpTransport
+          from check_edgar_mcp import direct_http_client
+          from edgar_mcp import TOOL_NAMES
+
+          assert os.getuid() == 10001
+          assert 'OPENROUTER_API_KEY' not in os.environ
+          assert not Path('/app/.env').exists()
+          assert not Path('/app/test_edgar_mcp.py').exists()
+          assert not any(p.is_file() for p in Path('/app/data').rglob('*'))
+
+          async def check():
+              transport = StreamableHttpTransport('http://127.0.0.1:8001/mcp', httpx_client_factory=direct_http_client)
+              async with Client(transport, timeout=10) as client:
+                  assert {t.name for t in await client.list_tools()} == TOOL_NAMES
+                  companies = await client.call_tool('list_companies', {})
+                  assert len(companies.structured_content['companies']) == 15
+                  missing = await client.call_tool('get_annual_financial_fact',
+                      {'ticker': 'MSFT', 'metric': 'net_income', 'year': 2025})
+                  assert missing.structured_content['code'] == 'data_file_missing'
+              print('MCP runtime discovery, structured cache error and image isolation passed.')
+
+          asyncio.run(check())
+          PY
+
+      - name: Show MCP logs on failure
+        if: failure()
+        run: docker logs analyst-desk-edgar-ci || true
+
+      - name: Remove MCP CI container
+        if: always()
+        run: docker rm --force analyst-desk-edgar-ci || true
