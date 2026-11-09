@@ -12,6 +12,7 @@ from pydantic import BaseModel, ConfigDict, ValidationError
 from company_registry import COMPANIES, DATA_DIR, filing_url
 from financial_contracts import FinancialFactArguments, TOOL_NAME, MAX_LOOKUPS
 from financial_data import get_annual_financial_fact
+from financial_metrics import METRIC_LABELS, METRIC_DEFINITIONS
 
 
 class GuardrailError(ValueError):
@@ -41,26 +42,21 @@ class AnswerDraft(BaseModel):
     kind: Literal[
         "financial", "ask_company", "ask_metric", "ask_year", "clarify_request",
         "unsupported", "define_net_income", "define_operating_income",
+        "define_net_income_consolidated", "define_pretax_income",
         "define_revenue", "define_profit", "compare_revenue_profit",
     ]
     claims: list[FinancialClaim]
 
 
-METRIC_LABELS = {
-    "revenue": "revenue",
-    "operating_income": "operating income",
-    "net_income": "net income attributable to the parent",
-}
-
 DIRECT_REPLIES = {
     "ask_company": "Which company would you like? Please send the full question again with the company included.",
-    "ask_metric": "Which measure would you like: revenue, operating income or net income? Please send the full question again.",
+    "ask_metric": "Which measure would you like: revenue, GAAP operating income, parent net income, consolidated net income or GAAP pretax income from continuing operations? Please send the full question again.",
     "ask_year": "Which fiscal year would you like? Please send the full question again with a four-digit fiscal year, such as FY2025.",
     "clarify_request": "Please specify the company, annual financial measure and fiscal year in one complete question.",
     "unsupported": (
-        f"This version retrieves annual revenue, operating income and net income for configured companies, "
+        f"This version retrieves annual revenue, GAAP operating income, parent net income, consolidated net income and GAAP pretax income from continuing operations for configured companies, "
         f"with up to {MAX_LOOKUPS} company/measure/year lookups per question. Available data varies by company. "
-        "It does not yet calculate growth, margins or differences, retrieve quarters, or provide forecasts. "
+        "It does not yet calculate growth, margins or differences, retrieve quarters, provide forecasts or retrieve adjusted/non-GAAP earnings. "
         "Configured tickers: " + ", ".join(COMPANIES) + "."
     ),
     "define_net_income": (
@@ -68,6 +64,8 @@ DIRECT_REPLIES = {
         "This lookup uses net income attributable to the parent, excluding the portion attributable to noncontrolling interests."
     ),
     "define_operating_income": "Operating income is profit or loss from operations after operating expenses; it generally excludes interest and income taxes.",
+    "define_net_income_consolidated": METRIC_DEFINITIONS["net_income_consolidated"],
+    "define_pretax_income": METRIC_DEFINITIONS["pretax_income"],
     "define_revenue": "Revenue is income from selling goods or services before the associated expenses are deducted.",
     "define_profit": "Profit is income minus the relevant costs. Gross profit, operating income and net income subtract different sets of costs.",
     "compare_revenue_profit": "Revenue is income from selling goods or services before expenses. Profit is what remains after the relevant costs are deducted.",
@@ -139,6 +137,19 @@ def check_and_render(draft_json: str, evidence: list[dict], *, data_dir=None) ->
         status = result["status"]
         if status == "not_found":
             lines.append(f"{subject}: no supported matching annual record was found in the cached SEC data{cutoff}. [{evidence_id}]")
+            for alternative in result.get("available_alternatives", []):
+                label = METRIC_LABELS[alternative["metric"]]
+                # Content was reproduced from local facts by verify_evidence.
+                # Never render an alternative amount as the requested measure.
+                links = "; ".join(f"[SEC filing {s['filing_identifier']}]({s['url']})"
+                                  for s in alternative["sources"])
+                lines.append(
+                    f"A separately defined measure is available for the same period{cutoff}: {label}. "
+                    f"It is not a substitute for {METRIC_LABELS[metric]}. "
+                    f"To retrieve it, ask: What was {COMPANIES[ticker]['name']}'s {label} in fiscal year {year}"
+                    + (f", using filings dated on or before {arguments['as_of']}" if arguments['as_of'] else "")
+                    + f"? {links}. [{evidence_id}]"
+                )
         elif status == "conflict":
             lines.append(f"{subject}: conflicting records or reporting periods prevent a reliable selection{cutoff}. No figure is reported. [{evidence_id}]")
         elif status == "unsupported_period":

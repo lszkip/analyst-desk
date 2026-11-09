@@ -24,6 +24,7 @@ from company_registry import COMPANIES
 from financial_data import get_annual_financial_fact
 from output_guardrails import FinancialClaim, GuardrailError, check_and_render
 from request_guardrails import requested_fiscal_years
+from financial_metrics import METRICS
 
 
 def args(ticker="MSFT", metric="net_income", year=2025, as_of=None):
@@ -178,16 +179,15 @@ class AskEndpointTests(unittest.TestCase):
         self.assertEqual(self.lookup.call_count, 6)
         self.assertEqual(self.ai.call_count, 2)
 
-    def test_missing_future_year_is_sent_back_to_ai(self):
+    def test_missing_future_year_is_rendered_without_second_ai_request(self):
         result = self.prepare([args(year=2099)])[0]
         response = self.ask("Microsoft annual net income for FY2099?")
         self.assertEqual(response.status_code, 200, response.text)
         self.assertEqual(result["status"], "not_found")
         self.assertNotIn("USD", response.json()["answer"])
         self.assertEqual(response.json()["guardrail"]["checked_claims"], 0)
-        tool_message = self.ai.call_args_list[1].kwargs["messages"][-1]
-        self.assertEqual(json.loads(tool_message["content"])["result"], result)
-        self.assertEqual(tool_message["tool_call_id"], "call_1")
+        self.assertEqual(response.json()["evidence"][0]["result"], result)
+        self.assertEqual(self.ai.call_count, 1)
 
     def test_missing_metric_is_distinct_from_missing_cache(self):
         self.change_facts(lambda tags: tags.pop("OperatingIncomeLoss"))
@@ -203,6 +203,7 @@ class AskEndpointTests(unittest.TestCase):
         self.assertEqual(response.json()["guardrail"]["checked_claims"], 1)
         self.assertIn("USD 250", response.json()["answer"])
         self.assertIn("no supported matching", response.json()["answer"])
+        self.assertEqual(self.ai.call_count, 2)
 
     def test_conflicting_values_report_no_figure(self):
         def conflict(tags):
@@ -214,6 +215,7 @@ class AskEndpointTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200, response.text)
         self.assertIn("conflicting", response.json()["answer"])
         self.assertNotIn("USD", response.json()["answer"])
+        self.assertEqual(self.ai.call_count, 1)
 
     def test_unsupported_period_reports_no_figure(self):
         def shorten(tags):
@@ -225,6 +227,7 @@ class AskEndpointTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200, response.text)
         self.assertEqual(response.json()["evidence"][0]["result"]["status"], "unsupported_period")
         self.assertNotIn("USD", response.json()["answer"])
+        self.assertEqual(self.ai.call_count, 1)
 
     def test_as_of_cutoff_is_preserved_and_applied(self):
         for cutoff, status in (("2025-07-31", "not_found"), ("2025-08-01", "ok")):
@@ -445,8 +448,13 @@ class AskEndpointTests(unittest.TestCase):
             self.assert_blocked(self.ask())
 
     def test_claim_for_missing_result_is_blocked(self):
-        self.prepare([args(year=2099)], content=draft(claims=[make_claim(self.result())]))
-        self.assert_blocked(self.ask("Microsoft net income for FY2099?"))
+        # A mixed batch still uses a model draft. A missing item cannot become
+        # a claim just because another requested result was found.
+        result = self.result()
+        self.prepare([args(), args(year=2099)], content=draft(claims=[
+            make_claim(result, "e1"), make_claim(result, "e2"),
+        ]))
+        self.assert_blocked(self.ask("Microsoft net income for FY2025 and FY2099?"))
 
     def test_cross_company_evidence_swap_is_blocked(self):
         msft, google = self.result(), self.result(args("GOOGL"))
@@ -543,6 +551,202 @@ class AskEndpointTests(unittest.TestCase):
         self.assertEqual(requests[0]["provider"], {"require_parameters": True})
         self.assertEqual(requests[0]["response_format"]["type"], "json_schema")
         self.assertEqual(requests[1]["tool_choice"], "none")
+
+
+    def add_alternative_facts(self):
+        def mutate(tags):
+            tags["ProfitLoss"] = deepcopy(tags["NetIncomeLoss"])
+            tags[METRICS["pretax_income"][0]] = deepcopy(tags["NetIncomeLoss"])
+            for row in tags["ProfitLoss"]["units"]["USD"]:
+                row["val"] += 20
+            for row in tags[METRICS["pretax_income"][0]]["units"]["USD"]:
+                row["val"] += 100
+        self.change_facts(mutate)
+
+    def test_explicit_consolidated_net_income_returns_distinct_label_and_evidence(self):
+        self.add_alternative_facts()
+        self.prepare([args(metric="net_income_consolidated")])
+        response = self.ask("What was Microsoft's consolidated net income in FY2025?")
+        self.assertEqual(response.status_code, 200, response.text)
+        body = response.json()
+        self.assertIn("including noncontrolling interests", body["answer"])
+        self.assertIn("USD 270", body["answer"])
+        self.assertEqual(body["evidence"][0]["result"]["concept"], "ProfitLoss")
+        self.assertEqual(body["guardrail"]["checked_claims"], 1)
+
+    def test_explicit_pretax_income_is_labelled_continuing_operations(self):
+        self.add_alternative_facts()
+        self.prepare([args(metric="pretax_income")])
+        response = self.ask("What was Microsoft's GAAP pretax income in FY2025?")
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertIn("income from continuing operations before income taxes", response.json()["answer"])
+        self.assertIn("USD 350", response.json()["answer"])
+
+    def test_missing_parent_income_suggests_new_question_but_no_alternative_amount(self):
+        self.add_alternative_facts()
+        self.change_facts(lambda tags: tags.pop("NetIncomeLoss"))
+        self.prepare()
+        response = self.ask()
+        self.assertEqual(response.status_code, 200, response.text)
+        body = response.json()
+        self.assertIn("consolidated net income", body["answer"])
+        self.assertIn("not a substitute", body["answer"])
+        self.assertNotIn("USD 270", body["answer"])
+        self.assertEqual(body["guardrail"]["checked_claims"], 0)
+        self.assertEqual(body["evidence"][0]["result"]["status"], "not_found")
+
+    def test_missing_operating_income_suggests_pretax_with_original_cutoff(self):
+        self.add_alternative_facts()
+        self.change_facts(lambda tags: tags.pop("OperatingIncomeLoss"))
+        self.prepare([args(metric="operating_income", as_of="2025-12-31")])
+        response = self.ask("Microsoft operating income FY2025 using filings dated on or before 2025-12-31?")
+        self.assertEqual(response.status_code, 200, response.text)
+        answer = response.json()["answer"]
+        self.assertIn("before income taxes", answer)
+        self.assertIn("not a substitute for GAAP operating income", answer)
+        self.assertIn("fiscal year 2025, using filings dated on or before 2025-12-31?", answer)
+        self.assertNotIn("USD 350", answer)
+
+    def test_unrequested_alternative_is_blocked_before_any_lookup(self):
+        for metric, question in (
+            ("net_income_consolidated", "Microsoft net income FY2025?"),
+            ("pretax_income", "Microsoft operating income FY2025?"),
+        ):
+            self.ai.side_effect = None
+            self.ai.return_value = fake_response(tool_calls=[fake_tool_call(args(metric=metric))])
+            response = self.ask(question)
+            self.assertEqual(response.status_code, 502)
+            self.assertEqual(response.json()["detail"]["code"], "request_guardrail_blocked")
+            self.lookup.assert_not_called()
+
+    def test_mixed_batch_with_unrequested_alternative_reads_no_data(self):
+        self.ai.return_value = fake_response(tool_calls=[fake_tool_call(args(metric="revenue"), 1),
+                                                        fake_tool_call(args(metric="pretax_income"), 2)])
+        response = self.ask("Microsoft revenue and operating income FY2025?")
+        self.assertEqual(response.status_code, 502)
+        self.lookup.assert_not_called()
+
+    def test_non_gaap_or_adjusted_request_cannot_be_served_with_gaap_facts(self):
+        for question, metric in (("IBM non-GAAP operating income FY2025?", "operating_income"),
+                                 ("Microsoft adjusted pretax income FY2025?", "pretax_income")):
+            self.ai.return_value = fake_response(tool_calls=[fake_tool_call(args(metric=metric))])
+            response = self.ask(question)
+            self.assertEqual(response.status_code, 502)
+            self.assertEqual(response.json()["detail"]["code"], "request_guardrail_blocked")
+            self.lookup.assert_not_called()
+
+    def test_alternative_suggestions_cannot_be_promoted_to_claims(self):
+        self.add_alternative_facts()
+        self.change_facts(lambda tags: tags.pop("NetIncomeLoss"))
+        alternative = self.result(args(metric="net_income_consolidated"))
+        google = self.result(args("GOOGL", "revenue"))
+        self.prepare([args(), args("GOOGL", "revenue")], content=draft(claims=[
+            make_claim(alternative, "e1"), make_claim(google, "e2"),
+        ]))
+        self.assert_blocked(self.ask("Microsoft parent net income and Google revenue FY2025?"))
+
+    def test_changed_suggestion_definition_and_source_are_blocked(self):
+        self.add_alternative_facts()
+        self.change_facts(lambda tags: tags.pop("NetIncomeLoss"))
+        result = self.result()
+        for field, value in (("metric", "pretax_income"), ("label", "parent net income"),
+                             ("definition", "Same as parent income"), ("sources", [])):
+            changed = deepcopy(result)
+            changed["available_alternatives"][0][field] = value
+            self.prepare()
+            self.lookup.side_effect = lambda *a, **k: changed
+            self.assert_blocked(self.ask())
+
+    def test_new_metric_definitions_need_no_financial_claim_or_lookup(self):
+        for kind in ("define_net_income_consolidated", "define_pretax_income"):
+            self.ai.return_value = fake_response(content=draft(kind))
+            response = self.ask("What does this accounting measure mean?")
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.json()["guardrail"]["status"], "not_applicable")
+            self.lookup.assert_not_called()
+
+    def test_tool_schema_uses_all_five_distinct_metric_names(self):
+        schema = main.TOOLS[0]["function"]["parameters"]
+        self.assertEqual(set(schema["properties"]["metric"]["enum"]), set(METRICS))
+
+    def test_missing_parent_income_does_not_depend_on_model_answer_kind(self):
+        self.add_alternative_facts()
+        self.change_facts(lambda tags: tags.pop("NetIncomeLoss"))
+        # The live failure selected a nonfinancial kind after a missing lookup.
+        # That second response must never be requested for a status-only batch.
+        for kind in ("unsupported", "ask_metric", "clarify_request", "define_net_income"):
+            with self.subTest(kind=kind):
+                self.ai.reset_mock()
+                self.prepare(content=draft(kind))
+                response = self.ask()
+                self.assertEqual(response.status_code, 200, response.text)
+                body = response.json()
+                self.assertEqual(body["guardrail"], {"status": "passed", "checked_claims": 0})
+                self.assertIn("no supported matching", body["answer"])
+                self.assertIn("consolidated net income", body["answer"])
+                self.assertNotIn("USD", body["answer"])
+                self.assertEqual(self.ai.call_count, 1)
+
+    def test_missing_operating_income_needs_no_second_model_request(self):
+        self.add_alternative_facts()
+        self.change_facts(lambda tags: tags.pop("OperatingIncomeLoss"))
+        self.ai.side_effect = [
+            fake_response(tool_calls=[fake_tool_call(args(metric="operating_income"))]),
+            AssertionError("No second model request is needed for a missing result"),
+        ]
+        response = self.ask("Microsoft operating income FY2025?")
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertIn("before income taxes", response.json()["answer"])
+        self.assertNotIn("USD", response.json()["answer"])
+        self.assertEqual(self.ai.call_count, 1)
+
+    def test_all_missing_batch_preserves_each_request_and_suggestion(self):
+        self.add_alternative_facts()
+        self.change_facts(lambda tags: [tags.pop(tag) for tag in ("NetIncomeLoss", "OperatingIncomeLoss")])
+        requests = [args(year=2024), args(metric="operating_income")]
+        expected = self.prepare(requests, content=draft("unsupported"))
+        response = self.ask("Microsoft parent net income FY2024 and operating income FY2025?")
+        self.assertEqual(response.status_code, 200, response.text)
+        body = response.json()
+        self.assertEqual([e["arguments"] for e in body["evidence"]], requests)
+        self.assertEqual([e["result"] for e in body["evidence"]], expected)
+        self.assertIn("[e1]", body["answer"])
+        self.assertIn("[e2]", body["answer"])
+        self.assertIn("consolidated net income", body["answer"])
+        self.assertIn("before income taxes", body["answer"])
+        self.assertNotIn("USD", body["answer"])
+        self.assertEqual(body["guardrail"], {"status": "passed", "checked_claims": 0})
+        self.assertEqual(self.ai.call_count, 1)
+
+    def test_missing_status_still_rejects_cache_changed_after_lookup(self):
+        self.prepare([args(year=2099)])
+        def lookup_then_change_cache(*positional, **kwargs):
+            result = get_annual_financial_fact(*positional, **kwargs)
+            path = self.folder / "MSFT_companyfacts.json"
+            path.write_text(path.read_text() + "\n")
+            return result
+        self.lookup.side_effect = lookup_then_change_cache
+        self.assert_blocked(self.ask("Microsoft net income FY2099?"))
+        self.assertEqual(self.ai.call_count, 1)
+
+    def test_successful_result_disguised_as_missing_is_still_blocked(self):
+        forged = {**self.result(), "status": "not_found"}
+        self.prepare(content=draft())
+        self.lookup.return_value = forged
+        self.assert_blocked(self.ask())
+        self.assertEqual(self.ai.call_count, 1)
+
+    def test_mixed_found_and_missing_batch_still_requires_financial_draft(self):
+        self.prepare([args(), args("GOOGL", year=2099)], content=draft("unsupported"))
+        self.assert_blocked(self.ask("Microsoft net income FY2025 and Google net income FY2099?"))
+        self.assertEqual(self.ai.call_count, 2)
+
+    def test_nonfinancial_draft_with_evidence_is_still_rejected_by_guardrail(self):
+        for request in (args(), args(year=2099)):
+            evidence = [{"id": "e1", "tool": main.TOOL_NAME, "arguments": request,
+                         "result": self.result(request)}]
+            with self.assertRaisesRegex(GuardrailError, "did not account for the tool results"):
+                check_and_render(draft("unsupported"), evidence, data_dir=self.folder)
 
 
 class RequestedFiscalYearTests(unittest.TestCase):

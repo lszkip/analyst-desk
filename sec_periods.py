@@ -13,13 +13,9 @@ import re
 
 from company_registry import COMPANIES, normalise_ticker, filing_url
 from sec_fiscal_years import validate_year_evidence
+from financial_metrics import METRICS
 
 ANNUAL_FORMS = ("10-K", "10-K/A")
-METRICS = {
-    "revenue": ("RevenueFromContractWithCustomerExcludingAssessedTax", "Revenues", "SalesRevenueNet"),
-    "operating_income": ("OperatingIncomeLoss",),
-    "net_income": ("NetIncomeLoss",),
-}
 
 
 class FinancialDataError(ValueError):

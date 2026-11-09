@@ -13,6 +13,7 @@ from company_registry import COMPANIES, normalise_ticker
 from financial_data import FinancialDataError, get_annual_financial_fact, select_annual_fact
 from download_company_facts import download_company_facts, _download
 from sec_fiscal_years import extract_year_evidence, primary_document_url, evidence_path
+from financial_metrics import METRICS, METRIC_LABELS, METRIC_DEFINITIONS, CORE_METRICS, MetricName
 
 ACC = "0000789019-25-000001"
 AMEND = "0000789019-25-000002"
@@ -489,6 +490,124 @@ class FiscalYearEvidenceTests(unittest.TestCase):
         evidence["quote"] = evidence["quote"].replace("fiscal 2026", "fiscal 2027")
         self.history_path.write_text(json.dumps(meta))
         self.assertEqual(self.lookup()["code"], "invalid_data_file")
+
+
+class MetricDefinitionTests(unittest.TestCase):
+    def facts(self, *, parent=True, consolidated=True, pretax=True):
+        facts = document()
+        tags = facts["facts"]["us-gaap"]
+        if not parent:
+            del tags["NetIncomeLoss"]
+        # Revenue establishes the period even if the requested measure is absent.
+        tags["Revenues"] = {"units": {"USD": [record(1000)]}}
+        if consolidated:
+            tags["ProfitLoss"] = {"units": {"USD": [record(120)]}}
+        if pretax:
+            tags[METRICS["pretax_income"][0]] = {"units": {"USD": [record(160)]}}
+        return facts
+
+    def lookup(self, metric, facts=None, **kwargs):
+        return select_annual_fact(self.facts() if facts is None else facts,
+                                 "MSFT", metric, 2025, history=history(), **kwargs)
+
+    def test_parent_and_consolidated_profits_remain_distinct(self):
+        parent = self.lookup("net_income")
+        group = self.lookup("net_income_consolidated")
+        self.assertEqual((parent["value"], parent["concept"]), (100, "NetIncomeLoss"))
+        self.assertEqual((group["value"], group["concept"]), (120, "ProfitLoss"))
+        self.assertIn("including", group["metric_definition"])
+
+    def test_missing_parent_suggests_consolidated_without_returning_an_amount(self):
+        result = self.lookup("net_income", self.facts(parent=False))
+        self.assertEqual((result["status"], result["metric"]), ("not_found", "net_income"))
+        self.assertNotIn("value", result)
+        alternative = result["available_alternatives"][0]
+        self.assertEqual(alternative["metric"], "net_income_consolidated")
+        self.assertEqual(alternative["concept"], "ProfitLoss")
+        self.assertNotIn('"value"', json.dumps(alternative))
+        self.assertEqual(alternative["sources"][0]["filing_identifier"], ACC)
+
+    def test_parent_only_is_not_automatically_consolidated(self):
+        result = self.lookup("net_income_consolidated", self.facts(consolidated=False))
+        self.assertEqual(result["status"], "not_found")
+        self.assertNotIn("value", result)
+        self.assertEqual(result["available_alternatives"][0]["metric"], "net_income")
+
+    def test_pretax_income_does_not_fill_missing_operating_income(self):
+        result = self.lookup("operating_income")
+        self.assertEqual(result["status"], "not_found")
+        self.assertNotIn("value", result)
+        self.assertEqual(result["available_alternatives"][0]["metric"], "pretax_income")
+        self.assertEqual(self.lookup("pretax_income")["value"], 160)
+
+    def test_different_pretax_equity_investment_definition_is_not_an_alias(self):
+        facts = self.facts(pretax=False)
+        tag = "IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments"
+        facts["facts"]["us-gaap"][tag] = {"units": {"USD": [record(170)]}}
+        self.assertEqual(self.lookup("pretax_income", facts)["status"], "not_found")
+
+    def test_alternative_must_match_period_currency_and_cutoff(self):
+        for change in ("different_period", "currency", "future"):
+            facts = self.facts(parent=False)
+            tag = facts["facts"]["us-gaap"]["ProfitLoss"]
+            if change == "different_period":
+                tag["units"]["USD"][0]["start"] = "2025-01-01"
+            elif change == "currency":
+                tag["units"]["EUR"] = tag["units"].pop("USD")
+            else:
+                tag["units"]["USD"] = [record(120, accn=LATER, filed="2026-08-01", fy=2026)]
+            with self.subTest(change=change):
+                result = self.lookup("net_income", facts, as_of="2025-12-31")
+                self.assertNotIn("available_alternatives", result)
+
+    def test_conflicting_alternative_is_not_advertised_as_available(self):
+        facts = self.facts(parent=False)
+        facts["facts"]["us-gaap"]["ProfitLoss"]["units"]["USD"].append(record(121))
+        self.assertNotIn("available_alternatives", self.lookup("net_income", facts))
+        self.assertEqual(self.lookup("net_income_consolidated", facts)["status"], "conflict")
+
+    def test_new_measures_keep_latest_amendment_and_as_of_policy(self):
+        for metric in ("net_income_consolidated", "pretax_income"):
+            facts = self.facts()
+            facts["facts"]["us-gaap"][METRICS[metric][0]]["units"]["USD"] = [
+                record(0), record(-20, accn=AMEND, filed="2025-08-03", form="10-K/A")]
+            self.assertEqual(self.lookup(metric, facts)["value"], -20)
+            self.assertEqual(self.lookup(metric, facts, as_of="2025-08-02")["value"], 0)
+
+    def test_consolidated_only_facts_can_establish_an_annual_period(self):
+        facts = document([record(120)], tag="ProfitLoss")
+        result = self.lookup("net_income_consolidated", facts)
+        self.assertEqual((result["period_start"], result["period_end"], result["value"]),
+                         ("2024-07-01", "2025-06-30", 120))
+
+    def test_new_measure_values_must_still_be_integer_usd(self):
+        for metric in ("net_income_consolidated", "pretax_income"):
+            for value in (True, 123.0, "123"):
+                facts = self.facts()
+                facts["facts"]["us-gaap"][METRICS[metric][0]]["units"]["USD"][0]["val"] = value
+                with self.subTest(metric=metric, value=value), self.assertRaises(FinancialDataError):
+                    self.lookup(metric, facts)
+
+    def test_metric_catalog_contracts_and_core_coverage_stay_aligned(self):
+        from typing import get_args
+        self.assertEqual(set(get_args(MetricName)), set(METRICS))
+        self.assertEqual(set(METRICS), set(METRIC_LABELS))
+        self.assertEqual(set(METRICS), set(METRIC_DEFINITIONS))
+        self.assertEqual(CORE_METRICS, ("revenue", "operating_income", "net_income"))
+
+    def test_coverage_cli_defaults_remain_135_and_explicit_metrics_work(self):
+        import check_financial_coverage as coverage
+        import io
+        from contextlib import redirect_stdout
+        for argv, expected_count, expected_metrics in (
+            (["coverage"], 135, set(CORE_METRICS)),
+            (["coverage", "--tickers", "IBM", "--metrics", "pretax_income", "--years", "2023", "2024", "2025"],
+             3, {"pretax_income"}),
+        ):
+            with patch("sys.argv", argv), patch.object(coverage, "get_annual_financial_fact", return_value={"status": "ok"}) as lookup, redirect_stdout(io.StringIO()):
+                self.assertEqual(coverage.main(), 0)
+            self.assertEqual(lookup.call_count, expected_count)
+            self.assertEqual({c.args[1] for c in lookup.call_args_list}, expected_metrics)
 
 
 if __name__ == "__main__":

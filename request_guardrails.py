@@ -5,6 +5,7 @@ It supports four-digit fiscal years, lists and ascending inclusive ranges.
 Dates, URLs and obvious monetary amounts do not supply a fiscal-year label.
 Relative years and words such as 'twenty twenty-five' require clarification.
 Company/metric intent and completeness still need separate evaluation.
+New alternative measures also require explicit wording before a tool is run.
 """
 
 import re
@@ -59,3 +60,25 @@ def requested_fiscal_years(question: str) -> frozenset[int]:
             else:
                 return frozenset()
     return frozenset(years)
+
+
+def alternative_metric_is_explicit(question: str, metric: str) -> bool:
+    """Prevent automatic swaps to the newly supported, differently defined measures.
+
+    Deliberately conservative: unsupported wording needs a clearer question.
+    This is a whole-question check, not a complete company-to-measure parser.
+    """
+    text = unicodedata.normalize("NFKC", question).casefold()
+    text = re.sub(r"https?://\S+", " ", text)
+    text = re.sub(r"\s+", " ", text)
+    if re.search(r"\b(?:non[\s‐‑–—-]*gaap|adjusted)\b", text):
+        return False  # A GAAP result cannot answer an adjusted-earnings request.
+    if metric not in {"net_income_consolidated", "pretax_income"}:
+        return True
+    if metric == "net_income_consolidated":
+        return bool(re.search(
+            r"\bconsolidated net (?:income|profit|loss)\b|"
+            r"\bnet (?:income|profit|loss) (?:including|inclusive of) "
+            r"(?:the (?:portion|share) attributable to )?non[ -]?controlling interests?\b", text))
+    return bool(re.search(r"\bpre[\s‐‑–—-]*tax (?:income|profit|loss)\b|"
+                          r"\b(?:income|profit|loss)(?: from continuing operations)? before (?:income )?tax(?:es)?\b", text))
