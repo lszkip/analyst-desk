@@ -7,6 +7,7 @@ No LLM calls or OpenRouter key are involved.
 
 import argparse
 from datetime import datetime, timezone
+from datetime import date
 import hashlib
 import json
 import os
@@ -23,6 +24,10 @@ from company_registry import (
 )
 from sec_periods import (
     FinancialDataError, ANNUAL_FORMS, validate_identity, validate_companyfacts, read_filings,
+    METRICS, metric_records, validate_year,
+)
+from sec_fiscal_years import (
+    extract_year_evidence, primary_document_url, evidence_path, verify_cached_year_evidence,
 )
 
 MAX_DOWNLOAD_BYTES = 25 * 1024 * 1024
@@ -52,7 +57,7 @@ def _download(url, user_agent):
     if delay > 0:
         time.sleep(delay)
     _last_request_started = time.monotonic()
-    request = Request(url, headers={"User-Agent": user_agent, "Accept": "application/json"})
+    request = Request(url, headers={"User-Agent": user_agent, "Accept": "application/json, text/html"})
     with urlopen(request, timeout=30) as response:
         raw = response.read(MAX_DOWNLOAD_BYTES + 1)
     if len(raw) > MAX_DOWNLOAD_BYTES:
@@ -102,15 +107,63 @@ def _validate_root(obj, ticker):
             raise FinancialDataError("Unexpected SEC history filename.")
 
 
-def download_company_facts(ticker, user_agent, *, refresh=False, data_dir=None):
+def _resolve_fiscal_years(facts, history, ticker, years, folder, user_agent, refresh):
+    """Enrich candidate filings only; no ticker-specific calendars or year offsets."""
+    for year in years:
+        validate_year(year)
+    indexed = read_filings(history, ticker)
+    candidates = set()
+    for metric in METRICS:
+        for _, fact in metric_records(facts, metric):
+            accession = fact.get("accn")
+            row = indexed.get(accession) if isinstance(accession, str) else None
+            if not row or fact.get("form") not in ANNUAL_FORMS or fact.get("fp") != "FY":
+                continue
+            resolution = row.get("fiscal_year_evidence", {})
+            if fact.get("fy") not in years and resolution.get("fiscal_year") not in years:
+                continue
+            if fact.get("end") != row.get("reportDate"):
+                continue
+            days = (date.fromisoformat(fact["end"]) - date.fromisoformat(fact["start"])).days + 1
+            if 350 <= days <= 380:
+                candidates.add(fact["accn"])
+    changed, resolved = False, 0
+    # Validate all constructed URLs before any document request.
+    urls = {a: primary_document_url(ticker, indexed[a]) for a in candidates}
+    for accession in sorted(candidates):
+        row = indexed[accession]
+        old = row.get("fiscal_year_evidence")
+        if old and not refresh:
+            verify_cached_year_evidence({"annual_filings": [row]}, ticker, folder)
+            resolved += 1
+            continue
+        raw = _download(urls[accession], user_agent)
+        evidence = extract_year_evidence(raw, ticker, row)
+        if evidence is None:
+            if old:
+                raise FinancialDataError("Previously supported fiscal-year evidence cannot be reproduced.")
+            continue  # Unsupported wording leaves the original conflict unresolved.
+        _atomic_write(evidence_path(folder, evidence), raw)
+        row["fiscal_year_evidence"] = evidence
+        changed = True
+        resolved += 1
+    return changed, {"candidates": len(candidates), "resolved": resolved,
+                     "unresolved": len(candidates) - resolved}
+
+
+def download_company_facts(ticker, user_agent, *, refresh=False, data_dir=None, resolve_years=None):
+    if resolve_years is not None:
+        for year in resolve_years:
+            validate_year(year)
     ticker = normalise_ticker(ticker)
     folder = Path(data_dir if data_dir is not None else DATA_DIR)
     facts_path = folder / f"{ticker}_companyfacts.json"
-    _, _, facts_status = _cached_json(facts_path, companyfacts_url(ticker), user_agent, refresh,
+    facts, _, facts_status = _cached_json(facts_path, companyfacts_url(ticker), user_agent, refresh,
                                       lambda obj: validate_companyfacts(obj, ticker))
     history_path = folder / f"{ticker}_filings.json"
     if history_path.exists() and not refresh:
-        read_filings(json.loads(history_path.read_bytes()), ticker)
+        history = json.loads(history_path.read_bytes())
+        read_filings(history, ticker)
         history_status = "cached"
     else:
         cik = COMPANIES[ticker]["cik"]
@@ -132,9 +185,17 @@ def download_company_facts(ticker, user_agent, *, refresh=False, data_dir=None):
                    "prepared_at": datetime.now(timezone.utc).isoformat()}
         indexed = read_filings(history, ticker)
         history["annual_filings"] = [indexed[key] for key in sorted(indexed)]
-        _atomic_write(history_path, json.dumps(history, indent=2).encode())
         history_status = "prepared"
+    resolution_result = {}
+    if resolve_years:
+        changed, resolution_result = _resolve_fiscal_years(
+            facts, history, ticker, set(resolve_years), folder, user_agent, refresh)
+        if changed:
+            history_status = "prepared"
+    if history_status == "prepared":
+        _atomic_write(history_path, json.dumps(history, indent=2).encode())
     return {"status": facts_status, "ticker": ticker, "path": str(facts_path),
+            "fiscal_year_resolution": resolution_result,
             "history_status": history_status, "history_path": str(history_path)}
 
 
@@ -145,6 +206,8 @@ def main():
     parser.add_argument("tickers", nargs="*", help="Tickers or aliases from companies.json")
     parser.add_argument("--all", action="store_true", help="Prepare all configured companies")
     parser.add_argument("--refresh", action="store_true", help="Replace existing snapshots")
+    parser.add_argument("--resolve-years", type=int, nargs="+",
+                        help="Read candidate original filings for explicit fiscal-year definitions")
     args = parser.parse_args()
     if args.all == bool(args.tickers):
         parser.error("Supply company tickers OR --all.")
@@ -155,7 +218,8 @@ def main():
     for ticker in tickers:
         print(f"Preparing {ticker} facts and filing history...", flush=True)
         try:
-            result = download_company_facts(ticker, os.getenv("SEC_USER_AGENT", ""), refresh=args.refresh)
+            result = download_company_facts(ticker, os.getenv("SEC_USER_AGENT", ""),
+                                            refresh=args.refresh, resolve_years=args.resolve_years)
         except HTTPError as exc:
             print(f"SEC download failed: HTTP {exc.code}. Check SEC_USER_AGENT; retry later if rate-limited.")
             return 1
@@ -164,6 +228,8 @@ def main():
             return 1
         print(f"Facts {result['status']}: {result['path']}")
         print(f"Filing history {result['history_status']}: {result['history_path']}")
+        if result["fiscal_year_resolution"]:
+            print(f"Fiscal-year documents: {result['fiscal_year_resolution']}")
     return 0
 
 

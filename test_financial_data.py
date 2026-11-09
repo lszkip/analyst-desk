@@ -12,6 +12,7 @@ from urllib.error import HTTPError
 from company_registry import COMPANIES, normalise_ticker
 from financial_data import FinancialDataError, get_annual_financial_fact, select_annual_fact
 from download_company_facts import download_company_facts, _download
+from sec_fiscal_years import extract_year_evidence, primary_document_url, evidence_path
 
 ACC = "0000789019-25-000001"
 AMEND = "0000789019-25-000002"
@@ -327,6 +328,167 @@ class CacheAndDownloadTests(unittest.TestCase):
         request = network.call_args.args[0]
         self.assertEqual(request.get_header("User-agent"), "Project test@example.com")
         response.read.assert_called_once_with(25 * 1024 * 1024 + 1)
+
+
+def original_filing(*, year=2025, tagged_year=2025, end="June 30, 2025",
+                    cik="0000789019", form="10-K", context="current", definition=None):
+    definition = definition if definition is not None else (
+        f"References to fiscal {year}, for example, refer to the fiscal year ending {end}.")
+    return (f'<html><body><ix:hidden>'
+        f'<ix:nonNumeric name="dei:EntityCentralIndexKey" contextRef="{context}">{cik}</ix:nonNumeric>'
+        f'<ix:nonNumeric name="dei:DocumentFiscalYearFocus" contextRef="{context}">{tagged_year}</ix:nonNumeric>'
+        f'<ix:nonNumeric name="dei:DocumentFiscalPeriodFocus" contextRef="{context}">FY</ix:nonNumeric>'
+        f'<ix:nonNumeric name="dei:DocumentType" contextRef="{context}">{form}</ix:nonNumeric>'
+        f'</ix:hidden><div>For the fiscal year ended '
+        f'<ix:nonNumeric name="dei:DocumentPeriodEndDate" contextRef="{context}">{end}</ix:nonNumeric>'
+        f'</div><p>{definition}</p></body></html>').encode()
+
+
+class FiscalYearEvidenceTests(unittest.TestCase):
+    """Invented records reproduce a duplicate year label across two annual filings."""
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(); self.addCleanup(self.temp.cleanup)
+        self.folder = Path(self.temp.name)
+        self.facts_path = self.folder / "MSFT_companyfacts.json"
+        self.history_path = self.folder / "MSFT_filings.json"
+        self.facts = document([record(100), record(200, accn=LATER, filed="2026-08-01",
+            start="2025-07-01", end="2026-06-30", fy=2025),
+            record(110, accn=LATER, filed="2026-08-01", fy=2025)])
+        self.history = history(rows=[filing(), filing(LATER, "2026-08-01", "2026-06-30")])
+        self.facts_path.write_text(json.dumps(self.facts))
+        self.history_path.write_text(json.dumps(self.history))
+        self.raw = {ACC: original_filing(), LATER: original_filing(year=2026, end="June 30, 2026")}
+
+    def fetch(self, url, _):
+        for accession, raw in self.raw.items():
+            if accession.replace("-", "") in url:
+                return raw
+        self.fail("Unexpected request: " + url)
+
+    def prepare(self):
+        with patch("download_company_facts._download", side_effect=self.fetch):
+            return download_company_facts("MSFT", "Project test@example.com", data_dir=self.folder, resolve_years=[2025])
+
+    def lookup(self, year=2025, as_of=None):
+        return get_annual_financial_fact("MSFT", "net_income", year, as_of=as_of, data_dir=self.folder)
+
+    def test_duplicate_tag_resolves_both_years_and_keeps_later_comparative(self):
+        self.assertEqual(self.lookup()["code"], "annual_period_conflict")
+        self.prepare()
+        previous, current = self.lookup(), self.lookup(2026)
+        self.assertEqual((previous["period_start"], previous["period_end"], previous["value"]),
+                         ("2024-07-01", "2025-06-30", 110))
+        self.assertEqual((current["period_start"], current["period_end"], current["value"]),
+                         ("2025-07-01", "2026-06-30", 200))
+        self.assertEqual(previous["filing_identifiers"], [LATER])
+        self.assertEqual(previous["fiscal_year_resolutions"][1]["tagged_fiscal_year"], 2025)
+        self.assertEqual(previous["fiscal_year_resolutions"][1]["fiscal_year"], 2026)
+
+    def test_as_of_does_not_use_future_resolution_or_value(self):
+        self.prepare()
+        result = self.lookup(as_of="2025-12-31")
+        self.assertEqual(result["value"], 100)
+        self.assertEqual(len(result["fiscal_year_resolutions"]), 1)
+        self.assertEqual(result["fiscal_year_resolutions"][0]["filing_identifier"], ACC)
+        self.assertEqual(self.lookup(2026, as_of="2025-12-31")["status"], "not_found")
+
+    def test_fiscal_label_is_not_inferred_from_end_year(self):
+        raw = original_filing(year=2025, end="December 29, 2024")
+        row = filing(filed="2025-02-01", end="2024-12-29")
+        evidence = extract_year_evidence(raw, "MSFT", row)
+        self.assertEqual(evidence["fiscal_year"], 2025)
+        self.assertEqual(evidence["report_date"], "2024-12-29")
+
+    def test_nested_inline_period_date_and_split_sentence(self):
+        raw = original_filing().replace(b'June 30, 2025</ix:nonNumeric>',
+            b'<ix:nonNumeric name="dei:CurrentFiscalYearEndDate" contextRef="current">June 30</ix:nonNumeric>, 2025</ix:nonNumeric>')
+        raw = raw.replace(b'References to fiscal 2025', b'References to <b>fiscal 2025</b>')
+        self.assertEqual(extract_year_evidence(raw, "MSFT", filing())["fiscal_year"], 2025)
+
+    def test_date_only_or_unsupported_wording_does_not_resolve(self):
+        for definition in ("For the fiscal year ended June 30, 2025.", "Our year ends in June."):
+            with self.subTest(definition=definition):
+                self.assertIsNone(extract_year_evidence(original_filing(definition=definition), "MSFT", filing()))
+
+    def test_definition_for_another_reporting_date_does_not_resolve(self):
+        raw = original_filing(definition="References to fiscal 2024 refer to the fiscal year ending June 30, 2024.")
+        self.assertIsNone(extract_year_evidence(raw, "MSFT", filing()))
+
+    def test_hidden_definition_does_not_resolve(self):
+        for wrapper in ('<ix:hidden>{}</ix:hidden>', '<div style="display: none">{}</div>'):
+            definition = wrapper.format("References to fiscal 2025 refer to the fiscal year ending June 30, 2025.")
+            self.assertIsNone(extract_year_evidence(original_filing(definition=definition), "MSFT", filing()))
+
+    def test_conflicting_explicit_definitions_are_rejected(self):
+        definition = ("References to fiscal 2025 refer to the fiscal year ending June 30, 2025. "
+                      "References to fiscal 2024 refer to the fiscal year ending June 30, 2025.")
+        with self.assertRaises(ValueError):
+            extract_year_evidence(original_filing(definition=definition), "MSFT", filing())
+
+    def test_wrong_identity_form_context_and_cover_date_are_rejected(self):
+        raw = original_filing()
+        cases = [original_filing(cik="0001652044"), original_filing(form="10-Q"),
+                 raw.replace(b'name="dei:DocumentType" contextRef="current"',
+                             b'name="dei:DocumentType" contextRef="other"'),
+                 raw.replace(b'June 30, 2025</ix:nonNumeric>', b'June 30, 2024</ix:nonNumeric>')]
+        for bad in cases:
+            with self.subTest(raw=bad[:50]), self.assertRaises(ValueError):
+                extract_year_evidence(bad, "MSFT", filing())
+
+    def test_untrusted_primary_document_is_rejected_before_network(self):
+        for name in ("../../secret.html", "https://evil.test/a.htm", "annual.htm?x=1"):
+            self.history["annual_filings"][0]["primaryDocument"] = name
+            self.history_path.write_text(json.dumps(self.history))
+            with patch("download_company_facts._download") as fetch, self.assertRaises(ValueError):
+                download_company_facts("MSFT", "Project test@example.com", data_dir=self.folder, resolve_years=[2025])
+            fetch.assert_not_called()
+
+    def test_preparation_preserves_facts_and_caches_source_bytes(self):
+        before = self.facts_path.read_bytes()
+        prepared = self.prepare()
+        self.assertEqual(prepared["fiscal_year_resolution"], {"candidates": 2, "resolved": 2, "unresolved": 0})
+        self.assertEqual(self.facts_path.read_bytes(), before)
+        meta = json.loads(self.history_path.read_bytes())
+        for row in meta["annual_filings"]:
+            self.assertEqual(evidence_path(self.folder, row["fiscal_year_evidence"]).read_bytes(), self.raw[row["accessionNumber"]])
+
+    def test_prepared_evidence_is_reused_without_network(self):
+        self.prepare(); before = self.history_path.read_bytes()
+        with patch("download_company_facts._download") as fetch:
+            download_company_facts("MSFT", "", data_dir=self.folder, resolve_years=[2025])
+        fetch.assert_not_called()
+        self.assertEqual(before, self.history_path.read_bytes())
+
+    def test_unsupported_document_keeps_conflict(self):
+        self.raw[LATER] = original_filing(year=2026, end="June 30, 2026", definition="Unrecognized definition.")
+        self.assertEqual(self.prepare()["fiscal_year_resolution"]["unresolved"], 1)
+        self.assertEqual(self.lookup()["code"], "annual_period_conflict")
+
+    def test_failed_second_download_preserves_original_history(self):
+        before = self.history_path.read_bytes()
+        with patch("download_company_facts._download", side_effect=[self.raw[ACC], OSError("offline")]):
+            with self.assertRaises(OSError):
+                download_company_facts("MSFT", "Project test@example.com", data_dir=self.folder, resolve_years=[2025])
+        self.assertEqual(before, self.history_path.read_bytes())
+        self.assertEqual(self.lookup()["code"], "annual_period_conflict")
+
+    def test_missing_or_modified_original_document_blocks_lookup(self):
+        self.prepare()
+        row = json.loads(self.history_path.read_bytes())["annual_filings"][1]
+        path = evidence_path(self.folder, row["fiscal_year_evidence"])
+        path.write_bytes(path.read_bytes() + b'changed')
+        self.assertEqual(self.lookup()["code"], "invalid_data_file")
+        path.unlink()
+        self.assertEqual(self.lookup()["code"], "invalid_data_file")
+
+    def test_self_consistent_but_forged_metadata_fails_reextraction(self):
+        self.prepare()
+        meta = json.loads(self.history_path.read_bytes())
+        evidence = meta["annual_filings"][1]["fiscal_year_evidence"]
+        evidence["fiscal_year"] = 2027
+        evidence["quote"] = evidence["quote"].replace("fiscal 2026", "fiscal 2027")
+        self.history_path.write_text(json.dumps(meta))
+        self.assertEqual(self.lookup()["code"], "invalid_data_file")
 
 
 if __name__ == "__main__":

@@ -18,6 +18,7 @@ from sec_periods import (
     validate_companyfacts, read_filings, metric_records, checked_filing,
     select_annual_period,
 )
+from sec_fiscal_years import verify_cached_year_evidence
 
 
 def validate_arguments(ticker, metric, year, as_of):
@@ -99,11 +100,14 @@ def get_annual_financial_fact(ticker, metric, year, *, as_of=None, data_dir=None
         return {"status": "error", "code": "data_file_unreadable", "ticker": ticker,
                 "message": "A local SEC data file could not be read."}
     try:
+        history = json.loads(history_raw)
+        read_filings(history, ticker)
+        verify_cached_year_evidence(history, ticker, folder)
         result = select_annual_fact(json.loads(raw), ticker, metric, year,
-                                    history=json.loads(history_raw), as_of=as_of)
-    except (UnicodeError, json.JSONDecodeError, FinancialDataError):
+                                    history=history, as_of=as_of)
+    except (UnicodeError, ValueError, OSError):
         return {"status": "error", "code": "invalid_data_file", "ticker": ticker,
-                "message": "The SEC files are invalid or inconsistent. Check them, or rerun the downloader with --refresh."}
+                "message": "The SEC files or their original-filing evidence are missing, invalid or inconsistent. Check the cache and rerun the relevant downloader command."}
     result["snapshot_sha256"] = hashlib.sha256(raw).hexdigest()
     result["filings_snapshot_sha256"] = hashlib.sha256(history_raw).hexdigest()
     return result
