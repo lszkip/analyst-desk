@@ -12,12 +12,15 @@ from pathlib import Path
 from company_registry import DATA_DIR, COMPANIES, normalise_ticker
 from financial_data import METRICS, get_annual_financial_fact
 from sec_periods import validate_year
+from financial_metrics import CORE_METRICS
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--tickers", nargs="+", help="Default: all companies in companies.json")
     parser.add_argument("--years", nargs="+", type=int, default=[2023, 2024, 2025])
+    parser.add_argument("--metrics", nargs="+", choices=list(METRICS), default=list(CORE_METRICS),
+                        help="Default: the original revenue, operating_income and net_income baseline")
     parser.add_argument("--data-dir", type=Path, default=DATA_DIR)
     parser.add_argument("--output", type=Path, help="Optional JSON report path")
     args = parser.parse_args()
@@ -31,7 +34,7 @@ def main():
     results = []
     for ticker in tickers:
         for year in years:
-            for metric in METRICS:
+            for metric in dict.fromkeys(args.metrics):
                 result = get_annual_financial_fact(ticker, metric, year, data_dir=args.data_dir)
                 results.append({"request": {"ticker": ticker, "metric": metric, "year": year}, "result": result})
                 period = f"{result.get('period_start', '?')} to {result.get('period_end', '?')}"

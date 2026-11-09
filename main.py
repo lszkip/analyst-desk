@@ -15,7 +15,8 @@ from company_registry import COMPANIES, DATA_DIR
 from financial_contracts import FinancialFactArguments, TOOL_NAME, MAX_LOOKUPS
 from financial_data import get_annual_financial_fact
 from output_guardrails import AnswerDraft, GuardrailError, check_and_render
-from request_guardrails import requested_fiscal_years
+from request_guardrails import requested_fiscal_years, alternative_metric_is_explicit
+from financial_metrics import METRIC_LABELS, METRIC_DEFINITIONS
 
 load_dotenv(Path(__file__).resolve().parent / ".env")
 api_key = os.getenv("OPENROUTER_API_KEY")
@@ -37,7 +38,8 @@ TOOLS = [{
     "function": {
         "name": TOOL_NAME,
         "description": (
-            "Retrieve one company's annual revenue, operating income or net income attributable to parent "
+            "Retrieve one company's annual revenue, GAAP operating income, parent net income, "
+            "consolidated net income or GAAP pretax income from continuing operations "
             "for a fiscal year from cached SEC facts and filing history. Uses actual reporting dates. "
             "Returns evidence or an explicit missing/conflict/unsupported status. No forecasts or calculations."
         ),
@@ -54,6 +56,8 @@ COMPANY_GUIDE = "\n".join(
     f"- {ticker}: {company['name']}; aliases: {', '.join(company.get('aliases', []))}"
     for ticker, company in COMPANIES.items()
 )
+METRIC_GUIDE = "\n".join(f"- {key}: {METRIC_LABELS[key]}. {description}"
+                         for key, description in METRIC_DEFINITIONS.items())
 
 SYSTEM_PROMPT = f"""
 You are Analyst Desk. Python renders your structured answer in English.
@@ -64,8 +68,16 @@ Supported company identities (configured, not a guarantee of data availability):
 
 For an actual annual financial figure with a specified company, measure and fiscal
 year, call {TOOL_NAME}. Map company names/aliases to the canonical ticker above.
-Supported measures are revenue, operating_income, and net_income (attributable
-to the parent). Do not silently substitute other measures or companies.
+Supported measures and their exact definitions:
+{METRIC_GUIDE}
+Do not silently substitute other measures or companies. Plain 'net income'
+retains the net_income (parent) definition. Use net_income_consolidated only
+when the question explicitly asks for consolidated net income or net income
+including noncontrolling interests. Use pretax_income only for an explicit
+pretax income / income before taxes question. Do not use it for operating income.
+Adjusted or non-GAAP earnings are unsupported. Never treat them as GAAP measures.
+If a tool reports available_alternatives, do not turn them into claims or run
+another lookup. Python will suggest a new question with the separate definition.
 Interpret a bare year as that company's FISCAL year and disclose actual dates.
 Do not guess a missing year, company, measure or an unspecified 'latest' year.
 Fiscal years must be explicitly written as four digits, such as FY2025 or
@@ -93,7 +105,8 @@ When tools return evidence:
 
 Without a lookup, return empty claims and an appropriate kind:
 - ask_company, ask_metric, ask_year, or clarify_request for missing/ambiguous inputs.
-- define_net_income, define_operating_income, define_revenue, define_profit,
+- define_net_income, define_net_income_consolidated, define_pretax_income,
+  define_operating_income, define_revenue, define_profit,
   compare_revenue_profit for basic conceptual definitions.
 - unsupported for other requests, forecasts, calculations or more than {MAX_LOOKUPS} lookups.
 
@@ -104,7 +117,7 @@ same arguments. There is no second tool round.
 
 
 def request_ai(messages, tool_choice):
-    # Two model requests maximum: choose tools, then propose checked claims.
+    # Two model requests maximum; status-only results need just the first.
     response = client.chat.completions.create(
         model=MODEL, messages=messages, tools=TOOLS, tool_choice=tool_choice,
         response_format=ANSWER_FORMAT,
@@ -173,6 +186,13 @@ def ask(request: AskRequest):
                     "code": "request_guardrail_blocked",
                     "message": "The AI requested a fiscal year that could not be matched to your question. No financial lookup was run. Please state each fiscal year using four digits and try again.",
                 })
+            if any(not alternative_metric_is_explicit(question, arguments.metric)
+                   for _, arguments in validated):
+                logger.warning("Request guardrail blocked an unrequested alternative measure.")
+                raise HTTPException(status_code=502, detail={
+                    "code": "request_guardrail_blocked",
+                    "message": "The AI requested an accounting measure that could not be matched to the supported request wording. No financial lookup was run. Request consolidated net income or GAAP pretax income explicitly if wanted. Adjusted/non-GAAP requests are unsupported.",
+                })
             messages.append({"role": "assistant", "content": message.content,
                              "tool_calls": [call.model_dump(exclude_none=True) for call, _ in validated]})
             for call, arguments in validated:
@@ -195,6 +215,17 @@ def ask(request: AskRequest):
                         "arguments": arguments.model_dump(), "result": result}
                 evidence.append(item)
                 messages.append({"role": "tool", "tool_call_id": call.id, "content": json.dumps(item)})
+            if evidence and all(
+                isinstance(item["result"], dict)
+                and item["result"].get("status") in {"not_found", "conflict", "unsupported_period"}
+                for item in evidence
+            ):
+                # There are no numerical claims for the model to propose.
+                # Replay and verify the evidence before Python renders statuses
+                # and separate-measure suggestions. This is not an error fallback.
+                status_draft = AnswerDraft(kind="financial", claims=[]).model_dump_json()
+                answer, guardrail = check_and_render(status_draft, evidence, data_dir=DATA_DIR)
+                return {"answer": answer, "model": MODEL, "evidence": evidence, "guardrail": guardrail}
             message = request_ai(messages, "none")
 
         if message.tool_calls or not message.content:

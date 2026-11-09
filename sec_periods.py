@@ -4,19 +4,18 @@ The XBRL 'fy' field labels the filing, including its comparative figures.
 We therefore require the fact's end date to equal that filing's reportDate
 before using 'fy' to identify the requested year's CURRENT annual period.
 After identification, value selection can use later comparative filings.
+When explicitly prepared, definitions from original filings can resolve an
+incorrect 'fy' label. Their evidence is returned in fiscal_year_resolutions.
 """
 
 from datetime import date
 import re
 
 from company_registry import COMPANIES, normalise_ticker, filing_url
+from sec_fiscal_years import validate_year_evidence
+from financial_metrics import METRICS
 
 ANNUAL_FORMS = ("10-K", "10-K/A")
-METRICS = {
-    "revenue": ("RevenueFromContractWithCustomerExcludingAssessedTax", "Revenues", "SalesRevenueNet"),
-    "operating_income": ("OperatingIncomeLoss",),
-    "net_income": ("NetIncomeLoss",),
-}
 
 
 class FinancialDataError(ValueError):
@@ -76,6 +75,8 @@ def read_filings(history, ticker):
                 iso_date(row["reportDate"])
                 if row["filingDate"] < row["reportDate"]:
                     raise FinancialDataError("Filing date precedes report date.")
+            if "fiscal_year_evidence" in row:
+                validate_year_evidence(row["fiscal_year_evidence"], normalise_ticker(ticker), row)
         except ValueError as exc:
             raise FinancialDataError("Invalid annual filing metadata.") from exc
         if accession in filings and filings[accession] != row:
@@ -114,10 +115,16 @@ def checked_filing(record, filings):
 def select_annual_period(facts, filings, ticker, year, as_of=None):
     """Return a period with evidence; never invent a calendar for an unknown year."""
     validate_year(year)
-    periods, short_periods = {}, set()
+    periods, short_periods, resolutions = {}, set(), {}
     for metric in METRICS:
         for tag, record in metric_records(facts, metric):
-            if record.get("form") not in ANNUAL_FORMS or record.get("fy") != year or record.get("fp") != "FY":
+            if record.get("form") not in ANNUAL_FORMS or record.get("fp") != "FY":
+                continue
+            accession = record.get("accn")
+            metadata = filings.get(accession, {}) if isinstance(accession, str) else {}
+            resolution = metadata.get("fiscal_year_evidence")
+            effective_year = resolution["fiscal_year"] if resolution else record.get("fy")
+            if record.get("fy") != year and effective_year != year:
                 continue
             filed = iso_date(record.get("filed"))
             if as_of is not None and filed > as_of:
@@ -125,6 +132,10 @@ def select_annual_period(facts, filings, ticker, year, as_of=None):
             metadata = checked_filing(record, filings)
             if not metadata.get("reportDate") or record.get("end") != metadata["reportDate"]:
                 continue  # A comparative figure, not this filing's current year.
+            if resolution:
+                resolutions[accession] = {"filing_identifier": accession, "filed": filed, **resolution}
+            if effective_year != year:
+                continue
             start, end = iso_date(record.get("start")), iso_date(record.get("end"))
             days = (date.fromisoformat(end) - date.fromisoformat(start)).days + 1
             if days <= 0 or filed < end:
@@ -136,19 +147,24 @@ def select_annual_period(facts, filings, ticker, year, as_of=None):
                         "form": record["form"], "fiscal_year_focus": year,
                         "report_date": metadata["reportDate"], "concept": tag,
                         "url": filing_url(ticker, record["accn"])}
+            if resolution:
+                evidence.update({"fiscal_year_focus": record.get("fy"),
+                                 "resolved_fiscal_year": year,
+                                 "fiscal_year_basis": resolution["method"]})
             periods.setdefault((start, end), {})[(record["accn"], tag)] = evidence
+    audit = {"fiscal_year_resolutions": [resolutions[key] for key in sorted(resolutions)]} if resolutions else {}
     if len(periods) > 1:
-        return {"status": "conflict", "code": "annual_period_conflict",
+        return {**audit, "status": "conflict", "code": "annual_period_conflict",
                 "message": "More than one annual reporting period matches this fiscal year; no period selected.",
                 "candidate_periods": [{"start": p[0], "end": p[1]} for p in sorted(periods)]}
     if not periods:
         if short_periods:
-            return {"status": "unsupported_period", "code": "nonstandard_annual_period",
+            return {**audit, "status": "unsupported_period", "code": "nonstandard_annual_period",
                     "message": "Only nonstandard or shorter periods were found. This version requires a full 350–380 day year."}
-        return {"status": "not_found", "code": "annual_period_not_found",
+        return {**audit, "status": "not_found", "code": "annual_period_not_found",
                 "message": "No supported annual period could be established for this fiscal year from the cached filings and USD facts."}
     (start, end), evidence = next(iter(periods.items()))
-    return {"status": "ok", "period_start": start, "period_end": end,
+    return {**audit, "status": "ok", "period_start": start, "period_end": end,
             "period_days": (date.fromisoformat(end) - date.fromisoformat(start)).days + 1,
             "period_selection_policy": "filing_fiscal_year_and_report_date_with_full_year_duration",
             "period_sources": [evidence[key] for key in sorted(evidence)]}

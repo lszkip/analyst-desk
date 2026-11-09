@@ -18,13 +18,15 @@ from sec_periods import (
     validate_companyfacts, read_filings, metric_records, checked_filing,
     select_annual_period,
 )
+from sec_fiscal_years import verify_cached_year_evidence
+from financial_metrics import METRIC_LABELS, METRIC_DEFINITIONS, METRIC_ALTERNATIVES
 
 
 def validate_arguments(ticker, metric, year, as_of):
     ticker = normalise_ticker(ticker)
     validate_year(year)
     if not isinstance(metric, str) or metric not in METRICS:
-        raise ValueError("Metric must be revenue, operating_income or net_income.")
+        raise ValueError("Metric must be one of: " + ", ".join(METRICS) + ".")
     if as_of is not None:
         iso_date(as_of)
     return ticker
@@ -42,6 +44,7 @@ that supplies the value: subsequent 10-Ks may restate comparative figures.
     base = {
         "ticker": ticker, "company": facts["entityName"],
         "cik": COMPANIES[ticker]["cik"], "metric": metric,
+        "metric_label": METRIC_LABELS[metric], "metric_definition": METRIC_DEFINITIONS[metric],
         "fiscal_year": year, "unit": "USD", "as_of": as_of,
         "selection_policy": "latest_matching_annual_filing_in_snapshot",
         "companyfacts_url": companyfacts_url(ticker),
@@ -52,6 +55,29 @@ that supplies the value: subsequent 10-Ks may restate comparative figures.
         return {**base, **period}
     base.update({key: value for key, value in period.items() if key != "status"})
     start, end = base["period_start"], base["period_end"]
+    result = _select_period_value(facts, filings, ticker, metric, start, end, as_of)
+    if result["status"] == "not_found":
+        alternatives = []
+        for alternative in METRIC_ALTERNATIVES.get(metric, ()):
+            other = _select_period_value(facts, filings, ticker, alternative, start, end, as_of)
+            if other["status"] != "ok":
+                continue
+            alternatives.append({
+                "metric": alternative, "label": METRIC_LABELS[alternative],
+                "definition": METRIC_DEFINITIONS[alternative], "concept": other["concept"],
+                "period_start": start, "period_end": end, "filed": other["filed"],
+                "sources": [{"filing_identifier": source["filing_identifier"], "url": source["url"]}
+                            for source in other["sources"]],
+            })
+        if alternatives:
+            # Suggestions contain no amount; they cannot become a claim for the
+            # requested measure. The user must explicitly request the other one.
+            result["available_alternatives"] = alternatives
+    return {**base, **result}
+
+
+def _select_period_value(facts, filings, ticker, metric, start, end, as_of):
+    """Read only concepts with the requested definition for one exact period."""
     candidates = []
     for tag, record in metric_records(facts, metric):
         if (record.get("form") not in ANNUAL_FORMS
@@ -71,17 +97,17 @@ that supplies the value: subsequent 10-Ks may restate comparative figures.
                            "filing_identifier": record["accn"], "form": record["form"],
                            "url": filing_url(ticker, record["accn"])})
     if not candidates:
-        return {"status": "not_found", **base, "code": "metric_not_found",
+        return {"status": "not_found", "code": "metric_not_found",
                 "message": "The annual period was identified, but no matching supported USD fact was found."}
     latest_date = max(item["filed"] for item in candidates)
     latest = [item for item in candidates if item["filed"] == latest_date]
     if len({item["value"] for item in latest}) != 1:
-        return {"status": "conflict", **base, "filed": latest_date,
+        return {"status": "conflict", "filed": latest_date,
                 "message": "Latest matching annual records disagree; no value selected.",
                 "candidates": latest}
     chosen_tag = latest[0]["concept"]
     sources = {item["filing_identifier"]: item for item in latest if item["concept"] == chosen_tag}
-    return {"status": "ok", **base, "concept": chosen_tag, "value": latest[0]["value"],
+    return {"status": "ok", "concept": chosen_tag, "value": latest[0]["value"],
             "filed": latest_date, "filing_identifiers": sorted(sources),
             "sources": [sources[key] for key in sorted(sources)]}
 
@@ -99,11 +125,14 @@ def get_annual_financial_fact(ticker, metric, year, *, as_of=None, data_dir=None
         return {"status": "error", "code": "data_file_unreadable", "ticker": ticker,
                 "message": "A local SEC data file could not be read."}
     try:
+        history = json.loads(history_raw)
+        read_filings(history, ticker)
+        verify_cached_year_evidence(history, ticker, folder)
         result = select_annual_fact(json.loads(raw), ticker, metric, year,
-                                    history=json.loads(history_raw), as_of=as_of)
-    except (UnicodeError, json.JSONDecodeError, FinancialDataError):
+                                    history=history, as_of=as_of)
+    except (UnicodeError, ValueError, OSError):
         return {"status": "error", "code": "invalid_data_file", "ticker": ticker,
-                "message": "The SEC files are invalid or inconsistent. Check them, or rerun the downloader with --refresh."}
+                "message": "The SEC files or their original-filing evidence are missing, invalid or inconsistent. Check the cache and rerun the relevant downloader command."}
     result["snapshot_sha256"] = hashlib.sha256(raw).hexdigest()
     result["filings_snapshot_sha256"] = hashlib.sha256(history_raw).hexdigest()
     return result
