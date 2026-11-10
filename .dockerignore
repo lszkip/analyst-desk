@@ -23,3 +23,5 @@
 !edgar_mcp.py
 !check_edgar_mcp.py
 !test_edgar_mcp.py
+!edgar_client.py
+!test_api_mcp.py

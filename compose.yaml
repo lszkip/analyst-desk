@@ -13,6 +13,10 @@ services:
     # The file and key are not sent to the image build.
     environment:
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:?Set OPENROUTER_API_KEY in your existing .env file}
+      EDGAR_MCP_URL: http://edgar:8001/mcp
+    depends_on:
+      edgar:
+        condition: service_healthy
     ports:
       - "127.0.0.1:8000:8000"
     volumes:

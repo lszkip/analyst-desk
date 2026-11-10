@@ -93,7 +93,8 @@ class AskEndpointTests(unittest.TestCase):
         self.folder = Path(temporary.name)
         for ticker in ("MSFT", "GOOGL"):
             write_fixture(self.folder, ticker)
-        for target, value in (("main.DATA_DIR", self.folder), ("main.client", Mock())):
+        for target, value in (("main.DATA_DIR", self.folder), ("main.client", Mock()),
+                              ("main.EDGAR_MCP_URL", None)):
             p = patch(target, value)
             p.start()
             self.addCleanup(p.stop)

@@ -14,11 +14,15 @@ from pydantic import BaseModel, Field, ValidationError
 from company_registry import COMPANIES, DATA_DIR
 from financial_contracts import FinancialFactArguments, TOOL_NAME, MAX_LOOKUPS
 from financial_data import get_annual_financial_fact
-from output_guardrails import AnswerDraft, GuardrailError, check_and_render
+from edgar_client import EdgarMCPError, lookup_batch, validate_endpoint
+from output_guardrails import AnswerDraft, GuardrailError, check_and_render, verify_evidence
 from request_guardrails import requested_fiscal_years, alternative_metric_is_explicit
 from financial_metrics import METRIC_LABELS, METRIC_DEFINITIONS
 
 load_dotenv(Path(__file__).resolve().parent / ".env")
+EDGAR_MCP_URL = os.getenv("EDGAR_MCP_URL")
+if EDGAR_MCP_URL is not None:
+    validate_endpoint(EDGAR_MCP_URL)
 api_key = os.getenv("OPENROUTER_API_KEY")
 if not api_key:
     raise RuntimeError("OPENROUTER_API_KEY is missing from .env")
@@ -154,6 +158,33 @@ def validate_tool_calls(calls):
     return validated
 
 
+def retrieve_batch(validated):
+    """Select the configured backend once, after all request guards pass."""
+    if EDGAR_MCP_URL is not None:
+        try:
+            return lookup_batch(EDGAR_MCP_URL, [args.model_dump() for _, args in validated])
+        except EdgarMCPError:
+            raise HTTPException(status_code=503, detail={
+                "code": "edgar_mcp_unavailable",
+                "message": "The EDGAR MCP service could not complete the financial lookup. Check that the edgar service is running and healthy.",
+            }) from None
+    results = []
+    for _, arguments in validated:
+        try:
+            results.append(get_annual_financial_fact(**arguments.model_dump(), data_dir=DATA_DIR))
+        except (OSError, ValueError, KeyError, TypeError):
+            raise HTTPException(status_code=503, detail={
+                "code": "financial_data_unavailable", "ticker": arguments.ticker,
+                "message": "The local financial data could not be read. Check the SEC cache.",
+            }) from None
+    return results
+
+
+def checked_response(answer, evidence, guardrail):
+    return {"answer": answer, "model": MODEL, "evidence": evidence, "guardrail": guardrail,
+            "lookup_backend": "edgar_mcp" if EDGAR_MCP_URL is not None else "local"}
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
@@ -179,7 +210,7 @@ def ask(request: AskRequest):
             if not requested_years:
                 clarification = AnswerDraft(kind="ask_year", claims=[]).model_dump_json()
                 answer, guardrail = check_and_render(clarification, [], data_dir=DATA_DIR)
-                return {"answer": answer, "model": MODEL, "evidence": [], "guardrail": guardrail}
+                return checked_response(answer, [], guardrail)
             if any(arguments.year not in requested_years for _, arguments in validated):
                 logger.warning("Request guardrail blocked an unrequested fiscal year.")
                 raise HTTPException(status_code=502, detail={
@@ -195,14 +226,8 @@ def ask(request: AskRequest):
                 })
             messages.append({"role": "assistant", "content": message.content,
                              "tool_calls": [call.model_dump(exclude_none=True) for call, _ in validated]})
-            for call, arguments in validated:
-                try:
-                    result = get_annual_financial_fact(**arguments.model_dump(), data_dir=DATA_DIR)
-                except (OSError, ValueError, KeyError, TypeError):
-                    raise HTTPException(status_code=503, detail={
-                        "code": "financial_data_unavailable", "ticker": arguments.ticker,
-                        "message": "The local financial data could not be read. Check the SEC cache.",
-                    }) from None
+            results = retrieve_batch(validated)
+            for (call, arguments), result in zip(validated, results, strict=True):
                 if isinstance(result, dict) and result.get("status") == "error":
                     command = f"python download_company_facts.py {arguments.ticker}"
                     if result.get("code") != "data_file_missing":
@@ -215,6 +240,10 @@ def ask(request: AskRequest):
                         "arguments": arguments.model_dump(), "result": result}
                 evidence.append(item)
                 messages.append({"role": "tool", "tool_call_id": call.id, "content": json.dumps(item)})
+            if EDGAR_MCP_URL is not None:
+                # Reject altered or stale remote evidence BEFORE exposing it to
+                # the model. Final rendering verifies it again after the draft.
+                verify_evidence(evidence, data_dir=DATA_DIR)
             if evidence and all(
                 isinstance(item["result"], dict)
                 and item["result"].get("status") in {"not_found", "conflict", "unsupported_period"}
@@ -225,7 +254,7 @@ def ask(request: AskRequest):
                 # and separate-measure suggestions. This is not an error fallback.
                 status_draft = AnswerDraft(kind="financial", claims=[]).model_dump_json()
                 answer, guardrail = check_and_render(status_draft, evidence, data_dir=DATA_DIR)
-                return {"answer": answer, "model": MODEL, "evidence": evidence, "guardrail": guardrail}
+                return checked_response(answer, evidence, guardrail)
             message = request_ai(messages, "none")
 
         if message.tool_calls or not message.content:
@@ -240,4 +269,4 @@ def ask(request: AskRequest):
     except APIError:
         raise HTTPException(status_code=502, detail="The AI request failed. Check the OpenRouter connection and structured-output support.") from None
 
-    return {"answer": answer, "model": MODEL, "evidence": evidence, "guardrail": guardrail}
+    return checked_response(answer, evidence, guardrail)

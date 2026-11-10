@@ -1,0 +1,195 @@
+ANALYST DESK: CONNECT /ask TO EDGAR MCP
+Prepared 10 November 2026 (Australia/Sydney)
+Starting checkpoint: main 50516b9, merged EDGAR MCP PR #6.
+
+PURPOSE
+The API can now retrieve financial facts through the running EDGAR MCP server.
+Compose sets EDGAR_MCP_URL=http://edgar:8001/mcp for the api service and waits
+for edgar to become healthy before starting api.
+
+Request path:
+  Browser -> FastAPI /ask -> model proposes lookup arguments
+  -> existing request guards -> HTTP MCP -> edgar -> saved SEC facts
+  -> API verifies returned evidence against its own read-only cache
+  -> model proposes claims -> final guardrail -> Python renders the answer.
+
+The model does not choose the MCP endpoint, discover extra tools, or receive
+server-provided prompts. No OpenRouter key is forwarded to EDGAR. The API still
+needs the same SEC cache mount because it verifies remote evidence locally.
+This verification reuses the deterministic financial lookup; it is not an
+independent accounting audit of the underlying data or selection algorithm.
+
+The existing two-model-call / six-lookup limit remains. Every MCP batch has a
+30-second deadline, with shorter initialization and per-call timeouts. There is
+no automatic local retrieval fallback if MCP fails. The original direct/local
+mode remains available when EDGAR_MCP_URL is unset, including for the existing
+133-test baseline. The Compose deployment explicitly selects MCP.
+
+This is the API-to-MCP connection checkpoint before LangGraph orchestration.
+It does not implement multi-agent research, retrieval/reranking, memory,
+approval-gated publishing, or cloud deployment.
+
+EXACT PACKAGE CONTENTS: 9 FILES
+New (3):
+  edgar_client.py
+  test_api_mcp.py
+  API_MCP_INSTALL_AND_TEST.txt
+Updated (6):
+  main.py
+  test_api.py
+  Dockerfile
+  .dockerignore
+  compose.yaml
+  .github/workflows/mcp.yml
+
+Existing dependency pins and the EDGAR server code are reused. Keep all other
+project files, including requirements-mcp.txt, edgar_mcp.py, test_edgar_mcp.py,
+the existing workflows, your .env and data directory.
+
+1. CREATE A BRANCH AND COPY THE FILES
+In your existing WSL terminal:
+
+  cd ~/projects/analyst-desk
+  git status
+  git switch -c feature/api-edgar-mcp
+
+You already pulled main 50516b9. The untracked .vscode/ folder can stay as it is.
+Extract the ZIP and copy its NINE files into the project, preserving the
+.github/workflows/ directory. Replace the six existing files named above.
+Copy individual files into the existing folders; do not replace the whole
+project folder or delete the other workflows.
+
+  git status --short
+
+Expected: six modified tracked files, three new files, plus your existing
+untracked .vscode/. Do not stage .vscode/, .env, downloaded data or the ZIP.
+
+2. BUILD AND RUN ALL TESTS
+These commands use fictional fixtures and a mocked model; no API credits are
+used. HTTP MCP runs over loopback inside the isolated test container.
+
+  docker build --target mcp-tests --tag analyst-desk-mcp-tests:local .
+
+  docker run --rm --network none --read-only \
+    --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 \
+    --cap-drop ALL \
+    --security-opt no-new-privileges:true \
+    analyst-desk-mcp-tests:local
+
+Expected: Ran 179 tests ... OK.
+The total is 133 existing tests + 17 EDGAR MCP tests + 29 API/MCP tests.
+Expected warning lines from invalid-input or blocked-output tests are fine
+when the final result is OK. A FAILED or ERROR summary needs investigation.
+
+3. REBUILD AND START THE TWO SERVICES
+No change to your existing key or host UID/GID settings is required.
+
+  docker compose config --quiet
+  docker compose up --build --detach --wait --wait-timeout 90
+  docker compose ps
+
+Expected: api and edgar are healthy. API port is 127.0.0.1:8000; EDGAR port is
+127.0.0.1:8001. The API image now also contains the pinned MCP client packages.
+
+Inspect only the non-secret endpoint setting:
+
+  docker compose exec api python -c 'import os; print(os.environ.get("EDGAR_MCP_URL"))'
+
+Expected: http://edgar:8001/mcp
+Do not print the complete environment or non-quiet Compose configuration.
+
+4. VERIFY THE LIVE /ask PATH
+This step uses the existing OpenRouter key and can consume API credits.
+Open http://127.0.0.1:8000/docs, expand POST /ask, select Try it out and submit:
+
+  {
+    "question": "What were Microsoft's and Google's annual net incomes in fiscal year 2025?"
+  }
+
+Expected: HTTP 200, evidence for both companies, guardrail status passed and:
+
+  "lookup_backend": "edgar_mcp"
+
+The backend field identifies the configured route. For a financial request,
+the evidence and passed guardrail confirm the successful result. Definition
+or clarification replies also identify the configured route but make no
+financial MCP call.
+
+Do not compare live values with the invented numbers in test fixtures. Actual
+figures, periods and filing dates come from your existing local SEC snapshots.
+
+5. CHECK THAT MCP FAILURE IS VISIBLE
+Stop only the EDGAR service:
+
+  docker compose stop edgar
+
+Submit the same financial question again in /docs. Expected: HTTP 503 with
+detail.code = edgar_mcp_unavailable. No financial answer should be returned.
+This verifies that the API does not silently retrieve an answer locally.
+The initial model request can still consume credits before MCP is contacted.
+
+Restart EDGAR even if the preceding check did not behave as expected:
+
+  docker compose up --detach --wait --wait-timeout 90 edgar
+  docker compose ps
+
+Submit the same question again. Expected: HTTP 200 and lookup_backend edgar_mcp.
+
+If the error is financial_data_unavailable, inspect/prepare the SEC cache on
+the host. If it is output_guardrail_blocked, the draft or evidence failed
+verification; do not disable the guardrail to force an answer. Both services
+must see the same complete data directory and readable original documents.
+
+6. COMMIT AND PUSH AFTER LOCAL VERIFICATION
+
+  git diff --stat
+  git add main.py edgar_client.py test_api.py test_api_mcp.py \
+    Dockerfile .dockerignore compose.yaml .github/workflows/mcp.yml \
+    API_MCP_INSTALL_AND_TEST.txt
+  git diff --cached --stat
+  git commit -m "Route financial API lookups through EDGAR MCP"
+  git push -u origin feature/api-edgar-mcp
+
+Review the staged file list: exactly nine intended files. No secrets or data.
+Open a pull request with base main and compare feature/api-edgar-mcp.
+
+Suggested title:
+  Route financial API lookups through EDGAR MCP
+
+Suggested description:
+  Connects /ask to the EDGAR MCP service over HTTP in Docker Compose. The API
+  validates the whole tool batch, retrieves through MCP, verifies evidence
+  against its local SEC snapshots before drafting, and checks the final claims.
+  Adds bounded MCP requests, a lookup_backend response field and explicit
+  service-unavailable errors with no automatic local retrieval fallback.
+  Adds 29 tests for successful requests, input guards, missing/conflicting data,
+  service failure, malformed results, timeouts and snapshot/claim mismatches.
+
+Add your actual local Docker and live API results to the description. Do not
+claim GitHub CI passed until its checks have completed for the new commit.
+Wait for Analyst Desk tests, Analyst Desk Docker and Analyst Desk MCP to pass
+on the branch and pull request before merging. Their existing check names are
+preserved; the MCP workflow now also runs the API-to-MCP integration tests.
+
+After GitHub shows the pull request as merged:
+
+  git switch main
+  git pull --ff-only origin main
+  git log -1 --oneline
+  git status
+
+PREPARATION VALIDATION AND LIMITS
+- Python 3.12 pinned MCP environment: all 179 tests passed.
+- Original CI dependency environment: all 133 original tests passed.
+- Dependency consistency: pip check passed.
+- YAML for Compose and all three workflows parsed successfully.
+- Integration tests start a real EDGAR HTTP server with a separate cache and
+  submit requests to the FastAPI app through TestClient. Only the model is
+  mocked. The tests do not call OpenRouter or SEC.
+- Docker is unavailable in the preparation workspace. Docker builds, container
+  restrictions, Compose service discovery and live OpenRouter requests must
+  be verified on your laptop and in GitHub Actions using the steps above.
+
+References for the MCP client implementation:
+  https://gofastmcp.com/docs/clients/transports
+  https://gofastmcp.com/docs/clients/tools
