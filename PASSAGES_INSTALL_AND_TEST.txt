@@ -1,0 +1,222 @@
+ANALYST DESK — ITEM PASSAGES AND STRUCTURED TABLES
+Revision 4 — IBM Exhibit 13 coverage; prepared 11 November 2026 (Sydney).
+Requires the completed filing-corpus update and the revision 3 passages.
+
+WHAT THIS FIXES
+IBM's primary 10-K refers to financial material in Exhibit 13 in the same
+SEC filing. Revision 3 correctly reported six coverage warnings: Items 7
+and 8 for FY2023, FY2024 and FY2025. This update adds that actual material.
+It does not suppress the warning or invent section labels.
+
+The downloader reads the Exhibit 13 link from the verified primary filing's
+Item 15 and the incorporated page ranges from Items 7 and 8. It only accepts
+an HTML exhibit inside that exact SEC filing directory. It corroborates the
+company, report year, continuous printed page sequence and section headings.
+Original bytes, fingerprints, source locations and reference chains are saved.
+
+Primary references checked:
+  FY2023: Item 7 pages 6–40; Item 8 pages 44–121.
+  FY2024: Item 7 pages 6–42; Item 8 pages 46–121.
+  FY2025: Item 7 pages 6–38; Item 8 pages 42–116.
+The ranges come from each report, not from a hard-coded year lookup.
+
+FILES (10)
+  filing_passages.py                 extraction/storage, now adds saved exhibits
+  prepare_filing_passages.py         passage command-line entry point
+  test_filing_passages.py            52 existing passage tests
+  filing_supplements.py              NEW: exhibit acquisition, validation, mapping
+  prepare_filing_supplements.py      NEW: exhibit command-line entry point
+  test_filing_supplements.py         NEW: 22 offline supplement tests
+  PASSAGES_INSTALL_AND_TEST.txt      this guide
+  Dockerfile                        adds supplements to both test targets
+  .dockerignore                     admits the new Python files
+  .github/workflows/tests.yml        includes supplement tests in Python CI
+No new dependencies. No change to the /ask API or EDGAR server.
+
+INSTALL ON YOUR CURRENT BRANCH
+Stay on feature/filing-passages. Extract all ten files into the project root,
+preserving .github/workflows/. Replace matching files. Keep data/ in place.
+Do not create another nested project directory or refresh financial snapshots.
+Run each command only after the previous one succeeds.
+
+1. TEST THE PASSAGE AND SUPPLEMENT CODE
+
+python -m unittest -v test_filing_passages.py test_filing_supplements.py
+
+Expected: Ran 74 tests ... OK (52 passage + 22 supplement tests).
+
+2. DOWNLOAD THE THREE IBM EXHIBITS
+
+python prepare_filing_supplements.py IBM --years 2023 2024 2025
+
+This uses the existing SEC_USER_AGENT in your .env. No model calls.
+First successful run: status ok, verified_supplements 3, downloaded 3.
+A retry reuses verified receipts; no need for --refresh on this new step.
+An optional --plan-only shows links and references without writes/networking.
+
+3. VERIFY THE SAVED EXHIBITS
+
+python prepare_filing_supplements.py IBM --years 2023 2024 2025 --verify-only
+
+Expected: status ok, verified_supplements 3. This is offline and read-only.
+
+4. REBUILD ONLY IBM'S PASSAGES
+
+python prepare_filing_passages.py IBM --years 2023 2024 2025 --refresh
+
+This --refresh is intentional: the three old IBM outputs did not include
+Exhibit 13. It rebuilds only these passage objects and preserves the other
+42 manifest entries. It does not re-download or change original sources.
+Expected: status ok, verified_company_years 3, built 3,
+coverage_review_required false, coverage_warnings [].
+
+Observed counts in the three public source copies checked here:
+  IBM FY2023: 359 text passages, 155 tables.
+  IBM FY2024: 361 text passages, 157 tables.
+  IBM FY2025: 338 text passages, 147 tables.
+Each includes the original primary-document passages. Exact counts depend
+on source bytes and parser settings; coverage/source checks matter more.
+
+5. VERIFY ALL 45 REPORTS
+
+python prepare_filing_passages.py --all --years 2023 2024 2025 --verify-only
+
+Expected: status ok, verified_company_years 45, companies 15,
+fiscal_years [2023, 2024, 2025], coverage_review_required false,
+coverage_warnings []. The command replays original sources and saved exhibits
+and compares exact output. It never downloads anything or writes files.
+If an error occurs, keep the error and stop; do not bypass the check.
+
+The prior screenshot totals plus the checked IBM additions would give
+10,901 text passages and 5,334 table passages. The 239 unassigned passages
+are already included in the counts; they are not an additional category.
+Unassigned material remains retained without a guessed Item label.
+
+6. INSPECT AN IBM FINANCIAL SAMPLE
+
+python prepare_filing_passages.py IBM --years 2025 --preview --item 8 --limit 3
+
+The first sample can still be the original reference paragraph. Added samples
+have source_document_type EX-13, an exhibit source_url, its own source_sha256,
+source_page_title, printed_page in source_spans, and the primary report's
+reference text/location in item_reference_sources. Table cells retain their
+text, units, blank cells, merged-cell positions and original HTML locations.
+Preview checks the saved object fingerprint, not full source replay; do step 5
+before relying on samples. Numeric column positions are zero-based.
+
+7. NOW BUILD AND RUN THE FULL DOCKER TEST SUITE
+
+docker build --target mcp-tests -t analyst-desk-mcp-tests:local .
+docker run --rm --network none --read-only \
+  --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 \
+  --cap-drop ALL \
+  --security-opt no-new-privileges:true \
+  analyst-desk-mcp-tests:local
+
+Expected: Ran 297 tests ... OK. Python-only CI runs 251 tests. The Docker
+mcp-tests target includes another 46 MCP tests. Guardrail rejection messages
+in negative tests are expected. Runtime smoke checks are additional.
+Docker is unavailable here; the Docker result must be confirmed on your laptop.
+
+8. REVIEW AND COMMIT AFTER SUCCESS
+
+git diff --check
+git status
+git add filing_passages.py prepare_filing_passages.py test_filing_passages.py \
+  filing_supplements.py prepare_filing_supplements.py test_filing_supplements.py \
+  PASSAGES_INSTALL_AND_TEST.txt Dockerfile .dockerignore .github/workflows/tests.yml
+git diff --cached --stat
+
+Expected: ten staged files if this feature has not yet been committed.
+Do not stage data/, .env, .vscode/ or the ZIP.
+
+git commit -m "Extract source-linked passages and include IBM financial exhibits"
+git push -u origin feature/filing-passages
+
+Open a PR to main, describe actual laptop validation, wait for CI, then merge.
+Retain the feature branch if you prefer. Include remaining scope limits below.
+
+OUTPUT AND PROVENANCE
+  data/filings/objects/<sha>.html
+    Existing original 10-Ks; unchanged by this update.
+  data/filings/supplements/objects/<sha>.html
+    Original Exhibit 13 bytes. Paths in supplemental passages are relative
+    to data/filings/, just as primary-document html_path values are.
+  data/filings/supplements/receipts/IBM_<year>_<accession>.json
+    Completed download and verified-reference record for resumable runs.
+  data/filings/supplements/manifest.json
+    Catalogue of verified exhibits and their primary-filing dependencies.
+  data/passages/objects/<sha>.json
+    Per-company/year passages. IBM includes both original and added passages.
+  data/passages/receipts/<ticker>_<year>_<accession>.json
+    Completion records; rebuild IBM's three receipts deliberately with --refresh.
+  data/passages/manifest.json
+    All prepared company-years, counts and output fingerprints.
+
+The original passage and cell IDs are preserved. Added passages use the
+exhibit's source fingerprint and DOM positions, so citations do not falsely
+point at the primary 10-K. Supplement passages additionally record EX-13,
+primary-source URL/hash/path, explicit Item reference, printed page and title.
+The parent form remains 10-K; source_document_type distinguishes the exhibit.
+HTML character offsets refer to decoded UTF-8 text, not byte offsets. Table
+cells use the same original HTML and stable-ID rules as primary passages.
+
+The new output retains the primary reference paragraphs. Supplemental records
+are appended and carry their Item explicitly; consumers should filter by
+metadata rather than assume every Item is one contiguous array range.
+
+VALIDATION PERFORMED HERE
+- 297 Python tests passed (275 existing + 22 new). Tests use invented reports
+  and no SEC/model connections. They cover wrong years, unsafe/different-filing
+  links, page ranges, missing/duplicate pages, source changes, bad paths,
+  original-ID preservation, old-output refresh, failed download recovery,
+  read-only replay, source changes during a run and keeping other companies.
+- The real IBM FY2023/24/25 primary HTML identities and their linked exhibits
+  were checked directly. Item 7/8 page ranges and tables extracted successfully;
+  all six targeted warnings cleared with actual added content. A complete
+  three-year preparation/replay run also passed using the existing local
+  IBM financial snapshots plus the downloaded public HTML. Replay stayed
+  offline and left saved files and modification times unchanged.
+- These checks do not substitute for verifying your own 45-file cache, Docker
+  execution, numerical claim verification or later retrieval evaluation.
+
+SCOPE AND LIMITATIONS
+- This resolver supports IBM's observed Exhibit 13 Items 7 and 8 layout.
+  It is not a general external-reference crawler. Other references (including
+  proxy statements) are not claimed complete. Market-risk material within the
+  Item 7 pages is included under Item 7; it is not duplicated under Item 7A.
+- Management/auditor pages between the two ranges, stockholder-information
+  pages and performance graphs are outside these two Item references and are
+  not added as Item 7/8 passages. All exhibit bytes remain available locally.
+- The coverage warning remains a targeted short-Item check, not a complete
+  audit of every referenced document. No warnings does not prove all possible
+  financial research questions are answerable.
+- Source HTML is never rewritten; scripts are not executed. This parser is
+  not a browser/full XBRL engine and does not interpret external CSS.
+- Whole tables are preserved, including presentation tables; no automatic
+  financial-table classification or numeric-value conversion is claimed.
+- Text chunks are at most 350 whitespace-delimited words by default. Tables
+  remain whole; later retrieval needs to handle large table records.
+- Keep one writer at a time. A failed batch preserves the preceding manifest
+  and completed receipts for retry. Refresh is an explicit repair/rebuild,
+  not a way to conceal unexplained verification failures.
+- Supplement --refresh may re-download the selected exhibits. After changing
+  those sources, rebuild the corresponding IBM passages with --refresh.
+- Passage preparation and --verify-only always remain offline. Network access
+  belongs only to the explicit supplement download command.
+- untrusted_source is provenance metadata, not a complete prompt-injection
+  defence. Model-facing tools must enforce their own trust boundaries.
+
+PUBLIC SOURCE LINKS
+https://www.sec.gov/Archives/edgar/data/51143/000005114324000012/ibm-20231231.htm
+https://www.sec.gov/Archives/edgar/data/51143/000005114324000012/ibm-20231231_d2.htm
+https://www.sec.gov/Archives/edgar/data/51143/000005114325000015/ibm-20241231.htm
+https://www.sec.gov/Archives/edgar/data/51143/000005114325000015/ibm-20241231_d2.htm
+https://www.sec.gov/Archives/edgar/data/51143/000005114326000010/ibm-20251231.htm
+https://www.sec.gov/Archives/edgar/data/51143/000005114326000010/ibm-20251231_d2.htm
+
+NEXT STEP
+After the real-corpus checks, Docker and Git checkpoint: implement retrieval
+(BM25 + vectors, fusion/reranking, company/year/Item filtering and Recall@5
+evaluation). Search, LangGraph agents and numerical table-claim checks are not
+implemented by this preparation update. AWS remains post-project work.

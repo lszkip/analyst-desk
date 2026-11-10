@@ -32,9 +32,11 @@ CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000
 # The test modules supply their own fake key, responses and financial fixtures.
 FROM app AS tests
 COPY download_company_facts.py check_financial_coverage.py \
-    test_api.py test_financial_data.py filing_corpus.py prepare_filing_corpus.py test_filing_corpus.py ./
+    test_api.py test_financial_data.py filing_corpus.py prepare_filing_corpus.py test_filing_corpus.py \
+    filing_passages.py prepare_filing_passages.py test_filing_passages.py \
+    filing_supplements.py prepare_filing_supplements.py test_filing_supplements.py ./
 HEALTHCHECK NONE
-CMD ["python", "-m", "unittest", "-v", "test_api.py", "test_financial_data.py", "test_filing_corpus.py"]
+CMD ["python", "-m", "unittest", "-v", "test_api.py", "test_financial_data.py", "test_filing_corpus.py", "test_filing_passages.py", "test_filing_supplements.py"]
 
 # Both the API client and EDGAR server use the same pinned MCP dependencies.
 FROM app AS mcp-base
@@ -57,9 +59,11 @@ CMD ["python", "edgar_mcp.py", "--transport", "http", "--host", "0.0.0.0", "--po
 FROM edgar AS mcp-tests
 COPY download_company_facts.py check_financial_coverage.py \
     test_api.py test_financial_data.py test_edgar_mcp.py test_api_mcp.py \
-    filing_corpus.py prepare_filing_corpus.py test_filing_corpus.py ./
+    filing_corpus.py prepare_filing_corpus.py test_filing_corpus.py \
+    filing_passages.py prepare_filing_passages.py test_filing_passages.py \
+    filing_supplements.py prepare_filing_supplements.py test_filing_supplements.py ./
 HEALTHCHECK NONE
-CMD ["python", "-m", "unittest", "-v", "test_api.py", "test_financial_data.py", "test_edgar_mcp.py", "test_api_mcp.py", "test_filing_corpus.py"]
+CMD ["python", "-m", "unittest", "-v", "test_api.py", "test_financial_data.py", "test_edgar_mcp.py", "test_api_mcp.py", "test_filing_corpus.py", "test_filing_passages.py", "test_filing_supplements.py"]
 
 # The default target remains the existing API runtime.
 FROM mcp-base AS runtime

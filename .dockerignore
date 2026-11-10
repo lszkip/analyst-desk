@@ -28,3 +28,9 @@
 !filing_corpus.py
 !prepare_filing_corpus.py
 !test_filing_corpus.py
+!filing_passages.py
+!prepare_filing_passages.py
+!test_filing_passages.py
+!filing_supplements.py
+!prepare_filing_supplements.py
+!test_filing_supplements.py
