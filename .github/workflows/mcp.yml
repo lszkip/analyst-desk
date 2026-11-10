@@ -34,7 +34,7 @@ jobs:
       - name: Build MCP test image
         run: docker build --target mcp-tests --tag analyst-desk-mcp-tests:ci .
 
-      - name: Run existing and MCP tests without external networking
+      - name: Run existing, MCP and API-to-MCP tests without external networking
         run: |
           docker run --rm --network none --read-only \
             --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 \
