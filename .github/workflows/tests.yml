@@ -42,4 +42,4 @@ jobs:
           python -m pip check
 
       - name: Run API and financial-data tests
-        run: python -m unittest -v test_api.py test_financial_data.py
+        run: python -m unittest -v test_api.py test_financial_data.py test_filing_corpus.py
