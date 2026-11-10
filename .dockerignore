@@ -25,3 +25,6 @@
 !test_edgar_mcp.py
 !edgar_client.py
 !test_api_mcp.py
+!filing_corpus.py
+!prepare_filing_corpus.py
+!test_filing_corpus.py

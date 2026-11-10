@@ -1,0 +1,245 @@
+ANALYST DESK — ORIGINAL ANNUAL-REPORT CORPUS
+Revision 3 — prepared 10 November 2026. Base: PR #7 merged, main d387b86.
+
+PURPOSE
+The next retrieval milestone needs original annual-report text and tables.
+Our existing /ask service uses structured SEC financial facts. This update
+prepares one original 10-K HTML document per company/fiscal year, with its
+source and reporting dates. Target: 15 companies x FY2023–FY2025 = 45 reports.
+
+This package does NOT yet extract passages, index vectors, rerank results or
+change /ask. Keeping complete HTML preserves tables for the next parser step;
+it is not yet the required table-aware passage extraction. AWS, Terraform and
+Lambda remain outside this submission step.
+
+FILES (8)
+New:
+  filing_corpus.py                 planning, downloading, cache and verification
+  prepare_filing_corpus.py         command-line entry point
+  test_filing_corpus.py            44 offline tests
+  FILINGS_INSTALL_AND_TEST.txt     this guide
+Modified:
+  sec_fiscal_years.py              compares report dates by value and declared format
+  Dockerfile                      includes new tests in both test targets
+  .dockerignore                   allows the three new Python files into builds
+  .github/workflows/tests.yml      runs corpus tests in ordinary Python CI
+
+No new dependencies. Existing main.py, MCP services, compose.yaml, financial
+lookup policy, prompts and credentials are not changed by this package.
+
+VALIDATION ALREADY PERFORMED
+- Fresh Python 3.12 environment installed the existing requirements-mcp.txt pins.
+- pip check: no broken requirements.
+- 223 tests passed: existing 179 + 44 corpus tests.
+- New tests cover planning all 45 fictional company-years, exact fiscal dates,
+  wrong-company/year/form documents, resolved fiscal-year labels, original
+  bytes and tables, altered snapshots, missing data, interruption and retry,
+  refresh failure, missing coverage, declared/rate-limited HTTP requests,
+  redirect blocking, bounds and source URL validation.
+- These tests use invented financial data and HTML, not actual annual reports.
+- Docker could not be run in the build workspace. Build/run the image below.
+- Your actual 45-report download and verification are still to be performed.
+
+
+REVISION 2: REUSE VERIFIED FISCAL-YEAR SOURCE HTML
+A run stopped after CRM FY2024 with a generic identity-validation error.
+The likely cause is a freshly served copy differing from the exact HTML
+already used for the fiscal-year correction. The live Salesforce FY2025
+filing passes identity parsing, and its delivered HTML contains an extra
+script tag. Any byte difference correctly fails the original hash check.
+
+The downloader now imports the existing verified original document whenever
+fiscal_year_evidence points to one. It keeps the exact bytes, source hash,
+identity checks and re-extraction checks. It does not ignore a hash mismatch
+or normalise away scripts to make different documents appear identical.
+
+Six additional regression tests cover reuse, differing delivery scripts,
+refresh behaviour, a source changed after planning, old receipt compatibility,
+and clearer company/year/reason errors. The subsequent laptop retry successfully reused and verified CRM FY2025.
+The original generic error did not independently prove the exact byte difference.
+
+REVISION 3: EQUIVALENT INLINE REPORT DATES
+The next live failure was DIS FY2023: conflicting inline filing identity.
+Inspection of the original SEC HTML reproduced the issue. The filing includes
+DocumentPeriodEndDate twice in the same context: hidden 9/30/2023 with the
+XBRL date-month-day-year transform, and visible September 30, 2023 with the
+English month-name transform. Both mean 2023-09-30.
+
+The shared identity reader now compares canonical report dates after applying
+supported, namespace-qualified date formats. Numeric dates need a recognised
+format declaration; there is no locale guessing. Truly conflicting dates,
+different contexts, invalid dates and unsupported transforms still fail.
+Original HTML bytes and fingerprints are unchanged. This is a narrow subset
+of XBRL date transformations, not a complete XBRL implementation.
+
+Eight new regression tests cover equivalent dates through preparation and
+verification, different dates, different contexts, unsupported/missing formats,
+invalid dates, namespace aliases and scope, supported registry versions, and
+compatibility with explicit fiscal-year evidence. Real Disney FY2023 and
+Salesforce FY2025 HTML also passed identity validation in the build workspace.
+This is not proof of full 45-report coverage on the laptop.
+
+IF YOU ALREADY INSTALLED AN EARLIER PACKAGE
+Stay on feature/filing-corpus. Replace all eight package files with this revision.
+Since revision 2, sec_fiscal_years.py and test_filing_corpus.py changed, along
+with this guide. Since revision 1, filing_corpus.py and
+prepare_filing_corpus.py also changed.
+Do not delete data/ or use --refresh for this retry.
+
+python -m unittest -v test_filing_corpus.py
+python prepare_filing_corpus.py --all --years 2023 2024 2025
+python prepare_filing_corpus.py --all --years 2023 2024 2025 --verify-only
+
+Expect 44 tests to pass. Completed receipts remain reusable. A source reused
+from the fiscal-year cache is reported separately from newly downloaded HTML.
+The final target remains 45 verified company-years and 15 companies.
+If an error remains, share the new message: it now names the company, fiscal
+year and validation reason. Do not weaken the validation checks.
+
+1. START A BRANCH IN YOUR UBUNTU TERMINAL
+
+cd ~/projects/analyst-desk
+git status
+git log -1 --oneline
+git switch -c feature/filing-corpus
+
+Expected starting point: main at d387b86 and no changes to tracked files.
+The untracked .vscode/ folder may remain. Keep the previous feature branch.
+If feature/filing-corpus already exists, use git switch feature/filing-corpus.
+Extract the ZIP contents directly into this project root. Preserve .github/.
+The four existing files listed above are replaced; the other four are added.
+Do not put a second analyst-desk directory inside your project.
+
+2. RUN THE NEW TESTS
+
+python -m unittest -v test_filing_corpus.py
+
+Expected: Ran 44 tests ... OK.
+If imports fail, use the same activated Python environment as the project.
+The Docker procedure below uses the existing pinned dependencies.
+
+3. READ-ONLY PREFLIGHT FOR SIX REPORTS
+
+python prepare_filing_corpus.py MSFT GOOGL --years 2023 2024 2025 --plan-only
+
+Expected: six company/year rows, with exact reporting periods, accession
+numbers and SEC primary-document URLs, followed by:
+  Plan ready: 6 company-years. No files downloaded or changed.
+
+This reads data/raw/*_companyfacts.json and *_filings.json, including saved
+original-filing evidence used to resolve fiscal-year labels. It never infers
+a fiscal year just from the calendar year of a report's end date.
+
+If this fails, stop and share the error. Do not automatically refresh all
+financial caches or weaken the fiscal-year checks to make it pass.
+
+4. DOWNLOAD AND VERIFY THOSE SIX REPORTS
+
+python prepare_filing_corpus.py MSFT GOOGL --years 2023 2024 2025
+python prepare_filing_corpus.py MSFT GOOGL --years 2023 2024 2025 --verify-only
+
+The downloader uses SEC_USER_AGENT from the existing .env. It must contain
+your project name and contact email. Do not post .env or credentials in chat.
+No OpenRouter calls or credits are used.
+
+The first command downloads missing HTML and verifies inline company ID,
+form, reporting date and fiscal-year label. The second repeats the checks
+against the saved bytes and current financial-cache fingerprints, offline.
+Expected verification: status ok, verified_company_years 6, companies 2.
+
+5. EXPAND TO ALL 45 REPORTS
+
+python prepare_filing_corpus.py --all --years 2023 2024 2025 --plan-only
+python prepare_filing_corpus.py --all --years 2023 2024 2025
+python prepare_filing_corpus.py --all --years 2023 2024 2025 --verify-only
+
+Proceed to each command only after the preceding one succeeds.
+Expected verification: status ok, verified_company_years 45, companies 15,
+two sectors, fiscal_years [2023, 2024, 2025]. Until this succeeds, do not claim
+the real 45-report corpus is complete. Rerunning reuses verified downloads.
+
+6. RUN THE WHOLE SUITE IN DOCKER
+
+docker build --target mcp-tests -t analyst-desk-mcp-tests:local .
+docker run --rm --network none --read-only \
+  --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 \
+  --cap-drop ALL \
+  --security-opt no-new-privileges:true \
+  analyst-desk-mcp-tests:local
+
+Expected: Ran 223 tests ... OK. Guardrail rejection messages in negative
+tests are expected. This test image contains no real SEC cache or API keys.
+The ordinary Python CI workflow now runs 177 tests; the MCP Docker workflow
+runs all 223. Runtime smoke checks are additional to those unittest counts.
+
+7. REVIEW AND COMMIT AFTER THE CHECKS
+
+git diff --check
+git status
+git add filing_corpus.py prepare_filing_corpus.py test_filing_corpus.py \
+  FILINGS_INSTALL_AND_TEST.txt sec_fiscal_years.py Dockerfile .dockerignore .github/workflows/tests.yml
+git diff --cached --stat
+
+Expected: eight staged files. Keep downloaded data, .env and .vscode/ out of
+the commit. Keep the ZIP outside the repository or leave it untracked.
+
+git commit -m "Prepare verified original annual-report corpus"
+git push -u origin feature/filing-corpus
+
+Create a PR to main and record the actual Docker and live corpus results.
+Wait for CI to pass before merging. Do not claim passage retrieval is done.
+
+WHAT GETS SAVED
+  data/filings/objects/<sha256>.html
+    Exact original HTML bytes. Tables and inline tags remain intact.
+  data/filings/receipts/<ticker>_<year>_<accession>.json
+    Per-document metadata enabling resumable preparation.
+  data/filings/manifest.json
+    Catalogue for the later parser: company, sector, fiscal year, period,
+    filing date, accession, original URL, HTML hash/size, source-cache hashes,
+    inline identity, acquisition method and preparation timestamp. A new HTTP
+    download records downloaded_at; reuse of an earlier fiscal-year source
+    records downloaded_at as null because its download time is not known.
+
+The manifest is published only when every requested document succeeds and
+the financial snapshots still agree with the original plan. On failure the
+previous manifest remains intact; completed receipts are reused on retry.
+Earlier HTML objects remain available, including after an explicit refresh.
+
+SCOPE AND LIMITATIONS
+- The policy is one evidenced original 10-K per company/year. Partial 10-K/A
+  amendments do not replace the narrative report. Financial lookup still
+  applies its own existing latest-value/amendment policy. Later research must
+  disclose when narrative and numerical evidence come from different filings.
+- Ambiguous or missing original filings stop preparation. No guessed periods.
+- The HTML validator supports UTF-8 inline-XBRL 10-Ks with consistent cover
+  identity. Unsupported historical formats or inconsistent labels stop with
+  an error for review; real-corpus testing may reveal a format to add.
+- The metadata checks consistency and provenance. It does not independently
+  audit SEC accounting data, detect every document injection or verify every
+  numerical statement in a report. Retrieved text must remain untrusted data.
+- SEC HTTP requests are sequential, capped at roughly 3.33/second, with a
+  declared contact, 30-second socket timeout, 25 MiB response limit and no
+  redirects. A 403/429 should be investigated or retried later, not bypassed.
+- Use one preparation process at a time. Concurrent writers are unsupported.
+- --refresh reprepares selected reports. For documents already used as
+  fiscal-year evidence, it reuses the exact verified data/raw snapshot; for
+  other documents it downloads again. It does not refresh data/raw. Do not
+  run it routinely; changed-source failures deserve review.
+- --as-of YYYY-MM-DD selects only filings published by that date. Verification
+  must use the same cutoff. Future retrieval must apply its own cutoff filter.
+
+NEXT IMPLEMENTATION STEP
+Inspect real documents, split 10-K HTML into Items with stable passage IDs,
+preserve tables, then add hybrid BM25/vector retrieval, reranking, query
+decomposition and labelled Recall@5 evaluation. Original HTML is the input
+for that work; this update only prepares that input.
+
+OFFICIAL SEC REFERENCES
+https://www.sec.gov/search-filings/edgar-application-programming-interfaces
+https://www.sec.gov/about/developer-resources
+https://www.sec.gov/about/webmaster-frequently-asked-questions
+
+DATE-FORMAT REFERENCES
+https://www.sec.gov/Archives/edgar/data/1744489/000174448923000216/dis-20230930.htm
+https://www.xbrl.org/Specification/inlineXBRL-transformationRegistry/REC-2020-02-12/inlineXBRL-transformationRegistry-REC-2020-02-12.html
