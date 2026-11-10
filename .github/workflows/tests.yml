@@ -41,5 +41,5 @@ jobs:
           python -m pip install -r requirements-ci.txt
           python -m pip check
 
-      - name: Run API and financial-data tests
-        run: python -m unittest -v test_api.py test_financial_data.py test_filing_corpus.py
+      - name: Run API, financial-data, corpus, passage and supplement tests
+        run: python -m unittest -v test_api.py test_financial_data.py test_filing_corpus.py test_filing_passages.py test_filing_supplements.py
