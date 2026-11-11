@@ -77,15 +77,43 @@ HEALTHCHECK --interval=20s --timeout=10s --start-period=180s --retries=5 \
 CMD ["python", "filings_kb_mcp.py", "--transport", "http", "--host", "0.0.0.0", "--port", "8002"]
 
 FROM retrieval-base AS mcp-tests
+USER root
+COPY requirements-tools.txt ./
+RUN python -m pip install --no-cache-dir -r requirements-tools.txt \
+    && python -m pip check
+USER 10001:10001
 COPY download_company_facts.py check_financial_coverage.py \
     test_api.py test_financial_data.py test_edgar_mcp.py test_api_mcp.py \
     filing_corpus.py prepare_filing_corpus.py test_filing_corpus.py \
     filing_passages.py prepare_filing_passages.py test_filing_passages.py \
     filing_supplements.py prepare_filing_supplements.py test_filing_supplements.py \
     edgar_mcp.py check_edgar_mcp.py filings_kb_mcp.py setup_retrieval.py \
-    evaluate_filing_retrieval.py test_filing_retrieval.py test_filings_kb_mcp.py ./
+    evaluate_filing_retrieval.py test_filing_retrieval.py test_filings_kb_mcp.py \
+    tool_security.py sandbox_worker.py python_sandbox.py python_sandbox_mcp.py \
+    research_portal.py research_portal_mcp.py research_tools_client.py \
+    setup_research_tools.py check_research_tools.py review_portal_note.py \
+    test_python_sandbox.py test_research_portal.py test_research_tools_mcp.py test_research_tools_setup.py ./
 HEALTHCHECK NONE
-CMD ["python", "-m", "unittest", "-v", "test_api.py", "test_financial_data.py", "test_edgar_mcp.py", "test_api_mcp.py", "test_filing_corpus.py", "test_filing_passages.py", "test_filing_supplements.py", "test_filing_retrieval.py", "test_filings_kb_mcp.py"]
+CMD ["python", "-m", "unittest", "-v", "test_api.py", "test_financial_data.py", "test_edgar_mcp.py", "test_api_mcp.py", "test_filing_corpus.py", "test_filing_passages.py", "test_filing_supplements.py", "test_filing_retrieval.py", "test_filings_kb_mcp.py", "test_python_sandbox.py", "test_research_portal.py", "test_research_tools_mcp.py", "test_research_tools_setup.py"]
+
+FROM mcp-base AS python-sandbox
+USER root
+COPY requirements-tools.txt ./
+RUN python -m pip install --no-cache-dir -r requirements-tools.txt \
+    && python -m pip check
+COPY tool_security.py sandbox_worker.py python_sandbox.py python_sandbox_mcp.py ./
+USER 10001:10001
+EXPOSE 8003
+HEALTHCHECK --interval=30s --timeout=15s --start-period=20s --retries=3 \
+    CMD ["python", "-c", "import json,urllib.request; r=urllib.request.urlopen('http://127.0.0.1:8003/ready',timeout=12); assert json.load(r)['status']=='ok'"]
+CMD ["python", "python_sandbox_mcp.py", "--host", "0.0.0.0", "--port", "8003"]
+
+FROM mcp-base AS research-portal
+COPY tool_security.py research_portal.py research_portal_mcp.py ./
+EXPOSE 8004
+HEALTHCHECK --interval=15s --timeout=5s --start-period=15s --retries=3 \
+    CMD ["python", "-c", "import json,urllib.request; r=urllib.request.urlopen('http://127.0.0.1:8004/health',timeout=3); assert json.load(r)['status']=='ok'"]
+CMD ["python", "research_portal_mcp.py", "--host", "0.0.0.0", "--port", "8004"]
 
 # The default target remains the existing API runtime.
 FROM mcp-base AS runtime

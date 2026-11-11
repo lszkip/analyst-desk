@@ -144,6 +144,65 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  python-sandbox:
+    build:
+      context: .
+      target: python-sandbox
+    image: analyst-desk-python-sandbox:local
+    user: "${ANALYST_UID:?Set ANALYST_UID}:${ANALYST_GID:?Set ANALYST_GID}"
+    environment:
+      SANDBOX_API_TOKEN: ${SANDBOX_API_TOKEN:?Run python setup_research_tools.py}
+    # No data mount, Docker socket, model key or portal credential.
+    networks: [research-tools]
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m,mode=1777
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 64
+    mem_limit: 2g
+    cpus: 2.0
+    init: true
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  research-portal:
+    build:
+      context: .
+      target: research-portal
+    image: analyst-desk-research-portal:local
+    user: "${ANALYST_UID:?Set ANALYST_UID}:${ANALYST_GID:?Set ANALYST_GID}"
+    environment:
+      PORTAL_READ_TOKEN: ${PORTAL_READ_TOKEN:?Run python setup_research_tools.py}
+      PORTAL_DRAFT_TOKEN: ${PORTAL_DRAFT_TOKEN:?Run python setup_research_tools.py}
+      PORTAL_PUBLISH_TOKEN: ${PORTAL_PUBLISH_TOKEN:?Run python setup_research_tools.py}
+      PORTAL_REVIEW_TOKEN: ${PORTAL_REVIEW_TOKEN:?Run python setup_research_tools.py}
+    volumes:
+      - type: bind
+        source: ./data/research_portal
+        target: /app/data/research_portal
+        bind:
+          create_host_path: false
+    networks: [research-tools]
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m,mode=1777
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 64
+    mem_limit: 512m
+    init: true
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   # Internal-only networks cannot publish host ports. Only this fixed-route
   # gateway joins a normal bridge; Qdrant and filings-kb remain internal-only.
   retrieval-gateway:
@@ -157,6 +216,8 @@ services:
     ports:
       - "127.0.0.1:6333:6333"
       - "127.0.0.1:8002:8002"
+      - "127.0.0.1:8003:8003"
+      - "127.0.0.1:8004:8004"
     volumes:
       - type: bind
         source: ./retrieval_gateway.conf
@@ -164,7 +225,7 @@ services:
         read_only: true
         bind:
           create_host_path: false
-    networks: [retrieval, retrieval-access]
+    networks: [retrieval, research-tools, retrieval-access]
     read_only: true
     tmpfs:
       - /tmp:rw,noexec,nosuid,size=64m,mode=1777
@@ -188,3 +249,5 @@ networks:
     internal: true
   retrieval-access:
     driver: bridge
+  research-tools:
+    internal: true
