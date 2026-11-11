@@ -1,0 +1,176 @@
+{
+  "base_commit": "270e062",
+  "branch": "feature/filing-retrieval",
+  "scope": "Qdrant and hybrid retrieval with verified full-corpus laptop indexing and live KB tools; relevance evaluation and remaining capstone requirements pending",
+  "files": [
+    {
+      "path": ".dockerignore",
+      "sha256": "ad6c7abf69e6eeba74b121e2aece8ceb0517fe170e50aab895437061df2e6bc9",
+      "bytes": 1084,
+      "action": "replace"
+    },
+    {
+      "path": ".github/workflows/docker.yml",
+      "sha256": "19c23431dc1b41cc159082adeeaf1bc41ef7ec7e6f57e693e037f49feb4e8a7d",
+      "bytes": 7895,
+      "action": "replace"
+    },
+    {
+      "path": ".github/workflows/mcp.yml",
+      "sha256": "e2ab4b7650af3520328bc6adc491e117e2f5e07df8ce0afb764c251dbc57004c",
+      "bytes": 4025,
+      "action": "replace"
+    },
+    {
+      "path": ".github/workflows/tests.yml",
+      "sha256": "42a80efda1c9e4848772535c2ab751e6847e54f52a8ad05180a8fec0dd92a1df",
+      "bytes": 1573,
+      "action": "replace"
+    },
+    {
+      "path": "CAPSTONE_REQUIREMENTS.md",
+      "sha256": "0910adc237091bae29f2f1185269ddd4ca8791b8fb77c66002f4e8eb3da6029a",
+      "bytes": 12962,
+      "action": "add"
+    },
+    {
+      "path": "Dockerfile",
+      "sha256": "556c4cd25f9d78c848de144f8ba4d3c3abe19216c79c278ce6f7cffd0d31607d",
+      "bytes": 4754,
+      "action": "replace"
+    },
+    {
+      "path": "RETRIEVAL_INSTALL_AND_TEST.txt",
+      "sha256": "4e663ae51ceff137bb33c1364396522c33d21a5989fe913dba0281d53cc08e83",
+      "bytes": 13865,
+      "action": "add"
+    },
+    {
+      "path": "RETRIEVAL_VALIDATION.md",
+      "sha256": "cfd27efe785c52467cb7b3f76ac762a1005c4b6ecfc915448aa0a68a6244f728",
+      "bytes": 8280,
+      "action": "add"
+    },
+    {
+      "path": "check_filings_kb.py",
+      "sha256": "e6a009d08904c37d0accf068a80372c6bb77ed859e3c3d9d1a8f990b1240b1d8",
+      "bytes": 3066,
+      "action": "add"
+    },
+    {
+      "path": "compose.yaml",
+      "sha256": "d213e3c744894e57f8d513552a89d3d287aae3fbf3835ba5f82fab69f20c8112",
+      "bytes": 5647,
+      "action": "replace"
+    },
+    {
+      "path": "edgar_mcp.py",
+      "sha256": "23f1ddd87c0cc1f8ea900ee6a4ca5173938e839c5d87acdeedc82df617107e7e",
+      "bytes": 12399,
+      "action": "replace"
+    },
+    {
+      "path": "evaluate_filing_retrieval.py",
+      "sha256": "c300b85cabe7658aa8c43799c2160678de6b92f888cf2ca6d47ac1cddd33fd75",
+      "bytes": 8441,
+      "action": "add"
+    },
+    {
+      "path": "export_retrieval_review.py",
+      "sha256": "2e058ee76dea22b43a1562d1798f8cf89ba8d20eb5996d6738299680f7d40a67",
+      "bytes": 3530,
+      "action": "add"
+    },
+    {
+      "path": "filing_index.py",
+      "sha256": "cc81b7a598d93e7c23a3e054dd9a7e3a38c8e0d581ff3f26a4c9045435584557",
+      "bytes": 10691,
+      "action": "add"
+    },
+    {
+      "path": "filing_retrieval.py",
+      "sha256": "7d92737b18b4018870286b7a15e8499e6c569657abdde78a404b267545afdc83",
+      "bytes": 12107,
+      "action": "add"
+    },
+    {
+      "path": "filings_kb_mcp.py",
+      "sha256": "2075cfda6be9e5b1b092b214b32bef05ef272699db12d788636ac8fd9710f86e",
+      "bytes": 7945,
+      "action": "add"
+    },
+    {
+      "path": "prepare_filing_index.py",
+      "sha256": "c8f2e58fefe63611cdd635b25ec6589b9dabc22645f1cd4f71723f341823ce4f",
+      "bytes": 3368,
+      "action": "add"
+    },
+    {
+      "path": "prepare_retrieval_models.py",
+      "sha256": "4b07181615f3d817a58ea8a20450bc5937cb5f3a9c2f427c51b756cadab28e9b",
+      "bytes": 872,
+      "action": "add"
+    },
+    {
+      "path": "requirements-retrieval.txt",
+      "sha256": "75d5f50fe89a84840378f3068c1ee05b79f9c25a806442d07d59d1e342ff90d9",
+      "bytes": 507,
+      "action": "add"
+    },
+    {
+      "path": "retrieval_config.json",
+      "sha256": "544008638849d72eff77543a0cbaaa3a0b82027700231a8334d8ab12493017c6",
+      "bytes": 1848,
+      "action": "add"
+    },
+    {
+      "path": "retrieval_data.py",
+      "sha256": "6e3b3271b806bfb7bf85bbf78cae886b192ccb5cb554ac1f62570ee1dfdd21b8",
+      "bytes": 10931,
+      "action": "add"
+    },
+    {
+      "path": "retrieval_models.py",
+      "sha256": "29eb1fa15052fe42fd1ba3aa34252435fbd98023b7f760ebd95a17488f1ef610",
+      "bytes": 6782,
+      "action": "add"
+    },
+    {
+      "path": "retrieval_questions.jsonl",
+      "sha256": "39eab4bc3f371cd832111d01e9740c4b9355f4aa663fdd47c857e9e01a9b0e36",
+      "bytes": 14876,
+      "action": "add"
+    },
+    {
+      "path": "search_filings.py",
+      "sha256": "1680c9f4b827cafc963d8f4bc8feda3c437b365e189d11f381e39fd3473212aa",
+      "bytes": 2797,
+      "action": "add"
+    },
+    {
+      "path": "setup_retrieval.py",
+      "sha256": "b7a9c9b7d1a5ee68ae6b9ddf25cd182d63f5714ce31bd86c366c4ebf2b324604",
+      "bytes": 2149,
+      "action": "add"
+    },
+    {
+      "path": "test_filing_retrieval.py",
+      "sha256": "d3b7133a49fd46322e95c20cd59a12e738065fdb236d167834df616b8f2ce3b0",
+      "bytes": 20874,
+      "action": "add"
+    },
+    {
+      "path": "test_filings_kb_mcp.py",
+      "sha256": "01b70ad8f8baba113a26b7ee2b5e94a281d5d25d82cb398bf9cd50671ce2d6c1",
+      "bytes": 9071,
+      "action": "add"
+    },
+    {
+      "path": "retrieval_gateway.conf",
+      "action": "add",
+      "bytes": 1531,
+      "sha256": "45a92f2dfbe40457aae113727ed5db3033fce82be8c79e5af0113c5ca01c3735"
+    }
+  ],
+  "update_version": "v2-evidence-checkpoint"
+}

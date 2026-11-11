@@ -74,3 +74,117 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+  qdrant:
+    image: qdrant/qdrant:v1.20.0@sha256:9bfc89f9914fc14876a88c05270685921a55b8877b254a98bcc1cc2f0a424cd2
+    user: "${ANALYST_UID:?Set ANALYST_UID}:${ANALYST_GID:?Set ANALYST_GID}"
+    environment:
+      QDRANT__SERVICE__API_KEY: ${QDRANT_API_KEY:?Run python setup_retrieval.py}
+      QDRANT__SERVICE__READ_ONLY_API_KEY: ${QDRANT_READ_ONLY_API_KEY:?Run python setup_retrieval.py}
+      QDRANT__SERVICE__ENABLE_CORS: "false"
+      QDRANT__TELEMETRY_DISABLED: "true"
+      QDRANT_INIT_FILE_PATH: /tmp/.qdrant-initialized
+      QDRANT__STORAGE__SNAPSHOTS_PATH: /qdrant/snapshots
+    volumes:
+      - type: bind
+        source: ./data/qdrant_storage
+        target: /qdrant/storage
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./data/qdrant_snapshots
+        target: /qdrant/snapshots
+        bind:
+          create_host_path: false
+    networks: [retrieval]
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=128m,mode=1777
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  filings-kb:
+    build:
+      context: .
+      target: filings-kb
+    image: analyst-desk-filings-kb:local
+    user: "${ANALYST_UID:?Set ANALYST_UID}:${ANALYST_GID:?Set ANALYST_GID}"
+    environment:
+      QDRANT_URL: http://qdrant:6333
+      QDRANT_READ_ONLY_API_KEY: ${QDRANT_READ_ONLY_API_KEY:?Run python setup_retrieval.py}
+    depends_on:
+      qdrant:
+        condition: service_started
+    volumes:
+      - type: bind
+        source: ./data
+        target: /app/data
+        read_only: true
+        bind:
+          create_host_path: false
+    networks: [retrieval]
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=128m,mode=1777
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    init: true
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Internal-only networks cannot publish host ports. Only this fixed-route
+  # gateway joins a normal bridge; Qdrant and filings-kb remain internal-only.
+  retrieval-gateway:
+    image: nginx:stable-alpine@sha256:583b7f2fce1cdb8da5ad5c39ebd3c33b98b87d493190e548bdee1fa8c619c311
+    user: "${ANALYST_UID:?Set ANALYST_UID}:${ANALYST_GID:?Set ANALYST_GID}"
+    entrypoint: ["nginx"]
+    command: ["-e", "/dev/stderr", "-c", "/etc/nginx/retrieval.conf", "-g", "daemon off;"]
+    depends_on:
+      qdrant:
+        condition: service_started
+    ports:
+      - "127.0.0.1:6333:6333"
+      - "127.0.0.1:8002:8002"
+    volumes:
+      - type: bind
+        source: ./retrieval_gateway.conf
+        target: /etc/nginx/retrieval.conf
+        read_only: true
+        bind:
+          create_host_path: false
+    networks: [retrieval, retrieval-access]
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m,mode=1777
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    init: true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:6333/__gateway_health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  retrieval:
+    internal: true
+  retrieval-access:
+    driver: bridge

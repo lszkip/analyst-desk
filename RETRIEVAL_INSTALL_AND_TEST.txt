@@ -1,0 +1,274 @@
+ANALYST DESK — QDRANT AND HYBRID RETRIEVAL
+
+Run all commands in Ubuntu/WSL, from ~/projects/analyst-desk.
+Keep Docker Desktop running. This update does not deploy anything to AWS.
+
+WHAT THIS UPDATE ADDS
+
+- Real local BGE embeddings and a MiniLM cross-encoder reranker (ONNX on CPU).
+- Pinned model revisions and SHA-256 checks for every model/tokenizer file.
+- Qdrant 1.20.0 with durable host storage and separate administrator/read keys.
+- BM25, dense search, RRF, reranking and explicit query decomposition.
+- Source-linked, paginated passages and original structured tables/cells.
+- EDGAR get_section; a new filings-kb MCP server with five read-only tools.
+- Resumable embedding batches, atomic index publication, replay/vector checks.
+- A four-mode Recall@5 evaluator and 40 UNLABELLED development questions.
+- CAPSTONE_REQUIREMENTS.md: required behaviour, higher targets, evidence/gaps.
+
+This does not finish the capstone. The research agent graph, remaining MCP
+servers, numerical table checking, human approval flow, memory, monitoring,
+security evaluation and final evaluation/reporting remain tracked requirements.
+
+1. FEATURE BRANCH AND FILE INSTALLATION
+
+If feature/filing-retrieval already exists, use it. Otherwise create it from the
+synced main branch (merge 270e062 or a later reviewed main commit).
+
+git status
+if git show-ref --verify --quiet refs/heads/feature/filing-retrieval; then
+  git switch feature/filing-retrieval
+else
+  git switch -c feature/filing-retrieval
+fi
+
+Extract the update ZIP and copy its files into the project root, preserving
+the .github/workflows directory. Replace only the files included in the ZIP.
+Do not replace your .env or data directories; neither is included in the ZIP.
+PATCH_MANIFEST.json lists every supplied file and its SHA-256 fingerprint.
+
+2. ISOLATED HOST ENVIRONMENT
+
+The validated interpreter is Python 3.12. Check python --version first.
+Use a separate venv so this installation does not change the existing environment.
+
+python -m venv .venv-retrieval
+source .venv-retrieval/bin/activate
+mkdir -p ./LSOutput
+set -o pipefail
+python -m pip install -r requirements-retrieval.txt 2>&1 | tee ./LSOutput/RetrievalInstall.txt
+python -m pip check
+python setup_retrieval.py
+
+setup_retrieval.py preserves existing .env contents and adds two different
+random Qdrant keys if absent. It never prints the keys. It also excludes model,
+vector, venv and log files locally in Git. Do not paste your .env or unredacted
+docker compose config output. The quiet validation below does not print values.
+
+3. DOWNLOAD AND VERIFY THE TWO MODELS
+
+python prepare_retrieval_models.py 2>&1 | tee ./LSOutput/ModelsOut.txt
+python prepare_retrieval_models.py --verify-only
+
+This is the explicit model-download step. Both models are public, so no new API
+key/payment is needed. Downloads are pinned to exact repository revisions.
+Subsequent indexing/search only reads the verified local model files.
+
+4. BUILD AND RUN THE COMPLETE DOCKER TEST SUITE
+
+set -o pipefail
+{
+  docker build --progress=plain --target mcp-tests -t analyst-desk-mcp-tests:local . &&
+  docker run --rm --network none --read-only \
+    --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 \
+    --cap-drop ALL --security-opt no-new-privileges:true \
+    analyst-desk-mcp-tests:local
+} 2>&1 | tee ./LSOutput/DockerOut.txt
+
+Expected: 361 tests, OK. No real models/filings/network are needed by this test
+suite. Its test doubles prove software behaviour, not retrieval quality.
+The Docker execution itself must be checked on your laptop/CI; the authoring
+environment ran Python tests and native Qdrant, not a Docker daemon.
+
+5. START QDRANT
+
+docker compose config --quiet
+docker compose up -d qdrant retrieval-gateway
+docker compose ps qdrant retrieval-gateway
+curl --noproxy '*' --fail --show-error --retry 10 --retry-connrefused \
+  --retry-delay 1 --retry-max-time 30 --connect-timeout 3 --max-time 5 \
+  http://127.0.0.1:6333/healthz
+
+The gateway must show 127.0.0.1:6333->6333/tcp and 127.0.0.1:8002->8002/tcp.
+Qdrant itself intentionally has no host-published port. A container attached only
+to an internal network cannot publish a host port. The fixed-route gateway is
+the only retrieval service attached to a normal bridge; Qdrant and filings-kb
+remain internal-only. The gateway has no source/model mounts or credential env.
+It forwards Qdrant authentication headers unchanged and preserves MCP streaming.
+Its healthy status proves gateway liveness; /healthz above checks Qdrant itself.
+If the health request fails immediately after startup, check the logs below.
+
+Qdrant is reached only through 127.0.0.1:6333 on the host. Its files persist under
+data/qdrant_storage and data/qdrant_snapshots. Keep those folders on the WSL
+Linux filesystem. The service runs as your configured ANALYST_UID/GID.
+Give it a moment to start before indexing. On failure, capture:
+
+docker compose logs --no-color --tail=100 qdrant retrieval-gateway > ./LSOutput/QdrantOut.txt 2>&1
+
+6. BUILD THE INDEX FOR THE COMPLETE PREPARED PASSAGE MANIFEST
+
+python prepare_filing_index.py 2>&1 | tee ./LSOutput/IndexOut.txt
+
+There is no --all switch: the index includes every company/year already in the
+verified passage manifest. The command first replay-verifies those inputs.
+For your corpus, expected coverage is 45 company-years and 16,235 total source
+passages (10,901 text + 5,334 tables). Search-window count is different because
+long passages and tables have multiple searchable windows. The 239 unassigned
+passages remain included with item=null; no Item is guessed.
+
+Initial CPU indexing may take a substantial time. Progress is printed every
+64 windows. You can interrupt it and run the same command again: completed,
+verified embedding batches are reused. A failed build keeps the previously
+published index manifest. Do not use --refresh unless inputs/settings changed.
+
+7. VERIFY THE COMPLETE INDEX
+
+python prepare_filing_index.py --verify-only 2>&1 | tee ./LSOutput/IndexVerifyOut.txt
+
+This is read-only. It replays source extraction, checks corpus/model fingerprints,
+checks Qdrant point counts, every vector and every point's metadata against the
+saved embedding batches. Expected: status ok and coverage company_years 45.
+
+If original passages/models change deliberately, prepare them first and then:
+
+python prepare_filing_index.py --refresh
+docker compose restart filings-kb edgar
+
+New index generations preserve old Qdrant collections. This update has no
+automatic deletion/garbage collection. Do not delete collections by hand while
+a retrieval service is using them.
+
+8. TRY A REAL SEARCH
+
+python search_filings.py "What risks arise from cybersecurity attacks?" \
+  --tickers MSFT --years 2025 --items 1A \
+  2>&1 | tee ./LSOutput/SearchOut.txt
+
+python search_filings.py "Consolidated income statement revenue net income" \
+  --tickers IBM --years 2025 --kind table \
+  2>&1 | tee ./LSOutput/TableSearchOut.txt
+
+Show the decomposition before executing a comparison:
+
+python search_filings.py "Compare operating margins and risk factors" \
+  --tickers MSFT GOOGL --years 2023 2024 2025 --plan-only \
+  2>&1 | tee ./LSOutput/SearchPlanOut.txt
+
+The plan separates company/year pairs and financial/risk facets. It never guesses
+relative dates. Run without --plan-only to search. Each branch has its own hits;
+the global top five is not a claim that all comparison questions are answered.
+No margin calculation or generated note is performed by this retrieval command.
+
+9. START AND TEST BOTH MCP SERVERS
+
+docker compose up -d --build edgar filings-kb retrieval-gateway
+docker compose ps
+python check_filings_kb.py 2>&1 | tee ./LSOutput/MCPRetrievalOut.txt
+
+The first KB readiness check loads the models/index and verifies the vectors;
+startup can take longer than subsequent searches. The KB health check uses /ready.
+The KB container cannot download models: it has an internal network and offline
+model settings. It receives only the read-only Qdrant key, not the administrator
+or OpenRouter key. The smoke check also confirms that this key cannot write.
+
+EDGAR now has four tools: list_companies, list_annual_filings,
+get_annual_financial_fact and get_section. get_section returns paginated complete
+source passages/tables by company, fiscal year and Item. Very large tables can
+be paged by the KB get_table_rows tool without losing cell IDs/merged spans.
+
+The KB has five tools: plan_search, search_filings, get_passage,
+get_table_rows and get_coverage. These are tools within one server. This milestone
+therefore supplies TWO domain MCP servers; python-sandbox/research-portal remain.
+
+10. EXPORT THE 40-QUESTION SOURCE REVIEW PACK
+
+python export_retrieval_review.py 2>&1 | tee ./LSOutput/ReviewExportOut.txt
+
+Outputs LSOutput/RetrievalReview.zip. It contains the 40 questions and all saved
+source passages in each question's explicit scope, not rankings from the search
+engine. It excludes secrets and models. Upload it to continue relevance labelling.
+Nothing is automatically marked relevant, reviewed or passed.
+
+After source review, save reviewed labels as retrieval_labels.jsonl. Each line
+needs: id, request, gold_passage_ids, gold_source_sha256 (ID-to-source-hash map),
+label_status="reviewed", reviewer, rationale, and
+label_scope="all_relevant_passages_reviewed". Judge all relevant passages within
+the explicit scope. A single known-answer hit does not establish Recall@5.
+
+python evaluate_filing_retrieval.py retrieval_labels.jsonl \
+  2>&1 | tee ./LSOutput/RetrievalEvaluationOut.txt
+
+The evaluator runs BM25, dense, hybrid, and hybrid+reranker on the same cases,
+keeps labels out of requests, counts failed runs as zero recall, and records
+median/p95 query latency. It writes LSOutput/RetrievalEvaluation.json.
+It requires 40 reviewed queries and reports before/after adding the reranker.
+The initial PROJECT target is Recall@5 >= 0.70 with no reranker regression; the
+capstone brief itself does not prescribe a numeric retrieval threshold. Report
+the actual result; do not adjust a held-out threshold after viewing results.
+--allow-drafts permits provisional inspection but cannot produce a passing report.
+
+11. TABLE-AWARE VS PLAIN-TEXT ABLATION (AFTER LABEL REVIEW)
+
+python prepare_filing_index.py --plain-text --index-dir ./data/retrieval_plain
+python evaluate_filing_retrieval.py retrieval_labels.jsonl \
+  --index-dir ./data/retrieval_plain --output ./LSOutput/RetrievalPlainEvaluation.json
+
+This creates a separate collection/index. It changes only the searchable table
+representation; original structured tables and citation IDs remain preserved.
+Critic-loop on/off is a separate later agent experiment.
+
+12. SHARE RESULTS BEFORE COMMITTING
+
+Upload DockerOut.txt, IndexOut.txt, IndexVerifyOut.txt and MCPRetrievalOut.txt.
+Keep logs, models, vectors, source corpora and .env out of Git. Use the explicit
+file list in PATCH_MANIFEST.json when staging source changes, not git add .
+Do not call retrieval complete until the real-corpus checks AND reviewed-query
+evaluation are recorded in CAPSTONE_REQUIREMENTS.md.
+
+IMPLEMENTATION CHECKPOINT — 11 NOVEMBER 2026
+
+The laptop Docker suite (361 tests), 24,607-window full index and verification,
+search smoke checks, 12-branch plan and all five live KB tools have passed.
+RETRIEVAL_VALIDATION.md records that evidence. Relevance labels, Recall@5,
+FinanceBench and the remaining capstone requirements are still pending.
+
+The working implementation can now be committed as a checkpoint without
+claiming retrieval evaluation complete. Use only the explicit source/config/docs
+files in PATCH_MANIFEST.json, plus PATCH_MANIFEST.json itself. Keep .vscode,
+LSOutput, .env, data, models and virtual environments out of this commit.
+The evidence-note update changes documentation and manifest hashes only; the
+verified runtime and index do not need rebuilding for that update.
+
+The next implementation milestone is python-sandbox and research-portal,
+connected to a complete LangGraph research workflow. Source relevance review
+continues separately. Review the 40-query scope before freezing gold labels;
+do not treat all 5,109 exported candidate passages as a count required by the
+brief, or reduce a question's genuinely relevant set to improve its score.
+
+ARCHITECTURE / LIMITS
+
+- BM25 uses rank-bm25. Dense retrieval uses real 384-dimensional BGE vectors in
+  Qdrant. RRF merges unique parent-passage ranks (k=60). MiniLM cross-encoder
+  scores rerank candidate windows; parent hits retain stable passage IDs.
+- Search views repeat available table headings/header rows and compact nonempty
+  cells. Layout blanks and spans remain fully present in original table objects
+  and cell-ID links; the search text is not an authoritative financial table.
+- Token windows cover long content instead of silently embedding just its start.
+  Queries and reranker pairs have explicit token bounds; limits fail clearly.
+- This local deployment binds only loopback ports and uses a private Docker
+  network for retrieval. Only a fixed-route gateway has a second normal bridge;
+  Qdrant and the KB stay internal-only. The gateway image is pinned by digest.
+  A remote/cloud deployment needs TLS and its own review.
+- Search ranking is not proof of truth or an answer. The quant/compliance stages
+  must still check numbers and claims before the final note can be published.
+- Full-system held-out evaluation, FinanceBench, 12 risk-change company-years,
+  30 human judge labels and 40 attacks are separate tracked work. Unit-test
+  counts and these 40 unlabelled retrieval questions do not satisfy them.
+
+PRIMARY IMPLEMENTATION REFERENCES
+
+https://qdrant.tech/documentation/quickstart/
+https://qdrant.tech/documentation/security/
+https://qdrant.tech/documentation/fastembed/fastembed-rerankers/
+https://github.com/qdrant/qdrant/releases/tag/v1.20.0
+https://github.com/qdrant/fastembed
+https://gofastmcp.com/docs/servers/tools
