@@ -34,12 +34,18 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: requirements-ci.txt
+          cache-dependency-path: |
+            requirements-ci.txt
+            requirements-mcp.txt
+            requirements-retrieval.txt
 
       - name: Install test dependencies
         run: |
-          python -m pip install -r requirements-ci.txt
+          python -m pip install -r requirements-retrieval.txt
           python -m pip check
 
-      - name: Run API, financial-data, corpus, passage and supplement tests
-        run: python -m unittest -v test_api.py test_financial_data.py test_filing_corpus.py test_filing_passages.py test_filing_supplements.py
+      - name: Run all offline tests, including MCP and retrieval contracts
+        env:
+          HF_HUB_OFFLINE: "1"
+          TOKENIZERS_PARALLELISM: "false"
+        run: python -m unittest -v test_api.py test_financial_data.py test_edgar_mcp.py test_api_mcp.py test_filing_corpus.py test_filing_passages.py test_filing_supplements.py test_filing_retrieval.py test_filings_kb_mcp.py

@@ -34,3 +34,14 @@
 !filing_supplements.py
 !prepare_filing_supplements.py
 !test_filing_supplements.py
+!requirements-retrieval.txt
+!retrieval_config.json
+!retrieval_models.py
+!retrieval_data.py
+!filing_index.py
+!filing_retrieval.py
+!filings_kb_mcp.py
+!setup_retrieval.py
+!evaluate_filing_retrieval.py
+!test_filing_retrieval.py
+!test_filings_kb_mcp.py

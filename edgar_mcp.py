@@ -27,7 +27,7 @@ from sec_fiscal_years import verify_cached_year_evidence
 logger = logging.getLogger("analyst_desk.edgar")
 READ_ONLY = {"readOnlyHint": True, "destructiveHint": False,
              "idempotentHint": True, "openWorldHint": False}
-TOOL_NAMES = {"list_companies", "list_annual_filings", "get_annual_financial_fact"}
+TOOL_NAMES = {"list_companies", "list_annual_filings", "get_annual_financial_fact", "get_section"}
 
 
 class StrictModel(BaseModel):
@@ -98,9 +98,24 @@ alternative-measure definitions from the shared financial-data implementation.
     message: str | None = None
 
 
-def create_server(data_dir: Path | str = DATA_DIR) -> FastMCP:
+class SectionResult(StrictModel):
+    status: Literal["ok", "error"]
+    ticker: str | None = None
+    fiscal_year: int | None = None
+    item: str | None = None
+    passages: list[dict[str, JsonValue]] = Field(default_factory=list)
+    total_passages: int = 0
+    next_offset: int | None = None
+    code: str | None = None
+    message: str | None = None
+
+
+def create_server(data_dir: Path | str = DATA_DIR, *, passages_dir=None, corpus_dir=None) -> FastMCP:
     # This path is trusted operator configuration, never an MCP tool argument.
     folder = Path(data_dir).resolve()
+    section_catalogue = None
+    from threading import RLock
+    section_lock = RLock()
     server = FastMCP(
         "Analyst Desk EDGAR", version="1.0.0", mask_error_details=True,
         strict_input_validation=True,
@@ -109,6 +124,36 @@ def create_server(data_dir: Path | str = DATA_DIR) -> FastMCP:
                       "Use only explicitly requested fiscal years and measures. "
                       "Missing, conflicting or unreadable data is not a numerical answer."),
     )
+
+    @server.tool(annotations=READ_ONLY, tags={"read", "edgar"})
+    def get_section(ticker: str, year: Annotated[int, Field(strict=True, ge=1900, le=2100)],
+                    item: str, offset: Annotated[int, Field(strict=True, ge=0, le=100000)] = 0,
+                    limit: Annotated[int, Field(strict=True, ge=1, le=20)] = 5) -> SectionResult:
+        """Read a verified 10-K Item as paginated complete passages, including incorporated exhibits.
+
+        Passages retain text, structured tables, source URLs and stable IDs.
+        Use smaller pages or filings-kb.get_table_rows for very large tables.
+        No embedding, model call or network download is needed for this tool.
+        """
+        from filing_passages import ITEM_ORDER
+        from retrieval_data import PassageCatalogue
+        nonlocal section_catalogue
+        try:
+            canonical = normalise_ticker(ticker)
+            if item not in ITEM_ORDER:
+                raise ValueError("Invalid Item.")
+            with section_lock:
+                if section_catalogue is None:
+                    section_catalogue = PassageCatalogue(passages_dir or folder.parent / "passages", corpus_dir or folder.parent / "filings")
+                result = section_catalogue.section(canonical, year, item, offset, limit)
+            if len(json.dumps(result).encode()) > 2 * 1024 * 1024:
+                return SectionResult(status="error", code="section_page_too_large",
+                    message="Use a smaller section page or filings-kb.get_table_rows for a large table.")
+            return SectionResult(status="ok", ticker=canonical, fiscal_year=year, item=item,
+                                 passages=result["passages"], total_passages=result["total"], next_offset=result["next_offset"])
+        except (ValueError, OSError, KeyError, TypeError):
+            return SectionResult(status="error", code="section_unavailable",
+                                 message="Use a configured company/year/Item and a prepared, verified passage corpus.")
 
     @server.tool(annotations=READ_ONLY, tags={"read", "edgar"})
     def list_companies() -> CompanyList:

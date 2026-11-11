@@ -1,0 +1,28 @@
+# Pinned CPU retrieval dependencies; Python 3.12.
+-r requirements-mcp.txt
+
+charset-normalizer==3.5.2
+fastembed==0.9.1
+filelock==4.2.10
+flatbuffers==25.12.19
+fsspec==2026.9.0
+grpcio==1.85.1
+h2==4.4.1
+hf-xet==1.8.0
+hpack==4.2.0
+huggingface_hub==1.33.0
+hyperframe==6.1.0
+loguru==0.7.3
+mmh3==5.3.1
+numpy==2.5.4
+onnxruntime==1.31.1
+pillow==13.0.0
+portalocker==4.4.2
+protobuf==7.36.2
+py_rust_stemmers==0.1.8
+qdrant-client==1.20.0
+rank-bm25==0.2.2
+requests==2.34.2
+socksio==1.0.0
+tokenizers==0.23.3
+urllib3==2.8.0
