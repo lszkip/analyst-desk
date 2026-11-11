@@ -21,6 +21,11 @@ jobs:
     env:
       QDRANT_API_KEY: ci-placeholder-administrator-key-not-real
       QDRANT_READ_ONLY_API_KEY: ci-placeholder-read-only-key-not-real
+      SANDBOX_API_TOKEN: ci-sandbox-placeholder-not-a-real-key
+      PORTAL_READ_TOKEN: ci-reader-placeholder-not-a-real-key
+      PORTAL_DRAFT_TOKEN: ci-draft-placeholder-not-a-real-key
+      PORTAL_PUBLISH_TOKEN: ci-publisher-placeholder-not-a-real-key
+      PORTAL_REVIEW_TOKEN: ci-human-review-placeholder-not-a-real-key
     steps:
       - name: Check out the code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -103,6 +108,76 @@ jobs:
         if: failure()
         run: docker logs analyst-desk-edgar-ci || true
 
+      - name: Build research tool runtime images
+        run: |
+          docker build --target python-sandbox --tag analyst-desk-python-sandbox:ci .
+          docker build --target research-portal --tag analyst-desk-research-portal:ci .
+
+      - name: Start research tools without external networking
+        run: |
+          docker run --detach --name analyst-desk-sandbox-ci --network none \
+            --read-only --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 \
+            --cap-drop ALL --security-opt no-new-privileges:true --pids-limit 64 \
+            --memory 2g --env SANDBOX_API_TOKEN analyst-desk-python-sandbox:ci
+          docker run --detach --name analyst-desk-portal-ci --network none \
+            --read-only --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 \
+            --tmpfs /app/data/research_portal:rw,noexec,nosuid,size=16m,uid=10001,gid=10001,mode=0700 \
+            --cap-drop ALL --security-opt no-new-privileges:true \
+            --env PORTAL_READ_TOKEN --env PORTAL_DRAFT_TOKEN --env PORTAL_PUBLISH_TOKEN \
+            --env PORTAL_REVIEW_TOKEN analyst-desk-research-portal:ci
+
+      - name: Check research tool runtime health and authenticated MCP
+        run: |
+          for container in analyst-desk-sandbox-ci analyst-desk-portal-ci; do
+            ready=false
+            for attempt in $(seq 1 60); do
+              status=$(docker inspect --format '{{.State.Health.Status}}' "$container")
+              if [ "$status" = healthy ]; then ready=true; break; fi
+              if [ "$status" = unhealthy ]; then docker logs "$container"; exit 1; fi
+              sleep 1
+            done
+            "$ready"
+          done
+          docker exec -i analyst-desk-sandbox-ci python - <<'PY'
+          import asyncio, os
+          from fastmcp import Client
+          from fastmcp.client.transports import StreamableHttpTransport
+          async def check():
+              assert os.getuid() != 0
+              assert 'PORTAL_REVIEW_TOKEN' not in os.environ
+              assert 'OPENROUTER_API_KEY' not in os.environ
+              transport=StreamableHttpTransport('http://127.0.0.1:8003/mcp',headers={'Authorization':'Bearer '+os.environ['SANDBOX_API_TOKEN']})
+              async with Client(transport) as client:
+                  reply=(await client.call_tool('execute_python',{'code':'result = 2 + 2','inputs':{}})).structured_content
+                  assert reply['data']['result'] == 4, reply
+                  assert all(reply['data']['kernel_probes'].values()), reply
+              print('Sandbox runtime MCP and kernel probes passed.')
+          asyncio.run(check())
+          PY
+          docker exec -i analyst-desk-portal-ci python - <<'PY'
+          import asyncio, os
+          from fastmcp import Client
+          from fastmcp.client.transports import StreamableHttpTransport
+          async def check():
+              assert os.getuid() != 0
+              assert 'SANDBOX_API_TOKEN' not in os.environ
+              assert 'OPENROUTER_API_KEY' not in os.environ
+              transport=StreamableHttpTransport('http://127.0.0.1:8004/mcp',headers={'Authorization':'Bearer '+os.environ['PORTAL_READ_TOKEN']})
+              async with Client(transport) as client:
+                  reply=(await client.call_tool('list_notes',{})).structured_content
+                  assert reply['data']['total'] == 0, reply
+                  denied=(await client.call_tool('publish_note',{'proposal_id':'missing','expected_hash':'a'*64,'approval_token':'x'*40})).structured_content
+                  assert denied['code'] == 'permission_denied', denied
+              print('Portal runtime MCP and read-credential publication denial passed.')
+          asyncio.run(check())
+          PY
+
+      - name: Show research tool logs on failure
+        if: failure()
+        run: |
+          docker logs analyst-desk-sandbox-ci || true
+          docker logs analyst-desk-portal-ci || true
+
       - name: Remove MCP CI container
         if: always()
-        run: docker rm --force analyst-desk-edgar-ci || true
+        run: docker rm --force analyst-desk-edgar-ci analyst-desk-sandbox-ci analyst-desk-portal-ci || true

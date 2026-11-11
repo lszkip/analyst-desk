@@ -1,0 +1,6 @@
+# Research tools, Python 3.12; existing retrieval pins remain unchanged.
+-r requirements-mcp.txt
+numpy==2.5.4
+pandas==3.1.1
+python-dateutil==2.9.0.post0
+six==1.17.0

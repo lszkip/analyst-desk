@@ -1,0 +1,158 @@
+ANALYST DESK — PYTHON SANDBOX AND RESEARCH PORTAL
+
+Base: main at 7207082 (merged retrieval PR #10).
+Run in the existing Ubuntu/WSL terminal, ~/projects/analyst-desk.
+Use Python 3.12 and keep Docker Desktop running.
+LSOutput already exists. No directory-creation command is needed for it.
+The sandbox supports Linux x86_64, including this laptop's WSL/Docker platform.
+Unsupported architectures fail closed rather than running calculations unsafely.
+
+1. BRANCH AND PATCH
+
+cd ~/projects/analyst-desk
+git status --short
+git log -1 --oneline
+git switch -c feature/research-tools
+
+Extract analyst_desk_research_tools_update.zip and copy its contents into this
+project root, preserving .github/workflows. Replace only included files.
+The ZIP contains source/configuration/tests/documentation, not .env, downloaded
+SEC reports, models, vector storage or the portal database.
+PATCH_MANIFEST.json lists the patch files and their SHA-256 fingerprints.
+
+2. INSTALL THE ADDITIONAL HOST DEPENDENCIES AND LOCAL CREDENTIALS
+
+source .venv-retrieval/bin/activate
+set -o pipefail
+{
+  python --version &&
+  python -m pip install -r requirements-tools.txt &&
+  python -m pip check &&
+  python setup_research_tools.py &&
+  docker compose config --quiet
+} 2>&1 | tee ./LSOutput/ResearchToolsInstallOut.txt
+
+This reuses the existing retrieval environment and pinned MCP/NumPy versions.
+It adds pandas, python-dateutil and six. It does not download models or rebuild
+the filing index. Setup preserves existing .env entries, adds five different
+random service credentials, creates data/research_portal with private
+permissions and excludes local portal data from Git. Secrets are never printed.
+
+Never share .env, approval capabilities or unredacted docker compose config.
+PORTAL_REVIEW_TOKEN belongs to the human operator/trusted review backend only.
+It must never be passed to the LLM, agent tool arguments or agent environment.
+
+3. COMPLETE DOCKER REGRESSION SUITE
+
+{
+  docker build --progress=plain --target mcp-tests -t analyst-desk-mcp-tests:local . &&
+  docker run --rm --network none --read-only \
+    --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 \
+    --cap-drop ALL --security-opt no-new-privileges:true \
+    analyst-desk-mcp-tests:local
+} 2>&1 | tee ./LSOutput/DockerOut.txt
+
+Expected: 414 tests, OK. Existing 361 tests remain; 53 checks cover the new
+services, real subprocess restrictions, HTTP authorization and operator scripts.
+No models, original filings or real secrets are needed by the tests.
+If any test fails, stop here and send DockerOut.txt before continuing.
+
+4. BUILD AND START THE TWO NEW SERVICES
+
+{
+  docker compose --progress plain build python-sandbox research-portal &&
+  docker compose up -d --wait --wait-timeout 180 \
+    python-sandbox research-portal retrieval-gateway &&
+  docker compose ps python-sandbox research-portal retrieval-gateway
+} 2>&1 | tee ./LSOutput/ResearchToolsStartOut.txt
+
+Compose updates the fixed-route gateway to expose local ports 8003 and 8004.
+The new services are on a separate internal network, with read-only roots,
+non-root users, dropped capabilities and no-new-privileges. The sandbox receives
+only its own authentication token, no host data and no Docker socket. Its
+untrusted child receives no service token and denies network/file/process
+syscalls after trusted bootstrap. The portal mounts only its own SQLite folder.
+Existing Qdrant vectors, models and SEC documents are not rebuilt or deleted.
+
+5. LIVE HTTP MCP CHECK
+
+python check_research_tools.py 2>&1 | tee ./LSOutput/ResearchToolsOut.txt
+
+Expected status ok, calculation "25.00", three true kernel probes, blocked
+unapproved publication, blocked read-only publication and blocked agent approval.
+The command creates ONE clearly marked synthetic pending draft per run.
+It does not approve or publish it. Keep the returned proposal_id for step 6.
+This check uses the shipped HTTP client and ignores shell HTTP proxy settings.
+
+If startup/checking fails, collect:
+
+docker compose logs --no-color --tail=100 python-sandbox research-portal retrieval-gateway \
+  > ./LSOutput/ResearchToolsLogs.txt 2>&1
+
+Do not disable seccomp, authentication, capability restrictions or approval
+checks to make a failing run pass. Diagnose the actual failure first.
+
+6. HUMAN REVIEW DEMONSTRATION (AFTER THE ABOVE OUTPUTS ARE REVIEWED)
+
+The test draft deliberately uses fictional data and a fictional citation. It is
+for testing the mock portal, not for verifying a real financial claim. The
+eventual graph must verify source support/numbers before proposing real notes.
+
+Replace PROPOSAL_ID with the identifier printed by step 5, and Your Name with
+the actual reviewer name:
+
+python review_portal_note.py PROPOSAL_ID --reviewer "Your Name" \
+  2>&1 | tee ./LSOutput/PortalReviewOut.txt
+
+This displays the entire proposed note, citations and hash. Read it. Approving
+requires typing the exact displayed APPROVE AND PUBLISH phrase and hash prefix
+at the interactive prompt. Enter alone cancels. Approval is bound to that exact
+content, expires after ten minutes, and publishes once. No capability is printed.
+The command will not accept a piped/scripted approval through stdin.
+Repeating this command after success returns status ok, action already_published
+and the original note_id without another approval prompt or database write.
+If you installed the retry fix over the original version, rebuild and restart
+research-portal so get_proposal returns its saved note ID:
+
+docker compose --progress plain build research-portal &&
+docker compose up -d --wait --wait-timeout 120 research-portal
+
+The existing database is preserved by its bind mount.
+
+To reject a pending proposal instead:
+
+python review_portal_note.py PROPOSAL_ID --reviewer "Your Name" --action reject \
+  2>&1 | tee ./LSOutput/PortalRejectOut.txt
+
+To edit, save a JSON file with the ResearchNote fields (title, body_markdown,
+tickers, fiscal_years, citations), then use:
+
+python review_portal_note.py PROPOSAL_ID --reviewer "Your Name" --action edit \
+  --edited-note ./LSOutput/EditedNote.json \
+  2>&1 | tee ./LSOutput/PortalEditOut.txt
+
+An edit returns to pending and revokes old approval. Run the review command
+again to read and approve the new exact content. Published/rejected proposals
+are closed; use a new proposal for a new note. Read tools never expose approval
+capabilities. Repeating a successful publish returns the same existing note.
+
+7. REVIEW BEFORE COMMITTING
+
+{
+  git status --short
+  git diff --stat
+  git diff --check
+} 2>&1 | tee ./LSOutput/ResearchToolsGitOut.txt
+
+Share the install, Docker, startup and live-check logs first. Do not stage .env,
+data/, LSOutput/, .vscode/ or the downloaded ZIP. Commit/push/PR steps will follow
+after reviewing laptop validation. Do not merge before GitHub checks pass.
+
+WHAT REMAINS
+
+This milestone implements all four named domain MCP servers, but does not
+complete all MCP/agent capstone requirements. Next: LangGraph roles/allowlists,
+typed state, persistent checkpoints, plan editing, interrupt/resume approval,
+quant evidence checks, critic loop, budget/trace hooks, memory and evaluation.
+The standalone human review CLI is not a substitute for LangGraph interrupt().
+See CAPSTONE_REQUIREMENTS.md and RESEARCH_TOOLS_VALIDATION.md for evidence/gaps.

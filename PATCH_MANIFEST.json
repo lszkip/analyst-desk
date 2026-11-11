@@ -1,176 +1,195 @@
 {
-  "base_commit": "270e062",
-  "branch": "feature/filing-retrieval",
-  "scope": "Qdrant and hybrid retrieval with verified full-corpus laptop indexing and live KB tools; relevance evaluation and remaining capstone requirements pending",
+  "version": "research-tools-v2-evidence-checkpoint",
+  "base_commit": "7207082",
+  "branch": "feature/research-tools",
+  "scope": "Research tools plus read-only repeated human review handling; exact-content approval and publication protections retained",
   "files": [
     {
       "path": ".dockerignore",
-      "sha256": "ad6c7abf69e6eeba74b121e2aece8ceb0517fe170e50aab895437061df2e6bc9",
-      "bytes": 1084,
-      "action": "replace"
+      "sha256": "53a63165d3c6b84487ec9f548d6332c059431ce484a90d2bf70763a6df4980c4",
+      "bytes": 1437,
+      "action": "replace",
+      "base_sha256": "ad6c7abf69e6eeba74b121e2aece8ceb0517fe170e50aab895437061df2e6bc9"
     },
     {
       "path": ".github/workflows/docker.yml",
-      "sha256": "19c23431dc1b41cc159082adeeaf1bc41ef7ec7e6f57e693e037f49feb4e8a7d",
-      "bytes": 7895,
-      "action": "replace"
+      "sha256": "6a452d9b4e9ca865fa0162771459f89254e0887fe2949ecc0cf4fd5aef2c4bfe",
+      "bytes": 8220,
+      "action": "replace",
+      "base_sha256": "19c23431dc1b41cc159082adeeaf1bc41ef7ec7e6f57e693e037f49feb4e8a7d"
     },
     {
       "path": ".github/workflows/mcp.yml",
-      "sha256": "e2ab4b7650af3520328bc6adc491e117e2f5e07df8ce0afb764c251dbc57004c",
-      "bytes": 4025,
-      "action": "replace"
+      "sha256": "836d8ff4af28e23e636bf7e593ab87603f529939dc0cf2c56098a5601ae2e351",
+      "bytes": 8316,
+      "action": "replace",
+      "base_sha256": "e2ab4b7650af3520328bc6adc491e117e2f5e07df8ce0afb764c251dbc57004c"
     },
     {
       "path": ".github/workflows/tests.yml",
-      "sha256": "42a80efda1c9e4848772535c2ab751e6847e54f52a8ad05180a8fec0dd92a1df",
-      "bytes": 1573,
-      "action": "replace"
+      "sha256": "8db0fc04aca9303bfb79fb55b0bad4b7e029a65a7313d00612f828eeed5128e9",
+      "bytes": 1737,
+      "action": "replace",
+      "base_sha256": "42a80efda1c9e4848772535c2ab751e6847e54f52a8ad05180a8fec0dd92a1df"
     },
     {
       "path": "CAPSTONE_REQUIREMENTS.md",
-      "sha256": "0910adc237091bae29f2f1185269ddd4ca8791b8fb77c66002f4e8eb3da6029a",
-      "bytes": 12962,
-      "action": "add"
+      "sha256": "25de9d20937768dde29553d0cd2801ac810f7415b8444d5a23c6b982ae7df2cc",
+      "bytes": 14942,
+      "action": "replace",
+      "base_sha256": "0910adc237091bae29f2f1185269ddd4ca8791b8fb77c66002f4e8eb3da6029a"
     },
     {
       "path": "Dockerfile",
-      "sha256": "556c4cd25f9d78c848de144f8ba4d3c3abe19216c79c278ce6f7cffd0d31607d",
-      "bytes": 4754,
-      "action": "replace"
+      "sha256": "db05a1b9efb51995e7d9f305d0ef645e37e20dca51ce00dc89492f5b8add22fe",
+      "bytes": 6383,
+      "action": "replace",
+      "base_sha256": "556c4cd25f9d78c848de144f8ba4d3c3abe19216c79c278ce6f7cffd0d31607d"
     },
     {
-      "path": "RETRIEVAL_INSTALL_AND_TEST.txt",
-      "sha256": "4e663ae51ceff137bb33c1364396522c33d21a5989fe913dba0281d53cc08e83",
-      "bytes": 13865,
-      "action": "add"
+      "path": "RESEARCH_TOOLS_INSTALL_AND_TEST.txt",
+      "sha256": "9cedcdf8e4efa7dbcfbb449a6df433852a9651f500d082c0157a453c6a5389ac",
+      "bytes": 7270,
+      "action": "add",
+      "base_sha256": null
     },
     {
-      "path": "RETRIEVAL_VALIDATION.md",
-      "sha256": "cfd27efe785c52467cb7b3f76ac762a1005c4b6ecfc915448aa0a68a6244f728",
-      "bytes": 8280,
-      "action": "add"
+      "path": "RESEARCH_TOOLS_VALIDATION.md",
+      "sha256": "c5d17c2e3e8d5ea3d252272d32c731805876b5a728c9ebe8b85a7e38a9a7cd01",
+      "bytes": 9578,
+      "action": "add",
+      "base_sha256": null
     },
     {
-      "path": "check_filings_kb.py",
-      "sha256": "e6a009d08904c37d0accf068a80372c6bb77ed859e3c3d9d1a8f990b1240b1d8",
-      "bytes": 3066,
-      "action": "add"
+      "path": "check_research_tools.py",
+      "sha256": "d698323e1e9167dd481291fef7f24637735fe7721ce497dfc283eedfb9689255",
+      "bytes": 4221,
+      "action": "add",
+      "base_sha256": null
     },
     {
       "path": "compose.yaml",
-      "sha256": "d213e3c744894e57f8d513552a89d3d287aae3fbf3835ba5f82fab69f20c8112",
-      "bytes": 5647,
-      "action": "replace"
+      "sha256": "caa3d32dd0d8f9b0deebb27e987e2d62b69b4281a0c0ec3f32c445fee5d3bbff",
+      "bytes": 7566,
+      "action": "replace",
+      "base_sha256": "d213e3c744894e57f8d513552a89d3d287aae3fbf3835ba5f82fab69f20c8112"
     },
     {
-      "path": "edgar_mcp.py",
-      "sha256": "23f1ddd87c0cc1f8ea900ee6a4ca5173938e839c5d87acdeedc82df617107e7e",
-      "bytes": 12399,
-      "action": "replace"
+      "path": "python_sandbox.py",
+      "sha256": "5547d7d8b7233965bec2b608a58536cf85854b845c593d10b76b50343cce9876",
+      "bytes": 4805,
+      "action": "add",
+      "base_sha256": null
     },
     {
-      "path": "evaluate_filing_retrieval.py",
-      "sha256": "c300b85cabe7658aa8c43799c2160678de6b92f888cf2ca6d47ac1cddd33fd75",
-      "bytes": 8441,
-      "action": "add"
+      "path": "python_sandbox_mcp.py",
+      "sha256": "24f461d086208ff3c35bc22fde0f31bef9e5d1a3ed5049ffd8b4abc6b015d2ac",
+      "bytes": 2819,
+      "action": "add",
+      "base_sha256": null
     },
     {
-      "path": "export_retrieval_review.py",
-      "sha256": "2e058ee76dea22b43a1562d1798f8cf89ba8d20eb5996d6738299680f7d40a67",
-      "bytes": 3530,
-      "action": "add"
+      "path": "requirements-tools.txt",
+      "sha256": "9f03ecfc41fa7b70c1eb9a6d8ca2e34083032a664cd097e0cb6b1d3f48e728b3",
+      "bytes": 165,
+      "action": "add",
+      "base_sha256": null
     },
     {
-      "path": "filing_index.py",
-      "sha256": "cc81b7a598d93e7c23a3e054dd9a7e3a38c8e0d581ff3f26a4c9045435584557",
-      "bytes": 10691,
-      "action": "add"
+      "path": "research_portal.py",
+      "sha256": "e2c5e6b9d1c15b91eceab364fc935f526ab92522f25976cf7bf446b3b475b9a3",
+      "bytes": 11781,
+      "action": "add",
+      "base_sha256": null
     },
     {
-      "path": "filing_retrieval.py",
-      "sha256": "7d92737b18b4018870286b7a15e8499e6c569657abdde78a404b267545afdc83",
-      "bytes": 12107,
-      "action": "add"
+      "path": "research_portal_mcp.py",
+      "sha256": "b0d4c76afaac39e4142fa25e054f60c31b88bef5764e4764a731cfa0f18edc93",
+      "bytes": 5920,
+      "action": "add",
+      "base_sha256": null
     },
     {
-      "path": "filings_kb_mcp.py",
-      "sha256": "2075cfda6be9e5b1b092b214b32bef05ef272699db12d788636ac8fd9710f86e",
-      "bytes": 7945,
-      "action": "add"
-    },
-    {
-      "path": "prepare_filing_index.py",
-      "sha256": "c8f2e58fefe63611cdd635b25ec6589b9dabc22645f1cd4f71723f341823ce4f",
-      "bytes": 3368,
-      "action": "add"
-    },
-    {
-      "path": "prepare_retrieval_models.py",
-      "sha256": "4b07181615f3d817a58ea8a20450bc5937cb5f3a9c2f427c51b756cadab28e9b",
-      "bytes": 872,
-      "action": "add"
-    },
-    {
-      "path": "requirements-retrieval.txt",
-      "sha256": "75d5f50fe89a84840378f3068c1ee05b79f9c25a806442d07d59d1e342ff90d9",
-      "bytes": 507,
-      "action": "add"
-    },
-    {
-      "path": "retrieval_config.json",
-      "sha256": "544008638849d72eff77543a0cbaaa3a0b82027700231a8334d8ab12493017c6",
-      "bytes": 1848,
-      "action": "add"
-    },
-    {
-      "path": "retrieval_data.py",
-      "sha256": "6e3b3271b806bfb7bf85bbf78cae886b192ccb5cb554ac1f62570ee1dfdd21b8",
-      "bytes": 10931,
-      "action": "add"
-    },
-    {
-      "path": "retrieval_models.py",
-      "sha256": "29eb1fa15052fe42fd1ba3aa34252435fbd98023b7f760ebd95a17488f1ef610",
-      "bytes": 6782,
-      "action": "add"
-    },
-    {
-      "path": "retrieval_questions.jsonl",
-      "sha256": "39eab4bc3f371cd832111d01e9740c4b9355f4aa663fdd47c857e9e01a9b0e36",
-      "bytes": 14876,
-      "action": "add"
-    },
-    {
-      "path": "search_filings.py",
-      "sha256": "1680c9f4b827cafc963d8f4bc8feda3c437b365e189d11f381e39fd3473212aa",
-      "bytes": 2797,
-      "action": "add"
-    },
-    {
-      "path": "setup_retrieval.py",
-      "sha256": "b7a9c9b7d1a5ee68ae6b9ddf25cd182d63f5714ce31bd86c366c4ebf2b324604",
-      "bytes": 2149,
-      "action": "add"
-    },
-    {
-      "path": "test_filing_retrieval.py",
-      "sha256": "d3b7133a49fd46322e95c20cd59a12e738065fdb236d167834df616b8f2ce3b0",
-      "bytes": 20874,
-      "action": "add"
-    },
-    {
-      "path": "test_filings_kb_mcp.py",
-      "sha256": "01b70ad8f8baba113a26b7ee2b5e94a281d5d25d82cb398bf9cd50671ce2d6c1",
-      "bytes": 9071,
-      "action": "add"
+      "path": "research_tools_client.py",
+      "sha256": "3b0a650ec074f5a6c7e73dc06dc408e9e21c4b830037e18d0c3b34c1d02b64f7",
+      "bytes": 1548,
+      "action": "add",
+      "base_sha256": null
     },
     {
       "path": "retrieval_gateway.conf",
+      "sha256": "8af57ae3293be7aca2d636ee0bd6c4ad53168f227d181701c65b979ab0f5d3b1",
+      "bytes": 1952,
+      "action": "replace",
+      "base_sha256": "45a92f2dfbe40457aae113727ed5db3033fce82be8c79e5af0113c5ca01c3735"
+    },
+    {
+      "path": "review_portal_note.py",
+      "sha256": "4737884f6db5f88561c852c1354f9f744db92b0903792fb32f88315c8973f895",
+      "bytes": 6922,
       "action": "add",
-      "bytes": 1531,
-      "sha256": "45a92f2dfbe40457aae113727ed5db3033fce82be8c79e5af0113c5ca01c3735"
+      "base_sha256": null
+    },
+    {
+      "path": "sandbox_worker.py",
+      "sha256": "765c7d291e226c10aeffd70357b5ee3e94299202ec46bbf79e727b247c06b712",
+      "bytes": 8994,
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "setup_research_tools.py",
+      "sha256": "8c1bea2f06e55ac3797207d1e16da878017cbb4892024d56a265ca890ae3b32b",
+      "bytes": 2089,
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "test_python_sandbox.py",
+      "sha256": "1678ee2784bd16bb6088ace13028c4658cfedffe6738d010aaf566443162c8dd",
+      "bytes": 5137,
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "test_research_portal.py",
+      "sha256": "c5d631bbbd65187229844fccf3709cdd3095ecd0cae2d8059f39df9c2e12d47a",
+      "bytes": 8485,
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "test_research_tools_mcp.py",
+      "sha256": "e5d2296d2f82378c38b19ecbeed755205906cc24f501d74050478ed37ef6149d",
+      "bytes": 15657,
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "test_research_tools_setup.py",
+      "sha256": "c545399d9c91f92e6b3471ae56e560ead79402eba3269fa0b58571ca126a9fda",
+      "bytes": 2525,
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "tool_security.py",
+      "sha256": "cf5b0ad04603018e9583edb07b2807c07a04e101703858d7cc4b10c9737bb67a",
+      "bytes": 2466,
+      "action": "add",
+      "base_sha256": null
     }
   ],
-  "update_version": "v2-evidence-checkpoint"
+  "validation": {
+    "python_tests": 414,
+    "python_tests_seconds": 37.109,
+    "python_result": "OK",
+    "retry_regression": "Real HTTP repeat command uses only read credential; no prompt; same note ID; unchanged database",
+    "prior_laptop_docker_tests": 409,
+    "prior_laptop_docker_seconds": 24.549,
+    "prior_laptop_services": "healthy; live MCP checks passed; synthetic human approval published",
+    "updated_laptop_docker": "passed: 414 tests in 25.853 seconds",
+    "updated_laptop_retry": "passed: already_published; original note ID and content hash; no new approval or publication",
+    "github_ci": "pending branch push and PR checks"
+  }
 }

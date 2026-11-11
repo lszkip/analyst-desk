@@ -21,6 +21,11 @@ jobs:
     env:
       QDRANT_API_KEY: ci-placeholder-administrator-key-not-real
       QDRANT_READ_ONLY_API_KEY: ci-placeholder-read-only-key-not-real
+      SANDBOX_API_TOKEN: ci-sandbox-placeholder-not-a-real-key
+      PORTAL_READ_TOKEN: ci-reader-placeholder-not-a-real-key
+      PORTAL_DRAFT_TOKEN: ci-draft-placeholder-not-a-real-key
+      PORTAL_PUBLISH_TOKEN: ci-publisher-placeholder-not-a-real-key
+      PORTAL_REVIEW_TOKEN: ci-human-review-placeholder-not-a-real-key
     steps:
       - name: Check out the code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
