@@ -1,0 +1,390 @@
+CURRENT CHECKPOINT - 12 November 2026
+
+Docker log 41.25 confirms a successful image build and 505 tests passed in
+40.653 seconds after the workflow_support.py build-context fix.
+Live log 41.23 confirms one exact-content, human-approved publication for
+margin_demo_v2, with no pending nodes. This was a human-corrected,
+budget-extended development run; it is not held-out evaluation evidence.
+GitHub CI and the broader capstone evaluations remain pending.
+This checkpoint supersedes earlier pending-status entries below.
+
+ANALYST DESK — FIRST LANGGRAPH WORKFLOW
+Base: main at 56ebbce (merged research-tools PR #11)
+Branch: feature/research-workflow
+Environment: Ubuntu/WSL, Python 3.12, existing .venv-retrieval
+
+V6 UPDATE FOR AN EXISTING margin_demo_v2 AT awaiting_note: use section 9D.
+Do not restart the run or approve its old proposal. The ZIP includes a reviewed
+development correction at LSOutput/CorrectedNoteV2.json; it is not a gold label.
+
+This milestone connects the research roles, existing MCP services, persistent
+checkpoints and human review. Its first supported research task is operating-
+margin comparison with optional qualitative risk discussion. The UI, long-term
+memory, wider metric/table-cell claims and capstone evaluations remain separate.
+
+1. CREATE THE BRANCH, THEN COPY THE ZIP CONTENTS INTO THE PROJECT ROOT
+
+cd ~/projects/analyst-desk
+git switch -c feature/research-workflow
+
+Extract the ZIP and copy its contents into ~/projects/analyst-desk, preserving
+.github/workflows/. Replace the included existing files. Do not create a nested
+project folder. PATCH_MANIFEST.json lists the exact files and base fingerprints.
+The update contains source/configuration only; keep existing .env and data/.
+
+2. INSTALL AND RUN THE NEW OFFLINE SOFTWARE TESTS
+
+Use the existing active .venv-retrieval. LSOutput already exists.
+
+set -o pipefail
+{
+  python -m pip install -r requirements-workflow.txt &&
+  python -m pip check &&
+  python -m unittest -v test_research_workflow.py test_workflow_clients.py
+} 2>&1 | tee ./LSOutput/WorkflowInstallOut.txt
+
+These software tests use synthetic SEC/retrieval fixtures and scripted model
+responses. They include actual local HTTP MCP services and a three-process
+checkpoint/resume test. They are not live-model quality evaluations.
+
+3. BUILD AND RUN THE COMPLETE DOCKER TEST SUITE
+
+set -o pipefail
+{
+  docker build --progress=plain --target mcp-tests -t analyst-desk-mcp-tests:local . &&
+  docker run --rm --network none --read-only \
+    --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 \
+    --cap-drop ALL --security-opt no-new-privileges:true \
+    analyst-desk-mcp-tests:local
+} 2>&1 | tee ./LSOutput/DockerOut.txt
+
+This extends the existing mcp-tests target and Python/MCP CI. Existing running
+services and the numeric API remain unchanged. The workflow currently runs in
+the host venv; containerising the research API/UI is a later integration step.
+
+4. CHECK THE EXISTING LIVE SERVICES
+
+set -o pipefail
+{
+  docker compose up -d --wait --wait-timeout 240 \
+    edgar filings-kb python-sandbox research-portal retrieval-gateway &&
+  docker compose ps &&
+  python -u check_research_workflow.py
+} 2>&1 | tee ./LSOutput/WorkflowPreflightOut.txt
+
+The read-only check exercises KB coverage, an actual EDGAR section and fact,
+sandbox computation/kernel probes, and portal reading. It does not create a
+draft, publish a note or make a model request. Compose waits for services to
+be running/healthy before the checker starts. The checker validates the exact
+45 company/year pairs and no coverage warnings using the KB company_years field.
+
+5. START THE LIVE MODEL WORKFLOW — THIS USES OPENROUTER CREDIT
+
+The existing OPENROUTER_API_KEY in .env is used. Never paste .env or any key into
+chat or a log. workflow_config.json uses the existing API model
+openai/gpt-4.1-mini, with no provider/model fallback. Keep this config unchanged
+while resuming a run. Broader cohort model-list documentation remains pending.
+
+The demonstration request names MSFT, GOOGL and FY2023/FY2024/FY2025 explicitly.
+Read workflow_demo_request.json first. The planner stops at an editable plan.
+
+set -o pipefail
+python -u run_research_workflow.py start --run-id margin_demo \
+  2>&1 | tee ./LSOutput/WorkflowStartOut.txt
+
+Save that output for review. Do not start the same run ID again. Use status,
+review or continue for the existing run. A genuinely new request uses a new ID.
+
+6. INSPECT SAVED STATE, INCLUDING AFTER CLOSING THE TERMINAL
+
+python -u run_research_workflow.py status --run-id margin_demo \
+  2>&1 | tee ./LSOutput/WorkflowStatusOut.txt
+
+State is in data/workflow/checkpoints.sqlite3. Evidence, conservative budget
+reservations, cached responses and hashed events are in journal.sqlite3. The
+directory is private (0700) and databases are 0600. Preserve it for resume.
+
+7. REVIEW THE PLAN IN AN INTERACTIVE TERMINAL
+
+set -o pipefail
+python -u run_research_workflow.py review --run-id margin_demo \
+  --reviewer "Livius Szkipala" \
+  2>&1 | tee ./LSOutput/WorkflowPlanReviewOut.txt
+
+Read the displayed company/year scope and full plan. Type the exact APPROVE
+phrase/hash only if acceptable; Enter cancels. Approval runs the research
+branches, quant, risk comparison, writer and critic, then pauses at the note.
+If source limitations cause a replan, it pauses for another plan review first.
+
+To edit a plan, save the complete plan JSON object as LSOutput/EditedPlan.json
+with objective, outline, research_query and limitations. Run:
+
+python -u run_research_workflow.py review --run-id margin_demo --action edit \
+  --edited-json ./LSOutput/EditedPlan.json --reviewer "Livius Szkipala" \
+  2>&1 | tee ./LSOutput/WorkflowPlanEditOut.txt
+
+An edit saves a fresh review gate and returns to the shell. It does not prompt
+again in the same command. Run review again to approve the replacement plan.
+Company/year scope is in the request;
+start a new run to change that scope. To reject, use --action reject instead.
+
+8. REVIEW THE EXACT FINAL NOTE BEFORE PUBLICATION
+
+python -u run_research_workflow.py review --run-id margin_demo \
+  --reviewer "Livius Szkipala" \
+  2>&1 | tee ./LSOutput/WorkflowNoteReviewOut.txt
+
+At the note gate, read every field, source and limitation. Only typing the exact
+APPROVE AND PUBLISH phrase/hash authorises publication. The CLI obtains a
+separate human capability outside LangGraph, then resumes the publisher. Source
+facts and passages are checked again before publish_note is called.
+
+To edit, copy the complete editable_draft object from the gate into
+LSOutput/EditedDraft.json. It contains title and paragraphs; each paragraph has
+text and evidence_ids. Use --action edit --edited-json ./LSOutput/EditedDraft.json.
+The old proposal is closed, invalidating its approval. The replacement is
+checked and presented at a new gate. It is not automatically published.
+Financial table values are generated from evidence and cannot be edited into
+unsupported numbers. Use --action reject to close the note without publishing.
+
+9. RESUME AFTER AN INTERRUPTION OR ERROR
+
+First run status. If no human gate is pending and next_nodes is nonempty:
+
+python -u run_research_workflow.py continue --run-id margin_demo \
+  2>&1 | tee ./LSOutput/WorkflowResumeOut.txt
+
+continue never supplies a human decision. At a pending gate, use review. If the
+process stopped after approval but before publication, its in-memory capability
+is lost and a fresh human review is required. If publication already committed,
+the publisher reads the original note ID and does not create a duplicate.
+
+Model response caches avoid repeating completed requests on replay. Reserved
+budgets are not reset by restart. Failed or ambiguous provider requests retain
+their reservation; missing cost data is reported as unknown, never as zero.
+
+9A. RESUME margin_demo AFTER THE RESEARCHER SCOPE CORRECTION
+
+The supplied laptop log confirms that the edited plan was approved. Research
+then stopped when the Alphabet branch requested Microsoft. The v3 correction
+keeps that request blocked, supplies exact branch-specific argument schemas,
+and returns a bounded correction observation before another model decision.
+Wrong-company source responses, role violations and policy violations still
+stop the run. No rejected request is silently redirected to another company.
+
+Replace the included files in the existing feature/research-workflow checkout.
+Keep workflow_config.json, the approved request/plan and data/workflow state;
+the package retains the same configuration bytes and database formats. No new
+dependencies or service image changes are needed for this host-side correction.
+Changed model context is recorded with new prompt hashes and may make fresh
+model calls; existing token reservations and evidence remain in place.
+
+set -o pipefail
+{
+  python -m unittest -v test_research_workflow.py test_workflow_clients.py &&
+  python -u run_research_workflow.py continue --run-id margin_demo
+} 2>&1 | tee ./LSOutput/WorkflowScopeFixOut.txt
+
+The continue command resumes the approved research without approving a new
+plan or publishing a note. A later plan/note gate is saved and the command
+returns to the shell; use review separately after inspecting its output.
+Final laptop Docker and GitHub CI results still need recording for this version.
+
+9B. RESUME margin_demo AFTER THE REPEATED-PAGE CORRECTION
+
+The v3 laptop tests passed, but the live Microsoft researcher repeatedly read
+FY2023 Item 7 at offset 0 until its ten-step limit. The v4 correction keeps the
+same limits and gives the model compact source previews, explicit next_offset,
+a record of successful requests, remaining steps and a durable source index.
+An identical successful request is blocked within that agent invocation; the
+model can select another page/year/Item or finish with explicit limitations.
+The last decision is reserved for the handoff. Failure to finish still stops
+the run; the code does not fabricate a successful research result.
+
+Download the updated ZIP and replace its included files in the existing branch.
+Keep .env, data/, workflow_config.json and the current margin_demo checkpoint.
+No dependency reinstall or MCP service rebuild is required for this correction.
+
+set -o pipefail
+{
+  python -m unittest -v test_research_workflow.py test_workflow_clients.py &&
+  python -u run_research_workflow.py continue --run-id margin_demo
+} 2>&1 | tee ./LSOutput/WorkflowProgressFixOut.txt
+
+The local suite now contains 52 workflow/client tests. The continuation uses
+model credit within the existing saved budget. It may pause at a revised-plan
+gate because the completed Alphabet handoff reported source limitations.
+That is a human review point: inspect the output before running review. The
+continuation cannot approve a plan or publish a note by itself. Do not start
+margin_demo again or remove its saved state. Send WorkflowProgressFixOut.txt
+for review before proceeding to the final Docker/CI checkpoint.
+
+9C. START A NEW DEVELOPMENT RUN AFTER THE WRITER/COVERAGE CORRECTION
+
+The original margin_demo completed its original draft plus both permitted
+revisions and ended blocked. Its diagnostic shows numeric year/Item labels in
+the title and narrative, and no FY2025 Item 1A samples for either company.
+Preserve that run and its budget/history. Do not reset revisions, rewind its
+checkpoint, delete its state, or expect continue to restart a terminal run.
+
+The v5 patch requires actual lookup attempts for missing year/Item sections,
+feeds saved financial receipts and bounded original source excerpts to the
+writer, supplies precise field/token feedback, and exposes rejection reasons
+in normal blocked output. Source previews remain explicitly incomplete and
+untrusted. The original numerical guard and two-revision bound remain enforced.
+
+Replace the ZIP's included files in the existing feature/research-workflow
+branch. Keep .env and data/. No dependencies or MCP service images changed.
+The new workflow/client suite contains 61 tests.
+
+set -o pipefail
+{
+  python -m unittest -v test_research_workflow.py test_workflow_clients.py &&
+  python -u run_research_workflow.py start --run-id margin_demo_v2
+} 2>&1 | tee ./LSOutput/WorkflowWriterFixOut.txt
+
+This is a separately recorded development run with its own budget and a new
+human plan gate; the prior run's cost and failure remain in the journal.
+Starting makes the planner model call and returns to the shell for review.
+Inspect the output before approving. All later review/status/continue commands
+for this run must use --run-id margin_demo_v2. Final publication still requires
+the separate exact-note approval. Record the final Docker/CI checkpoint after
+the live workflow passes; no live success is claimed by the software tests.
+
+9D. CORRECT THE FALSE-POSITIVE CRITIC AND RECHECK THE PAUSED V2 NOTE
+
+Logs 41.16/41.17 show all six margin calculations but incorrect financial-data
+absence and causal claims in the note. The critic approved every paragraph,
+including a mixed-company paragraph with only Alphabet citations and unsupported
+global risk-change language. Do not publish that proposal.
+
+Copy the v6 ZIP contents into the existing project root, preserving paths.
+This updates the host CLI and adds workflow_support.py. It also places the
+corrected draft in the existing LSOutput folder. No pip install or MCP service
+rebuild is needed for the host continuation. Keep workflow_config.json, .env,
+data, checkpoints and recorded budgets. The config bytes are unchanged.
+
+Run the 71 workflow/client software tests first:
+
+set -o pipefail
+python -m unittest -v test_research_workflow.py test_workflow_clients.py \
+  2>&1 | tee ./LSOutput/WorkflowCriticFixTestsOut.txt
+
+Only if they pass, review the replacement draft:
+
+python -u run_research_workflow.py review --run-id margin_demo_v2 \
+  --action edit \
+  --edited-json ./LSOutput/CorrectedNoteV2.json \
+  --reviewer "Livius Szkipala" \
+  2>&1 | tee ./LSOutput/WorkflowV2NoteEditOut.txt
+
+For the still-current proposal shown in log 41.16, the phrase is:
+EDIT 8f7431ac68e7
+Read the original and complete replacement first. Use the phrase actually
+displayed by the CLI; do not submit an approval for the old note.
+
+The edit closes the old portal proposal, rechecks the corrected draft and its
+sources, and, if accepted, prepares a new proposal with a new content hash.
+It makes paid critic calls under the existing budget. It does not publish.
+The same run history and maximum of two automatic revisions are preserved.
+Send WorkflowCriticFixTestsOut.txt and WorkflowV2NoteEditOut.txt for inspection
+before approving publication. Do not grant more budget or rewind the run if it
+stops. The old critic verdict is intentionally insufficient for publication.
+
+The new critic checks one paragraph at a time, every sentence in order, against
+that paragraph's citations. Exact source excerpts are checked in code; model
+semantic judgments remain fallible and still need human review/evaluation.
+Final Docker/CI and live semantic-quality validation remain pending.
+
+9E. REPAIR THE CRITIC RESPONSE LOOP AND RECOVER THE EDITED V2 RUN
+
+This supersedes the pending v6 continuation in 9D. Log 41.19 confirms the edit
+was already accepted: margin_demo_v2 is edited_note with next_nodes=[critic].
+Do not submit the edit again or approve the earlier proposal. The critic sent
+overlong quotes repeatedly because its correction feedback was too generic.
+Only 2,514 reservation units remain; they are not billed-token totals.
+
+Copy the v7 ZIP's included files into ~/projects/analyst-desk, preserving paths.
+Keep .env, data, configuration and checkpoint/history files. No dependency
+install or MCP service rebuild is required for this host CLI correction.
+
+Run the 82 workflow/client tests:
+
+set -o pipefail
+python -m unittest -v test_research_workflow.py test_workflow_clients.py \
+  2>&1 | tee ./LSOutput/WorkflowResponseFixTestsOut.txt
+
+Only after they pass, explicitly extend this DEVELOPMENT run's TOTAL token
+reservation limit from 900000 to 1100000. This adds 200000; no used allowance
+is refunded. The command journals the extension and excludes this run from
+fixed-budget evaluation. It calls no model/tool and publishes nothing.
+
+python -u run_research_workflow.py extend-dev-budget \
+  --run-id margin_demo_v2 --token-limit 1100000 \
+  2>&1 | tee ./LSOutput/WorkflowV2BudgetExtensionOut.txt
+
+Read the displayed saved usage and new limit. To accept, type exactly:
+EXTEND DEVELOPMENT margin_demo_v2 900000 TO 1100000
+
+Do not pipe this phrase into the command. Enter alone cancels. If the displayed
+old limit differs, inspect status instead of repeating an extension. The tool
+budget and maximum of two writer revisions remain unchanged.
+
+After the extension succeeds, resume the saved critic (this can make paid
+model calls, still bounded by the saved limits):
+
+python -u run_research_workflow.py continue --run-id margin_demo_v2 \
+  2>&1 | tee ./LSOutput/WorkflowV2CriticResumeOut.txt
+
+Expected successful result: awaiting_note with a fresh proposal and human
+review gate. Do not approve publication yet. Send WorkflowResponseFixTestsOut.txt,
+WorkflowV2BudgetExtensionOut.txt and WorkflowV2CriticResumeOut.txt for review.
+If it stops again, send that output; do not keep retrying or extend again.
+
+V7 shows precise quote/receipt corrections and allows at most two repair
+attempts before stopping. It does not weaken source checks or turn unsupported
+claims into approvals. Final exact-note human approval is still separate.
+
+9F. SIMPLIFY CRITIC REFERENCES AND CONTINUE WITH THE EXISTING ALLOWANCE
+
+Log 41.21 confirms the budget extension succeeded. The run has 938310 reserved
+units out of 1100000 and 101 tool calls. It then stopped at agent_response_limit
+while the financial critic repeated invalid receipt fields. Do not repeat the
+budget extension or the already-accepted human draft edit.
+
+Copy the v8 ZIP's included files into ~/projects/analyst-desk, preserving paths
+and replacing matching files. Keep .env, data and the saved run. Configuration
+bytes, dependencies, checkpoints and saved budget/history are preserved. No
+dependency installation or MCP service rebuild is needed for this host fix.
+
+Run the 91 workflow/client tests:
+
+cd ~/projects/analyst-desk
+set -o pipefail
+python -m unittest -v test_research_workflow.py test_workflow_clients.py \
+  2>&1 | tee ./LSOutput/WorkflowCatalogFixTestsOut.txt
+
+Only if they pass, resume the same run once (paid critic calls may occur):
+
+python -u run_research_workflow.py continue --run-id margin_demo_v2 \
+  2>&1 | tee ./LSOutput/WorkflowV2CatalogResumeOut.txt
+
+The critic now selects checked reference IDs instead of transcribing quotes
+or inventing financial receipt descriptions. Each selected reference remains
+bound to this paragraph and its evidence. A semantic rejection still uses the
+existing bounded writer revision route; neither support nor approval is forced.
+
+If successful, the run reaches awaiting_note with a fresh human review gate.
+Send WorkflowCatalogFixTestsOut.txt and WorkflowV2CatalogResumeOut.txt before
+approving publication. If it stops, send the same output: it now includes the
+saved failure diagnostics. Do not repeatedly continue or extend the budget.
+Live completion and final Docker/CI are not established by the software tests.
+
+10. CHECK BEFORE COMMITTING
+
+git diff --check
+git status --short
+
+Do not stage .env, downloaded data, checkpoint databases, logs or .vscode/.
+Review the installation, full Docker, preflight and live workflow logs first.
+No git commit, push or merge is performed by these installation commands.

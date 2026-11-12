@@ -39,14 +39,15 @@ jobs:
             requirements-mcp.txt
             requirements-retrieval.txt
             requirements-tools.txt
+            requirements-workflow.txt
 
       - name: Install test dependencies
         run: |
-          python -m pip install -r requirements-retrieval.txt -r requirements-tools.txt
+          python -m pip install -r requirements-retrieval.txt -r requirements-workflow.txt
           python -m pip check
 
       - name: Run all offline tests, including MCP and retrieval contracts
         env:
           HF_HUB_OFFLINE: "1"
           TOKENIZERS_PARALLELISM: "false"
-        run: python -m unittest -v test_api.py test_financial_data.py test_edgar_mcp.py test_api_mcp.py test_filing_corpus.py test_filing_passages.py test_filing_supplements.py test_filing_retrieval.py test_filings_kb_mcp.py test_python_sandbox.py test_research_portal.py test_research_tools_mcp.py test_research_tools_setup.py
+        run: python -m unittest -v test_api.py test_financial_data.py test_edgar_mcp.py test_api_mcp.py test_filing_corpus.py test_filing_passages.py test_filing_supplements.py test_filing_retrieval.py test_filings_kb_mcp.py test_python_sandbox.py test_research_portal.py test_research_tools_mcp.py test_research_tools_setup.py test_research_workflow.py test_workflow_clients.py

@@ -1,0 +1,6 @@
+{
+  "question": "Compare Microsoft and Alphabet operating margins for FY2023, FY2024 and FY2025, and describe supported changes in their risk disclosures.",
+  "tickers": ["MSFT", "GOOGL"],
+  "years": [2023, 2024, 2025],
+  "include_risks": true
+}

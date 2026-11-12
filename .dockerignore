@@ -60,3 +60,17 @@
 !test_research_portal.py
 !test_research_tools_mcp.py
 !test_research_tools_setup.py
+!requirements-workflow.txt
+!workflow_contracts.py
+!workflow_store.py
+!workflow_tools.py
+!workflow_agents.py
+!workflow_render.py
+!research_workflow.py
+!run_research_workflow.py
+!check_research_workflow.py
+!workflow_config.json
+!workflow_demo_request.json
+!test_research_workflow.py
+!test_workflow_clients.py
+!workflow_support.py

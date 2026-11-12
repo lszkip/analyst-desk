@@ -1,195 +1,201 @@
 {
-  "version": "research-tools-v2-evidence-checkpoint",
-  "base_commit": "7207082",
-  "branch": "feature/research-tools",
-  "scope": "Research tools plus read-only repeated human review handling; exact-content approval and publication protections retained",
+  "version": "research-workflow-v8.2-docker-verified",
+  "base_commit": "56ebbce",
+  "branch": "feature/research-workflow",
+  "date": "2026-11-12",
+  "scope": "First persistent CLI LangGraph margin/risk workflow, scoped MCP tools and exact-content human gates; UI, memory and capstone evaluations remain pending",
   "files": [
     {
       "path": ".dockerignore",
-      "sha256": "53a63165d3c6b84487ec9f548d6332c059431ce484a90d2bf70763a6df4980c4",
-      "bytes": 1437,
+      "sha256": "1881adb196635824847137bdc63618e77f71bcf603234c1ecdb5c1121a6d79a4",
+      "bytes": 1765,
       "action": "replace",
-      "base_sha256": "ad6c7abf69e6eeba74b121e2aece8ceb0517fe170e50aab895437061df2e6bc9"
-    },
-    {
-      "path": ".github/workflows/docker.yml",
-      "sha256": "6a452d9b4e9ca865fa0162771459f89254e0887fe2949ecc0cf4fd5aef2c4bfe",
-      "bytes": 8220,
-      "action": "replace",
-      "base_sha256": "19c23431dc1b41cc159082adeeaf1bc41ef7ec7e6f57e693e037f49feb4e8a7d"
+      "base_sha256": "53a63165d3c6b84487ec9f548d6332c059431ce484a90d2bf70763a6df4980c4"
     },
     {
       "path": ".github/workflows/mcp.yml",
-      "sha256": "836d8ff4af28e23e636bf7e593ab87603f529939dc0cf2c56098a5601ae2e351",
-      "bytes": 8316,
+      "sha256": "f2a0befb9e7d0954cee0465f7893a6e333150e74d7fc3bc382e1a964ff1092c4",
+      "bytes": 8314,
       "action": "replace",
-      "base_sha256": "e2ab4b7650af3520328bc6adc491e117e2f5e07df8ce0afb764c251dbc57004c"
+      "base_sha256": "836d8ff4af28e23e636bf7e593ab87603f529939dc0cf2c56098a5601ae2e351"
     },
     {
       "path": ".github/workflows/tests.yml",
-      "sha256": "8db0fc04aca9303bfb79fb55b0bad4b7e029a65a7313d00612f828eeed5128e9",
-      "bytes": 1737,
+      "sha256": "f833d816303b827151b3fd3980b8fc50a04a84f95c2dcd33cc6ec91a9f1c1428",
+      "bytes": 1829,
       "action": "replace",
-      "base_sha256": "42a80efda1c9e4848772535c2ab751e6847e54f52a8ad05180a8fec0dd92a1df"
+      "base_sha256": "8db0fc04aca9303bfb79fb55b0bad4b7e029a65a7313d00612f828eeed5128e9"
     },
     {
       "path": "CAPSTONE_REQUIREMENTS.md",
-      "sha256": "25de9d20937768dde29553d0cd2801ac810f7415b8444d5a23c6b982ae7df2cc",
-      "bytes": 14942,
+      "sha256": "5920a115845429112427ad8b54a9193b3b982fba50d5bf2851f579cc805ce342",
+      "bytes": 26380,
       "action": "replace",
-      "base_sha256": "0910adc237091bae29f2f1185269ddd4ca8791b8fb77c66002f4e8eb3da6029a"
+      "base_sha256": "25de9d20937768dde29553d0cd2801ac810f7415b8444d5a23c6b982ae7df2cc"
     },
     {
       "path": "Dockerfile",
-      "sha256": "db05a1b9efb51995e7d9f305d0ef645e37e20dca51ce00dc89492f5b8add22fe",
-      "bytes": 6383,
+      "sha256": "38275319f6035ea75aef6404396acd99fd848fa65a406f504f4b2fe84b37e367",
+      "bytes": 6765,
       "action": "replace",
-      "base_sha256": "556c4cd25f9d78c848de144f8ba4d3c3abe19216c79c278ce6f7cffd0d31607d"
+      "base_sha256": "db05a1b9efb51995e7d9f305d0ef645e37e20dca51ce00dc89492f5b8add22fe"
     },
     {
-      "path": "RESEARCH_TOOLS_INSTALL_AND_TEST.txt",
-      "sha256": "9cedcdf8e4efa7dbcfbb449a6df433852a9651f500d082c0157a453c6a5389ac",
-      "bytes": 7270,
+      "path": "LSOutput/CorrectedNoteV2.json",
       "action": "add",
-      "base_sha256": null
+      "sha256": "554a48098c0b9525c248576f82de066abc721db94387805c8d75be19e06a48a7",
+      "bytes": 2050
     },
     {
-      "path": "RESEARCH_TOOLS_VALIDATION.md",
-      "sha256": "c5d17c2e3e8d5ea3d252272d32c731805876b5a728c9ebe8b85a7e38a9a7cd01",
-      "bytes": 9578,
+      "path": "WORKFLOW_ARCHITECTURE.md",
+      "sha256": "386dbc7b34bafb559486d13881ce4616541c238bcbbe200fbc49edff874e9a0b",
+      "bytes": 2013,
+      "action": "add"
+    },
+    {
+      "path": "WORKFLOW_INSTALL_AND_TEST.txt",
+      "sha256": "866d9a382fefb155fd52903586f5c7dcc334b7c7df5012b4b042ef56348a0ac9",
+      "bytes": 19539,
+      "action": "add"
+    },
+    {
+      "path": "WORKFLOW_VALIDATION.md",
+      "sha256": "5a2fff4e99fbe0eadd8c472d1d38e79aa1b6cdf102f423a9cf929a7be30962e9",
+      "bytes": 29389,
+      "action": "add"
+    },
+    {
+      "path": "check_research_workflow.py",
+      "sha256": "e32694a8fb8d236f0265e0036006aad2f57c276bf0d2fe7e0b88bc613ed02130",
+      "bytes": 3497,
+      "action": "add"
+    },
+    {
+      "path": "requirements-workflow.txt",
+      "sha256": "9986be6b8461ea353695f0e709729e1924420503de7922e412d1d74e35571519",
+      "bytes": 497,
+      "action": "add"
+    },
+    {
+      "path": "research_workflow.py",
+      "sha256": "10cacd67a29f2ed21b78a8923b19f0caa768b91f655fa9a90b882904ac00af2f",
+      "bytes": 21761,
+      "action": "add"
+    },
+    {
+      "path": "run_research_workflow.py",
+      "sha256": "7fa3bc8351a95ab8b2344a9902a5d6b02d05b20a9f5e3e5dd0387e00d07f94f7",
+      "bytes": 13224,
+      "action": "add"
+    },
+    {
+      "path": "test_research_workflow.py",
+      "sha256": "ef916caa6f5ac979c4d717cc565b937d532f58576b2b37d7dce447ab338bc09f",
+      "bytes": 88243,
+      "action": "add"
+    },
+    {
+      "path": "test_workflow_clients.py",
+      "sha256": "bbca98ad171a6cda46088239d4541f14c48d07b8a862e196a69dcbaafec32aa6",
+      "bytes": 17229,
+      "action": "add"
+    },
+    {
+      "path": "workflow_agents.py",
+      "sha256": "4e9ded175c8376f2ac4833669e3cd8bb647813b51252ab2afcb9084c90b6bb06",
+      "bytes": 20002,
+      "action": "add"
+    },
+    {
+      "path": "workflow_config.json",
+      "sha256": "6df563cef657730e870334dfa4c5acab98f990fd82d5ffe7f9e1522ac25c50fe",
+      "bytes": 9150,
+      "action": "add"
+    },
+    {
+      "path": "workflow_contracts.py",
+      "sha256": "de3f7fda9d277f3ab94abc5d6fedbbdd112c5d21afaf6db2c619d9b816c50fae",
+      "bytes": 4607,
+      "action": "add"
+    },
+    {
+      "path": "workflow_demo_request.json",
+      "sha256": "2a1ce6c5e95bcab163fca9526e7aebc5ba5270c0d923d79a4d97acb192ac5d7c",
+      "bytes": 246,
+      "action": "add"
+    },
+    {
+      "path": "workflow_render.py",
+      "sha256": "64987f4085cd00c2c806191aa85bc0eef629612f585153348a85ed0cd2134e7c",
+      "bytes": 5725,
+      "action": "add"
+    },
+    {
+      "path": "workflow_store.py",
+      "sha256": "465366ad2d3975c5b0c6f6319415f882e8585eab9278a30b23a307e4906a29ce",
+      "bytes": 7982,
+      "action": "add"
+    },
+    {
+      "path": "workflow_support.py",
       "action": "add",
-      "base_sha256": null
+      "sha256": "af216558fd2daacf79f5cb6e65cb247e33c2545745000dd4faf6dbaec3fcfa39",
+      "bytes": 13176
     },
     {
-      "path": "check_research_tools.py",
-      "sha256": "d698323e1e9167dd481291fef7f24637735fe7721ce497dfc283eedfb9689255",
-      "bytes": 4221,
-      "action": "add",
-      "base_sha256": null
-    },
-    {
-      "path": "compose.yaml",
-      "sha256": "caa3d32dd0d8f9b0deebb27e987e2d62b69b4281a0c0ec3f32c445fee5d3bbff",
-      "bytes": 7566,
-      "action": "replace",
-      "base_sha256": "d213e3c744894e57f8d513552a89d3d287aae3fbf3835ba5f82fab69f20c8112"
-    },
-    {
-      "path": "python_sandbox.py",
-      "sha256": "5547d7d8b7233965bec2b608a58536cf85854b845c593d10b76b50343cce9876",
-      "bytes": 4805,
-      "action": "add",
-      "base_sha256": null
-    },
-    {
-      "path": "python_sandbox_mcp.py",
-      "sha256": "24f461d086208ff3c35bc22fde0f31bef9e5d1a3ed5049ffd8b4abc6b015d2ac",
-      "bytes": 2819,
-      "action": "add",
-      "base_sha256": null
-    },
-    {
-      "path": "requirements-tools.txt",
-      "sha256": "9f03ecfc41fa7b70c1eb9a6d8ca2e34083032a664cd097e0cb6b1d3f48e728b3",
-      "bytes": 165,
-      "action": "add",
-      "base_sha256": null
-    },
-    {
-      "path": "research_portal.py",
-      "sha256": "e2c5e6b9d1c15b91eceab364fc935f526ab92522f25976cf7bf446b3b475b9a3",
-      "bytes": 11781,
-      "action": "add",
-      "base_sha256": null
-    },
-    {
-      "path": "research_portal_mcp.py",
-      "sha256": "b0d4c76afaac39e4142fa25e054f60c31b88bef5764e4764a731cfa0f18edc93",
-      "bytes": 5920,
-      "action": "add",
-      "base_sha256": null
-    },
-    {
-      "path": "research_tools_client.py",
-      "sha256": "3b0a650ec074f5a6c7e73dc06dc408e9e21c4b830037e18d0c3b34c1d02b64f7",
-      "bytes": 1548,
-      "action": "add",
-      "base_sha256": null
-    },
-    {
-      "path": "retrieval_gateway.conf",
-      "sha256": "8af57ae3293be7aca2d636ee0bd6c4ad53168f227d181701c65b979ab0f5d3b1",
-      "bytes": 1952,
-      "action": "replace",
-      "base_sha256": "45a92f2dfbe40457aae113727ed5db3033fce82be8c79e5af0113c5ca01c3735"
-    },
-    {
-      "path": "review_portal_note.py",
-      "sha256": "4737884f6db5f88561c852c1354f9f744db92b0903792fb32f88315c8973f895",
-      "bytes": 6922,
-      "action": "add",
-      "base_sha256": null
-    },
-    {
-      "path": "sandbox_worker.py",
-      "sha256": "765c7d291e226c10aeffd70357b5ee3e94299202ec46bbf79e727b247c06b712",
-      "bytes": 8994,
-      "action": "add",
-      "base_sha256": null
-    },
-    {
-      "path": "setup_research_tools.py",
-      "sha256": "8c1bea2f06e55ac3797207d1e16da878017cbb4892024d56a265ca890ae3b32b",
-      "bytes": 2089,
-      "action": "add",
-      "base_sha256": null
-    },
-    {
-      "path": "test_python_sandbox.py",
-      "sha256": "1678ee2784bd16bb6088ace13028c4658cfedffe6738d010aaf566443162c8dd",
-      "bytes": 5137,
-      "action": "add",
-      "base_sha256": null
-    },
-    {
-      "path": "test_research_portal.py",
-      "sha256": "c5d631bbbd65187229844fccf3709cdd3095ecd0cae2d8059f39df9c2e12d47a",
-      "bytes": 8485,
-      "action": "add",
-      "base_sha256": null
-    },
-    {
-      "path": "test_research_tools_mcp.py",
-      "sha256": "e5d2296d2f82378c38b19ecbeed755205906cc24f501d74050478ed37ef6149d",
-      "bytes": 15657,
-      "action": "add",
-      "base_sha256": null
-    },
-    {
-      "path": "test_research_tools_setup.py",
-      "sha256": "c545399d9c91f92e6b3471ae56e560ead79402eba3269fa0b58571ca126a9fda",
-      "bytes": 2525,
-      "action": "add",
-      "base_sha256": null
-    },
-    {
-      "path": "tool_security.py",
-      "sha256": "cf5b0ad04603018e9583edb07b2807c07a04e101703858d7cc4b10c9737bb67a",
-      "bytes": 2466,
-      "action": "add",
-      "base_sha256": null
+      "path": "workflow_tools.py",
+      "sha256": "d08ade89a74913409321ede798e4266b105404f4e9101448a3c77bc55923a0eb",
+      "bytes": 21943,
+      "action": "add"
     }
   ],
   "validation": {
-    "python_tests": 414,
-    "python_tests_seconds": 37.109,
-    "python_result": "OK",
-    "retry_regression": "Real HTTP repeat command uses only read credential; no prompt; same note ID; unchanged database",
-    "prior_laptop_docker_tests": 409,
-    "prior_laptop_docker_seconds": 24.549,
-    "prior_laptop_services": "healthy; live MCP checks passed; synthetic human approval published",
-    "updated_laptop_docker": "passed: 414 tests in 25.853 seconds",
-    "updated_laptop_retry": "passed: already_published; original note ID and content hash; no new approval or publication",
-    "github_ci": "pending branch push and PR checks"
-  }
+    "environment": "Authoring Linux x86_64 / Python 3.12; synthetic data and scripted model; no paid model call",
+    "full_suite_tests": 505,
+    "new_tests": 91,
+    "full_suite_seconds": 49.543,
+    "full_suite_status": "passed",
+    "pip_check": "passed",
+    "docker_copy_and_workflow_syntax": "All 104 literal local COPY sources (71 unique files) were audited. Log 41.25 confirms the corrected Docker image builds and its full suite passes.",
+    "separate_process_resume": "passed with three distinct OS processes",
+    "four_real_http_mcp_servers": "passed with synthetic source fixtures and scripted model",
+    "laptop_docker": "Log 41.25: image built successfully; 505 tests passed in 40.653 seconds. The log 41.24 build-context failure is resolved. GitHub CI remains pending.",
+    "laptop_live_model_and_corpus": "Log 41.23: margin_demo_v2 published once after exact-content human approval, with no pending nodes. Human-corrected, budget-extended development evidence; not held-out evaluation success.",
+    "github_ci": "pending",
+    "laptop_install_initial": "34 tests passed in 9.230 seconds; no broken requirements",
+    "preflight_http_integration": "Corrected helper passed against all four actual MCP servers with synthetic fixtures; no draft or publication created",
+    "targeted_client_tests": 9,
+    "targeted_client_seconds": 15.606,
+    "targeted_scope_tests": 8,
+    "targeted_scope_seconds": 0.525,
+    "scope_recovery": "Passed synthetic correction, strict denial, invalid-source failure, bounded retries and resume with retained approval/budget",
+    "model_cost_telemetry": "Log 41.21: margin_demo_v2 938310 reserved tokens out of the explicitly extended 1100000; 101 tools. Two new calls report 10180 tokens and USD 0.0056944 combined. Prior run history retained.",
+    "targeted_progress_and_scope_tests": 16,
+    "targeted_progress_and_scope_seconds": 0.791,
+    "progress_recovery": "Passed duplicate-page prevention, pagination, immutable originals, context trimming/reopen, bounded exhaustion, and graph resume retaining completed branch/plan/budget.",
+    "final_unicode_preview_check": "Passed in the final full suite; structured source IDs survive oversized multibyte previews.",
+    "targeted_writer_tests": 9,
+    "targeted_writer_seconds": 0.607,
+    "writer_and_section_checks": "Passed required-section enforcement, bounded early-finish correction, explicit empty-result gaps, six-pair financial context, original source previews, exact field/token feedback and terminal-run preservation.",
+    "targeted_support_tests": 10,
+    "targeted_support_seconds": 0.822,
+    "paragraph_review": "Passed sentence completeness, citation isolation, exact-source quote validation, two-revision limits and stale-critique publication rejection with scripted models.",
+    "corrected_note": "Human-reviewed development draft checked against supplied passages and margin values; not autonomous success or independent evaluation gold.",
+    "targeted_response_recovery_tests": 14,
+    "targeted_response_recovery_seconds": 0.527,
+    "new_response_recovery_tests": 11,
+    "response_repairs": "Sanitised field/constraint/length diagnostics; at most two repair attempts for schema or citation receipts; unsupported verdicts retain original writer-revision route. Eight actual uploaded malformed responses validated offline against new diagnostics.",
+    "development_budget_recovery": "TTY exact-confirmation command, no model tool or automatic extension; atomic journalled ceiling increase preserves usage/configuration/tool/revision bounds; extended runs explicitly excluded from fixed-budget evaluation.",
+    "configuration_and_state_compatibility": "workflow_config.json and requirements-workflow.txt byte-identical to v7; ResearchState AST and SQLite schema unchanged. Existing extension and all used allowance retained.",
+    "targeted_catalog_tests": 9,
+    "targeted_catalog_seconds": 0.064,
+    "catalog_review": "Paragraph-bound, source-checked catalog references; financial values/periods and exact bounded passage windows. Model selects IDs and judges every sentence; code assembles receipts without choosing support or changing verdicts.",
+    "effective_prompt": "Six-slot critic runtime prompt uses the sentence/catalog contract, versioned sentence-evidence-v2-catalog. Effective prompt and source catalog are included in response cache hashes. Old receipt versions cannot approve publication.",
+    "observed_input_replay": "Offline reconstruction from supplied source excerpts/note table: 6/26/29 references; 2932/11774/13240 catalog UTF-8 bytes; no supplied passage truncated. Both invalid financial responses rejected by new schema. Not live source verification.",
+    "error_diagnostics": "Failure output includes saved state, usage/budget and bounded sanitised current-attempt corrections, with no extra model call."
+  },
+  "install_guide": "WORKFLOW_INSTALL_AND_TEST.txt",
+  "evidence_register": "CAPSTONE_REQUIREMENTS.md",
+  "manifest_note": "This manifest is included in addition to the hashed files above; it does not hash itself.",
+  "resume_note": "Live development publication and the 505-test laptop Docker check are complete. Review Git changes, commit/push and check GitHub CI. Do not rerun publication. Broader capstone requirements remain pending."
 }
