@@ -78,8 +78,8 @@ CMD ["python", "filings_kb_mcp.py", "--transport", "http", "--host", "0.0.0.0", 
 
 FROM retrieval-base AS mcp-tests
 USER root
-COPY requirements-tools.txt ./
-RUN python -m pip install --no-cache-dir -r requirements-tools.txt \
+COPY requirements-tools.txt requirements-workflow.txt ./
+RUN python -m pip install --no-cache-dir -r requirements-workflow.txt \
     && python -m pip check
 USER 10001:10001
 COPY download_company_facts.py check_financial_coverage.py \
@@ -93,8 +93,9 @@ COPY download_company_facts.py check_financial_coverage.py \
     research_portal.py research_portal_mcp.py research_tools_client.py \
     setup_research_tools.py check_research_tools.py review_portal_note.py \
     test_python_sandbox.py test_research_portal.py test_research_tools_mcp.py test_research_tools_setup.py ./
+COPY workflow_contracts.py workflow_store.py workflow_tools.py workflow_agents.py workflow_render.py workflow_support.py research_workflow.py run_research_workflow.py check_research_workflow.py workflow_config.json workflow_demo_request.json test_research_workflow.py test_workflow_clients.py ./
 HEALTHCHECK NONE
-CMD ["python", "-m", "unittest", "-v", "test_api.py", "test_financial_data.py", "test_edgar_mcp.py", "test_api_mcp.py", "test_filing_corpus.py", "test_filing_passages.py", "test_filing_supplements.py", "test_filing_retrieval.py", "test_filings_kb_mcp.py", "test_python_sandbox.py", "test_research_portal.py", "test_research_tools_mcp.py", "test_research_tools_setup.py"]
+CMD ["python", "-m", "unittest", "-v", "test_api.py", "test_financial_data.py", "test_edgar_mcp.py", "test_api_mcp.py", "test_filing_corpus.py", "test_filing_passages.py", "test_filing_supplements.py", "test_filing_retrieval.py", "test_filings_kb_mcp.py", "test_python_sandbox.py", "test_research_portal.py", "test_research_tools_mcp.py", "test_research_tools_setup.py", "test_research_workflow.py", "test_workflow_clients.py"]
 
 FROM mcp-base AS python-sandbox
 USER root
