@@ -195,8 +195,10 @@ class SearchEngine:
         rerank_cache = {}
         for branch in plan:
             pids, fusion, evidence = self._candidates(branch, mode, vectors.get(branch["query"]))
-            rerank_scores, best = {}, {}
+            rerank_scores, rerank_fusion, hybrid_ranks, cross_encoder_ranks, best = {}, {}, {}, {}, {}
             if mode == "hybrid_rerank":
+                hybrid_order = list(pids)
+                hybrid_ranks = {pid: rank for rank, pid in enumerate(hybrid_order, 1)}
                 units = [u for pid in pids for u in evidence[pid]]
                 missing = [u for u in units if (branch["query"], u["unit_id"]) not in rerank_cache]
                 values = self.models.rerank(branch["query"], [u["text"] for u in missing]) if missing else []
@@ -204,7 +206,13 @@ class SearchEngine:
                 for pid in pids:
                     best[pid] = max(evidence[pid], key=lambda u: rerank_cache[(branch["query"], u["unit_id"])])
                     rerank_scores[pid] = rerank_cache[(branch["query"], best[pid]["unit_id"])]
-                pids.sort(key=lambda pid: (-rerank_scores[pid], -fusion[pid], pid))
+                cross_encoder_order = sorted(pids, key=lambda pid: (-rerank_scores[pid], -fusion[pid], pid))
+                cross_encoder_ranks = {pid: rank for rank, pid in enumerate(cross_encoder_order, 1)}
+                # Both ranking signals retain equal weight. Do not
+                # let one high-scoring window erase the original hybrid order.
+                # Candidate set, model inputs and search filters stay unchanged.
+                rerank_fusion = rrf([hybrid_order, cross_encoder_order], self.cfg["rrf_k"])
+                pids.sort(key=lambda pid: (-rerank_fusion[pid], -fusion[pid], pid))
             else:
                 best = {pid: evidence[pid][0] for pid in pids}
             hits = []
@@ -215,7 +223,10 @@ class SearchEngine:
                        "source_sha256": p["source_sha256"], "filing_identifier": p["filing_identifier"],
                        "period_start": p["period_start"], "period_end": p["period_end"],
                        "unit_id": u["unit_id"], "excerpt": u["text"], "cell_ids": u["cell_ids"],
-                       "rrf_score": fusion[pid], "rerank_score": rerank_scores.get(pid), "untrusted_source": True}
+                       "rrf_score": fusion[pid], "rerank_score": rerank_scores.get(pid),
+                       "rerank_fusion_score": rerank_fusion.get(pid),
+                       "hybrid_candidate_rank": hybrid_ranks.get(pid),
+                       "cross_encoder_rank": cross_encoder_ranks.get(pid), "untrusted_source": True}
                 hits.append(hit)
                 if pid not in merged:
                     merged[pid] = {**hit, "branch_ids": [], "plan_rrf_score": 0.0}

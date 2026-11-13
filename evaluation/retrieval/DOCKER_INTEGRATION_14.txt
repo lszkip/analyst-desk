@@ -1,0 +1,69 @@
+ALL COMPANIES — DOCKER RETRIEVAL INTEGRATION — SEQUENCE 14
+
+PURPOSE
+Deploy the accepted sequence13 ranking code into the existing local filings-kb
+service and verify that all 40 HTTP MCP searches match the accepted host run.
+This is deployment parity and prerequisite validation, not another tuning iteration.
+It is not an unseen-data evaluation or a full research-agent quality test.
+
+ACCEPTED DEVELOPMENT EVIDENCE
+Sequence13 passed the unchanged nDCG/Recall nonregression gates on 40 AI-reviewed
+development questions across all four modes, with zero errors. All120 unchanged
+control rankings and metrics matched baseline12. Independent arithmetic review
+recomputed 320 rows across both runs and verified hashes, summaries, gates and CSVs.
+The label/model/index/evaluator identities match. No human review is claimed.
+
+Mode                       nDCG@5       Recall@5      Precision@5
+Original hybrid            0.799025     0.387091      0.605
+Old standalone reranker    0.788462     0.369308      0.650
+Accepted fusion reranker   0.812511     0.388981      0.640
+
+Tradeoffs remain: 7 cases improved, 8 regressed and 25 tied in nDCG compared with old
+reranking. Google R026 now has no relevant top5 passage. Precision fell one percentage
+point. Netflix's single-gold recovery accounts for the net macro recall increase;
+the other 39 cases together declined. Do not claim universal improvement or accuracy
+of81%. These scores describe retrieval ranking on the inspected development cases.
+
+WHAT SEQUENCE14 CHANGES
+1. Dockerfile test COPY/CMD and .dockerignore allowlist include the evaluation metric
+   tests, fusion tests and new parity-checker tests. Existing build restrictions stay.
+2. GitHub offline test command includes the new parity-checker software tests.
+3. Add the read-only live parity checker, its software tests, this protocol and the
+   byte-identical accepted sequence13 reference report.
+4. Rebuild the complete offline test image and run it with networking disabled.
+5. Retain the previous local KB image tag, rebuild filings-kb using accepted code,
+   start existing prerequisite services, recreate KB and verify container code hashes.
+6. Send the 40 original requests once each through HTTP search_filings; compare exact
+   ranked IDs and validate source scope/hashes and fused-ranking provenance. Confirm
+   the expected model/config fingerprint and index generation from get_coverage.
+7. Run the existing five-tool KB/read-only-credential check and workflow prerequisite
+   check (45 company-years, EDGAR section/fact, sandbox isolation and portal reading).
+
+ACCEPTANCE
+All build/test/check commands must exit 0. Running container code must match the
+accepted host code. All 40 searches must match, with zero errors and no dropped cases.
+The checker reports integration parity only; it cannot upgrade development labels
+to held-out evidence. A mismatch or dependency failure remains a failure with logs.
+The runner keeps the original inputs, reference, result report and file identities.
+
+BOUNDARIES
+No retrieval scoring, labels, questions, models, index, source data, quality thresholds,
+workflow prompts or budgets change. No model download/index rebuild is requested.
+Docker builds can download pinned Python dependencies if their cached layers are absent.
+No paid LLM request, note creation/publication, Git commit/push, GitHub action dispatch
+or cloud deployment occurs. Local MCP services are started and filings-kb is recreated.
+The old image is retained for manual rollback if it was present. The runner does not
+delete volumes, data, workflow checkpoints or previous results.
+
+REMAINING PROJECT WORK
+GitHub CI results and real quality-regression CI evidence are still pending. Replaying
+a saved report is historical validation, not a fresh CI retrieval measurement.
+The independent FinanceBench check, agent-level cases/held-out runs, security attacks,
+judge calibration and other open capstone items remain separate work. Passing this
+integration check does not certify that the full capstone is complete.
+
+IDENTITIES
+Accepted sequence13 report SHA256: 5d367125a71446c2668940bd3226dca721a0cf4486dfe77466bfaae54e6eefac
+Accepted search code SHA256: ef6c53f0b05c194a70bf8952ecb2a4c92791913476cf444e7ed43caa7abff959
+Frozen labels SHA256: 1087398d4499fc0096fb5f55280335a8604e7ac7ce7932cf0f8ce19dc0a78454
+User results ZIP SHA256: e22c0167191a12ede6b95c2c35f45dbdb92fcc0133710449a5586d35ed2ad36c
