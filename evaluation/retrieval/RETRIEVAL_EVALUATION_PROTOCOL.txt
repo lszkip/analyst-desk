@@ -1,0 +1,67 @@
+ALL COMPANIES — RETRIEVAL EVALUATION PROTOCOL — SEQUENCE 12
+Policy: binary_ndcg5_exhaustive_recall_v1
+Declared before observing the first scored 40-case retrieval run.
+
+Frozen development data: 40 AI-reviewed cases, 884 relevant passage decisions,
+5,109 reviewed passages; zero unread or uncertain IDs. No human review is claimed.
+Labels SHA-256: 1087398d4499fc0096fb5f55280335a8604e7ac7ce7932cf0f8ce19dc0a78454
+Source export SHA-256: 219ac1f9caa9d5b8c35ea3afb865e1c7e51e9e2ffff10671b37d717e79d0b0e4
+Meta row9 uses the documented verified-original-source context supplement in sequence11.
+Gold sets are exhaustive and remain fixed. Do not truncate them to five or alter them
+after observing retrieval results merely to improve scores.
+
+Measure all four modes on the same cases and index: BM25, dense, hybrid,
+hybrid plus cross-encoder reranker. Before/after comparison is hybrid versus
+hybrid_rerank. No retrieval code, model, corpus, index or query settings are changed
+by this evaluation update. Models and index are loaded once before timed searches.
+
+METRICS
+Raw Recall@5 = unique relevant hits in the original first five positions / all gold.
+Precision@5 = unique relevant hits in those positions / 5. Missing positions score zero.
+Hit rate@5 = fraction of queries with at least one relevant result in those positions.
+Binary nDCG@5 = discounted relevant gain / the ideal discounted gain. Rank r has
+discount 1/log2(r+1), relevance gain is 0 or 1, and ideal ranks run from 1 through
+min(5, number of gold passages). All relevant passages are equal within the binary
+rubric; this does not measure answer completeness, facet diversity or factual accuracy.
+Duplicate IDs never gain credit twice and never promote rank six. The search-response
+contract rejects duplicate IDs as a retrieval error. Invalid/unknown/out-of-scope IDs
+and missing/stale source hashes are errors. Every error scores zero and stays in the
+macro denominator. Do not drop failing questions.
+
+PRIMARY DEVELOPMENT GATE
+Mean hybrid_rerank nDCG@5 >= 0.70, at least 40 reviewed cases, zero retrieval errors,
+and no macro nDCG@5 or raw Recall@5 regression against hybrid (tolerance 1e-12).
+This 0.70 nDCG target is a project-chosen development criterion, not an IIT requirement
+or an equivalent to 70% recall. It is declared before the run and must not be lowered
+afterward merely to make a failed run pass. An explicit regression override is recorded;
+the packaged runner does not enable it.
+
+The prior 0.70 raw Recall@5 gate was infeasible for the exhaustive gold sets and is
+retired as the default criterion. Mean raw Recall@5 can reach only 0.4530301377234023
+with five results, even under ideal retrieval. Precision@5 can reach only 0.805 because
+11 cases have fewer than five relevant passages. nDCG@5 can reach 1.0 for every case.
+An optional raw recall threshold is still supported; impossible targets fail before
+model loading/search. Do not describe the changed nDCG criterion as improved recall.
+
+BRIEF AND LIMITS
+The original project brief (physical page3) requires Recall@5 on 30+ labelled queries,
+before/after one change, and evaluation in CI failing below a threshold; it supplies
+no numeric retrieval threshold. We retain exhaustive Recall@5 and use 40 queries.
+The CLI exits nonzero on quality-gate failure. New offline metric tests are added to
+the existing GitHub test command. A real-data quality CI run and failed-run evidence
+remain to be collected; this package does not claim those happened.
+These development labels were created with Claude drafts and subsequent AI review,
+not independent human adjudication. Measured development scores are not held-out
+generalization evidence or a completed capstone evaluation.
+
+References for ranking measures:
+https://nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-ranked-retrieval-results-1.html
+https://scikit-learn.org/stable/modules/generated/sklearn.metrics.ndcg_score.html
+The threshold and non-regression policy are local project decisions, not claims from
+those references.
+
+RUN EVIDENCE
+Keep the complete JSON, per-case CSV, logs, frozen label/protocol copies, file hashes,
+index generation, model/config fingerprint and code identities. Preserve a failed
+baseline. Any later implementation iteration must rerun the same frozen cases and
+record the concrete change; do not silently change labels or success criteria.

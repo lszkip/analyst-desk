@@ -44,6 +44,10 @@
 !setup_retrieval.py
 !evaluate_filing_retrieval.py
 !test_filing_retrieval.py
+!test_retrieval_evaluation_metrics.py
+!test_retrieval_rerank_fusion.py
+!check_live_retrieval_parity.py
+!test_live_retrieval_parity.py
 !test_filings_kb_mcp.py
 !requirements-tools.txt
 !tool_security.py

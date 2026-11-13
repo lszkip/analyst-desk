@@ -1,0 +1,65 @@
+ALL COMPANIES — RERANKER FUSION EXPERIMENT — SEQUENCE 13
+
+Status at packaging: SOFTWARE VALIDATED; REAL RETRIEVAL CHANGE NOT YET MEASURED.
+This addendum describes one implementation change after inspecting baseline12.
+It does not rewrite the original sequence12 protocol or its failed baseline.
+
+MEASURED BASELINE
+All 40 AI-reviewed development questions ran in all four modes with zero errors.
+Hybrid: nDCG@5 0.7990250042602723; raw Recall@5 0.387090963807831.
+Standalone reranking: nDCG@5 0.7884621314098988; raw Recall@5 0.36930836230833014.
+The primary nDCG target was met, but both nonregression gates failed.
+Labels: 884 relevant decisions across 5,109 reviewed passages; zero uncertain or
+unread IDs. These are development labels, not human or held-out adjudication.
+
+DIAGNOSIS
+The original hybrid ranking placed the Microsoft, Salesforce and Netflix primary
+income statements first. Standalone cross-encoder reranking moved Microsoft and
+Salesforce to rank4 and Netflix outside the first five. Full supplied passages
+showed promotion of related notes, references and supplemental tables. No score
+alignment or input/output wiring defect was found. Representation/model mismatch
+is a supported explanation, not a proven single cause.
+
+ONE FIXED EXPERIMENT, DECLARED BEFORE ITS REAL-DATA RUN
+Keep the existing hybrid candidate order and score every existing candidate window
+with the same cross-encoder. Aggregate windows by the existing maximum score.
+Combine two full candidate orders with equal-weight reciprocal rank fusion (RRF):
+the original hybrid order and the cross-encoder order. Use the existing rrf_k=60.
+Ties use original hybrid score, then passage ID. No weights or k values are searched.
+Keep all 30 candidates eligible; return the original requested top5 to evaluation.
+Retain original hybrid and raw reranker scores; add component ranks and fused score
+to search hits for inspection. Branch planning and scope filtering are unchanged.
+
+FIXED INPUTS AND CRITERIA
+Do not alter labels, requests, source hashes, evaluator, model/config fingerprints,
+index generation, candidate limits, search-unit representation or quality gates.
+Mean hybrid_rerank nDCG@5 >=0.70; 40 reviewed cases; zero errors; no macro Recall@5
+or nDCG@5 regression against hybrid, with existing tolerance1e-12. No override.
+Raw Recall@5 remains reported, including its 0.4530301377234023 macro ceiling.
+The original protocol's 'no retrieval code changes' statement describes sequence12;
+this addendum explicitly records sequence13's retrieval code change.
+
+COMPARISON AND DECISION
+Run all40 cases across BM25, dense, hybrid and the changed hybrid_rerank mode.
+Require exact baseline identity for labels, evaluator, index, model/config, case set,
+and policy. Require the same ranked top5 IDs and metrics in all three unchanged modes.
+Compare the new reranker with the saved old reranker and report every case change.
+The evaluator's before_after_change field still names hybrid versus hybrid_rerank;
+the separate sequence13 comparison report identifies the cross-run experiment.
+If inputs or control rankings differ, report comparability failure, keep the results,
+and draw no isolated-change improvement conclusion. Quality-gate failure returns
+nonzero and remains visible. A passing target alone does not override other failures.
+
+LIMITS AND NEXT DECISION
+This implementation was selected using development failures. Any improvement is
+development evidence only; unseen-data performance remains unmeasured. Software
+fixtures validate ranking mechanics, not retrieval quality. Do not say 'fixed' or
+'passed' before inspecting the full comparable run. Preserve failed and successful
+results. Do not tune labels or gates to fit the experiment. Real quality CI and
+end-to-end workflow evaluation remain separate work.
+
+BASELINE IDENTITIES
+Baseline report SHA256: 0e69dd68140aa08c0b7df9f71b99c13f49bf43550e5cab9af9d43eeefdae2036
+Baseline results ZIP SHA256: 57420a2c47eb8c715a4f5aee267d5697d30114e8bc1574a11e0ae049a0368118
+Frozen label SHA256: 1087398d4499fc0096fb5f55280335a8604e7ac7ce7932cf0f8ce19dc0a78454
+Original search code SHA256: 7d92737b18b4018870286b7a15e8499e6c569657abdde78a404b267545afdc83
