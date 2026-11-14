@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "sequence": 26,
+  "compose_project": "analyst-desk-monitoring",
+  "compose_file": "monitoring/compose.yaml",
+  "services": [
+    "exporter",
+    "prometheus",
+    "grafana",
+    "monitoring-gateway"
+  ],
+  "images": {
+    "exporter": "analyst-desk-monitoring-exporter:local",
+    "prometheus": "prom/prometheus:v3.13.5",
+    "grafana": "grafana/grafana:13.3.1",
+    "monitoring-gateway": "nginx:stable-alpine@sha256:583b7f2fce1cdb8da5ad5c39ebd3c33b98b87d493190e548bdee1fa8c619c311"
+  },
+  "python_base": "python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e",
+  "image_reproducibility": "Python/nginx pinned by digest; explicit Prometheus/Grafana release tags with actual IDs/RepoDigests captured at runtime.",
+  "ports": {
+    "exporter": 8085,
+    "prometheus": 9090,
+    "grafana": 3000
+  },
+  "bind_address": "127.0.0.1",
+  "health": {
+    "exporter": "http://127.0.0.1:8085/health",
+    "prometheus": "http://127.0.0.1:9090/-/ready",
+    "grafana": "http://127.0.0.1:3000/api/health",
+    "monitoring-gateway": "http://127.0.0.1:8085/__monitoring_health"
+  },
+  "grafana": {
+    "dashboard_uid": "analyst-desk-saved-runs",
+    "dashboard_path": "/d/analyst-desk-saved-runs",
+    "dashboard_api": "/api/dashboards/uid/analyst-desk-saved-runs",
+    "datasource_uid": "analyst-desk-prometheus",
+    "datasource_health_api": "/api/datasources/uid/analyst-desk-prometheus/health",
+    "auth": "anonymous Viewer; basic login/signup and management writes disabled",
+    "version": "13.3.1",
+    "query_api": "/api/ds/query",
+    "query_body": {
+      "from": "now-5m",
+      "to": "now",
+      "queries": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          },
+          "expr": "analyst_desk_reported_tokens{dataset=\"google_meta_sequence25\"}",
+          "instant": true,
+          "range": false,
+          "format": "table"
+        }
+      ]
+    },
+    "expected_query_value": 133710
+  },
+  "prometheus": {
+    "version": "3.13.5",
+    "build_info_api": "/api/v1/status/buildinfo",
+    "targets_api": "/api/v1/targets",
+    "alerts_api": "/api/v1/alerts",
+    "query_api": "/api/v1/query",
+    "job": "analyst-desk-saved-runs",
+    "scrape_seconds": 5,
+    "evaluation_seconds": 5
+  },
+  "data": {
+    "snapshot": "monitoring/data/snapshot.json",
+    "probe": "monitoring/data/alert_probe.json",
+    "directory_mode": "0755",
+    "file_mode": "0644",
+    "mount": "read_only",
+    "original_private_state_mounted": false
+  },
+  "secret": {
+    "path": "monitoring/secrets/grafana_admin_password",
+    "minimum_length": 32,
+    "generation": "secrets.token_urlsafe(48)",
+    "directory_mode": "0700",
+    "file_mode": "0444",
+    "container_user": "472:472",
+    "mount": "single file, read_only",
+    "include_in_results": false,
+    "reason": "Private host directory; narrow bind-mounted file must be readable by Grafana UID472."
+  },
+  "alert": {
+    "name": "AnalystDeskVerifiedFinancialShareLow",
+    "real_dataset": "google_meta_sequence25",
+    "probe_dataset": "synthetic_alert_probe",
+    "probe_class": "synthetic",
+    "probe_telemetry_kind": "synthetic_test",
+    "share_metric": "analyst_desk_verified_financial_share",
+    "denominator_metric": "analyst_desk_financial_figures",
+    "threshold_exclusive": 0.98,
+    "positive_denominator_required": true,
+    "for_seconds": 5,
+    "fire_timeout_seconds": 45,
+    "resolve_timeout_seconds": 45,
+    "low_probe": {
+      "enabled": true,
+      "verified": 97,
+      "total": 100,
+      "expires_at": "runtime epoch seconds, now+300"
+    },
+    "recovered_probe": {
+      "enabled": true,
+      "verified": 100,
+      "total": 100,
+      "expires_at": "runtime epoch seconds, now+300"
+    },
+    "disabled_probe": {
+      "enabled": false,
+      "verified": 0,
+      "total": 0,
+      "expires_at": null
+    },
+    "external_notifications": false
+  },
+  "promtool_commands": [
+    [
+      "run",
+      "--rm",
+      "--no-deps",
+      "--entrypoint",
+      "/bin/promtool",
+      "prometheus",
+      "check",
+      "config",
+      "/etc/prometheus/prometheus.yml"
+    ],
+    [
+      "run",
+      "--rm",
+      "--no-deps",
+      "--entrypoint",
+      "/bin/promtool",
+      "prometheus",
+      "check",
+      "rules",
+      "/etc/prometheus/alerts.yml"
+    ],
+    [
+      "run",
+      "--rm",
+      "--no-deps",
+      "--entrypoint",
+      "/bin/promtool",
+      "prometheus",
+      "test",
+      "rules",
+      "/etc/prometheus/alert_tests.yml"
+    ]
+  ],
+  "denied_write_probes": [
+    {
+      "url": "http://127.0.0.1:8085/metrics",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:9090/-/reload",
+      "method": "POST"
+    },
+    {
+      "url": "http://127.0.0.1:3000/api/dashboards/db",
+      "method": "POST"
+    }
+  ],
+  "accepted_denial_statuses": [
+    403,
+    405
+  ],
+  "scope": "Read-only saved-run monitoring and a separate synthetic alert demonstration; no new AI calls, original data changes or publication.",
+  "no_live_docker_claim_from_static_tests": true
+}

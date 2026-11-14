@@ -1,0 +1,82 @@
+rule_files:
+  - /etc/prometheus/alerts.yml
+evaluation_interval: 5s
+tests:
+  - name: 97 percent fires and recovery clears
+    interval: 5s
+    input_series:
+      - series: 'analyst_desk_verified_financial_share{dataset="synthetic_alert_probe",evidence_class="synthetic",telemetry_kind="synthetic_test"}'
+        values: '0.97 0.97 0.97 1 1 1'
+      - series: 'analyst_desk_financial_figures{dataset="synthetic_alert_probe",evidence_class="synthetic",telemetry_kind="synthetic_test"}'
+        values: '100+0x5'
+    alert_rule_test:
+      - eval_time: 10s
+        alertname: AnalystDeskVerifiedFinancialShareLow
+        exp_alerts:
+          - exp_labels:
+              dataset: synthetic_alert_probe
+              evidence_class: synthetic
+              telemetry_kind: synthetic_test
+              severity: warning
+              measurement_scope: financial_table_values_only
+            exp_annotations:
+              summary: "Verified financial table share is below 98%"
+              description: "Dataset synthetic_alert_probe (synthetic, synthetic_test). This is table-value verification, not prose accuracy. synthetic_alert_probe is a deliberate alert test."
+      - eval_time: 20s
+        alertname: AnalystDeskVerifiedFinancialShareLow
+        exp_alerts: []
+  - name: 98 percent does not fire
+    interval: 5s
+    input_series:
+      - series: 'analyst_desk_verified_financial_share{dataset="synthetic_alert_probe",evidence_class="synthetic",telemetry_kind="synthetic_test"}'
+        values: '0.98+0x5'
+      - series: 'analyst_desk_financial_figures{dataset="synthetic_alert_probe",evidence_class="synthetic",telemetry_kind="synthetic_test"}'
+        values: '100+0x5'
+    alert_rule_test:
+      - eval_time: 20s
+        alertname: AnalystDeskVerifiedFinancialShareLow
+        exp_alerts: []
+  - name: 100 percent does not fire
+    interval: 5s
+    input_series:
+      - series: 'analyst_desk_verified_financial_share{dataset="synthetic_alert_probe",evidence_class="synthetic",telemetry_kind="synthetic_test"}'
+        values: '1+0x5'
+      - series: 'analyst_desk_financial_figures{dataset="synthetic_alert_probe",evidence_class="synthetic",telemetry_kind="synthetic_test"}'
+        values: '100+0x5'
+    alert_rule_test:
+      - eval_time: 20s
+        alertname: AnalystDeskVerifiedFinancialShareLow
+        exp_alerts: []
+  - name: zero denominator is not a percentage
+    interval: 5s
+    input_series:
+      - series: 'analyst_desk_financial_figures{dataset="synthetic_alert_probe",evidence_class="synthetic",telemetry_kind="synthetic_test"}'
+        values: '0+0x5'
+    promql_expr_test:
+      - expr: 'analyst_desk_verified_financial_share{dataset="synthetic_alert_probe"}'
+        eval_time: 20s
+        exp_samples: []
+    alert_rule_test:
+      - eval_time: 20s
+        alertname: AnalystDeskVerifiedFinancialShareLow
+        exp_alerts: []
+  - name: missing evidence is unavailable
+    interval: 5s
+    input_series: []
+    promql_expr_test:
+      - expr: 'analyst_desk_verified_financial_share{dataset="google_meta_sequence25"}'
+        eval_time: 20s
+        exp_samples: []
+    alert_rule_test:
+      - eval_time: 20s
+        alertname: AnalystDeskVerifiedFinancialShareLow
+        exp_alerts: []
+      - eval_time: 20s
+        alertname: AnalystDeskSnapshotUnavailable
+        exp_alerts:
+          - exp_labels:
+              dataset: google_meta_sequence25
+              severity: warning
+            exp_annotations:
+              summary: "Saved-run monitoring evidence is unavailable"
+              description: "Exporter failure or missing/invalid snapshot. Missing telemetry must not be read as zero errors or 100% verification."

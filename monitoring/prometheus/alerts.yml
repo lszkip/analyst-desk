@@ -1,0 +1,21 @@
+groups:
+  - name: analyst-desk-saved-run-integrity
+    interval: 5s
+    rules:
+      - alert: AnalystDeskVerifiedFinancialShareLow
+        expr: (analyst_desk_verified_financial_share < 0.98) and on (dataset, evidence_class, telemetry_kind) (analyst_desk_financial_figures > 0)
+        for: 5s
+        labels:
+          severity: warning
+          measurement_scope: financial_table_values_only
+        annotations:
+          summary: "Verified financial table share is below 98%"
+          description: "Dataset {{ $labels.dataset }} ({{ $labels.evidence_class }}, {{ $labels.telemetry_kind }}). This is table-value verification, not prose accuracy. synthetic_alert_probe is a deliberate alert test."
+      - alert: AnalystDeskSnapshotUnavailable
+        expr: (up{job="analyst-desk-saved-runs"} == 0) or (analyst_desk_snapshot_valid{dataset="google_meta_sequence25"} != 1) or absent(analyst_desk_snapshot_valid{dataset="google_meta_sequence25"})
+        for: 15s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Saved-run monitoring evidence is unavailable"
+          description: "Exporter failure or missing/invalid snapshot. Missing telemetry must not be read as zero errors or 100% verification."

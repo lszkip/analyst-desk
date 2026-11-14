@@ -1,0 +1,1428 @@
+{
+  "uid": "analyst-desk-saved-runs",
+  "title": "Analyst Desk — saved-run monitoring",
+  "description": "Read-only monitoring of validated saved evidence, with explicit assisted-development scope and unavailable telemetry.",
+  "tags": [
+    "analyst-desk",
+    "saved-evidence",
+    "assisted-development"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": false,
+  "refresh": "5s",
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m"
+    ]
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "links": [],
+  "panels": [
+    {
+      "id": 1,
+      "type": "text",
+      "title": "Scope of this dashboard",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 5
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "**Saved Google/Meta run · captured 14 November 2026 · AI-assisted development · human-approved publication**\n\nThese panels read the validated Sequence 25 export. Scrapes are live; the research evidence is a saved snapshot. The cumulative S22–S25 logical run is counted once; other attempts are outside these totals. Earlier failed attempts remain in the event history.\n\n**12/12 verification covers code-rendered financial table values only.** It does not measure qualitative correctness, every number in prose, or independent held-out performance. Some critic sentence receipts remain incomplete."
+      }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Published notes",
+      "description": "One final publication is recorded in imported evidence. This service never publishes notes.",
+      "gridPos": {
+        "x": 0,
+        "y": 5,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_published_notes{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Model requests — cumulative",
+      "description": "Inherited S22–S25 requests are counted once. Monitoring adds no model calls.",
+      "gridPos": {
+        "x": 6,
+        "y": 5,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_llm_requests{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Provider-reported tokens",
+      "description": "Actual reported model tokens; different from conservative budget reservations.",
+      "gridPos": {
+        "x": 12,
+        "y": 5,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_reported_tokens{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Saved run model cost — USD",
+      "description": "Saved S22–S25 logical run counted once, not total project spend. Other attempts such as S21 are excluded. Monitoring adds zero AI cost. Incomplete cost is unavailable, never zero.",
+      "gridPos": {
+        "x": 18,
+        "y": 5,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_reported_cost_usd{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "decimals": 7
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "Verified financial table share",
+      "description": "Verified/rendered financial table values. This is not a prose-quality score. No denominator means unavailable.",
+      "gridPos": {
+        "x": 0,
+        "y": 9,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_verified_financial_share{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0.98
+              }
+            ]
+          },
+          "decimals": 1
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 7,
+      "type": "stat",
+      "title": "Verified financial table figures",
+      "description": "Verified count within the code-rendered financial table.",
+      "gridPos": {
+        "x": 6,
+        "y": 9,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_verified_financial_figures{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 8,
+      "type": "stat",
+      "title": "Rendered financial table figures",
+      "description": "Denominator for the scoped verification share.",
+      "gridPos": {
+        "x": 12,
+        "y": 9,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_financial_figures{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 9,
+      "type": "stat",
+      "title": "Reserved token allowance used",
+      "description": "Conservative reservations retained in the original budget. Do not add to reported tokens.",
+      "gridPos": {
+        "x": 18,
+        "y": 9,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_reserved_tokens{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 10,
+      "type": "stat",
+      "title": "Critic rejection outcomes",
+      "description": "Completed critic-node rejections. Zero does not establish accuracy; schema corrections and hard stops are shown separately.",
+      "gridPos": {
+        "x": 0,
+        "y": 13,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_critic_rejections{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 11,
+      "type": "stat",
+      "title": "Schema / tool corrections",
+      "description": "Historical correction events remain visible even though the final note was published.",
+      "gridPos": {
+        "x": 6,
+        "y": 13,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_events{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\",kind=\"agent_correction\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 12,
+      "type": "stat",
+      "title": "Response-limit stops",
+      "description": "Historical stops after repeated invalid agent responses. Distinct from critic semantic rejections.",
+      "gridPos": {
+        "x": 12,
+        "y": 13,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_event_errors{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\",kind=\"agent_response_limit\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 13,
+      "type": "stat",
+      "title": "Model-response cache hits",
+      "description": "Model-response cache reuse only. This is not the EDGAR local-file cache.",
+      "gridPos": {
+        "x": 18,
+        "y": 13,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_model_response_cache_hits{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 14,
+      "type": "stat",
+      "title": "Model call errors",
+      "description": "Recorded provider-call errors. Incomplete/error latency is not fabricated.",
+      "gridPos": {
+        "x": 0,
+        "y": 17,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_event_errors{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\",kind=\"llm_error\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 15,
+      "type": "stat",
+      "title": "Tool call errors",
+      "description": "Errors observed by the workflow broker; direct operator reads are outside this journal.",
+      "gridPos": {
+        "x": 6,
+        "y": 17,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_event_errors{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\",kind=\"tool_error\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 16,
+      "type": "stat",
+      "title": "EDGAR median success latency",
+      "description": "Median across successful broker-observed EDGAR calls only. Excludes failed-call time and direct operator reads; not SEC network latency.",
+      "gridPos": {
+        "x": 12,
+        "y": 17,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\",service=\"edgar\",tool=\"__all__\",stat=\"median\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "decimals": 4
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 17,
+      "type": "stat",
+      "title": "EDGAR p95 success latency",
+      "description": "Nearest-rank p95 across successful broker-observed EDGAR calls only. No inference about unrecorded calls.",
+      "gridPos": {
+        "x": 18,
+        "y": 17,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\",service=\"edgar\",tool=\"__all__\",stat=\"p95\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "decimals": 4
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 18,
+      "type": "stat",
+      "title": "Snapshot integrity",
+      "description": "Missing or invalid input is unavailable, never a healthy zero.",
+      "gridPos": {
+        "x": 0,
+        "y": 21,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_snapshot_valid{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "1": {
+                  "text": "Validated",
+                  "color": "green"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 19,
+      "type": "stat",
+      "title": "Saved evidence timestamp",
+      "description": "Timestamp of saved evidence, not a new research event. Seconds converted to milliseconds for display.",
+      "gridPos": {
+        "x": 6,
+        "y": 21,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "1000 * analyst_desk_snapshot_timestamp_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "dateTimeAsIso",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 20,
+      "type": "stat",
+      "title": "Age of saved evidence",
+      "description": "Age of imported evidence. A live scrape does not make historical research fresh.",
+      "gridPos": {
+        "x": 12,
+        "y": 21,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_snapshot_age_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 21,
+      "type": "stat",
+      "title": "EDGAR cache-hit telemetry",
+      "description": "The journal has no EDGAR cache-hit measurement. Local file reads alone do not establish a cache-hit rate.",
+      "gridPos": {
+        "x": 18,
+        "y": 21,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_metric_available{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\",metric=\"edgar_cache_hits\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "Unavailable",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "Not measured",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "Available"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 22,
+      "type": "table",
+      "title": "Successful broker tool calls",
+      "description": "Counts from successful tool_end records. Direct operator reads bypass this ledger.",
+      "gridPos": {
+        "x": 0,
+        "y": 25,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_tool_calls{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\",status=\"ok\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "Unavailable",
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "sortBy": []
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "dataset": true,
+              "evidence_class": true,
+              "telemetry_kind": true,
+              "job": true,
+              "instance": true
+            },
+            "renameByName": {
+              "Value": "Count"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "type": "table",
+      "title": "Recorded event history — counts",
+      "description": "Historical schema repairs and stops are retained; final publication does not erase them.",
+      "gridPos": {
+        "x": 12,
+        "y": 25,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "analyst-desk-prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "analyst_desk_events{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "analyst-desk-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "noValue": "Unavailable",
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "sortBy": []
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "dataset": true,
+              "evidence_class": true,
+              "telemetry_kind": true,
+              "job": true,
+              "instance": true
+            },
+            "renameByName": {
+              "Value": "Count"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "type": "text",
+      "title": "Telemetry coverage and limits",
+      "gridPos": {
+        "x": 0,
+        "y": 33,
+        "w": 16,
+        "h": 6
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "**Included:** saved provider usage, original token reservations, broker-observed tool counts and successful latency, critic rejection events, correction/error events, exact publication status, scoped financial table verification.\n\n**Not measured:** full live agent traces, failed-call latency, EDGAR cache-hit rate, unlogged operator reads, qualitative accuracy, independent held-out performance. LangSmith/Langfuse integration and the broader red-team evaluation remain separate work.\n\nRead the sanitized event timeline at [localhost:8085](http://localhost:8085/). It contains allowlisted metadata only; no prompts, note text, reviewer identity, model response cache or credentials."
+      }
+    },
+    {
+      "id": 25,
+      "type": "text",
+      "title": "Alert demonstration",
+      "gridPos": {
+        "x": 16,
+        "y": 33,
+        "w": 8,
+        "h": 6
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "The warning condition is **verified financial table share <98% with a positive denominator**.\n\nThe runner temporarily uses the separate `synthetic_alert_probe` dataset, observes firing at 97%, restores 100%, then disables the probe. No real note or source evidence is altered.\n\nAll real-data panels explicitly select `google_meta_sequence25`. Inspect alerts at [localhost:9090/alerts](http://localhost:9090/alerts). No external notification is sent."
+      }
+    }
+  ]
+}
