@@ -5,7 +5,7 @@ import re
 from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
-from company_registry import normalise_ticker
+from company_registry import COMPANIES, normalise_ticker
 
 
 def canonical(value):
@@ -108,7 +108,25 @@ class HumanDecision(Strict):
 
 # These patterns are a first layer, not a claim that regex solves injection.
 # Credentials, watchlists, arbitrary URLs and filesystem paths are never tools.
-ADVICE = re.compile(r"\b(?:buy|sell|short|hold)\s+(?:(?:the|this|these|more|their)\s+)?(?:stock|shares|MSFT|GOOGL|AAPL)\b|\b(?:guaranteed?\s+(?:returns?|profits?)|price\s+target|strong\s+buy|investment\s+recommendation)\b", re.I)
+# Registry names cover literal advice for the full prepared company scope.
+# A security noun distinguishes company products from shares in ordinary prose;
+# bare imperative advice is also blocked. Paraphrases still need review.
+_advice_names = set()
+for _ticker, _company in COMPANIES.items():
+    _advice_names.update([_ticker, _company["name"], *_company.get("aliases", [])])
+    _advice_names.add(re.sub(r"[,\s]+(?:INC\.?|CORP\.?|CORPORATION|CO\.?|LTD\.?)$",
+                             "", _company["name"], flags=re.I).strip())
+_advice_company = "(?:" + "|".join(
+    r"\s+".join(re.escape(part) for part in name.split())
+    for name in sorted(_advice_names, key=lambda value: (-len(value), value)) if name
+) + r")(?!\w)"
+ADVICE = re.compile(
+    r"\b(?:buy|sell|short|hold)\s+(?:(?:the|this|these|more|their)\s+)?(?:stock|shares|MSFT|GOOGL|AAPL)\b"
+    + r"|\b(?:buy|sell|short|hold)\s+(?:(?:the|this|these|more|their)\s+)?\$?"
+    + _advice_company + r"(?:['’]s)?\s+(?:stock|shares|equity)\b"
+    + r"|(?:^|[.!?;]\s+)\s*(?:buy|sell|short|hold)\s+\$?"
+    + _advice_company + r"(?=\s*(?:[.!?;]|$))"
+    + r"|\b(?:guaranteed?\s+(?:returns?|profits?)|price\s+target|strong\s+buy|investment\s+recommendation)\b", re.I)
 INJECTION = re.compile(r"ignore\s+(?:all\s+)?(?:previous|prior|system)\s+instructions|reveal\s+(?:the\s+)?(?:secret|key|watchlist)|\b(?:api[_ -]?key|private\s+watchlist)\b", re.I)
 
 
