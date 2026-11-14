@@ -1,0 +1,114 @@
+{
+  "sequence": 37,
+  "operation": "complete_local_stack_startup",
+  "started_utc": "2026-11-14T13:01:48.105105+00:00",
+  "status": "all_local_services_healthy",
+  "external_model_calls": 0,
+  "research_started": false,
+  "volumes_deleted": false,
+  "check_only": false,
+  "commands": [
+    {
+      "argv": [
+        "docker",
+        "info",
+        "--format",
+        "{{.ServerVersion}}"
+      ],
+      "returncode": 0,
+      "seconds": 0.76,
+      "output": "29.9.3\n"
+    },
+    {
+      "argv": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/home/ls/projects/analyst-desk",
+        "-f",
+        "/home/ls/projects/analyst-desk/compose.final.yaml",
+        "config",
+        "--quiet"
+      ],
+      "returncode": 0,
+      "seconds": 0.25,
+      "output": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/home/ls/projects/analyst-desk/monitoring",
+        "-f",
+        "/home/ls/projects/analyst-desk/monitoring/compose.yaml",
+        "ps",
+        "--status",
+        "running",
+        "--quiet"
+      ],
+      "returncode": 0,
+      "seconds": 0.25,
+      "output": ""
+    },
+    {
+      "argv": [
+        "docker",
+        "compose",
+        "--project-directory",
+        "/home/ls/projects/analyst-desk",
+        "-f",
+        "/home/ls/projects/analyst-desk/compose.final.yaml",
+        "up",
+        "--detach",
+        "--build",
+        "--wait",
+        "--wait-timeout",
+        "240"
+      ],
+      "returncode": 0,
+      "seconds": 28.54,
+      "output": " Image analyst-desk-research-portal:local Building \n Image analyst-desk-filings-kb:local Building \n Image analyst-desk-research-app:local Building \n Image analyst-desk-edgar:local Building \n Image analyst-desk-monitoring-exporter:local Building \n Image analyst-desk-api:local Building \n Image analyst-desk-python-sandbox:local Building \n#1 [internal] load local bake definitions\n#1 reading from stdin 3.49kB done\n#1 DONE 0.0s\n\n#2 [exporter internal] load build definition from Dockerfile\n#2 transferring dockerfile: 616B done\n#2 DONE 0.0s\n\n#3 [filings-kb internal] load build definition from Dockerfile\n#3 transferring dockerfile: 7.89kB 0.0s done\n#3 DONE 0.0s\n\n#4 [python-sandbox internal] load metadata for docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e\n#4 DONE 0.0s\n\n#5 [exporter internal] load .dockerignore\n#5 transferring context: 68B done\n#5 DONE 0.0s\n\n#6 [research-portal internal] load .dockerignore\n#6 transferring context: 2.21kB done\n#6 DONE 0.0s\n\n#7 [exporter internal] load build context\n#7 transferring context: 34B 0.0s done\n#7 DONE 0.0s\n\n#8 [research-portal internal] load build context\n#8 transferring context: 18.37kB 0.0s done\n#8 DONE 0.1s\n\n#9 [python-sandbox internal] load build context\n#9 transferring context: 20.03kB 0.0s done\n#9 DONE 0.0s\n\n#10 [python-sandbox 1/3] FROM docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e\n#10 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e 0.1s done\n#10 DONE 0.1s\n\n#11 [edgar internal] load build context\n#11 transferring context: 15.55kB 0.0s done\n#11 DONE 0.0s\n\n#12 [filings-kb internal] load build context\n#12 transferring context: 127.98kB 0.0s done\n#12 DONE 0.1s\n\n#13 [research-app internal] load build context\n#13 transferring context: 3.55kB 0.0s done\n#13 DONE 0.1s\n\n#14 [exporter 2/3] WORKDIR /app\n#14 CACHED\n\n#15 [exporter 3/3] COPY exporter.py /app/exporter.py\n#15 CACHED\n\n#16 [exporter] exporting to image\n#16 exporting layers\n#16 ...\n\n#17 [api internal] load build context\n#17 transferring context: 532B done\n#17 DONE 0.0s\n\n#18 [research-portal app 6/6] COPY main.py edgar_client.py company_registry.py companies.json financial_contracts.py     financial_data.py financial_metrics.py output_guardrails.py     request_guardrails.py sec_periods.py sec_fiscal_years.py ./\n#18 CACHED\n\n#19 [research-portal mcp-base 1/2] COPY requirements-mcp.txt ./\n#19 CACHED\n\n#20 [research-portal app 4/6] RUN python -m pip install --no-cache-dir -r requirements-docker.txt     && python -m pip check\n#20 CACHED\n\n#21 [research-portal app 3/6] COPY requirements-ci.txt requirements-docker.txt ./\n#21 CACHED\n\n#22 [research-portal app 5/6] RUN groupadd --gid 10001 analyst     && useradd --uid 10001 --gid analyst --no-create-home --home-dir /tmp analyst     && mkdir -p /app/data/raw\n#22 CACHED\n\n#23 [research-portal research-portal 1/1] COPY tool_security.py research_portal.py research_portal_mcp.py ./\n#23 CACHED\n\n#24 [edgar mcp-base 2/2] RUN python -m pip install --no-cache-dir -r requirements-mcp.txt     && python -m pip check\n#24 CACHED\n\n#25 [edgar app 5/6] RUN groupadd --gid 10001 analyst     && useradd --uid 10001 --gid analyst --no-create-home --home-dir /tmp analyst     && mkdir -p /app/data/raw\n#25 CACHED\n\n#26 [edgar app 4/6] RUN python -m pip install --no-cache-dir -r requirements-docker.txt     && python -m pip check\n#26 CACHED\n\n#27 [edgar app 6/6] COPY main.py edgar_client.py company_registry.py companies.json financial_contracts.py     financial_data.py financial_metrics.py output_guardrails.py     request_guardrails.py sec_periods.py sec_fiscal_years.py ./\n#27 CACHED\n\n#28 [edgar app 3/6] COPY requirements-ci.txt requirements-docker.txt ./\n#28 CACHED\n\n#29 [edgar mcp-base 1/2] COPY requirements-mcp.txt ./\n#29 CACHED\n\n#30 [python-sandbox mcp-base 1/2] COPY requirements-mcp.txt ./\n#30 CACHED\n\n#31 [python-sandbox app 4/6] RUN python -m pip install --no-cache-dir -r requirements-docker.txt     && python -m pip check\n#31 CACHED\n\n#32 [python-sandbox app 3/6] COPY requirements-ci.txt requirements-docker.txt ./\n#32 CACHED\n\n#33 [python-sandbox python-sandbox 2/3] RUN python -m pip install --no-cache-dir -r requirements-tools.txt     && python -m pip check\n#33 CACHED\n\n#34 [python-sandbox app 6/6] COPY main.py edgar_client.py company_registry.py companies.json financial_contracts.py     financial_data.py financial_metrics.py output_guardrails.py     request_guardrails.py sec_periods.py sec_fiscal_years.py ./\n#34 CACHED\n\n#35 [python-sandbox python-sandbox 1/3] COPY requirements-tools.txt ./\n#35 CACHED\n\n#36 [python-sandbox app 5/6] RUN groupadd --gid 10001 analyst     && useradd --uid 10001 --gid analyst --no-create-home --home-dir /tmp analyst     && mkdir -p /app/data/raw\n#36 CACHED\n\n#37 [python-sandbox mcp-base 2/2] RUN python -m pip install --no-cache-dir -r requirements-mcp.txt     && python -m pip check\n#37 CACHED\n\n#38 [python-sandbox python-sandbox 3/3] COPY tool_security.py sandbox_worker.py python_sandbox.py python_sandbox_mcp.py ./\n#38 CACHED\n\n#39 [edgar edgar 1/1] COPY edgar_mcp.py check_edgar_mcp.py retrieval_data.py download_company_facts.py     filing_corpus.py filing_passages.py filing_supplements.py ./\n#39 CACHED\n\n#40 [filings-kb mcp-base 1/2] COPY requirements-mcp.txt ./\n#40 CACHED\n\n#41 [filings-kb retrieval-base 2/3] RUN python -m pip install --no-cache-dir -r requirements-retrieval.txt     && python -m pip check\n#41 CACHED\n\n#42 [filings-kb app 6/6] COPY main.py edgar_client.py company_registry.py companies.json financial_contracts.py     financial_data.py financial_metrics.py output_guardrails.py     request_guardrails.py sec_periods.py sec_fiscal_years.py ./\n#42 CACHED\n\n#43 [filings-kb app 4/6] RUN python -m pip install --no-cache-dir -r requirements-docker.txt     && python -m pip check\n#43 CACHED\n\n#44 [filings-kb mcp-base 2/2] RUN python -m pip install --no-cache-dir -r requirements-mcp.txt     && python -m pip check\n#44 CACHED\n\n#45 [filings-kb retrieval-base 1/3] COPY requirements-retrieval.txt ./\n#45 CACHED\n\n#46 [filings-kb app 5/6] RUN groupadd --gid 10001 analyst     && useradd --uid 10001 --gid analyst --no-create-home --home-dir /tmp analyst     && mkdir -p /app/data/raw\n#46 CACHED\n\n#47 [filings-kb retrieval-base 3/3] COPY retrieval_config.json retrieval_models.py retrieval_data.py filing_index.py filing_retrieval.py     filing_corpus.py filing_passages.py filing_supplements.py download_company_facts.py ./\n#47 CACHED\n\n#48 [filings-kb app 3/6] COPY requirements-ci.txt requirements-docker.txt ./\n#48 CACHED\n\n#49 [research-app app 6/6] COPY main.py edgar_client.py company_registry.py companies.json financial_contracts.py     financial_data.py financial_metrics.py output_guardrails.py     request_guardrails.py sec_periods.py sec_fiscal_years.py ./\n#49 CACHED\n\n#50 [research-app app 4/6] RUN python -m pip install --no-cache-dir -r requirements-docker.txt     && python -m pip check\n#50 CACHED\n\n#51 [research-app mcp-tests 3/4] COPY download_company_facts.py check_financial_coverage.py     test_api.py test_financial_data.py test_edgar_mcp.py test_api_mcp.py     filing_corpus.py prepare_filing_corpus.py test_filing_corpus.py     filing_passages.py prepare_filing_passages.py test_filing_passages.py     filing_supplements.py prepare_filing_supplements.py test_filing_supplements.py     edgar_mcp.py check_edgar_mcp.py filings_kb_mcp.py setup_retrieval.py     evaluate_filing_retrieval.py test_filing_retrieval.py test_retrieval_evaluation_metrics.py     test_retrieval_rerank_fusion.py check_live_retrieval_parity.py test_live_retrieval_parity.py test_filings_kb_mcp.py     tool_security.py sandbox_worker.py python_sandbox.py python_sandbox_mcp.py     research_portal.py research_portal_mcp.py research_tools_client.py     setup_research_tools.py check_research_tools.py review_portal_note.py     test_python_sandbox.py test_research_portal.py test_research_tools_mcp.py test_research_tools_setup.py ./\n#51 CACHED\n\n#14 [research-app 2/3] WORKDIR /app\n#14 CACHED\n\n#52 [research-app mcp-tests 2/4] RUN python -m pip install --no-cache-dir -r requirements-workflow.txt     && python -m pip check\n#52 CACHED\n\n#53 [research-app retrieval-base 3/3] COPY retrieval_config.json retrieval_models.py retrieval_data.py filing_index.py filing_retrieval.py     filing_corpus.py filing_passages.py filing_supplements.py download_company_facts.py ./\n#53 CACHED\n\n#54 [research-app retrieval-base 2/3] RUN python -m pip install --no-cache-dir -r requirements-retrieval.txt     && python -m pip check\n#54 CACHED\n\n#55 [research-app mcp-tests 1/4] COPY requirements-tools.txt requirements-workflow.txt ./\n#55 CACHED\n\n#56 [research-app app 3/6] COPY requirements-ci.txt requirements-docker.txt ./\n#56 CACHED\n\n#57 [research-app mcp-base 1/2] COPY requirements-mcp.txt ./\n#57 CACHED\n\n#58 [research-app mcp-tests 4/4] COPY workflow_financial_narrative.py workflow_critic_protocol.py test_workflow_critic_protocol.py test_workflow_financial_narrative.py test_workflow_research_prefetch.py workflow_contracts.py workflow_store.py workflow_tools.py workflow_agents.py workflow_render.py workflow_support.py workflow_source_safety.py workflow_memory.py workflow_lessons.py research_workflow.py run_research_workflow.py check_research_workflow.py workflow_config.json workflow_demo_request.json test_research_workflow.py test_workflow_clients.py ./\n#58 CACHED\n\n#59 [research-app retrieval-base 1/3] COPY requirements-retrieval.txt ./\n#59 CACHED\n\n#60 [research-app mcp-base 2/2] RUN python -m pip install --no-cache-dir -r requirements-mcp.txt     && python -m pip check\n#60 CACHED\n\n#61 [research-app app 5/6] RUN groupadd --gid 10001 analyst     && useradd --uid 10001 --gid analyst --no-create-home --home-dir /tmp analyst     && mkdir -p /app/data/raw\n#61 CACHED\n\n#62 [research-app research-app 1/1] COPY research_app.py research_ui.html ./\n#62 CACHED\n\n#63 [filings-kb filings-kb 1/1] COPY filings_kb_mcp.py ./\n#63 CACHED\n\n#64 [edgar mcp-base 2/2] RUN python -m pip install --no-cache-dir -r requirements-mcp.txt     && python -m pip check\n#64 CACHED\n\n#16 [exporter] exporting to image\n#16 exporting layers done\n#16 exporting manifest sha256:6b47b48c1c46d9f8d4a3e2afc434136bba0a584e4ca8ec0c11e90eda6ba57996 done\n#16 exporting config sha256:27df9616e884f6745c2774b6e8dc437c1ea162136dbd5ab437395365ac0a2305 done\n#16 exporting attestation manifest sha256:36b57b365b82de46527493ada2f9995919043a0f6a47f0a40946e03e14d42989\n#16 exporting attestation manifest sha256:36b57b365b82de46527493ada2f9995919043a0f6a47f0a40946e03e14d42989 0.4s done\n#16 exporting manifest list sha256:10af48439ab4c7ccea3a63957af73bd3fd3f54030f8f0811ffa8fac81d8feb48\n#16 exporting manifest list sha256:10af48439ab4c7ccea3a63957af73bd3fd3f54030f8f0811ffa8fac81d8feb48 0.2s done\n#16 naming to docker.io/library/analyst-desk-monitoring-exporter:local\n#16 naming to docker.io/library/analyst-desk-monitoring-exporter:local 0.1s done\n#16 unpacking to docker.io/library/analyst-desk-monitoring-exporter:local\n#16 unpacking to docker.io/library/analyst-desk-monitoring-exporter:local 0.1s done\n#16 DONE 1.2s\n\n#65 [api] exporting to image\n#65 exporting layers 0.0s done\n#65 exporting manifest sha256:9d902ad87a2c21cefa647f2d11bf03717182e8d7cd07eee2110c9822d2a22ddf 0.1s done\n#65 exporting config sha256:06ed23dc41f6b99c8703cecb20c59009b8e10628e7e6b6c4f862a64c944eaa83 0.1s done\n#65 exporting attestation manifest sha256:02cf84026f3fbbe58777cbcfd45d42ba45182827e5c4e7e28ac11a490f5d9329 0.3s done\n#65 exporting manifest list sha256:ae6b9fa1543ea8bbe2bc89da930eb7c98264635f90c8c350485045e2cf7a2d18 0.1s done\n#65 naming to docker.io/library/analyst-desk-api:local done\n#65 unpacking to docker.io/library/analyst-desk-api:local 0.1s done\n#65 ...\n\n#66 [research-portal] exporting to image\n#66 exporting layers done\n#66 exporting manifest sha256:fea41c9bbe62acd60c353be4e9ae4e9a2d008bd7213e7676cf8b25398286683a 0.0s done\n#66 exporting config sha256:77ec97eef9dce835e02977d0ac5a9cb2a768c96c63a2a8d56e19ce1487426446 0.1s done\n#66 exporting attestation manifest sha256:9940128cd3932918fef2b97c1261105a57b448f4e22db904cecf9e4b6578acd8 0.3s done\n#66 exporting manifest list sha256:e443ad6f132f8967ecd4aceed6231a727d4cf450591af18b449d640c58a65ee7 0.2s done\n#66 naming to docker.io/library/analyst-desk-research-portal:local 0.0s done\n#66 unpacking to docker.io/library/analyst-desk-research-portal:local 0.1s done\n#66 DONE 1.4s\n\n#65 [api] exporting to image\n#65 DONE 1.4s\n\n#67 [edgar] exporting to image\n#67 exporting layers 0.0s done\n#67 exporting manifest sha256:32d3fa837bda7a7eb1640e12cdd799dd03170342ceb572ef8b298baffafa1656 0.0s done\n#67 exporting config sha256:ac0342e2ba9c5d07e88d6a69426d9a05d9db1e51b2caf7887080f5a2931d447d 0.1s done\n#67 exporting attestation manifest sha256:48ecadae6e8e24a44446573463e20fc59a0a49bc054a3b62381c12811bd6f715 0.3s done\n#67 exporting manifest list sha256:f25f6bb099118049af42c739c8783f537cb17cce41a6a37508564fb99747b04d 0.1s done\n#67 naming to docker.io/library/analyst-desk-edgar:local 0.0s done\n#67 unpacking to docker.io/library/analyst-desk-edgar:local 0.1s done\n#67 DONE 1.4s\n\n#68 [python-sandbox] exporting to image\n#68 exporting layers done\n#68 exporting manifest sha256:8307807bc796c6533eac408c2ee1fb0cf4e24423959bbab1e0336d2bb2a0319b 0.1s done\n#68 exporting config sha256:2ded34ed6e66edf39a30f075f80acf0139a736e151d27c1db380733898ed58df 0.0s done\n#68 exporting attestation manifest sha256:c93db0dcd545c8cd7e32ea7eabe2488d0ca106efddf978aa5a7d11c83ccd7e30 0.3s done\n#68 exporting manifest list sha256:1ff468bc5346370f62c4525e0e73aa58cced276837d3a32a7acec56d41e587a6 0.1s done\n#68 naming to docker.io/library/analyst-desk-python-sandbox:local 0.0s done\n#68 unpacking to docker.io/library/analyst-desk-python-sandbox:local 0.1s done\n#68 DONE 1.4s\n\n#69 [filings-kb] exporting to image\n#69 exporting layers 0.0s done\n#69 exporting manifest sha256:5f7cccb3cf1ca6d8c5e40406059c41090e5c8c6cd4e09aa6f030a9be56baabd3 0.1s done\n#69 exporting config sha256:76a5d9cec88db1e4d6c1c4a0ce35bc6b5b650d42c7bd54e977d4d4992d6b8384 0.1s done\n#69 exporting attestation manifest sha256:09867a3488d046278bf417210d23dcbbc6db1f6466b6d5714567e990e0cc4bfd 0.3s done\n#69 exporting manifest list sha256:f35c5ea886fe019bb7fcb5fba1788960b0a0512021b34305299bbbb3fab35f85 0.1s done\n#69 naming to docker.io/library/analyst-desk-filings-kb:local 0.0s done\n#69 unpacking to docker.io/library/analyst-desk-filings-kb:local 0.1s done\n#69 DONE 1.4s\n\n#70 [research-app] exporting to image\n#70 exporting layers 0.0s done\n#70 exporting manifest sha256:b3ed2b68dc2d87a813fdf78d00d3cd436d1cd4aac37918ed63381f66a9ae3e26 0.1s done\n#70 exporting config sha256:8693cb5b9d1d123eeca1fddc9b3be93592bec91f688f8187a2a9f5560eb2f198 0.0s done\n#70 exporting attestation manifest sha256:33f9a4f10e15501e86780357b503f7ba323b9856971eab2c57bffffee12b4e66 0.3s done\n#70 exporting manifest list sha256:d812ce9def81e530e2d427079688c97855f050c6b3a3e1b9fd66e22d73fe52e7 0.1s done\n#70 naming to docker.io/library/analyst-desk-research-app:local 0.0s done\n#70 unpacking to docker.io/library/analyst-desk-research-app:local 0.1s done\n#70 DONE 1.5s\n\n#71 [exporter] resolving provenance for metadata file\n#71 DONE 0.1s\n\n#72 [research-portal] resolving provenance for metadata file\n#72 DONE 0.2s\n\n#73 [edgar] resolving provenance for metadata file\n#73 DONE 0.2s\n\n#74 [filings-kb] resolving provenance for metadata file\n#74 DONE 0.1s\n\n#75 [python-sandbox] resolving provenance for metadata file\n#75 DONE 0.1s\n\n#76 [research-app] resolving provenance for metadata file\n#76 DONE 0.1s\n\n#77 [api] resolving provenance for metadata file\n#77 DONE 0.0s\n Image analyst-desk-api:local Built \n Image analyst-desk-filings-kb:local Built \n Image analyst-desk-research-app:local Built \n Image analyst-desk-monitoring-exporter:local Built \n Image analyst-desk-python-sandbox:local Built \n Image analyst-desk-research-portal:local Built \n Image analyst-desk-edgar:local Built \ntime=\"2026-11-15T00:01:53+11:00\" level=warning msg=\"volume \\\"analyst-desk-monitoring_grafana-data\\\" already exists but was created for project \\\"analyst-desk-monitoring\\\" (expected \\\"analyst-desk\\\"). Use `external: true` to use an existing volume\"\ntime=\"2026-11-15T00:01:53+11:00\" level=warning msg=\"volume \\\"analyst-desk-monitoring_prometheus-data\\\" already exists but was created for project \\\"analyst-desk-monitoring\\\" (expected \\\"analyst-desk\\\"). Use `external: true` to use an existing volume\"\n Container analyst-desk-research-portal-1 Running \n Container analyst-desk-qdrant-1 Running \n Container analyst-desk-prometheus-1 Running \n Container analyst-desk-python-sandbox-1 Running \n Container analyst-desk-monitoring-gateway-1 Running \n Container analyst-desk-grafana-1 Running \n Container analyst-desk-filings-kb-1 Running \n Container analyst-desk-exporter-1 Running \n Container analyst-desk-api-1 Running \n Container analyst-desk-edgar-1 Recreate \n Container analyst-desk-edgar-1 Recreated \n Container analyst-desk-retrieval-gateway-1 Recreate \n Container analyst-desk-retrieval-gateway-1 Recreated \n Container analyst-desk-research-app-1 Recreate \n Container analyst-desk-research-app-1 Recreated \n Container analyst-desk-edgar-1 Starting \n Container analyst-desk-exporter-1 Waiting \n Container analyst-desk-python-sandbox-1 Waiting \n Container analyst-desk-research-portal-1 Waiting \n Container analyst-desk-filings-kb-1 Waiting \n Container analyst-desk-filings-kb-1 Healthy \n Container analyst-desk-python-sandbox-1 Healthy \n Container analyst-desk-research-portal-1 Healthy \n Container analyst-desk-exporter-1 Healthy \n Container analyst-desk-prometheus-1 Waiting \n Container analyst-desk-prometheus-1 Healthy \n Container analyst-desk-grafana-1 Waiting \n Container analyst-desk-grafana-1 Healthy \n Container analyst-desk-edgar-1 Started \n Container analyst-desk-edgar-1 Waiting \n Container analyst-desk-edgar-1 Healthy \n Container analyst-desk-retrieval-gateway-1 Starting \n Container analyst-desk-retrieval-gateway-1 Started \n Container analyst-desk-retrieval-gateway-1 Waiting \n Container analyst-desk-retrieval-gateway-1 Healthy \n Container analyst-desk-research-app-1 Starting \n Container analyst-desk-research-app-1 Started \n Container analyst-desk-api-1 Waiting \n Container analyst-desk-python-sandbox-1 Waiting \n Container analyst-desk-grafana-1 Waiting \n Container analyst-desk-filings-kb-1 Waiting \n Container analyst-desk-research-app-1 Waiting \n Container analyst-desk-research-portal-1 Waiting \n Container analyst-desk-qdrant-1 Waiting \n Container analyst-desk-prometheus-1 Waiting \n Container analyst-desk-retrieval-gateway-1 Waiting \n Container analyst-desk-monitoring-gateway-1 Waiting \n Container analyst-desk-edgar-1 Waiting \n Container analyst-desk-exporter-1 Waiting \n Container analyst-desk-research-portal-1 Healthy \n Container analyst-desk-qdrant-1 Healthy \n Container analyst-desk-filings-kb-1 Healthy \n Container analyst-desk-grafana-1 Healthy \n Container analyst-desk-python-sandbox-1 Healthy \n Container analyst-desk-retrieval-gateway-1 Healthy \n Container analyst-desk-prometheus-1 Healthy \n Container analyst-desk-monitoring-gateway-1 Healthy \n Container analyst-desk-api-1 Healthy \n Container analyst-desk-edgar-1 Healthy \n Container analyst-desk-exporter-1 Healthy \n Container analyst-desk-research-app-1 Healthy \n"
+    }
+  ],
+  "health": {
+    "research_ui": {
+      "healthy": true,
+      "http_status": 200
+    },
+    "api": {
+      "healthy": true,
+      "http_status": 200
+    },
+    "edgar": {
+      "healthy": true,
+      "http_status": 200
+    },
+    "filings_kb": {
+      "healthy": true,
+      "http_status": 200
+    },
+    "python_sandbox": {
+      "healthy": true,
+      "http_status": 200
+    },
+    "research_portal": {
+      "healthy": true,
+      "http_status": 200
+    },
+    "monitoring": {
+      "healthy": true,
+      "http_status": 200
+    },
+    "prometheus": {
+      "healthy": true,
+      "http_status": 200
+    },
+    "grafana": {
+      "healthy": true,
+      "http_status": 200
+    }
+  },
+  "failed_service_names": [],
+  "finished_utc": "2026-11-14T13:02:18.371520+00:00"
+}

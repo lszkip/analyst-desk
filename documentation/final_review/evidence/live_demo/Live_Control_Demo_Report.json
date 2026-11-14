@@ -1,0 +1,109 @@
+{
+  "schema_version": "live-control-demo-v1",
+  "status": "passed",
+  "started_utc": "2026-11-14T14:48:42.102930+00:00",
+  "evidence_class": "interactive_controlled_software_demonstration",
+  "financial_research_claim": false,
+  "agent_performance_claim": false,
+  "external_model_calls": 0,
+  "production_state_accessed": false,
+  "source_hashes": {
+    "research_workflow.py": "c0444f04f8ce42b7bf13b9bf53e0d554ca173ea92ad5284ca43f1e3fed84556b",
+    "research_portal.py": "e2c5e6b9d1c15b91eceab364fc935f526ab92522f25976cf7bf446b3b475b9a3",
+    "research_portal_mcp.py": "b0d4c76afaac39e4142fa25e054f60c31b88bef5764e4764a731cfa0f18edc93",
+    "workflow_agents.py": "f548da43cf7957168b8b74432916f58a477b9a7f19f2678144c5e81dbdc27ba6",
+    "workflow_config.json": "6df563cef657730e870334dfa4c5acab98f990fd82d5ffe7f9e1522ac25c50fe",
+    "deployment/live_control_demo.py": "b8deb0ad590629d18d31d1021ec9350ef08662be84e4134993bfaf635d33c263"
+  },
+  "phase": "complete",
+  "checkpoint_start": {
+    "phase": "start",
+    "process_id": 845543,
+    "checkpoint_id": "1f1e03a7-d31c-64af-8001-809a89f3b92f",
+    "plan_hash": "8072f4d064756e680208f902fad9b2723319d208f93651befcd00c9cf38f25fe",
+    "plan": {
+      "objective": "Show persistent plan review in a controlled software demonstration.",
+      "outline": [
+        "Review the saved plan",
+        "Reject this demonstration before any research"
+      ],
+      "research_query": "synthetic demonstration only",
+      "limitations": [
+        "Scripted planner response; no filing was retrieved and no financial conclusion is made."
+      ]
+    },
+    "next_nodes_before": [
+      "plan_review"
+    ],
+    "status_after": "awaiting_plan",
+    "next_nodes_after": [
+      "plan_review"
+    ],
+    "scripted_responses_this_process": 1,
+    "external_provider_calls": 0,
+    "tool_calls": 0,
+    "scripted_journal_requests_cumulative": 1,
+    "usage_values_are_synthetic": true,
+    "checkpoint_file_sha256_after_process_close": "e319084a42e4f25f24c182fb280f810f19fa7686a079e82832d93e2896704b85"
+  },
+  "checkpoint_resume": {
+    "phase": "resume",
+    "process_id": 845645,
+    "checkpoint_id": "1f1e03a7-d31c-64af-8001-809a89f3b92f",
+    "plan_hash": "8072f4d064756e680208f902fad9b2723319d208f93651befcd00c9cf38f25fe",
+    "plan": {
+      "objective": "Show persistent plan review in a controlled software demonstration.",
+      "outline": [
+        "Review the saved plan",
+        "Reject this demonstration before any research"
+      ],
+      "research_query": "synthetic demonstration only",
+      "limitations": [
+        "Scripted planner response; no filing was retrieved and no financial conclusion is made."
+      ]
+    },
+    "next_nodes_before": [
+      "plan_review"
+    ],
+    "status_after": "rejected",
+    "next_nodes_after": [],
+    "scripted_responses_this_process": 0,
+    "external_provider_calls": 0,
+    "tool_calls": 0,
+    "scripted_journal_requests_cumulative": 1,
+    "usage_values_are_synthetic": true,
+    "checkpoint_file_sha256_after_process_close": "eabec2f9a0ddd8927b02c22b00127ac8081b9a6c3343e89e819e649663ce3625"
+  },
+  "operator_rejected_plan": true,
+  "portal": {
+    "scope": "new isolated loopback HTTP/MCP server and private database",
+    "process_id": 845666,
+    "completed": true,
+    "phase": "complete",
+    "proposal_id": "proposal_0bddfb0ef5cc9669377328a50b70616f",
+    "original_hash": "22b8132b4310aa899a2d22e349bb9c67a725847bf808097b84729c4a5b9f8db6",
+    "operator_approved": true,
+    "reviewer_identity": "operator-entered; not exported or independently verified",
+    "edited_hash": "98c1fcfa91ef92ae3f0d54a5f705d818a26a75e5164b9be047f19aadd26e2bda",
+    "revision": 2,
+    "final_state": "pending",
+    "stale_approval_attempts": [
+      {
+        "expected_hash": "22b8132b4310aa899a2d22e349bb9c67a725847bf808097b84729c4a5b9f8db6",
+        "status": "error",
+        "code": "approval_required",
+        "original_approval_unexpired": true
+      },
+      {
+        "expected_hash": "98c1fcfa91ef92ae3f0d54a5f705d818a26a75e5164b9be047f19aadd26e2bda",
+        "status": "error",
+        "code": "approval_required",
+        "original_approval_unexpired": true
+      }
+    ],
+    "published_notes": 0,
+    "operator_edited": true,
+    "own_demo_server_stopped": true
+  },
+  "finished_utc": "2026-11-14T14:49:22.547800+00:00"
+}

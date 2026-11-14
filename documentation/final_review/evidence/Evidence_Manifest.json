@@ -1,0 +1,569 @@
+{
+  "extraction_type": "exact_original_bytes",
+  "source_baseline": "S40",
+  "new_model_calls": 0,
+  "entries": [
+    {
+      "archive": "upload/13_All_Companies_Reranker_Results.zip",
+      "archive_sha256": "e22c0167191a12ede6b95c2c35f45dbdb92fcc0133710449a5586d35ed2ad36c",
+      "member": "All_Companies_Retrieval_Evaluation.json",
+      "destination": "evidence/retrieval/All_Companies_Retrieval_Evaluation.json",
+      "sha256": "5d367125a71446c2668940bd3226dca721a0cf4486dfe77466bfaae54e6eefac",
+      "bytes": 119338
+    },
+    {
+      "archive": "upload/13_All_Companies_Reranker_Results.zip",
+      "archive_sha256": "e22c0167191a12ede6b95c2c35f45dbdb92fcc0133710449a5586d35ed2ad36c",
+      "member": "Baseline12_vs_Experiment13_Comparison.json",
+      "destination": "evidence/retrieval/Baseline12_vs_Experiment13_Comparison.json",
+      "sha256": "aa9d6b7f2d0d75c7677eca56deb9ed924a81cb8ee405e6a46d8856a8e40fd85b",
+      "bytes": 11044
+    },
+    {
+      "archive": "upload/25_Google_Meta_Publication_Results.zip",
+      "archive_sha256": "c63483b042119262a9bebc845b1afb66b521f5f9de3147d24e961d39bb05a719",
+      "member": "Publication_Approval_Binding.json",
+      "destination": "evidence/workflow/Publication_Approval_Binding.json",
+      "sha256": "2c5646483bd2f1e7c3c79bd041a96577df80295a7c4a1663d50c1f8ce002f34d",
+      "bytes": 19636
+    },
+    {
+      "archive": "upload/26_Google_Meta_Monitoring_Results(1).zip",
+      "archive_sha256": "f9b653d1137d200eba5b12bc21c87d744ef35fe755acf3a2278481c30f46efb5",
+      "member": "26_Monitoring_Audit.json",
+      "destination": "evidence/monitoring/26_Monitoring_Audit.json",
+      "sha256": "6e75031a2f4836070158ab7eadd59b4928daab70e8fce5f0fc3813eee9d9018d",
+      "bytes": 44930
+    },
+    {
+      "archive": "upload/26_Google_Meta_Monitoring_Results(1).zip",
+      "archive_sha256": "f9b653d1137d200eba5b12bc21c87d744ef35fe755acf3a2278481c30f46efb5",
+      "member": "Saved_Run_Snapshot.json",
+      "destination": "evidence/monitoring/Saved_Run_Snapshot.json",
+      "sha256": "c7e9856e997c1d9b6f09329434d3571033467f7bd76343efb99fbddb45f428d5",
+      "bytes": 52529
+    },
+    {
+      "archive": "upload/37_Analyst_Desk_EDGAR_Connection_Fix_Results_20261114T130103Z_ed856873.zip",
+      "archive_sha256": "658d31d2b72a5c1d7ce37783d9d729b932ca2ed035c0dc83daafa2552690faf8",
+      "member": "Startup/Startup_Report.json",
+      "destination": "evidence/deployment_memory/S37_Startup_Report.json",
+      "sha256": "12e902384f0e470cb84dfba65ef30b95b9bd4e937cfd4d5da2d7a8b2712744b3",
+      "bytes": 22153
+    },
+    {
+      "archive": "upload/37_Analyst_Desk_EDGAR_Connection_Fix_Results_20261114T130103Z_ed856873.zip",
+      "archive_sha256": "658d31d2b72a5c1d7ce37783d9d729b932ca2ed035c0dc83daafa2552690faf8",
+      "member": "Operator/Memory_On_Off_Report.json",
+      "destination": "evidence/deployment_memory/S37_Memory_On_Off_Report.json",
+      "sha256": "0b9784d7479ba956d95d74ebee07a9766712af2300eb39732b23cb55cc0819d6",
+      "bytes": 19215
+    },
+    {
+      "archive": "upload/39_Analyst_Desk_Pilot_Source_Validation_Results_20261114T132437Z_700ce33f.zip",
+      "archive_sha256": "29d9e4389db49a85faf4dabcac46338f026045f174e786885f893eba694b9705",
+      "member": "Operator/Operator_Audit.json",
+      "destination": "evidence/deployment_memory/S39_Operator_Audit.json",
+      "sha256": "1681bee2f601292f5379e888d62fd558c653cf4b07c75f0ef64dafa5eff360e0",
+      "bytes": 1508
+    },
+    {
+      "archive": "upload/39_Analyst_Desk_Pilot_Source_Validation_Results_20261114T132437Z_700ce33f.zip",
+      "archive_sha256": "29d9e4389db49a85faf4dabcac46338f026045f174e786885f893eba694b9705",
+      "member": "Operator/Preflight_Report.json",
+      "destination": "evidence/deployment_memory/S39_Preflight_Report.json",
+      "sha256": "65a970111875da1ebc2777307d1f4f6e50198c6c00eb18484c3ef0cbb34e82d0",
+      "bytes": 7406
+    },
+    {
+      "archive": "upload/40_Analyst_Desk_Pilot_Price_Compatibility_Results_20261114T133908Z_9dfae9e9.zip",
+      "archive_sha256": "6ffd695f6ea2a0a8e4296f07d71da0b307fbadf567e30df65250910585ad2871",
+      "member": "Operator/pilot/Experiment_Summary.json",
+      "destination": "evidence/pilot40/Experiment_Summary.json",
+      "sha256": "c3838e1fb286656da3d8e5936601154198b7f8c6d016e7d581b365507843912b",
+      "bytes": 33800
+    },
+    {
+      "archive": "upload/40_Analyst_Desk_Pilot_Price_Compatibility_Results_20261114T133908Z_9dfae9e9.zip",
+      "archive_sha256": "6ffd695f6ea2a0a8e4296f07d71da0b307fbadf567e30df65250910585ad2871",
+      "member": "Operator/pilot/Experiment_Manifest.json",
+      "destination": "evidence/pilot40/Experiment_Manifest.json",
+      "sha256": "8d0cb0de1d042a80f38f2f51c957000a2e96341480072bcc0871d3ff646ffc53",
+      "bytes": 2576
+    },
+    {
+      "archive": "upload/40_Analyst_Desk_Pilot_Price_Compatibility_Results_20261114T133908Z_9dfae9e9.zip",
+      "archive_sha256": "6ffd695f6ea2a0a8e4296f07d71da0b307fbadf567e30df65250910585ad2871",
+      "member": "Operator/AI_Model_Agreement.json",
+      "destination": "evidence/pilot40/AI_Model_Agreement.json",
+      "sha256": "f8333ba1c0b6f475f632c963c4ff362cc5c26be1ea95b0ce0ee4ed0fc084f565",
+      "bytes": 5663
+    },
+    {
+      "archive": "upload/40_Analyst_Desk_Pilot_Price_Compatibility_Results_20261114T133908Z_9dfae9e9.zip",
+      "archive_sha256": "6ffd695f6ea2a0a8e4296f07d71da0b307fbadf567e30df65250910585ad2871",
+      "member": "Operator/Budget_Report.json",
+      "destination": "evidence/pilot40/Budget_Report.json",
+      "sha256": "590ceac9400ee56ceb0bcc94a208168b9ccebf62ab6a942969dd780021d37374",
+      "bytes": 41085
+    },
+    {
+      "source": "capstone_final35_claude_review/results/35_Claude_Review_Validation_Report.json",
+      "destination": "evidence/ai_review/35_Claude_Review_Validation_Report.json",
+      "sha256": "04c8b1d714526e566b3f5e0046d844e98e82134c5cfee568487759e8059911ee",
+      "bytes": 5625
+    },
+    {
+      "source": "upload/41.12 WorkflowReplanReviewOut.txt",
+      "destination": "evidence/planning/Replan_Original_Review_Log.txt",
+      "sha256": "3ad086656da21de284a4fc38b882c5c28c38ff1e750a5828e251381194838ab5",
+      "bytes": 64882
+    },
+    {
+      "source": "capstone_final34_work/evaluator_private/frozen_v1/freeze_manifest.json",
+      "destination": "evidence/design/Frozen_Case_Manifest.json",
+      "sha256": "fd5cb4c6058f716c6ccfb1afa5cd283ad536840008410d48fb58998973e0533f",
+      "bytes": 6862
+    },
+    {
+      "source": "capstone_final40_work/source/edgar_mcp.py",
+      "destination": "source_reference/edgar_mcp.py",
+      "sha256": "23f1ddd87c0cc1f8ea900ee6a4ca5173938e839c5d87acdeedc82df617107e7e",
+      "bytes": 12399
+    },
+    {
+      "source": "capstone_final40_work/source/filings_kb_mcp.py",
+      "destination": "source_reference/filings_kb_mcp.py",
+      "sha256": "2075cfda6be9e5b1b092b214b32bef05ef272699db12d788636ac8fd9710f86e",
+      "bytes": 7945
+    },
+    {
+      "source": "capstone_final40_work/source/python_sandbox_mcp.py",
+      "destination": "source_reference/python_sandbox_mcp.py",
+      "sha256": "24f461d086208ff3c35bc22fde0f31bef9e5d1a3ed5049ffd8b4abc6b015d2ac",
+      "bytes": 2819
+    },
+    {
+      "source": "capstone_final40_work/source/research_portal_mcp.py",
+      "destination": "source_reference/research_portal_mcp.py",
+      "sha256": "b0d4c76afaac39e4142fa25e054f60c31b88bef5764e4764a731cfa0f18edc93",
+      "bytes": 5920
+    },
+    {
+      "source": "capstone_final40_work/source/test_edgar_mcp.py",
+      "destination": "source_reference/test_edgar_mcp.py",
+      "sha256": "11f1c5c519af0d1799af16f8308767c370b638e5e07e1b9105a9871a64e79947",
+      "bytes": 13577
+    },
+    {
+      "source": "capstone_final40_work/source/test_filings_kb_mcp.py",
+      "destination": "source_reference/test_filings_kb_mcp.py",
+      "sha256": "01b70ad8f8baba113a26b7ee2b5e94a281d5d25d82cb398bf9cd50671ce2d6c1",
+      "bytes": 9071
+    },
+    {
+      "source": "capstone_final40_work/source/test_research_tools_mcp.py",
+      "destination": "source_reference/test_research_tools_mcp.py",
+      "sha256": "e5d2296d2f82378c38b19ecbeed755205906cc24f501d74050478ed37ef6149d",
+      "bytes": 15657
+    },
+    {
+      "source": "capstone_final40_work/source/research_workflow.py",
+      "destination": "source_reference/research_workflow.py",
+      "sha256": "da2993c516ce9ed6dd0b042293caf4a417b1fe76829595149fdb78dd2f2798fc",
+      "bytes": 43993
+    },
+    {
+      "source": "capstone_final40_work/source/research_app.py",
+      "destination": "source_reference/research_app.py",
+      "sha256": "a8665a5c6838121dfddc2f960280dd897bb2a7162abfe01f47a8850c5bf0935e",
+      "bytes": 24634
+    },
+    {
+      "source": "capstone_final40_work/source/test_workflow_clients.py",
+      "destination": "source_reference/test_workflow_clients.py",
+      "sha256": "bbca98ad171a6cda46088239d4541f14c48d07b8a862e196a69dcbaafec32aa6",
+      "bytes": 17229
+    },
+    {
+      "source": "capstone_final40_work/source/workflow_memory.py",
+      "destination": "source_reference/workflow_memory.py",
+      "sha256": "08be7cd9de9b83759372ffa4cb00a825ed04f7e63df3e37679eb87a6b47b84c9",
+      "bytes": 16479
+    },
+    {
+      "source": "capstone_final40_work/source/workflow_lessons.py",
+      "destination": "source_reference/workflow_lessons.py",
+      "sha256": "65d27bb5e732c76eb60df782d283444df9ba5885deccf08eea1e74f4eeb48cbb",
+      "bytes": 8891
+    },
+    {
+      "source": "capstone_final40_work/source/workflow_source_safety.py",
+      "destination": "source_reference/workflow_source_safety.py",
+      "sha256": "2adf9b9da2c9fa827887f97e114d6530721df2f87a32c1f59b47d94419382264",
+      "bytes": 5247
+    },
+    {
+      "source": "capstone_final40_work/source/test_research_portal.py",
+      "destination": "source_reference/test_research_portal.py",
+      "sha256": "c5d631bbbd65187229844fccf3709cdd3095ecd0cae2d8059f39df9c2e12d47a",
+      "bytes": 8485
+    },
+    {
+      "source": "capstone_final40_work/source/test_research_workflow.py",
+      "destination": "source_reference/test_research_workflow.py",
+      "sha256": "0a86e3906c24e525b3163892ef2f2c29fe79876399256b5828ecde798be215e8",
+      "bytes": 123411
+    },
+    {
+      "source_file": "capstone_completion_work/pilot40/Pilot40_Audit.json",
+      "destination": "evidence/pilot40/Pilot40_Audit.json",
+      "sha256": "53c2f9e27f41df28524eed9c4b4910127ab7b9bb14b7b4ea860ab671eb401945",
+      "bytes": 59507
+    },
+    {
+      "source_file": "capstone_completion_work/pilot40/Pilot40_Replan_Trace.json",
+      "destination": "evidence/planning/Pilot40_Replan_Trace.json",
+      "sha256": "2404bfe64cdfc7554d640961c46bae74f0635f62fe72695552ab2b91b7df39ac",
+      "bytes": 2117
+    },
+    {
+      "source_file": "capstone_completion_work/deployment/review/Deployment_Validation.json",
+      "destination": "evidence/deployment_preparation/Deployment_Validation.json",
+      "sha256": "a09f22e5c658f100bdfd0df42178ee13f285a4ab837a6022fb37e47b38271bb0",
+      "bytes": 1931
+    },
+    {
+      "source_file": "capstone_completion_work/deployment/review/Independent_Deployment_Audit.json",
+      "destination": "evidence/deployment_preparation/Independent_Deployment_Audit.json",
+      "sha256": "92168531de7df9f168cba54e73bf5e271e9f504695c9cc4162a04820265e6444",
+      "bytes": 3123
+    },
+    {
+      "source_file": "capstone_completion_work/deployment/review/Local_Negative_Control_Report.json",
+      "destination": "evidence/deployment_preparation/Local_Negative_Control_Report.json",
+      "sha256": "a4962e55913a59685ea0008d62e2b959d7e4bf390d7adb261abc701fdda9463c",
+      "bytes": 526
+    },
+    {
+      "source_file": "workflow_live31_results_review/Writer_AI_Review.json",
+      "destination": "evidence/security/S31_Writer_AI_Review.json",
+      "sha256": "1ffe40151272829865b1d973fd4f599c10efeaeb528250a774ef43638e1ea304",
+      "bytes": 57657
+    },
+    {
+      "source_file": "workflow_live31_results_review/Review_Records.json",
+      "destination": "evidence/security/S31_Original_Review_Records.json",
+      "sha256": "b8c6eee783ccab4c6f1abe9790dd7770c39325b58bc59d9b775fca3a6ecf3b7c",
+      "bytes": 1246492
+    },
+    {
+      "source_file": "workflow_live32_results_review/Critic_AI_Review.json",
+      "destination": "evidence/security/S32_Critic_AI_Review.json",
+      "sha256": "8c7fb35012e89180d132068c3ada7afc57046748c85ed935cd05aac5e494442c",
+      "bytes": 8424
+    },
+    {
+      "source_file": "workflow_live32_results_review/Review_Records.json",
+      "destination": "evidence/security/S32_Original_Review_Records.json",
+      "sha256": "818467d125f555f4f8516ea13f5c78c471cfad049be79850c93e1cffe940dd21",
+      "bytes": 81798
+    },
+    {
+      "source_file": "workflow_live32_results_review/Frozen_Cases.json",
+      "destination": "evidence/security/S32_Frozen_Cases.json",
+      "sha256": "816d6099af655d9eb8903ee950bf2e215b78ff94353675ed083cf4e77df56478",
+      "bytes": 8955
+    },
+    {
+      "archive": "upload/33_Analyst_Desk_Source_Evidence_Results_20261114T104627Z_80e7c001.zip",
+      "archive_sha256": "362edb606c52b57c933a32122824f7782057493527c65a7799092bcccafabfd4",
+      "member": "33_Source_Evidence_Validation_Audit.json",
+      "destination": "evidence/security/S33_33_Source_Evidence_Validation_Audit.json",
+      "sha256": "a53c3a5032153517e2a77f9640f3552347af616f98657b221bcf70ece28f2e71",
+      "bytes": 20246
+    },
+    {
+      "archive": "upload/33_Analyst_Desk_Source_Evidence_Results_20261114T104627Z_80e7c001.zip",
+      "archive_sha256": "362edb606c52b57c933a32122824f7782057493527c65a7799092bcccafabfd4",
+      "member": "Security_Check_Report.json",
+      "destination": "evidence/security/S33_Security_Check_Report.json",
+      "sha256": "d63fc14baff39800e00a1ca6fb7938ad40a43085b5128917e280f799f60110de",
+      "bytes": 42748
+    },
+    {
+      "source_file": "capstone_completion_work/human_review/Actual_Human_Review_Validation.json",
+      "destination": "evidence/human_review/Actual_Human_Review_Validation.json",
+      "sha256": "addac92218d9972085144dbcb2368972ab3d3d721393f266d4757e7ae45e16c9",
+      "bytes": 859
+    },
+    {
+      "source_file": "capstone_completion_work/human_review/Historical_Judge_Against_Actual_Human.json",
+      "destination": "evidence/human_review/Historical_Judge_Against_Actual_Human.json",
+      "sha256": "78bc2f247cf50f494e4891417e82e54f2684f877ccd3e99d089a41817926f037",
+      "bytes": 2587
+    },
+    {
+      "archive": "upload/40_Analyst_Desk_Pilot_Price_Compatibility_Results_20261114T133908Z_9dfae9e9.zip",
+      "archive_sha256": "6ffd695f6ea2a0a8e4296f07d71da0b307fbadf567e30df65250910585ad2871",
+      "member": "Operator/pilot/executions/PILOT_C2_F002_r1/Journal_Report.json",
+      "destination": "evidence/viva/PILOT_C2_F002_r1_Journal.json",
+      "sha256": "8748a17bf21f8dd8aaefbeb4dde98b97b82ecdcdc6d1b742ebc91939e615171b",
+      "bytes": 30341
+    },
+    {
+      "archive": "upload/40_Analyst_Desk_Pilot_Price_Compatibility_Results_20261114T133908Z_9dfae9e9.zip",
+      "archive_sha256": "6ffd695f6ea2a0a8e4296f07d71da0b307fbadf567e30df65250910585ad2871",
+      "member": "Operator/pilot/executions/PILOT_C1_F003_r1/Journal_Report.json",
+      "destination": "evidence/viva/PILOT_C1_F003_r1_Journal.json",
+      "sha256": "e6ee0bf5e1125c58dbad002060f93ecb0b4aab610fe4bcbda7f5a47cc8df491f",
+      "bytes": 27814
+    },
+    {
+      "archive": "upload/40_Analyst_Desk_Pilot_Price_Compatibility_Results_20261114T133908Z_9dfae9e9.zip",
+      "archive_sha256": "6ffd695f6ea2a0a8e4296f07d71da0b307fbadf567e30df65250910585ad2871",
+      "member": "Operator/pilot/executions/PILOT_C2_F003_r1/Journal_Report.json",
+      "destination": "evidence/viva/PILOT_C2_F003_r1_Journal.json",
+      "sha256": "49b1e15a22a022d57bfad1ce15248fc77f1aad75773a1d1cc4f42c1eece73c12",
+      "bytes": 29560
+    },
+    {
+      "source": "capstone_final40_work/source/evaluation/final/adapters.py",
+      "destination": "source_reference/evaluation_adapters.py",
+      "sha256": "2271f08db2aeb8b3e2374ea9de46337469f28bb22df0ea69e8df2d08e5fa85bf",
+      "bytes": 16949
+    },
+    {
+      "archive": "upload/Live_Control_Demo_Results_20261114T144842Z_81ebe831.zip",
+      "archive_sha256": "6961053388d46036b29f0a694f8dde17169da3dc91a2455bacd4e75e3b52cee2",
+      "member": "Live_Control_Demo_Report.json",
+      "destination": "evidence/live_demo/Live_Control_Demo_Report.json",
+      "sha256": "ec18e362cae092be8d42c5825aec687907e511f4a23cc1dbca518c096dda52aa",
+      "bytes": 4325
+    },
+    {
+      "source_file": "capstone_final42_work/review/Independent_E1_Protocol_Audit.json",
+      "source_sha256": "6c17088db9fdd19c05c177b1b75d0e0aa0b3c6a1239be4c68f4b4d497c526ad4",
+      "destination": "evidence/sequence42_preparation/Independent_E1_Protocol_Audit.json",
+      "sha256": "6c17088db9fdd19c05c177b1b75d0e0aa0b3c6a1239be4c68f4b4d497c526ad4",
+      "bytes": 2582,
+      "evidence_kind": "assistant_side_software_check"
+    },
+    {
+      "source_file": "capstone_final42_work/tests/results/Sequence42_Installer_Validation.json",
+      "source_sha256": "e9acdbea702e3ae23774e9e6d1294e06a7571a9b493974c309e95039df4eb7d7",
+      "destination": "evidence/sequence42_preparation/Sequence42_Installer_Validation.json",
+      "sha256": "e9acdbea702e3ae23774e9e6d1294e06a7571a9b493974c309e95039df4eb7d7",
+      "bytes": 2704,
+      "evidence_kind": "assistant_side_software_check"
+    },
+    {
+      "source_file": "capstone_final42_work/tests/results/Packaged_Smoke_Result.json",
+      "source_sha256": "338d3ba0a80a78ff0717b9e051af36a0427cb3ab726793f130231b4721319b96",
+      "destination": "evidence/sequence42_preparation/Packaged_Smoke_Result.json",
+      "sha256": "338d3ba0a80a78ff0717b9e051af36a0427cb3ab726793f130231b4721319b96",
+      "bytes": 2755,
+      "evidence_kind": "assistant_side_software_check"
+    },
+    {
+      "source_file": "capstone_completion_work/final_security_metrics/Offline_Source_Detector_Audit.json",
+      "destination": "evidence/security/Offline_Source_Detector_Audit.json",
+      "sha256": "ac70edce51ee0e11985989251cd0e0c1f9d1d54da75075f1c7c69ff709ce2e4c",
+      "bytes": 27282,
+      "evidence_kind": "read_only_component_or_historical_count_audit"
+    },
+    {
+      "source_file": "capstone_completion_work/final_security_metrics/Historical_Live_Security_Counts.json",
+      "destination": "evidence/security/Historical_Live_Security_Counts.json",
+      "sha256": "81b023457dec77a67cb927ba3caccdccefb973dad1626e1693cd0aed287bd757",
+      "bytes": 11144,
+      "evidence_kind": "read_only_component_or_historical_count_audit"
+    },
+    {
+      "archive": "upload/42_Analyst_Desk_All_Company_Source_Compatibility_Results_20261114T163708Z_0e9c95df.zip",
+      "archive_sha256": "23b69f468e9be41c03642b83edde4d999b960084b691ca9ad63bb4b62ca3878e",
+      "member": "42_Source_Compatibility_Audit.json",
+      "destination": "evidence/sequence42_actual/42_Source_Compatibility_Audit.json",
+      "sha256": "37edf4ec50cb6d427fb78c56ea5b41e706d7b36340086b9e56fc3e3a3c7a6104",
+      "bytes": 40356,
+      "evidence_kind": "actual_user_S42_preview_no_new_paid_calls"
+    },
+    {
+      "archive": "upload/42_Analyst_Desk_All_Company_Source_Compatibility_Results_20261114T163708Z_0e9c95df.zip",
+      "archive_sha256": "23b69f468e9be41c03642b83edde4d999b960084b691ca9ad63bb4b62ca3878e",
+      "member": "Security_Check_Report.json",
+      "destination": "evidence/sequence42_actual/Security_Check_Report.json",
+      "sha256": "342f0d4e19c2864bb6368942eaa8689524a50a81bc93d6d90b6fd8a2c0e9af38",
+      "bytes": 42748,
+      "evidence_kind": "actual_user_S42_preview_no_new_paid_calls"
+    },
+    {
+      "archive": "upload/42_Analyst_Desk_All_Company_Source_Compatibility_Results_20261114T163708Z_0e9c95df.zip",
+      "archive_sha256": "23b69f468e9be41c03642b83edde4d999b960084b691ca9ad63bb4b62ca3878e",
+      "member": "Final_Offline_Check_Report.json",
+      "destination": "evidence/sequence42_actual/Final_Offline_Check_Report.json",
+      "sha256": "e960f9f14ce2208ab4c90d2f5b15c8025b80ceb32fee7e97a0d996907c30c2a4",
+      "bytes": 62545,
+      "evidence_kind": "actual_user_S42_preview_no_new_paid_calls"
+    },
+    {
+      "archive": "upload/42_Analyst_Desk_All_Company_Source_Compatibility_Results_20261114T163708Z_0e9c95df.zip",
+      "archive_sha256": "23b69f468e9be41c03642b83edde4d999b960084b691ca9ad63bb4b62ca3878e",
+      "member": "Operator/completion/Completion_Status.json",
+      "destination": "evidence/sequence42_actual/Completion_Status.json",
+      "sha256": "89bbd47049633dd0b83e38bf4565c0a5b64020967b304c280b7fed4305088bab",
+      "bytes": 117,
+      "evidence_kind": "actual_user_S42_preview_no_new_paid_calls"
+    },
+    {
+      "archive": "upload/42_Analyst_Desk_All_Company_Source_Compatibility_Results_20261114T163708Z_0e9c95df.zip",
+      "archive_sha256": "23b69f468e9be41c03642b83edde4d999b960084b691ca9ad63bb4b62ca3878e",
+      "member": "Operator/completion/Completion_Plan.json",
+      "destination": "evidence/sequence42_actual/Completion_Plan.json",
+      "sha256": "b88c64d8a1731fd5c3493f0d7b7db70c065c661a9367869b614b9f546e2150f5",
+      "bytes": 5012,
+      "evidence_kind": "actual_user_S42_preview_no_new_paid_calls"
+    },
+    {
+      "archive": "upload/42_Analyst_Desk_All_Company_Source_Compatibility_Results_20261114T163708Z_0e9c95df.zip",
+      "archive_sha256": "23b69f468e9be41c03642b83edde4d999b960084b691ca9ad63bb4b62ca3878e",
+      "member": "Operator/completion/Completion_Budget_Report.json",
+      "destination": "evidence/sequence42_actual/Completion_Budget_Report.json",
+      "sha256": "e96bd3a300636dfcb083013835260f98c0991d32042eea53474dfedf3c633b63",
+      "bytes": 2528,
+      "evidence_kind": "actual_user_S42_preview_no_new_paid_calls"
+    },
+    {
+      "archive": "upload/42_Analyst_Desk_All_Company_Source_Compatibility_Results_20261114T163708Z_0e9c95df.zip",
+      "archive_sha256": "23b69f468e9be41c03642b83edde4d999b960084b691ca9ad63bb4b62ca3878e",
+      "member": "Operator/completion/Source_Cache_Diagnostics.json",
+      "destination": "evidence/sequence42_actual/Source_Cache_Diagnostics.json",
+      "sha256": "894a216a16cd34e408fa601fbc697b5b3851667dfd12930a440ded3c8400a3ab",
+      "bytes": 17019,
+      "evidence_kind": "actual_user_S42_preview_no_new_paid_calls"
+    },
+    {
+      "source_file": "capstone_final43_work/tests/results/Sequence43_Installer_Validation.json",
+      "destination": "evidence/sequence43_preparation/Sequence43_Installer_Validation.json",
+      "sha256": "308632f19be87b92d2d0dbd40807de71b79cf7f43c15c280c4edefc578ba853c",
+      "bytes": 1238,
+      "evidence_kind": "assistant_side_synthetic_43_preparation_no_paid_calls"
+    },
+    {
+      "source_file": "capstone_final43_work/tests/results/Packaged_Smoke_Result.json",
+      "destination": "evidence/sequence43_preparation/Packaged_Smoke_Result.json",
+      "sha256": "b757999e13aa0098e582a23986f253febea99d56816aebce17207158b453faed",
+      "bytes": 2739,
+      "evidence_kind": "assistant_side_synthetic_43_preparation_no_paid_calls"
+    },
+    {
+      "source_file": "capstone_completion_work/final_protocol_review/Sequence43_Independent_Schedule_Audit.json",
+      "destination": "evidence/sequence43_preparation/Sequence43_Independent_Schedule_Audit.json",
+      "sha256": "910e05a3b7ebaab1038c69caec8f8ba64d94a009a3c0ce10a7840b86460a1562",
+      "bytes": 3529,
+      "evidence_kind": "assistant_side_synthetic_43_preparation_no_paid_calls"
+    },
+    {
+      "source_file": "capstone_completion_work/final_protocol_review/Actual43_Development_Stop_Audit.json",
+      "destination": "evidence/sequence43_actual/Actual43_Development_Stop_Audit.json",
+      "sha256": "8a1fb7c368c57b9bd3a800d25e0d5498fa6f7d421be5bb6d3cc30f696e19801b",
+      "bytes": 3956,
+      "evidence_kind": "read_only_derivation_of_actual_user_S43_results"
+    },
+    {
+      "source_file": "capstone_completion_work/final_protocol_review/actual43_development_sanity/Actual_Repeat_Performance.json",
+      "destination": "evidence/sequence43_actual/S43_Development_Sanity_Performance.json",
+      "sha256": "ea55b7ea5d4d13ba3aa6987e9823e028ceb1ef5b5abc9757a69335b7f4e60df6",
+      "bytes": 11734,
+      "evidence_kind": "read_only_derivation_of_actual_user_S43_results"
+    },
+    {
+      "source_file": "capstone_completion_work/final_protocol_review/actual43_development_coverage/Actual_Repeat_Performance.json",
+      "destination": "evidence/sequence43_actual/S43_Development_Coverage_Performance.json",
+      "sha256": "d64e3ba1e47015c580d99e86c580eaeb5f46e130284a9427e9716a50ba85373f",
+      "bytes": 9028,
+      "evidence_kind": "read_only_derivation_of_actual_user_S43_results"
+    },
+    {
+      "archive": "upload/43_Analyst_Desk_Prioritized_Final_Evaluation_Results_20261114T165248Z_65fbd16f.zip",
+      "archive_sha256": "0bb92afee402ee19bad8c769f9a97f87e7183cad73b2bf28636dc0e31e0a0b36",
+      "member": "Operator/completion/Completion_Status.json",
+      "destination": "evidence/sequence43_actual/Completion_Status.json",
+      "sha256": "89d80e39dc85d4020b5cbfabed4cf8c4e199e335755960e8c511ce27fa265802",
+      "bytes": 291608,
+      "evidence_kind": "actual_user_S43_development_stop"
+    },
+    {
+      "archive": "upload/43_Analyst_Desk_Prioritized_Final_Evaluation_Results_20261114T165248Z_65fbd16f.zip",
+      "archive_sha256": "0bb92afee402ee19bad8c769f9a97f87e7183cad73b2bf28636dc0e31e0a0b36",
+      "member": "Operator/completion/Completion_Budget_Report.json",
+      "destination": "evidence/sequence43_actual/Completion_Budget_Report.json",
+      "sha256": "6c8962791ef448e0e1757c82083f4ec274daa4727e37bfdf1b2e984da5a7cfb6",
+      "bytes": 186733,
+      "evidence_kind": "actual_user_S43_development_stop"
+    },
+    {
+      "source_file": "capstone_final44_work/tests/results/Sequence44_Installer_Validation.json",
+      "destination": "evidence/sequence44_preparation/Sequence44_Installer_Validation.json",
+      "sha256": "ef773d3c6c49a4bc6417931e9ff01d4ff9ae6ae985e3a5e92bc4566d686498a1",
+      "bytes": 950,
+      "evidence_kind": "assistant_side_S44_compatibility_checks_no_user_execution"
+    },
+    {
+      "source_file": "capstone_completion_work/final_protocol_review/Sequence44_Independent_Compatibility_Audit.json",
+      "destination": "evidence/sequence44_preparation/Sequence44_Independent_Compatibility_Audit.json",
+      "sha256": "2dc6de467179726e8b6a0b30eb7a3d88e6793dacb8cb7f3db8e935fa7421cc96",
+      "bytes": 2240,
+      "evidence_kind": "assistant_side_S44_compatibility_checks_no_user_execution"
+    },
+    {
+      "source_file": "capstone_final44_work/review/Independent_Local_Budget_Proof.json",
+      "destination": "evidence/sequence44_preparation/Independent_Local_Budget_Proof.json",
+      "sha256": "17a69a8652e63bfb850399f7d1dd97eb915c6abb5aef9b4132e0d0617664db0b",
+      "bytes": 1317,
+      "evidence_kind": "assistant_side_S44_compatibility_checks_no_user_execution"
+    },
+    {
+      "source_file": "capstone_completion_work/final_protocol_review/Actual44_Calibration_Stop_Audit.json",
+      "destination": "evidence/sequence44_actual/Actual44_Calibration_Stop_Audit.json",
+      "sha256": "49fcef0278448f71f09fe7bdc1386b1e75b4eccc2f88df7e48104ac85fa1cb17",
+      "bytes": 4327,
+      "evidence_kind": "read_only_audit_actual_user_S44_accounting_stop"
+    },
+    {
+      "source_file": "capstone_completion_work/final_ci_handoff/Clean_Install_Independent_Audit.json",
+      "destination": "evidence/deployment_actual/Clean_Install_Independent_Audit.json",
+      "sha256": "f990d665230f5861f4cba7da769cd977c1b49fa0e463e2442f040fa3bac2241d",
+      "bytes": 2616,
+      "evidence_kind": "independent_AI_audit_actual_hosted_CI_artifact"
+    }
+  ],
+  "later_evidence_note": "S42 entries are assistant-side preparation tests. UI screenshots are a real development demonstration, last observed awaiting note. Neither establishes completed held-out evaluation.",
+  "referenced_user_screenshot_sources": [
+    {
+      "uploaded_name": "image(20261114-155638).png",
+      "sha256": "ab0ae37d0a6e1ea63065e4df8eabf93170922c3cefb21f4f91c7937b5faac8c6",
+      "included_in_submission": false
+    },
+    {
+      "uploaded_name": "image(20261114-160424).png",
+      "sha256": "39b8e90fdf38adb8e4d941201a0ccd4760e8bd37f5abfdb0022e64ce3d1f2d43",
+      "included_in_submission": false
+    },
+    {
+      "uploaded_name": "image(20261114-160914).png",
+      "sha256": "73e17601430a7755d251498f1a1e631e86a1d764429f37852d75173c9efc59e6",
+      "included_in_submission": false
+    },
+    {
+      "uploaded_name": "image(20261114-162227).png",
+      "sha256": "bae5fe54588caf7fe4270af4cdf07dfe8c4a1265b2bee274971c902218700cae",
+      "included_in_submission": false
+    },
+    {
+      "uploaded_name": "image(20261114-162052).png",
+      "sha256": "08d52be048ffc212977dddbb7a21e4ec529506c69983d197ee49717bc5fc95b1",
+      "included_in_submission": false
+    }
+  ]
+}

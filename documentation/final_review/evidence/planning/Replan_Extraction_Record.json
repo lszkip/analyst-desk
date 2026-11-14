@@ -1,0 +1,62 @@
+{
+  "original_file_sha256": "3ad086656da21de284a4fc38b882c5c28c38ff1e750a5828e251381194838ab5",
+  "excerpt_sha256": "67ef8d8e693b6854e4b929a3fdb08bee986fc35e2148642907265261b631138d",
+  "original_start_line": 937,
+  "original_end_line": 986,
+  "source": "Replan_Original_Review_Log.txt",
+  "extraction": "Exact contiguous substring; no content edited. Enclosing list context is omitted.",
+  "events": [
+    {
+      "seq": 66,
+      "kind": "replan",
+      "role": "supervisor",
+      "details": {
+        "reason": "company_evidence_limit_or_contradiction"
+      },
+      "at": 1794446041.5349474
+    },
+    {
+      "seq": 67,
+      "kind": "llm_start",
+      "role": "supervisor",
+      "details": {
+        "company_scope": null,
+        "model": "openai/gpt-4.1-mini",
+        "prompt_sha256": "1ee3d8cbef2a9b0dbe722321fa4cfc12e7c2988a1218eb30a99e78b7ec42c999",
+        "reserved_tokens": 9753,
+        "step": 0
+      },
+      "at": 1794446041.5438266
+    },
+    {
+      "seq": 68,
+      "kind": "llm_end",
+      "role": "supervisor",
+      "details": {
+        "company_scope": null,
+        "elapsed_seconds": 3.3681,
+        "prompt_sha256": "1ee3d8cbef2a9b0dbe722321fa4cfc12e7c2988a1218eb30a99e78b7ec42c999",
+        "response_sha256": "ad87a5c8289dfa6cc1f1d4b12dab2c5c8c88c7d6d4d334113a79143374a6f4af",
+        "usage": {
+          "completion_tokens": 411,
+          "cost": 0.0010736,
+          "prompt_tokens": 1040,
+          "total_tokens": 1451
+        }
+      },
+      "at": 1794446044.912059
+    },
+    {
+      "seq": 69,
+      "kind": "plan_created",
+      "role": "supervisor",
+      "details": {
+        "plan_sha256": "c0e27c429ae70b2e6176b596f383828ca0c68b220ad7fb022db7ba6f64a10202",
+        "replans": 1
+      },
+      "at": 1794446044.917744
+    }
+  ],
+  "evidence_class": "saved_real_model_development_trace_with_operator_involvement",
+  "human_review_claim_for_this_extraction": false
+}

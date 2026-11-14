@@ -1,0 +1,1021 @@
+{
+  "budget": {
+    "id": "PILOT_C2_F003_r1",
+    "config_hash": "7ae8c5dc152a5dfe332e67e6241438b03f3876f8890a87ba1c9bcf8d54478739",
+    "token_limit": 650000,
+    "tool_limit": 240,
+    "reserved_tokens": 313065,
+    "tool_calls": 16
+  },
+  "metrics": {
+    "llm_requests_started": 14,
+    "llm_responses_received": 14,
+    "reported_total_tokens": 63487,
+    "reported_cost_usd": "0.0276352",
+    "cost_complete": true,
+    "critic_rejections": 3,
+    "model_response_cache_hits": 0,
+    "development_budget_extensions": 0,
+    "budget_protocol": "original_fixed_limit"
+  },
+  "events": [
+    {
+      "seq": 1,
+      "kind": "llm_start",
+      "role": "supervisor",
+      "details": {
+        "company_scope": null,
+        "model": "openai/gpt-4.1-mini",
+        "prompt_sha256": "5bb096b839007870390396788f72ed309851e64ac6ab82cfa71ba01dee3670df",
+        "reserved_tokens": 9491,
+        "step": 0
+      },
+      "at": 1794663685.8024504
+    },
+    {
+      "seq": 2,
+      "kind": "llm_end",
+      "role": "supervisor",
+      "details": {
+        "company_scope": null,
+        "elapsed_seconds": 4.047,
+        "prompt_sha256": "5bb096b839007870390396788f72ed309851e64ac6ab82cfa71ba01dee3670df",
+        "response_sha256": "a957af999b1351337d88f263a74bc658bfa12dca3bafdcc50fd7f449bd50937a",
+        "usage": {
+          "completion_tokens": 407,
+          "cost": 0.0010476,
+          "prompt_tokens": 991,
+          "total_tokens": 1398
+        }
+      },
+      "at": 1794663689.849378
+    },
+    {
+      "seq": 3,
+      "kind": "plan_created",
+      "role": "supervisor",
+      "details": {
+        "plan_sha256": "982e71052016bab6401d2818f9db49e74e02c230d5496f7878366f6b6f2f4091",
+        "replans": 0
+      },
+      "at": 1794663689.8576868
+    },
+    {
+      "seq": 4,
+      "kind": "evaluation_plan_approval_simulated",
+      "role": "evaluation",
+      "details": {
+        "human_reviewed": false,
+        "plan_hash": "5dc8ebf8cb4f95bc32eead91439361c945a77a6165d8e30a782de100f3abf91d"
+      },
+      "at": 1794663689.8599327
+    },
+    {
+      "seq": 5,
+      "kind": "tool_start",
+      "role": "researcher",
+      "details": {
+        "arguments_sha256": "e539828b5e8e53e546c317d9db742d2ea39eaa827e623ffa25692f72ee2237ea",
+        "service": "edgar",
+        "tool": "get_section"
+      },
+      "at": 1794663689.864761
+    },
+    {
+      "seq": 6,
+      "kind": "tool_end",
+      "role": "researcher",
+      "details": {
+        "elapsed_seconds": 0.0234,
+        "result_sha256": "63bfcf7a64708105324a3b138e6d09394192f6846befa7d136318fbcec80db43",
+        "service": "edgar",
+        "status": "ok",
+        "tool": "get_section"
+      },
+      "at": 1794663689.8881774
+    },
+    {
+      "seq": 7,
+      "kind": "research_section_prefetch",
+      "role": "researcher",
+      "details": {
+        "next_offset": 2,
+        "operation_sha256": "4ad8e58244363a7a101efa39be06f80a9513c00e28069dd7d4604a5bcc33991a",
+        "passage_ids": [
+          "p_1867d704d64d42324b0f227eddba0adeec11e87d98910c9edaa39189ab37689b",
+          "p_588af49703eb1fc886d09dfb1078afa7693ca4c41e72238f40e441cd40751a88"
+        ],
+        "result_sha256": "63bfcf7a64708105324a3b138e6d09394192f6846befa7d136318fbcec80db43",
+        "status": "ok",
+        "total_passages": 47
+      },
+      "at": 1794663689.8960586
+    },
+    {
+      "seq": 8,
+      "kind": "tool_start",
+      "role": "researcher",
+      "details": {
+        "arguments_sha256": "820c38b20d84ce89f7c863231e3a142c4275867f0f008e479ea84dbe569c1516",
+        "service": "edgar",
+        "tool": "get_section"
+      },
+      "at": 1794663689.9018998
+    },
+    {
+      "seq": 9,
+      "kind": "tool_end",
+      "role": "researcher",
+      "details": {
+        "elapsed_seconds": 0.0263,
+        "result_sha256": "cee98393f57afed27e01a102c729d684944344d27883b889967d54bdb8864d1b",
+        "service": "edgar",
+        "status": "ok",
+        "tool": "get_section"
+      },
+      "at": 1794663689.9283178
+    },
+    {
+      "seq": 10,
+      "kind": "research_section_prefetch",
+      "role": "researcher",
+      "details": {
+        "next_offset": 2,
+        "operation_sha256": "d57adfb53dae10e4d92951957390d8827f575dbb0d70435df7c9b105461c3af8",
+        "passage_ids": [
+          "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+          "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2"
+        ],
+        "result_sha256": "cee98393f57afed27e01a102c729d684944344d27883b889967d54bdb8864d1b",
+        "status": "ok",
+        "total_passages": 36
+      },
+      "at": 1794663689.9370394
+    },
+    {
+      "seq": 11,
+      "kind": "tool_start",
+      "role": "researcher",
+      "details": {
+        "arguments_sha256": "4e868d15522f981fa1a9a339838f86c47cf47e9c2657e45cc67f7487723843b6",
+        "service": "edgar",
+        "tool": "get_section"
+      },
+      "at": 1794663689.9426117
+    },
+    {
+      "seq": 12,
+      "kind": "tool_end",
+      "role": "researcher",
+      "details": {
+        "elapsed_seconds": 0.0492,
+        "result_sha256": "3712885d20ad1b2aa8e78a90596e43968b6a053dcf9303e488c5d8e3a5beaf61",
+        "service": "edgar",
+        "status": "ok",
+        "tool": "get_section"
+      },
+      "at": 1794663689.9918754
+    },
+    {
+      "seq": 13,
+      "kind": "research_section_prefetch",
+      "role": "researcher",
+      "details": {
+        "next_offset": 2,
+        "operation_sha256": "d9e923d945b847a9c636c799483b7b37ec7371b8c3992841c0433b54aa1a3f26",
+        "passage_ids": [
+          "p_34b9b8ae5690e8529dee259e277047447d4a4cf243e7048e26a0c7501dc086c9",
+          "p_561907d55b0b0edf0b62d3ffbac5d49892d7af3d6b3cf5de0d1101876c94cc0e"
+        ],
+        "result_sha256": "3712885d20ad1b2aa8e78a90596e43968b6a053dcf9303e488c5d8e3a5beaf61",
+        "status": "ok",
+        "total_passages": 42
+      },
+      "at": 1794663690.0003862
+    },
+    {
+      "seq": 14,
+      "kind": "tool_start",
+      "role": "researcher",
+      "details": {
+        "arguments_sha256": "9e00a4f1f1f1aa0ff7635ed7581442000b580e373eff0ac30d4358e22f49c029",
+        "service": "edgar",
+        "tool": "get_section"
+      },
+      "at": 1794663690.0059698
+    },
+    {
+      "seq": 15,
+      "kind": "tool_end",
+      "role": "researcher",
+      "details": {
+        "elapsed_seconds": 0.0394,
+        "result_sha256": "09123709474e9be1d3ec263f886aebfc5a44b5002f22266317098819fea29505",
+        "service": "edgar",
+        "status": "ok",
+        "tool": "get_section"
+      },
+      "at": 1794663690.0454285
+    },
+    {
+      "seq": 16,
+      "kind": "research_section_prefetch",
+      "role": "researcher",
+      "details": {
+        "next_offset": 2,
+        "operation_sha256": "c3c2f9c2f51b4ba62b704a6f76c3dcfc4c6a087538259b208d704c5754168a23",
+        "passage_ids": [
+          "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+          "p_f2b061c0efc337ebc00812b4542af2a4f5d7831e4722e055c2780a3608c2dbb1"
+        ],
+        "result_sha256": "09123709474e9be1d3ec263f886aebfc5a44b5002f22266317098819fea29505",
+        "status": "ok",
+        "total_passages": 40
+      },
+      "at": 1794663690.054037
+    },
+    {
+      "seq": 17,
+      "kind": "llm_start",
+      "role": "researcher",
+      "details": {
+        "company_scope": "MSFT",
+        "model": "openai/gpt-4.1-mini",
+        "prompt_sha256": "223b6f595ba5c7451e8e00855d2a903ecd8bcf34d57cac4e721767e6e096fb3d",
+        "reserved_tokens": 28352,
+        "step": 0
+      },
+      "at": 1794663690.066252
+    },
+    {
+      "seq": 18,
+      "kind": "llm_end",
+      "role": "researcher",
+      "details": {
+        "company_scope": "MSFT",
+        "elapsed_seconds": 4.7551,
+        "prompt_sha256": "223b6f595ba5c7451e8e00855d2a903ecd8bcf34d57cac4e721767e6e096fb3d",
+        "response_sha256": "646a101df16b66ebe4c877ba90172ed5449ea30d0351d87320f7e03ec6cc4c66",
+        "usage": {
+          "completion_tokens": 647,
+          "cost": 0.0033296,
+          "prompt_tokens": 5736,
+          "total_tokens": 6383
+        }
+      },
+      "at": 1794663694.82111
+    },
+    {
+      "seq": 19,
+      "kind": "replan",
+      "role": "supervisor",
+      "details": {
+        "reason": "company_evidence_limit_or_contradiction"
+      },
+      "at": 1794663694.8270147
+    },
+    {
+      "seq": 20,
+      "kind": "llm_start",
+      "role": "supervisor",
+      "details": {
+        "company_scope": null,
+        "model": "openai/gpt-4.1-mini",
+        "prompt_sha256": "81c3615bea25835ff25e6faa84596f790e3c011be957f7d2beb91197971ca0d7",
+        "reserved_tokens": 12156,
+        "step": 0
+      },
+      "at": 1794663694.8328319
+    },
+    {
+      "seq": 21,
+      "kind": "llm_end",
+      "role": "supervisor",
+      "details": {
+        "company_scope": null,
+        "elapsed_seconds": 4.4011,
+        "prompt_sha256": "81c3615bea25835ff25e6faa84596f790e3c011be957f7d2beb91197971ca0d7",
+        "response_sha256": "e6657e2500c51816a237a8adc8ef81e84ee009d0321eae2d9ea08990f7e26ba3",
+        "usage": {
+          "completion_tokens": 395,
+          "cost": 0.0013888,
+          "prompt_tokens": 1892,
+          "total_tokens": 2287
+        }
+      },
+      "at": 1794663699.2339442
+    },
+    {
+      "seq": 22,
+      "kind": "plan_created",
+      "role": "supervisor",
+      "details": {
+        "plan_sha256": "519851f252a8d39fc8a0c1d5d576797095452e467f6eab7ea97943ffd7e34fd5",
+        "replans": 1
+      },
+      "at": 1794663699.2444353
+    },
+    {
+      "seq": 23,
+      "kind": "evaluation_plan_approval_simulated",
+      "role": "evaluation",
+      "details": {
+        "human_reviewed": false,
+        "plan_hash": "fb4eeee1b7cb5c5d3c513d1540f02738483006389c8a6d5971fd45adbe64eadb"
+      },
+      "at": 1794663699.2484279
+    },
+    {
+      "seq": 24,
+      "kind": "llm_start",
+      "role": "researcher",
+      "details": {
+        "company_scope": "MSFT",
+        "model": "openai/gpt-4.1-mini",
+        "prompt_sha256": "db4c340fd7b733aa26579c0dcc9b1e614b7d2bacbb07982298c6553e96aada73",
+        "reserved_tokens": 28358,
+        "step": 0
+      },
+      "at": 1794663699.260644
+    },
+    {
+      "seq": 25,
+      "kind": "llm_end",
+      "role": "researcher",
+      "details": {
+        "company_scope": "MSFT",
+        "elapsed_seconds": 1.1646,
+        "prompt_sha256": "db4c340fd7b733aa26579c0dcc9b1e614b7d2bacbb07982298c6553e96aada73",
+        "response_sha256": "58b370428b9b80338fdedc52c9eefd115ba3af6150f233899d3f28a165b74249",
+        "usage": {
+          "completion_tokens": 60,
+          "cost": 0.0011952,
+          "prompt_tokens": 5724,
+          "total_tokens": 5784
+        }
+      },
+      "at": 1794663700.4252076
+    },
+    {
+      "seq": 26,
+      "kind": "tool_start",
+      "role": "researcher",
+      "details": {
+        "arguments_sha256": "1ea2d45e8fe6744b6655d8319b9596c8bd000e76ed2429e05b8fe65745094dbf",
+        "service": "kb",
+        "tool": "get_passage"
+      },
+      "at": 1794663700.438322
+    },
+    {
+      "seq": 27,
+      "kind": "tool_end",
+      "role": "researcher",
+      "details": {
+        "elapsed_seconds": 1.2895,
+        "result_sha256": "1fdd32775e34c4adff951e8ead797863b4cf341a5208421f8b8fe2bf23baa3e4",
+        "service": "kb",
+        "status": "ok",
+        "tool": "get_passage"
+      },
+      "at": 1794663701.7276704
+    },
+    {
+      "seq": 28,
+      "kind": "llm_start",
+      "role": "researcher",
+      "details": {
+        "company_scope": "MSFT",
+        "model": "openai/gpt-4.1-mini",
+        "prompt_sha256": "22c32a6a95a691a937df0f87fd902aabf5037b51fb749e491aabecf9b88168d5",
+        "reserved_tokens": 31776,
+        "step": 1
+      },
+      "at": 1794663701.7352455
+    },
+    {
+      "seq": 29,
+      "kind": "llm_end",
+      "role": "researcher",
+      "details": {
+        "company_scope": "MSFT",
+        "elapsed_seconds": 1.5867,
+        "prompt_sha256": "22c32a6a95a691a937df0f87fd902aabf5037b51fb749e491aabecf9b88168d5",
+        "response_sha256": "22eb1b00edef36ac0112cb63b127475ebbdb23780d77b76f05b607108022949b",
+        "usage": {
+          "completion_tokens": 36,
+          "cost": 0.0007708,
+          "prompt_tokens": 6487,
+          "total_tokens": 6523
+        }
+      },
+      "at": 1794663703.3218775
+    },
+    {
+      "seq": 30,
+      "kind": "tool_start",
+      "role": "researcher",
+      "details": {
+        "arguments_sha256": "d14e8dea81b23cb68276cddc00b8b06bf514b86a566ddad5e38d963fbbc727bc",
+        "service": "kb",
+        "tool": "search_filings"
+      },
+      "at": 1794663703.3302202
+    },
+    {
+      "seq": 31,
+      "kind": "tool_end",
+      "role": "researcher",
+      "details": {
+        "elapsed_seconds": 2.2369,
+        "result_sha256": "646463dbfe8cb470c3cb27b677e552108869915003a529d992d26290755e9f00",
+        "service": "kb",
+        "status": "ok",
+        "tool": "search_filings"
+      },
+      "at": 1794663705.5671432
+    },
+    {
+      "seq": 32,
+      "kind": "tool_start",
+      "role": "researcher",
+      "details": {
+        "arguments_sha256": "8031ac12a7950d68ea67d3902b21fb6f5fa8e506ddcf058c97dfc0c1fb1bda53",
+        "service": "kb",
+        "tool": "get_passage"
+      },
+      "at": 1794663705.5737722
+    },
+    {
+      "seq": 33,
+      "kind": "tool_end",
+      "role": "researcher",
+      "details": {
+        "elapsed_seconds": 0.0238,
+        "result_sha256": "9d617fded49cbb31fbabc8ba4c7f37747e571503be5ee1b0c6b048a6f6562add",
+        "service": "kb",
+        "status": "ok",
+        "tool": "get_passage"
+      },
+      "at": 1794663705.5975883
+    },
+    {
+      "seq": 34,
+      "kind": "tool_start",
+      "role": "researcher",
+      "details": {
+        "arguments_sha256": "a7f3600e8303a3b0c978f9d82075b4053ad8bbca9177e20f9727656178d5806f",
+        "service": "kb",
+        "tool": "get_passage"
+      },
+      "at": 1794663705.6020255
+    },
+    {
+      "seq": 35,
+      "kind": "tool_end",
+      "role": "researcher",
+      "details": {
+        "elapsed_seconds": 0.0237,
+        "result_sha256": "a9573d11a9a30aefa0a996cecf951b6d180feef031393976d1e9e7ae2933a27e",
+        "service": "kb",
+        "status": "ok",
+        "tool": "get_passage"
+      },
+      "at": 1794663705.6258347
+    },
+    {
+      "seq": 36,
+      "kind": "llm_start",
+      "role": "researcher",
+      "details": {
+        "company_scope": "MSFT",
+        "model": "openai/gpt-4.1-mini",
+        "prompt_sha256": "69879cac63af1a602f98bf106c83bc1e313179a8cd28795bbb084dc6a5854fc8",
+        "reserved_tokens": 34441,
+        "step": 2
+      },
+      "at": 1794663705.6376264
+    },
+    {
+      "seq": 37,
+      "kind": "llm_end",
+      "role": "researcher",
+      "details": {
+        "company_scope": "MSFT",
+        "elapsed_seconds": 1.7104,
+        "prompt_sha256": "69879cac63af1a602f98bf106c83bc1e313179a8cd28795bbb084dc6a5854fc8",
+        "response_sha256": "a59aaa3fe2031eaf5eb0c2cbca7fc7ca515777b91eed2dbbba903654201bb3cd",
+        "usage": {
+          "completion_tokens": 61,
+          "cost": 0.0029468,
+          "prompt_tokens": 7123,
+          "total_tokens": 7184
+        }
+      },
+      "at": 1794663707.347903
+    },
+    {
+      "seq": 38,
+      "kind": "tool_start",
+      "role": "researcher",
+      "details": {
+        "arguments_sha256": "8031ac12a7950d68ea67d3902b21fb6f5fa8e506ddcf058c97dfc0c1fb1bda53",
+        "service": "kb",
+        "tool": "get_passage"
+      },
+      "at": 1794663707.3546927
+    },
+    {
+      "seq": 39,
+      "kind": "tool_end",
+      "role": "researcher",
+      "details": {
+        "elapsed_seconds": 0.0239,
+        "result_sha256": "9d617fded49cbb31fbabc8ba4c7f37747e571503be5ee1b0c6b048a6f6562add",
+        "service": "kb",
+        "status": "ok",
+        "tool": "get_passage"
+      },
+      "at": 1794663707.3785257
+    },
+    {
+      "seq": 40,
+      "kind": "llm_start",
+      "role": "researcher",
+      "details": {
+        "company_scope": "MSFT",
+        "model": "openai/gpt-4.1-mini",
+        "prompt_sha256": "56ac96307011477bd4d6e800940e6b1e65cadbdbabe2452cc7881032897d5863",
+        "reserved_tokens": 36924,
+        "step": 3
+      },
+      "at": 1794663707.3853278
+    },
+    {
+      "seq": 41,
+      "kind": "llm_end",
+      "role": "researcher",
+      "details": {
+        "company_scope": "MSFT",
+        "elapsed_seconds": 1.1743,
+        "prompt_sha256": "56ac96307011477bd4d6e800940e6b1e65cadbdbabe2452cc7881032897d5863",
+        "response_sha256": "5789c6cce1a6d0a5a74a2003759e6e2d7961f9466e1785a688adfc4425153ae0",
+        "usage": {
+          "completion_tokens": 31,
+          "cost": 0.003122,
+          "prompt_tokens": 7681,
+          "total_tokens": 7712
+        }
+      },
+      "at": 1794663708.5594823
+    },
+    {
+      "seq": 42,
+      "kind": "tool_start",
+      "role": "researcher",
+      "details": {
+        "arguments_sha256": "30cb7e8cb611f87adb96fc6dbe3196b47dd0c182f78db089084de2467407d64e",
+        "service": "edgar",
+        "tool": "get_section"
+      },
+      "at": 1794663708.5661054
+    },
+    {
+      "seq": 43,
+      "kind": "tool_end",
+      "role": "researcher",
+      "details": {
+        "elapsed_seconds": 0.0255,
+        "result_sha256": "0dfc149d5bfd0efb5df07167acf0ac40e37675d1e18d3c2ee1831937c53cdbd4",
+        "service": "edgar",
+        "status": "ok",
+        "tool": "get_section"
+      },
+      "at": 1794663708.5916908
+    },
+    {
+      "seq": 44,
+      "kind": "llm_start",
+      "role": "researcher",
+      "details": {
+        "company_scope": "MSFT",
+        "model": "openai/gpt-4.1-mini",
+        "prompt_sha256": "ad95c546595d4b362bcf3de4a0c9366834dbb9f173e5730478105dd4651db8f0",
+        "reserved_tokens": 37710,
+        "step": 4
+      },
+      "at": 1794663708.602119
+    },
+    {
+      "seq": 45,
+      "kind": "llm_end",
+      "role": "researcher",
+      "details": {
+        "company_scope": "MSFT",
+        "elapsed_seconds": 5.3284,
+        "prompt_sha256": "ad95c546595d4b362bcf3de4a0c9366834dbb9f173e5730478105dd4651db8f0",
+        "response_sha256": "9eef58b1e7bc005dc0e715eec5c874c81d6e01dff6974d7fda5ca1b561ca2888",
+        "usage": {
+          "completion_tokens": 730,
+          "cost": 0.004348,
+          "prompt_tokens": 7950,
+          "total_tokens": 8680
+        }
+      },
+      "at": 1794663713.9303513
+    },
+    {
+      "seq": 46,
+      "kind": "llm_start",
+      "role": "quant",
+      "details": {
+        "company_scope": null,
+        "model": "openai/gpt-4.1-mini",
+        "prompt_sha256": "495da4b1598e287ebe94ca9c9c60f27dd1165690f48f610563fa66ae0c117501",
+        "reserved_tokens": 7423,
+        "step": 0
+      },
+      "at": 1794663713.9404953
+    },
+    {
+      "seq": 47,
+      "kind": "llm_end",
+      "role": "quant",
+      "details": {
+        "company_scope": null,
+        "elapsed_seconds": 0.9886,
+        "prompt_sha256": "495da4b1598e287ebe94ca9c9c60f27dd1165690f48f610563fa66ae0c117501",
+        "response_sha256": "93a0e1f11c42f652aeda4a6cbd4b5d988963cd3f044eee4279dd860fa6b36ea5",
+        "usage": {
+          "completion_tokens": 17,
+          "cost": 0.0002788,
+          "prompt_tokens": 629,
+          "total_tokens": 646
+        }
+      },
+      "at": 1794663714.9290352
+    },
+    {
+      "seq": 48,
+      "kind": "tool_start",
+      "role": "quant",
+      "details": {
+        "arguments_sha256": "e07255af74f5ab0709b3e33a59fc5b81cbc16b7ffb2cd2c5be4455586e19f545",
+        "service": "edgar",
+        "tool": "get_annual_financial_fact"
+      },
+      "at": 1794663714.9367695
+    },
+    {
+      "seq": 49,
+      "kind": "tool_end",
+      "role": "quant",
+      "details": {
+        "elapsed_seconds": 0.1376,
+        "result_sha256": "2bf438dbf9b634941d883fb8387e50f3e08016bc01438249a1b9a2bbff89c2ce",
+        "service": "edgar",
+        "status": "ok",
+        "tool": "get_annual_financial_fact"
+      },
+      "at": 1794663715.0743916
+    },
+    {
+      "seq": 50,
+      "kind": "tool_start",
+      "role": "quant",
+      "details": {
+        "arguments_sha256": "65d3e8805d42e3e6d0a6b1c6f2c9a8213d432bc9be18d25af8c86d55baf375d8",
+        "service": "edgar",
+        "tool": "get_annual_financial_fact"
+      },
+      "at": 1794663715.0839493
+    },
+    {
+      "seq": 51,
+      "kind": "tool_end",
+      "role": "quant",
+      "details": {
+        "elapsed_seconds": 0.0935,
+        "result_sha256": "9e0733bb2dfcd362cca1c93015077cd5c8dda46f123c5c49cd70224d4ed3abf8",
+        "service": "edgar",
+        "status": "ok",
+        "tool": "get_annual_financial_fact"
+      },
+      "at": 1794663715.1775026
+    },
+    {
+      "seq": 52,
+      "kind": "tool_start",
+      "role": "quant",
+      "details": {
+        "arguments_sha256": "fc4d2c8e9228a125294390261e8ff4c6fdbeeb38e1a5f85b6dd388a0b407f159",
+        "service": "sandbox",
+        "tool": "execute_python"
+      },
+      "at": 1794663715.1871824
+    },
+    {
+      "seq": 53,
+      "kind": "tool_end",
+      "role": "quant",
+      "details": {
+        "elapsed_seconds": 0.3959,
+        "result_sha256": "efd2f084bb89e0834115bd6bd28c899010534ebf591602ae68b268f889234d32",
+        "service": "sandbox",
+        "status": "ok",
+        "tool": "execute_python"
+      },
+      "at": 1794663715.5830572
+    },
+    {
+      "seq": 54,
+      "kind": "tool_start",
+      "role": "quant",
+      "details": {
+        "arguments_sha256": "692b55d90f00b00f10731f71e19114129906ecf513d8d74e739252136581c28c",
+        "service": "edgar",
+        "tool": "get_annual_financial_fact"
+      },
+      "at": 1794663715.5906596
+    },
+    {
+      "seq": 55,
+      "kind": "tool_end",
+      "role": "quant",
+      "details": {
+        "elapsed_seconds": 0.0711,
+        "result_sha256": "4ce714604805d962bc0d017985f33156b91584a209cf164a98bb8d5e9244d269",
+        "service": "edgar",
+        "status": "ok",
+        "tool": "get_annual_financial_fact"
+      },
+      "at": 1794663715.6618469
+    },
+    {
+      "seq": 56,
+      "kind": "tool_start",
+      "role": "quant",
+      "details": {
+        "arguments_sha256": "8ed21459950bdecabae70694adead19cbbc7052792e7de9621583ca04a200bd4",
+        "service": "edgar",
+        "tool": "get_annual_financial_fact"
+      },
+      "at": 1794663715.6693008
+    },
+    {
+      "seq": 57,
+      "kind": "tool_end",
+      "role": "quant",
+      "details": {
+        "elapsed_seconds": 0.0714,
+        "result_sha256": "51e3bf7edee851ea600844566895590315d96eb8910ae29f88d559049a56bed9",
+        "service": "edgar",
+        "status": "ok",
+        "tool": "get_annual_financial_fact"
+      },
+      "at": 1794663715.7407277
+    },
+    {
+      "seq": 58,
+      "kind": "tool_start",
+      "role": "quant",
+      "details": {
+        "arguments_sha256": "97f9e975031ecefa7e5d8a3126553404d6a53837d8885ffb3f57d37bdf149713",
+        "service": "sandbox",
+        "tool": "execute_python"
+      },
+      "at": 1794663715.7493486
+    },
+    {
+      "seq": 59,
+      "kind": "tool_end",
+      "role": "quant",
+      "details": {
+        "elapsed_seconds": 0.3856,
+        "result_sha256": "e335b7174dd927c56851f76d404537174096174f7d0f17dd17f86e4df8da9cc4",
+        "service": "sandbox",
+        "status": "ok",
+        "tool": "execute_python"
+      },
+      "at": 1794663716.1350365
+    },
+    {
+      "seq": 60,
+      "kind": "llm_start",
+      "role": "quant",
+      "details": {
+        "company_scope": null,
+        "model": "openai/gpt-4.1-mini",
+        "prompt_sha256": "0f7964441e2a8b495082a0f88abe05d26019f9589390796e3708c8a16b6ad74e",
+        "reserved_tokens": 8596,
+        "step": 1
+      },
+      "at": 1794663716.1438375
+    },
+    {
+      "seq": 61,
+      "kind": "llm_end",
+      "role": "quant",
+      "details": {
+        "company_scope": null,
+        "elapsed_seconds": 2.6304,
+        "prompt_sha256": "0f7964441e2a8b495082a0f88abe05d26019f9589390796e3708c8a16b6ad74e",
+        "response_sha256": "b224dfa1e15fba05504cfd762b2a42bd97b55e65430f065001976fe6613c5dd0",
+        "usage": {
+          "completion_tokens": 291,
+          "cost": 0.000858,
+          "prompt_tokens": 981,
+          "total_tokens": 1272
+        }
+      },
+      "at": 1794663718.7742002
+    },
+    {
+      "seq": 62,
+      "kind": "llm_start",
+      "role": "risk_diff",
+      "details": {
+        "company_scope": null,
+        "model": "openai/gpt-4.1-mini",
+        "prompt_sha256": "2a3c9c6f4ac38b3b931a3570efdb26b73fbc246965e1c3ef10f5c2d79a2f4b0b",
+        "reserved_tokens": 17633,
+        "step": 0
+      },
+      "at": 1794663718.787759
+    },
+    {
+      "seq": 63,
+      "kind": "llm_end",
+      "role": "risk_diff",
+      "details": {
+        "company_scope": null,
+        "elapsed_seconds": 3.0366,
+        "prompt_sha256": "2a3c9c6f4ac38b3b931a3570efdb26b73fbc246965e1c3ef10f5c2d79a2f4b0b",
+        "response_sha256": "004546c63b74eb62783d0d05e14eae0afeb359b5353547279d228e5a89ba138d",
+        "usage": {
+          "completion_tokens": 355,
+          "cost": 0.0018888,
+          "prompt_tokens": 3302,
+          "total_tokens": 3657
+        }
+      },
+      "at": 1794663721.8242521
+    },
+    {
+      "seq": 64,
+      "kind": "llm_start",
+      "role": "writer",
+      "details": {
+        "company_scope": null,
+        "model": "openai/gpt-4.1-mini",
+        "prompt_sha256": "68b4ac5b1bbff53995070ccfea4560a813fc8e7f63f6f1c0e2d9619ab260dbd7",
+        "reserved_tokens": 18260,
+        "step": 0
+      },
+      "at": 1794663721.8365765
+    },
+    {
+      "seq": 65,
+      "kind": "llm_end",
+      "role": "writer",
+      "details": {
+        "company_scope": null,
+        "elapsed_seconds": 5.9123,
+        "prompt_sha256": "68b4ac5b1bbff53995070ccfea4560a813fc8e7f63f6f1c0e2d9619ab260dbd7",
+        "response_sha256": "8593c0932b698fe9594a48c32e718fdd3fc423f5811b4f6768affe4bc4580356",
+        "usage": {
+          "completion_tokens": 471,
+          "cost": 0.0019996,
+          "prompt_tokens": 3115,
+          "total_tokens": 3586
+        }
+      },
+      "at": 1794663727.7488627
+    },
+    {
+      "seq": 66,
+      "kind": "deterministic_financial_narrative",
+      "role": "writer",
+      "details": {
+        "draft_sha256": "7d9dbe8e9cb0bf42dcfbb5af4b90d0e3cb7ca6a8442cc346f082498978ad20b4",
+        "financial_paragraphs_sha256": "7451af8695802433c7644a4ee778e18f1d7f650c98aaa0d15364f18b5d4c5717",
+        "risk_draft_sha256": "a63878bb6aac46092e597c90cef188cc891bd7d8ac17d5bd2a8b53e01c2530f7"
+      },
+      "at": 1794663727.7579787
+    },
+    {
+      "seq": 67,
+      "kind": "critic_rejected",
+      "role": "critic",
+      "details": {
+        "issue_count": 3,
+        "revision": 0
+      },
+      "at": 1794663727.7616699
+    },
+    {
+      "seq": 68,
+      "kind": "llm_start",
+      "role": "writer",
+      "details": {
+        "company_scope": null,
+        "model": "openai/gpt-4.1-mini",
+        "prompt_sha256": "ffe85bbad3ad9c70e8f98fe5a8f7c3d9f64d54aacb0a3af9b6ac8bf8c792c5ec",
+        "reserved_tokens": 21442,
+        "step": 0
+      },
+      "at": 1794663727.7714393
+    },
+    {
+      "seq": 69,
+      "kind": "llm_end",
+      "role": "writer",
+      "details": {
+        "company_scope": null,
+        "elapsed_seconds": 3.6461,
+        "prompt_sha256": "ffe85bbad3ad9c70e8f98fe5a8f7c3d9f64d54aacb0a3af9b6ac8bf8c792c5ec",
+        "response_sha256": "f8ba129768036dd125991fe56fb29a5c936e56c2ccc77508d4a24cd867c5c49a",
+        "usage": {
+          "completion_tokens": 463,
+          "cost": 0.0022752,
+          "prompt_tokens": 3836,
+          "total_tokens": 4299
+        }
+      },
+      "at": 1794663731.417536
+    },
+    {
+      "seq": 70,
+      "kind": "deterministic_financial_narrative",
+      "role": "writer",
+      "details": {
+        "draft_sha256": "f3defdc3c909f95aa0531104017d99998bced45e5c76c9e10213a78d1c57d2bc",
+        "financial_paragraphs_sha256": "7451af8695802433c7644a4ee778e18f1d7f650c98aaa0d15364f18b5d4c5717",
+        "risk_draft_sha256": "f06ca2a1928f43e6799ca49e1df419c1e5b644c89f417bfaf85191e24b25c7db"
+      },
+      "at": 1794663731.4214387
+    },
+    {
+      "seq": 71,
+      "kind": "critic_rejected",
+      "role": "critic",
+      "details": {
+        "issue_count": 2,
+        "revision": 1
+      },
+      "at": 1794663731.425299
+    },
+    {
+      "seq": 72,
+      "kind": "llm_start",
+      "role": "writer",
+      "details": {
+        "company_scope": null,
+        "model": "openai/gpt-4.1-mini",
+        "prompt_sha256": "455b7d121fdfa8da74fc23ddff43659f55222818a0219b02035c4e98e3c5d265",
+        "reserved_tokens": 20503,
+        "step": 0
+      },
+      "at": 1794663731.4331386
+    },
+    {
+      "seq": 73,
+      "kind": "llm_end",
+      "role": "writer",
+      "details": {
+        "company_scope": null,
+        "elapsed_seconds": 3.8725,
+        "prompt_sha256": "455b7d121fdfa8da74fc23ddff43659f55222818a0219b02035c4e98e3c5d265",
+        "response_sha256": "f8ba129768036dd125991fe56fb29a5c936e56c2ccc77508d4a24cd867c5c49a",
+        "usage": {
+          "completion_tokens": 463,
+          "cost": 0.002186,
+          "prompt_tokens": 3613,
+          "total_tokens": 4076
+        }
+      },
+      "at": 1794663735.3055267
+    },
+    {
+      "seq": 74,
+      "kind": "deterministic_financial_narrative",
+      "role": "writer",
+      "details": {
+        "draft_sha256": "f3defdc3c909f95aa0531104017d99998bced45e5c76c9e10213a78d1c57d2bc",
+        "financial_paragraphs_sha256": "7451af8695802433c7644a4ee778e18f1d7f650c98aaa0d15364f18b5d4c5717",
+        "risk_draft_sha256": "f06ca2a1928f43e6799ca49e1df419c1e5b644c89f417bfaf85191e24b25c7db"
+      },
+      "at": 1794663735.3103557
+    },
+    {
+      "seq": 75,
+      "kind": "critic_rejected",
+      "role": "critic",
+      "details": {
+        "issue_count": 2,
+        "revision": 2
+      },
+      "at": 1794663735.314909
+    }
+  ]
+}

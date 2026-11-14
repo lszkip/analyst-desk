@@ -1,0 +1,180 @@
+{
+  "evidence_type": "controlled_software_fixture_not_live_model_failure",
+  "method": "Executed unchanged existing ResearchProgressTests.test_failed_tool_result_can_be_retried; copied resulting real RunStore journal. Backend and model are scripted test fixtures.",
+  "test_source": "source_reference/test_research_workflow.py",
+  "test_source_sha256": "0a86e3906c24e525b3163892ef2f2c29fe79876399256b5828ecde798be215e8",
+  "run_id": "scope",
+  "existing_test_assertions_passed": true,
+  "new_paid_model_calls": 0,
+  "new_network_calls": 0,
+  "network_attempts": [],
+  "backend_error": {
+    "status": "error",
+    "code": "evidence_unavailable"
+  },
+  "expected_recovery": "Same allowed get_section request can be retried; failed lookup is not marked complete; both attempts count against tool budget.",
+  "journal": {
+    "budget": {
+      "id": "scope",
+      "config_hash": "e2d617ddd216bba59e4a5ba40b8634a221c9db8c36dd65db6c2320aa84ff1b73",
+      "token_limit": 900000,
+      "tool_limit": 240,
+      "reserved_tokens": 31491,
+      "tool_calls": 2
+    },
+    "metrics": {
+      "llm_requests_started": 3,
+      "llm_responses_received": 3,
+      "reported_total_tokens": 420,
+      "reported_cost_usd": "0.0",
+      "cost_complete": true,
+      "critic_rejections": 0,
+      "model_response_cache_hits": 0,
+      "development_budget_extensions": 0,
+      "budget_protocol": "original_fixed_limit"
+    },
+    "events": [
+      {
+        "seq": 1,
+        "kind": "llm_start",
+        "role": "researcher",
+        "details": {
+          "company_scope": "GOOGL",
+          "model": "openai/gpt-4.1-mini",
+          "prompt_sha256": "3391cf9c457f8adf7ab16b1796754d6f19944541971484f34db681568a8f971a",
+          "reserved_tokens": 9945,
+          "step": 0
+        },
+        "at": 1794667892.5800745
+      },
+      {
+        "seq": 2,
+        "kind": "llm_end",
+        "role": "researcher",
+        "details": {
+          "company_scope": "GOOGL",
+          "elapsed_seconds": 0.0004,
+          "prompt_sha256": "3391cf9c457f8adf7ab16b1796754d6f19944541971484f34db681568a8f971a",
+          "response_sha256": "25360fcd0fa66874d6a91501f22ccc9d6dae38569b78f177cbfabc1aac6381d1",
+          "usage": {
+            "completion_tokens": 60,
+            "cost": 0.0,
+            "prompt_tokens": 80,
+            "total_tokens": 140
+          }
+        },
+        "at": 1794667892.5804093
+      },
+      {
+        "seq": 3,
+        "kind": "tool_start",
+        "role": "researcher",
+        "details": {
+          "arguments_sha256": "66eb2afcecf48f26cdb0f89631ba20f0a5b5bb99bbc495db1d07cb26b0c22e82",
+          "service": "edgar",
+          "tool": "get_section"
+        },
+        "at": 1794667892.581491
+      },
+      {
+        "seq": 4,
+        "kind": "tool_end",
+        "role": "researcher",
+        "details": {
+          "elapsed_seconds": 0.0002,
+          "result_sha256": "079e42314422d592fd479af4124b52e007adc5eedd21207b2b3a2aba72b53489",
+          "service": "edgar",
+          "status": "error",
+          "tool": "get_section"
+        },
+        "at": 1794667892.5816936
+      },
+      {
+        "seq": 5,
+        "kind": "llm_start",
+        "role": "researcher",
+        "details": {
+          "company_scope": "GOOGL",
+          "model": "openai/gpt-4.1-mini",
+          "prompt_sha256": "893404dc118b307174bd56ced4e1d52c7b47a71e8f468bc79da8cb6e752c0cc2",
+          "reserved_tokens": 10371,
+          "step": 1
+        },
+        "at": 1794667892.5831368
+      },
+      {
+        "seq": 6,
+        "kind": "llm_end",
+        "role": "researcher",
+        "details": {
+          "company_scope": "GOOGL",
+          "elapsed_seconds": 0.0004,
+          "prompt_sha256": "893404dc118b307174bd56ced4e1d52c7b47a71e8f468bc79da8cb6e752c0cc2",
+          "response_sha256": "25360fcd0fa66874d6a91501f22ccc9d6dae38569b78f177cbfabc1aac6381d1",
+          "usage": {
+            "completion_tokens": 60,
+            "cost": 0.0,
+            "prompt_tokens": 80,
+            "total_tokens": 140
+          }
+        },
+        "at": 1794667892.5834959
+      },
+      {
+        "seq": 7,
+        "kind": "tool_start",
+        "role": "researcher",
+        "details": {
+          "arguments_sha256": "66eb2afcecf48f26cdb0f89631ba20f0a5b5bb99bbc495db1d07cb26b0c22e82",
+          "service": "edgar",
+          "tool": "get_section"
+        },
+        "at": 1794667892.584078
+      },
+      {
+        "seq": 8,
+        "kind": "tool_end",
+        "role": "researcher",
+        "details": {
+          "elapsed_seconds": 0.0002,
+          "result_sha256": "4511ea6b6a1b55ce6cf0b55b392742ff2302174b338de664a9ee749a999bcd23",
+          "service": "edgar",
+          "status": "ok",
+          "tool": "get_section"
+        },
+        "at": 1794667892.5843015
+      },
+      {
+        "seq": 9,
+        "kind": "llm_start",
+        "role": "researcher",
+        "details": {
+          "company_scope": "GOOGL",
+          "model": "openai/gpt-4.1-mini",
+          "prompt_sha256": "200f06dc07ed2cab1906e5129003e016d07902fd9a66382b214592c1f4bf6f93",
+          "reserved_tokens": 11175,
+          "step": 2
+        },
+        "at": 1794667892.5859642
+      },
+      {
+        "seq": 10,
+        "kind": "llm_end",
+        "role": "researcher",
+        "details": {
+          "company_scope": "GOOGL",
+          "elapsed_seconds": 0.0004,
+          "prompt_sha256": "200f06dc07ed2cab1906e5129003e016d07902fd9a66382b214592c1f4bf6f93",
+          "response_sha256": "f2d69cad5be2c7d20d7ca22f7ddc050f417161ffe97aa312325da1519d5dc94d",
+          "usage": {
+            "completion_tokens": 60,
+            "cost": 0.0,
+            "prompt_tokens": 80,
+            "total_tokens": 140
+          }
+        },
+        "at": 1794667892.5862906
+      }
+    ]
+  }
+}

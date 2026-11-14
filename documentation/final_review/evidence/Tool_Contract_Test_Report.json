@@ -1,0 +1,74 @@
+{
+  "evidence_class": "actual_offline_contract_tests_on_synthetic_fixtures",
+  "source_baseline": "S40",
+  "tests_run": 14,
+  "passed": 14,
+  "failed": 0,
+  "errors": 0,
+  "skipped": 0,
+  "elapsed_seconds": 5.664,
+  "tests": [
+    {
+      "test": "test_edgar_mcp.EdgarMCPTests.test_catalogue_has_schemas_and_only_read_tools",
+      "status": "passed"
+    },
+    {
+      "test": "test_edgar_mcp.EdgarMCPTests.test_company_catalogue_describes_coverage_and_metric_definitions",
+      "status": "passed"
+    },
+    {
+      "test": "test_edgar_mcp.EdgarMCPTests.test_filings_are_bounded_sorted_and_cutoff_filtered",
+      "status": "passed"
+    },
+    {
+      "test": "test_edgar_mcp.EdgarMCPTests.test_fact_preserves_all_existing_evidence",
+      "status": "passed"
+    },
+    {
+      "test": "test_filings_kb_mcp.FilingsKBTests.test_every_tool_has_typed_schemas_and_read_only_annotation",
+      "status": "passed"
+    },
+    {
+      "test": "test_filings_kb_mcp.FilingsKBTests.test_plan_is_returned_without_search",
+      "status": "passed"
+    },
+    {
+      "test": "test_filings_kb_mcp.FilingsKBTests.test_search_returns_source_linked_evidence",
+      "status": "passed"
+    },
+    {
+      "test": "test_filings_kb_mcp.FilingsKBTests.test_complete_table_passage_is_preserved",
+      "status": "passed"
+    },
+    {
+      "test": "test_filings_kb_mcp.FilingsKBTests.test_table_pagination_preserves_exact_cells",
+      "status": "passed"
+    },
+    {
+      "test": "test_filings_kb_mcp.FilingsKBTests.test_coverage_reports_actual_pairs",
+      "status": "passed"
+    },
+    {
+      "test": "test_filings_kb_mcp.FilingsKBTests.test_edgar_get_section_returns_paginated_source_references",
+      "status": "passed"
+    },
+    {
+      "test": "test_research_tools_mcp.ResearchToolsMCPTests.test_schemas_annotations_and_no_human_approval_tool",
+      "status": "passed"
+    },
+    {
+      "test": "test_research_tools_mcp.ResearchToolsMCPTests.test_http_prepare_human_review_publish_and_read",
+      "status": "passed"
+    },
+    {
+      "test": "test_research_tools_mcp.ResearchToolsMCPTests.test_sandbox_http_auth_execution_and_policy",
+      "status": "passed"
+    }
+  ],
+  "tool_catalogue_count": 16,
+  "model_calls": 0,
+  "external_network_calls": 0,
+  "loopback_HTTP_tests": true,
+  "publication": "Synthetic fixture publication into a disposable local portal only; no user note or real portal changed.",
+  "credentials": "Synthetic fixture tokens only; no real credentials forwarded."
+}

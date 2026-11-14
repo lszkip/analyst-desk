@@ -1,0 +1,228 @@
+{
+  "authority": {
+    "path": "upload/1. capstone_project(1).pdf",
+    "sha256": "cba8dccafc27664918911c45c526cd14f3d09aea7ae48469efb1ff24ca4e5860",
+    "physical_pages_reviewed": [
+      3,
+      5,
+      6,
+      7,
+      8
+    ],
+    "page3_table_visually_checked": true,
+    "analyst_desk_printed_pages": [
+      15,
+      16
+    ]
+  },
+  "rows": [
+    {
+      "id": "L4-L6",
+      "title": "Retrieval",
+      "third_column_exact_text": "Recall@5 on 30+ labelled queries, measured before and after one change.",
+      "status": "Available: development study",
+      "evidence_markdown": "[Before/after results](evidence/retrieval/Baseline12_vs_Experiment13_Comparison.json); [40-query evaluation](evidence/retrieval/All_Companies_Retrieval_Evaluation.json)",
+      "qualification": "40 AI-reviewed development queries; Recall@5 0.369308 to 0.388981. Labels are not human-adjudicated or held out."
+    },
+    {
+      "id": "L7",
+      "title": "Tools and MCP",
+      "third_column_exact_text": "A tool list with schemas and one test per tool.",
+      "status": "Available: actual schemas and tests",
+      "evidence_markdown": "[16-tool catalog and test map](TOOL_SCHEMAS_AND_TEST_MAP.md); [14 executed contract tests](evidence/Tool_Contract_Test_Report.json)",
+      "qualification": "One explicit test mapping per tool, with shared portal/sandbox methods. Tests use synthetic data; no research-quality inference."
+    },
+    {
+      "id": "L8",
+      "title": "Orchestration",
+      "third_column_exact_text": "A graph diagram and a live demonstration of resume.",
+      "status": "Available: graph and executed interactive controlled resume",
+      "evidence_markdown": "[Own graph](ARCHITECTURE_AND_RESUME_GUIDE.md); [actual live control report](evidence/live_demo/Live_Control_Demo_Report.json)",
+      "qualification": "Actual user-run production checkpoint reopened in a new process with identical checkpoint/plan hash and zero additional scripted responses; operator rejected the restored plan. Scripted content, zero paid calls, no research-quality claim. User reports completing the Research UI recording; the backup video is not yet received."
+    },
+    {
+      "id": "L9",
+      "title": "Memory",
+      "third_column_exact_text": "A one-page memory policy and a memory-on vs memory-off comparison.",
+      "status": "Available: policy and offline comparison",
+      "evidence_markdown": "[One-page policy](MEMORY_POLICY_ONE_PAGE.pdf); [actual S37 comparison](evidence/deployment_memory/S37_Memory_On_Off_Report.json)",
+      "qualification": "Off: 0 notes/131 characters. On: 1 note/18 citations/5,549 characters. Same historical inventory, zero model calls; no live-model quality benefit claim."
+    },
+    {
+      "id": "L10",
+      "title": "Planning",
+      "third_column_exact_text": "A trace showing a replan.",
+      "status": "Available: saved real replan trace",
+      "evidence_markdown": "[Trace and explanation](PLANNING_REPLAN_EVIDENCE.md); [exact events 66\u201369](evidence/planning/Replan_Exact_Events_66_69.txt)",
+      "qualification": "Evidence-limit replan, supervisor call and new plan hash with replans=1. Development recovery with operator involvement, not held-out success."
+    },
+    {
+      "id": "L11",
+      "title": "Multi-agent",
+      "third_column_exact_text": "A comparison of the single agent and the team.",
+      "status": "Available: small development comparison",
+      "evidence_markdown": "[Actual S40 pilot comparison](PILOT40_RESULTS.md); [six run results](evidence/pilot40/Execution_Results_Redacted.json)",
+      "qualification": "C0/C1/C2 each completed the numeric case and blocked the risk case. Same configured task model/tools/budget, one repeat on two development cases; no team-superiority claim or final held-out result. S40 uses a shared model critic across arms; C0 is fixed collection, not a wholly non-agentic pipeline. S42 strict C0/C1 corrections are implemented; actual user installation and source preview passed. Final comparison results remain pending. Later strict S43 six-run DEV sanity: three complete, two blocked, one agent_step_limit; numeric F002 completes all arms, risk F003 unresolved all arms. S44 correction retains all actual failures; no held-out results received."
+    },
+    {
+      "id": "L12",
+      "title": "Improvement",
+      "third_column_exact_text": "Held-out results before and after the playbook; the playbook; and one rejected lesson with the reason for rejecting it.",
+      "status": "Partial: human-reviewed lesson content available",
+      "evidence_markdown": "[Three approved lessons and exact rejected proposal/reason](HUMAN_REVIEW_AND_PLAYBOOK.md); [validated human receipt](evidence/human_review/Actual_Human_Review_Validation.json); [lesson implementation](source_reference/workflow_lessons.py)",
+      "qualification": "Three exact proposals approved and one rejected through personal human attestation. The S44 scope verifies the frozen runtime lesson manifest and e3_status=ready. Held-out before/after application and performance remain unrun. Actual S42 preview ingested the review and reports E3 preparation ready; this is not a measured effect."
+    },
+    {
+      "id": "L13",
+      "title": "Evaluation and monitoring",
+      "third_column_exact_text": "An evaluation report, judge agreement and a dashboard.",
+      "status": "Available evidence with failed judge eligibility",
+      "evidence_markdown": "[Evaluation report](FINAL_EVALUATION_REPORT.md); [dashboard audit](evidence/monitoring/26_Monitoring_Audit.json); [historical judge against actual human labels](evidence/human_review/Historical_Judge_Against_Actual_Human.json)",
+      "qualification": "Human labels received: 24 (12 supported/6 unsupported/6 uncertain). Historical Llama\u2013human kappa \u22120.014925 on 24; binary \u22120.064516 on 18. The brief\u2019s 20+ human-output count is met; the internal minimum of 20 definite pairs is not. Automated grading ineligible. Partial revised S44 judge: kappa 0.303665 on 19 pairs, binary 0.470588 on 15; still ineligible. Dashboard remains the S25 snapshot."
+    },
+    {
+      "id": "L14",
+      "title": "Human control and hooks",
+      "third_column_exact_text": "A live demonstration of an edit invalidating an earlier approval.",
+      "status": "Available: executed interactive edit invalidation",
+      "evidence_markdown": "[Actual live control report](evidence/live_demo/Live_Control_Demo_Report.json); [earlier publication binding](evidence/workflow/Publication_Approval_Binding.json)",
+      "qualification": "Operator approved then edited an isolated portal proposal. The original unexpired capability was rejected against both old and new content hashes; revision 2 stayed pending and published notes remained zero. User reports recording complete, but video has not been received; identity was not externally verified."
+    },
+    {
+      "id": "L15",
+      "title": "Security",
+      "third_column_exact_text": "Attack success with defences off and on, and the rate at which defences block legitimate work.",
+      "status": "Partial: observed failure and narrow controls",
+      "evidence_markdown": "[One-page threat model](THREAT_MODEL_ONE_PAGE.pdf); [source guard](source_reference/workflow_source_safety.py); [actual writer failure review](evidence/security/S31_Writer_AI_Review.json); [actual critic replay](evidence/security/S32_Critic_AI_Review.json); [S33 test report](evidence/security/S33_Security_Check_Report.json)",
+      "qualification": "S31/S32 failure and S33 regression checks are development evidence. Fair model-based defenses-off/on attack-success and clean false-block measurements are a separate pending record; unit counts are not rates. Planned E2 is source-stage only, not a full-system defense toggle."
+    },
+    {
+      "id": "L16",
+      "title": "Deployment",
+      "third_column_exact_text": "Installation on a clean machine and one failed CI run with an explanation.",
+      "status": "Both final-review evidence items observed within stated scopes",
+      "evidence_markdown": "[Fresh hosted-runner installation](ACTUAL_CLEAN_INSTALLATION.md); [hosted controlled negative CI failure](ACTUAL_CONTROLLED_NEGATIVE_CI.md)",
+      "qualification": "Actual fresh GitHub-runner installation passed with synthetic fixtures: 12 containers running, 9 HTTP200 health endpoints, protocol/UI/auth/SSE checks and cleanup passed. No model calls or research workflow. Separate hosted controlled negative CI failure is observed with exit20 and an explicit no-performance-claim explanation; its exact commit is not visible."
+    }
+  ],
+  "rows_count": 11,
+  "evidence_cut_utc": "2026-11-14T13:43:30.951589+00:00",
+  "human_review_claimed": false,
+  "all_requirements_claimed_complete": false,
+  "human_review_update": {
+    "exported_at": "2026-11-14T14:26:35.897Z",
+    "actual_human_labels": 24,
+    "identity_external_verification": false,
+    "judge_eligible": false,
+    "final_matrix_executed": false
+  },
+  "actual_live_control_demo": {
+    "completed_utc": "2026-11-14T14:49:22.547800+00:00",
+    "report_sha256": "ec18e362cae092be8d42c5825aec687907e511f4a23cc1dbca518c096dda52aa",
+    "recording_video_available": false
+  },
+  "later_real_ui_demonstration": {
+    "run_id": "research_20261114_155156",
+    "last_confirmed_status": "awaiting_note",
+    "displayed_numeric_verification": "12/12",
+    "recording_complete_user_reported": true,
+    "video_received": false,
+    "publication_receipt_received": false
+  },
+  "later_actual_S42_preview": {
+    "completed_utc": "2026-11-14T16:39:05.679499+00:00",
+    "evidence": "evidence/sequence42_actual/S42_Actual_Preview_Summary.json",
+    "status": "preview_only",
+    "new_paid_model_calls": 0,
+    "e3_preparation": "ready",
+    "source_json_checked": 30,
+    "mismatches": 0,
+    "exact_year_html": 2,
+    "offline_tests_passed": 540,
+    "source_pins_verified": 162
+  },
+  "later_S43_preparation": {
+    "evidence": "S43_SCHEDULING_PREPARATION.md",
+    "installer_tests_passed": 36,
+    "packaged_smoke_runs": 2,
+    "tests_per_packaged_run": 547,
+    "actual_user_results_received": true,
+    "same_planned_heldout_jobs": 840,
+    "new_paid_model_calls": 0
+  },
+  "actual_S43_development": {
+    "evidence": "S43_ACTUAL_DEVELOPMENT_RESULTS.md",
+    "new_attempts": 24,
+    "unique_development_cases": 20,
+    "completed": 11,
+    "blocked": 11,
+    "errors": 2,
+    "heldout_started": false,
+    "cumulative_calls": 368,
+    "reported_usd": 0.60079594,
+    "reserved_usd": 3.63497986
+  },
+  "S44_preparation": {
+    "evidence": "S44_LOCAL_BUDGET_CORRECTION.md",
+    "focused_checks": 49,
+    "installer_checks": 37,
+    "packaged_checks_each": 555,
+    "packaged_runs": 2,
+    "independent_transition_checks": 18,
+    "all_actual_S43_outcomes_preserved": true,
+    "original_scope_budgets_clock_preserved": true,
+    "human_review_claim": false,
+    "actual_user_results_received": true
+  },
+  "actual_S44_stop": {
+    "evidence": "S44_ACTUAL_CALIBRATION_STOP.md",
+    "19_successful_judge_responses": true,
+    "failed_judge_id": "H20",
+    "actual_cost_unknown_requests": 1,
+    "cumulative_requests": 388,
+    "known_actual_usd_lower_bound": 0.60246756,
+    "reserved_usd": 3.73199355,
+    "heldout_model_calls": 0,
+    "matrix_unrun": 839,
+    "matrix_immediate_accounting_errors": 1,
+    "memory_unrun": 11,
+    "memory_immediate_accounting_errors": 1,
+    "security_unrun": 120,
+    "three_class_kappa": 0.30366492146596846,
+    "paired_responses": 19,
+    "binary_kappa": 0.47058823529411775,
+    "binary_pairs": 15,
+    "semantic_scoring_eligible": false
+  },
+  "verified_playbook_freeze_and_pr": {
+    "evidence": "evidence/sequence44_actual/Playbook_Freeze_And_PR_Status.json",
+    "runtime_playbook_freeze_verified": true,
+    "e3_status": "ready",
+    "lesson_manifest_sha256": "bcd4b0bde83cff9c92254d64dc04b5db1dd49d9f9a1fe9919e0fae3eba44ce9d",
+    "heldout_playbook_performance_observed": false,
+    "pr_merged_closed_screenshot_observed": true,
+    "ci_result_verified": false,
+    "documentation_installation_observed": false
+  },
+  "actual_clean_installation": {
+    "evidence": "ACTUAL_CLEAN_INSTALLATION.md",
+    "status": "passed",
+    "commit_sha": "3b1b96a72ca78dd3cd9296517fbd27fb9e1a6cbd",
+    "run_url": "https://github.com/lszkip/analyst-desk/actions/runs/43624655205",
+    "synthetic_fixtures": true,
+    "llm_calls": 0,
+    "running_containers": 12,
+    "http_200_endpoints": 9,
+    "negative_quality_gate_ci_verified": true
+  },
+  "actual_controlled_negative_ci": {
+    "evidence": "ACTUAL_CONTROLLED_NEGATIVE_CI.md",
+    "job_url": "https://github.com/lszkip/analyst-desk/actions/runs/43625938338/job/132541633135",
+    "exit_code": 20,
+    "performance_claim": false,
+    "actual_numeric_gate": "skipped",
+    "exact_commit_sha_verified": false,
+    "source_image_sha256": "140c1234dd5c4ef30436501ca140ff4433fc939a1aea69134ba8c3af85398e8e",
+    "screenshot_pixels_included": false
+  }
+}

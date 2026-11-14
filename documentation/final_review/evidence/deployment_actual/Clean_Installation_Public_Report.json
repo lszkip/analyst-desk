@@ -1,0 +1,225 @@
+{
+  "schema_version": "clean-install-v1",
+  "status": "passed",
+  "started_utc": "2026-11-14T18:06:21.879930+00:00",
+  "scope": "fresh GitHub-hosted runner; production stack with synthetic source fixtures",
+  "performance_claim": false,
+  "paid_research_started": false,
+  "external_llm_calls_requested": 0,
+  "authorized_publication_requested": false,
+  "commit_sha": "3b1b96a72ca78dd3cd9296517fbd27fb9e1a6cbd",
+  "run_url": "https://github.com/lszkip/analyst-desk/actions/runs/43624655205",
+  "fixture": {
+    "kind": "invented_filings_and_financial_facts",
+    "company_years": 4,
+    "tickers": [
+      "MSFT",
+      "GOOGL"
+    ],
+    "years": [
+      2024,
+      2025
+    ],
+    "corpus_replay_verified": true,
+    "monitoring": "existing_public_saved_snapshot_fixture",
+    "monitoring_fixture_sha256": "c7e9856e997c1d9b6f09329434d3571033467f7bd76343efb99fbddb45f428d5"
+  },
+  "qdrant_bootstrap": {
+    "ready": true,
+    "authenticated_collections_read": true
+  },
+  "containers": {
+    "api": {
+      "state": "running",
+      "health": "healthy"
+    },
+    "edgar": {
+      "state": "running",
+      "health": "healthy"
+    },
+    "exporter": {
+      "state": "running",
+      "health": "healthy"
+    },
+    "filings-kb": {
+      "state": "running",
+      "health": "healthy"
+    },
+    "grafana": {
+      "state": "running",
+      "health": "healthy"
+    },
+    "monitoring-gateway": {
+      "state": "running",
+      "health": "healthy"
+    },
+    "prometheus": {
+      "state": "running",
+      "health": "healthy"
+    },
+    "python-sandbox": {
+      "state": "running",
+      "health": "healthy"
+    },
+    "qdrant": {
+      "state": "running",
+      "health": ""
+    },
+    "research-app": {
+      "state": "running",
+      "health": "healthy"
+    },
+    "research-portal": {
+      "state": "running",
+      "health": "healthy"
+    },
+    "retrieval-gateway": {
+      "state": "running",
+      "health": "healthy"
+    }
+  },
+  "health": {
+    "research_ui": {
+      "healthy": true,
+      "http_status": 200
+    },
+    "api": {
+      "healthy": true,
+      "http_status": 200
+    },
+    "edgar": {
+      "healthy": true,
+      "http_status": 200
+    },
+    "filings_kb": {
+      "healthy": true,
+      "http_status": 200
+    },
+    "python_sandbox": {
+      "healthy": true,
+      "http_status": 200
+    },
+    "research_portal": {
+      "healthy": true,
+      "http_status": 200
+    },
+    "monitoring": {
+      "healthy": true,
+      "http_status": 200
+    },
+    "prometheus": {
+      "healthy": true,
+      "http_status": 200
+    },
+    "grafana": {
+      "healthy": true,
+      "http_status": 200
+    }
+  },
+  "negative_publish_tests": "passed; unapproved and read-only requests rejected",
+  "protocol_checks": {
+    "edgar_fact": "passed",
+    "kb_five_tools_and_readonly_key": "passed",
+    "sandbox_and_unapproved_portal_publish_block": "passed"
+  },
+  "ui": {
+    "page": "passed",
+    "unauthenticated_api": "blocked",
+    "authenticated_api": "passed",
+    "sse_status_and_idle": "passed",
+    "workflow_executed": false,
+    "recorded_workflow_llm_requests": 0,
+    "recorded_workflow_tool_calls": 0
+  },
+  "cleanup": "own_ci_project_and_unique_volumes_removed",
+  "seconds": 126.98,
+  "command_results": [
+    {
+      "sequence": 1,
+      "operation": "Validate Compose configuration",
+      "returncode": 0,
+      "seconds": 0.25,
+      "original_argv_sha256": "0c0555c4c50328350deeba28894bc9f4e46de8d12c84d50fa5e1b775b8510665"
+    },
+    {
+      "sequence": 2,
+      "operation": "Prepare retrieval models",
+      "returncode": 0,
+      "seconds": 4.0,
+      "original_argv_sha256": "6e4b1b2e15c875f24b200daf0ee008a81df733e0d67c1dc04693ee57f5febede"
+    },
+    {
+      "sequence": 3,
+      "operation": "Start Qdrant, EDGAR and retrieval gateway",
+      "returncode": 0,
+      "seconds": 40.53,
+      "original_argv_sha256": "7c5201db07d7aab3e8bafc8e9be6f415092f2d66e14b157de3eaaf608e987e93"
+    },
+    {
+      "sequence": 4,
+      "operation": "Build filing index",
+      "returncode": 0,
+      "seconds": 3.01,
+      "original_argv_sha256": "2848167e7c2ba7fd7a7f0f284a0709e5f0225f907d84f6d0e6571315fe0fb4f9"
+    },
+    {
+      "sequence": 5,
+      "operation": "Verify filing index",
+      "returncode": 0,
+      "seconds": 1.25,
+      "original_argv_sha256": "4113a0e7cb3eb3299cc3f903405c329e768eaa2ad9c54be0101a9387fc6ea261"
+    },
+    {
+      "sequence": 6,
+      "operation": "Build and start complete production stack",
+      "returncode": 0,
+      "seconds": 67.9,
+      "original_argv_sha256": "ef29ffc6849a187b98106d5ad40890653f1fbfeb1d04a610b3bdb0fe11823671"
+    },
+    {
+      "sequence": 7,
+      "operation": "Inspect all container states",
+      "returncode": 0,
+      "seconds": 0.25,
+      "original_argv_sha256": "c522ca97c77e78ee8bd2fb3a55af05a00f5b315d70a769408f3e6a3c4a6689ac"
+    },
+    {
+      "sequence": 8,
+      "operation": "Check EDGAR MCP",
+      "returncode": 0,
+      "seconds": 1.25,
+      "original_argv_sha256": "65a077bd7c6a54466b0e4130481274c4c2d51841fc824cd85edbb9d624c8cc76"
+    },
+    {
+      "sequence": 9,
+      "operation": "Check filing KB MCP",
+      "returncode": 0,
+      "seconds": 2.76,
+      "original_argv_sha256": "26e4440d0d9d0a7795064ed16f71a29ad1a8a32dbe9f8082b7d520470e08592d"
+    },
+    {
+      "sequence": 10,
+      "operation": "Check sandbox and portal tools",
+      "returncode": 0,
+      "seconds": 2.5,
+      "original_argv_sha256": "10cbfb674397fec7ef2d6eb1f551e01199b3609dd6843edf3c30825b425ff7cd"
+    },
+    {
+      "sequence": 11,
+      "operation": "Remove own CI project and unique volumes",
+      "returncode": 0,
+      "seconds": 1.5,
+      "original_argv_sha256": "61ee2d521f9bee84d1e9554f906174a1f05ada214988f48b285d748702a0304e"
+    }
+  ],
+  "provenance": {
+    "archive": "Clean_Installation_43624655205_1.zip",
+    "archive_sha256": "2fc7509534c685ce1429c125c4bf3e6c197303e81cc0a8fe06ddf0aee602670e",
+    "member": "Clean_Install_Report.json",
+    "original_report_sha256": "e5aea4721fe24bca47a07a3833946ecc8ad511121cb0d901d0da76282db88969",
+    "original_report_bytes": 179449,
+    "public_derivative": true,
+    "omitted": "All raw command stdout/stderr/output logs and runner-local command paths; only status/duration summaries and original argv hashes retained.",
+    "original_archive_unchanged": true
+  }
+}

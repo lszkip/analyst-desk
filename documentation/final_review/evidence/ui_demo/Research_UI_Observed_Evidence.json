@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "record_type": "AI_extraction_from_user_supplied_screenshots_and_conversation",
+  "run_id": "research_20261114_155156",
+  "scenario": "Previously used F002 development question: Microsoft and Alphabet FY2024-FY2025 operating margins",
+  "last_screenshot_confirmed_status": "awaiting_note",
+  "original_plan_error": "The model swapped Microsoft and Alphabet fiscal year ends.",
+  "correction": "The operator saved an AI-assisted correction: Microsoft June 30, Alphabet December 31. The saved edit still awaited separate plan approval.",
+  "automatic_error_detection_claimed": false,
+  "independent_human_error_discovery_claimed": false,
+  "displayed_metrics_at_note_review": {
+    "model_requests": 10,
+    "provider_tokens": 27965,
+    "reported_cost_usd": "0.01458",
+    "reserved_tokens": 151554,
+    "token_limit": 900000
+  },
+  "financial_rows": [
+    {
+      "ticker": "GOOGL",
+      "fiscal_year": 2024,
+      "period_start": "2024-01-01",
+      "period_end": "2024-12-31",
+      "revenue_usd": 350018000000,
+      "operating_income_usd": 112390000000,
+      "operating_margin_percent": "32.11"
+    },
+    {
+      "ticker": "GOOGL",
+      "fiscal_year": 2025,
+      "period_start": "2025-01-01",
+      "period_end": "2025-12-31",
+      "revenue_usd": 402836000000,
+      "operating_income_usd": 129039000000,
+      "operating_margin_percent": "32.03"
+    },
+    {
+      "ticker": "MSFT",
+      "fiscal_year": 2024,
+      "period_start": "2023-07-01",
+      "period_end": "2024-06-30",
+      "revenue_usd": 245122000000,
+      "operating_income_usd": 109433000000,
+      "operating_margin_percent": "44.64"
+    },
+    {
+      "ticker": "MSFT",
+      "fiscal_year": 2025,
+      "period_start": "2024-07-01",
+      "period_end": "2025-06-30",
+      "revenue_usd": 281724000000,
+      "operating_income_usd": 128528000000,
+      "operating_margin_percent": "45.62"
+    }
+  ],
+  "displayed_verification": {
+    "rendered_financial_figures": 12,
+    "verified_financial_figures": 12,
+    "verified_share": 1,
+    "missing_company_years": [],
+    "metric_scope": "Code-rendered financial table values; qualitative support is a separate critic check."
+  },
+  "matches_frozen_F002_numeric_targets": true,
+  "publication_receipt_received": false,
+  "publication_status": "not_confirmed_by_received_evidence",
+  "user_reported_recording_complete": true,
+  "backup_video_received_and_inspected": false,
+  "ui_runtime_source_version_verified": false,
+  "evaluation_budget_ledger": "Separate UI journal/token limits; these costs are not in the completion evaluation ledger.",
+  "limitations": [
+    "Real assisted development demonstration, not a held-out or autonomous-success result.",
+    "Screenshots do not replace the raw run journal or publication receipt.",
+    "Recording completion is user-reported; the media file has not been received.",
+    "The displayed numeric share does not grade all narrative assertions."
+  ],
+  "screenshots": [
+    {
+      "uploaded_name": "image(20261114-155638).png",
+      "sha256": "ab0ae37d0a6e1ea63065e4df8eabf93170922c3cefb21f4f91c7937b5faac8c6",
+      "included_in_submission": false
+    },
+    {
+      "uploaded_name": "image(20261114-160424).png",
+      "sha256": "39b8e90fdf38adb8e4d941201a0ccd4760e8bd37f5abfdb0022e64ce3d1f2d43",
+      "included_in_submission": false
+    },
+    {
+      "uploaded_name": "image(20261114-160914).png",
+      "sha256": "73e17601430a7755d251498f1a1e631e86a1d764429f37852d75173c9efc59e6",
+      "included_in_submission": false
+    },
+    {
+      "uploaded_name": "image(20261114-162227).png",
+      "sha256": "bae5fe54588caf7fe4270af4cdf07dfe8c4a1265b2bee274971c902218700cae",
+      "included_in_submission": false
+    },
+    {
+      "uploaded_name": "image(20261114-162052).png",
+      "sha256": "08d52be048ffc212977dddbb7a21e4ec529506c69983d197ee49717bc5fc95b1",
+      "included_in_submission": false
+    }
+  ]
+}

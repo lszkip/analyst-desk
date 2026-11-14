@@ -1,0 +1,17 @@
+{
+  "schema_version": "final-quality-gate-v1",
+  "performance_claim": false,
+  "gate_passed": false,
+  "thresholds": null,
+  "scope": "Saved numeric outcome gate, not risk-semantic completion or independent audit of provider execution",
+  "failures": [
+    {
+      "code": "negative_control",
+      "message": "CONTROLLED NEGATIVE CI CHECK: deliberately failed; no experiment performance was assessed"
+    }
+  ],
+  "observations": {},
+  "status": "controlled_negative_failure",
+  "exit_code": 20,
+  "negative_control": true
+}

@@ -1,0 +1,22 @@
+{
+  "evidence_type": "bounded_public_provenance_summary",
+  "scope_archive": "44_Analyst_Desk_Local_Budget_Continuation_Results_20261114T173041Z_59d285da.zip",
+  "scope_archive_sha256": "279067191fe6322da98f6b9634ecfbcdd24887c87b8c480b8312bb91584901d2",
+  "scope_member": "Operator/completion/Completion_Scope.json",
+  "scope_member_sha256": "99ac18764b368a79a43448a8b3b67de299bbcf99db6ac8099c6031d7ad366ae5",
+  "approved_scope_sha256": "49267c92182e0a88aa92523297c7acc4b16fd565e35f9e05a5eca174b8923c8a",
+  "e3_status": "ready",
+  "frozen_lesson_manifest_sha256": "bcd4b0bde83cff9c92254d64dc04b5db1dd49d9f9a1fe9919e0fae3eba44ce9d",
+  "runtime_playbook_freeze_verified": true,
+  "heldout_playbook_application_observed": false,
+  "heldout_before_after_performance_observed": false,
+  "pr_status": {
+    "source": "Latest user-supplied screenshot in conversation, inspected by lead agent",
+    "branch": "feature/final-evaluation-evidence",
+    "merged_and_closed_observed": true,
+    "exact_merge_commit_not_verified": true,
+    "ci_check_result_verified": false,
+    "browser_screenshot_included": false
+  },
+  "documentation_installation_observed": false
+}

@@ -1,0 +1,33 @@
+{
+  "evidence_class": "observed_user_screenshot_text_and_provenance",
+  "job_url": "https://github.com/lszkip/analyst-desk/actions/runs/43625938338/job/132541633135",
+  "source_image_filename": "image(20261114-182257).png",
+  "source_image_sha256": "140c1234dd5c4ef30436501ca140ff4433fc939a1aea69134ba8c3af85398e8e",
+  "source_pixels_included": false,
+  "job_name": "Offline verifier and saved-evidence coverage",
+  "job_failed_observed": true,
+  "failed_step": "Deliberately fail controlled negative CI check",
+  "command": "python -m evaluation.final.quality_gate --negative-control --report Evaluation_Gate_Report.json",
+  "observed_report": {
+    "schema_version": "final-quality-gate-v1",
+    "performance_claim": false,
+    "gate_passed": false,
+    "thresholds": null,
+    "failures": [
+      {
+        "code": "negative_control",
+        "message": "CONTROLLED NEGATIVE CI CHECK: deliberately failed; no experiment performance was assessed"
+      }
+    ],
+    "status": "controlled_negative_failure",
+    "exit_code": 20,
+    "negative_control": true
+  },
+  "verifier_unit_step": "passed",
+  "saved_evidence_availability_step": "passed",
+  "actual_numeric_gate": "skipped",
+  "preserve_summary_and_logs_step": "passed",
+  "exact_commit_sha": null,
+  "commit_limitation": "The screenshot does not expose this job commit; no claim that it is the clean-install commit.",
+  "interpretation": "Actual hosted failed CI demonstration with explicit controlled-failure explanation; not a measured numeric quality regression or successful quality evaluation."
+}

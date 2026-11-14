@@ -1,0 +1,19 @@
+test_catalogue_has_schemas_and_only_read_tools (test_edgar_mcp.EdgarMCPTests.test_catalogue_has_schemas_and_only_read_tools) ... ok
+test_company_catalogue_describes_coverage_and_metric_definitions (test_edgar_mcp.EdgarMCPTests.test_company_catalogue_describes_coverage_and_metric_definitions) ... ok
+test_filings_are_bounded_sorted_and_cutoff_filtered (test_edgar_mcp.EdgarMCPTests.test_filings_are_bounded_sorted_and_cutoff_filtered) ... ok
+test_fact_preserves_all_existing_evidence (test_edgar_mcp.EdgarMCPTests.test_fact_preserves_all_existing_evidence) ... ok
+test_every_tool_has_typed_schemas_and_read_only_annotation (test_filings_kb_mcp.FilingsKBTests.test_every_tool_has_typed_schemas_and_read_only_annotation) ... ok
+test_plan_is_returned_without_search (test_filings_kb_mcp.FilingsKBTests.test_plan_is_returned_without_search) ... ok
+test_search_returns_source_linked_evidence (test_filings_kb_mcp.FilingsKBTests.test_search_returns_source_linked_evidence) ... ok
+test_complete_table_passage_is_preserved (test_filings_kb_mcp.FilingsKBTests.test_complete_table_passage_is_preserved) ... ok
+test_table_pagination_preserves_exact_cells (test_filings_kb_mcp.FilingsKBTests.test_table_pagination_preserves_exact_cells) ... ok
+test_coverage_reports_actual_pairs (test_filings_kb_mcp.FilingsKBTests.test_coverage_reports_actual_pairs) ... ok
+test_edgar_get_section_returns_paginated_source_references (test_filings_kb_mcp.FilingsKBTests.test_edgar_get_section_returns_paginated_source_references) ... ok
+test_schemas_annotations_and_no_human_approval_tool (test_research_tools_mcp.ResearchToolsMCPTests.test_schemas_annotations_and_no_human_approval_tool) ... ok
+test_http_prepare_human_review_publish_and_read (test_research_tools_mcp.ResearchToolsMCPTests.test_http_prepare_human_review_publish_and_read) ... ok
+test_sandbox_http_auth_execution_and_policy (test_research_tools_mcp.ResearchToolsMCPTests.test_sandbox_http_auth_execution_and_policy) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 4.605s
+
+OK

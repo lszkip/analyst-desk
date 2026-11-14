@@ -1,0 +1,43 @@
+{
+  "evidence_class": "explicit_privacy_redacted_derivatives",
+  "original_records_unchanged": true,
+  "records": [
+    {
+      "original_destination": "evidence/workflow/Publication_Receipt.json",
+      "original_source": {
+        "archive": "upload/25_Google_Meta_Publication_Results.zip",
+        "archive_sha256": "c63483b042119262a9bebc845b1afb66b521f5f9de3147d24e961d39bb05a719",
+        "member": "S22_Google_Meta_FY2024_FY2025/Publication_Receipt.json",
+        "destination": "evidence/workflow/Publication_Receipt.json",
+        "sha256": "4c0c301bcf4fac95238d3aa50edfd6eac172839fe32d3e354e86a6eab20e61c1",
+        "bytes": 363
+      },
+      "redacted_destination": "evidence/workflow/Publication_Receipt_Redacted.json",
+      "redacted_sha256": "740b1ea3b594e59cb4b13394f63adefb4a685c7a855ad3557f94523706a257e8",
+      "redacted_field_path": [
+        "reviewer"
+      ],
+      "rule": "Only the reviewer-name value is replaced. This is not the original byte-exact receipt; original archive/member/content hashes remain available and original files are unchanged."
+    },
+    {
+      "original_destination": "evidence/workflow/25_Publication_Summary.json",
+      "original_source": {
+        "archive": "upload/25_Google_Meta_Publication_Results.zip",
+        "archive_sha256": "c63483b042119262a9bebc845b1afb66b521f5f9de3147d24e961d39bb05a719",
+        "member": "25_Publication_Summary.json",
+        "destination": "evidence/workflow/25_Publication_Summary.json",
+        "sha256": "493905a8016ab86f127871f977233ff272066e4c10a133f88cf52004f2fbc365",
+        "bytes": 12066
+      },
+      "redacted_destination": "evidence/workflow/25_Publication_Summary_Redacted.json",
+      "redacted_sha256": "d8d95bdecefd0e0b93e03a69ad2ac2660234786e60bd83c81f8763510ebc4606",
+      "redacted_field_path": [
+        "cases",
+        0,
+        "operator_approval",
+        "reviewer"
+      ],
+      "rule": "Only the reviewer-name value is replaced. This is not the original byte-exact receipt; original archive/member/content hashes remain available and original files are unchanged."
+    }
+  ]
+}

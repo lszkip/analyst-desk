@@ -1,0 +1,1016 @@
+{
+  "sequence": 26,
+  "launcher_revision": 2,
+  "started_utc": "2026-11-14T04:29:13.242878+00:00",
+  "outcome": "monitoring_and_synthetic_alert_verified",
+  "new_model_calls": 0,
+  "research_or_publication_performed": false,
+  "prior_run_databases_opened": false,
+  "telemetry_scope": "One immutable uploaded S25 saved-run snapshot; not live monitoring of all workflows.",
+  "mode": "monitor_and_probe",
+  "prior_evidence": {
+    "preserved_utc": "2026-11-14T04:29:13.268315+00:00",
+    "files": [
+      {
+        "original_path": "results/26_Monitoring_Audit.json",
+        "preserved_path": "history/Invocation_1794630553262355047_fae4034f/26_Monitoring_Audit.json",
+        "bytes": 44871,
+        "sha256": "529612d386edb49ae07e95328e45dd142d0c1718ba34f3926f3585fd2fab4174"
+      },
+      {
+        "original_path": "26_Google_Meta_Monitoring_Results.zip",
+        "preserved_path": "history/Invocation_1794630553262355047_fae4034f/26_Google_Meta_Monitoring_Results.zip",
+        "bytes": 19597,
+        "sha256": "811e016ef4718637bd0740661836cfd98a2d5d2f7f36acb3dab33629bfeb7026"
+      }
+    ],
+    "history_directory": "history/Invocation_1794630553262355047_fae4034f",
+    "manifest_sha256": "9542f654c5ce32cf654518858cea1186f83d711a72d930647937de79c0b55a5e",
+    "preservation_required": true
+  },
+  "source_before": {
+    "matches": true,
+    "actual_sha256": {
+      "research_workflow.py": "76adba6e2d29414a73ac27ceab8bb66d7fa68ab532413d22fbba3a64a86fd435",
+      "workflow_agents.py": "25657494a264e5d27fa679d38257fe06d945c1a9fc20d389105228f262baac3c",
+      "workflow_contracts.py": "de3f7fda9d277f3ab94abc5d6fedbbdd112c5d21afaf6db2c619d9b816c50fae",
+      "workflow_render.py": "788592ec2052d42ff1c53fc3a54145f668da3def6fdc9b78b287800dc3b832c6",
+      "workflow_store.py": "465366ad2d3975c5b0c6f6319415f882e8585eab9278a30b23a307e4906a29ce",
+      "workflow_support.py": "af216558fd2daacf79f5cb6e65cb247e33c2545745000dd4faf6dbaec3fcfa39",
+      "workflow_tools.py": "341553354b88863fdf126973e8a08a9ff3148c28ad60244fae6d25cbaf7a7437",
+      "workflow_config.json": "6df563cef657730e870334dfa4c5acab98f990fd82d5ffe7f9e1522ac25c50fe",
+      "run_research_workflow.py": "7fa3bc8351a95ab8b2344a9902a5d6b02d05b20a9f5e3e5dd0387e00d07f94f7",
+      "check_research_workflow.py": "e32694a8fb8d236f0265e0036006aad2f57c276bf0d2fe7e0b88bc613ed02130",
+      "company_registry.py": "f204309c9d8fac1e1d7368a364f3feebe9752ebab8f12ffa56a714e5f2c9afd1",
+      "companies.json": "e2511c1a11ec0fa531a5779e4f395c27b01513c381a4b3d0cea9b8fb82ccd453",
+      "research_portal.py": "e2c5e6b9d1c15b91eceab364fc935f526ab92522f25976cf7bf446b3b475b9a3",
+      "research_tools_client.py": "3b0a650ec074f5a6c7e73dc06dc408e9e21c4b830037e18d0c3b34c1d02b64f7",
+      "review_portal_note.py": "4737884f6db5f88561c852c1354f9f744db92b0903792fb32f88315c8973f895",
+      "tool_security.py": "cf5b0ad04603018e9583edb07b2807c07a04e101703858d7cc4b10c9737bb67a",
+      "financial_contracts.py": "0710c7c5d973e35b5f8685b612fc6869f2b55d4b76c73a7598b3fc1caadf8c30",
+      "financial_data.py": "a435973731d7eb6dcc5c34a79f5786e72306ce8a85dcf5005737161ea326b746",
+      "financial_metrics.py": "1a6b1928541fb33a8276a0c29506e9e9c781036e41e3441da02615ef4435b273",
+      "sec_periods.py": "68e6b6648e76e90907284b06a4492e7b8d54045207803431887367c4ab751283",
+      "sec_fiscal_years.py": "9f71567256b34eae0e17c00fb563f75eb20d2079a1a67d4d99b4a6406e134f7b",
+      "filing_retrieval.py": "ef6c53f0b05c194a70bf8952ecb2a4c92791913476cf444e7ed43caa7abff959",
+      "retrieval_config.json": "544008638849d72eff77543a0cbaaa3a0b82027700231a8334d8ab12493017c6",
+      "retrieval_models.py": "29eb1fa15052fe42fd1ba3aa34252435fbd98023b7f760ebd95a17488f1ef610",
+      "retrieval_data.py": "6e3b3271b806bfb7bf85bbf78cae886b192ccb5cb554ac1f62570ee1dfdd21b8",
+      "filing_index.py": "cc81b7a598d93e7c23a3e054dd9a7e3a38c8e0d581ff3f26a4c9045435584557",
+      "filings_kb_mcp.py": "2075cfda6be9e5b1b092b214b32bef05ef272699db12d788636ac8fd9710f86e",
+      "requirements-workflow.txt": "9986be6b8461ea353695f0e709729e1924420503de7922e412d1d74e35571519",
+      "test_research_workflow.py": "f064620452e7b443e9c984c13c0939f6d6164f378eb3f7ab54af3500e679ded9",
+      "workflow_financial_narrative.py": "a88bbea019026928950fb727c08a34511c226705e510bb1e76cfb52becd10c61",
+      "test_workflow_financial_narrative.py": "f4d8fad452004fb1fc504fdc913a44d89586521054ee71b632d9ef94b6e7f36a",
+      "Dockerfile": "c6cb8e1aa9fd98022493364129913cbffc44fc1941bff0a92e482728cc296bb5",
+      ".dockerignore": "36818143230b17b0f463022e179c94b85c17b0ea1d6a3c0b4f2a62000d0bad72",
+      ".github/workflows/tests.yml": "4447de1e6205921ca85edc5e164494e6511437c7179f980766843486ff2843c3",
+      "test_workflow_clients.py": "bbca98ad171a6cda46088239d4541f14c48d07b8a862e196a69dcbaafec32aa6",
+      "test_workflow_research_prefetch.py": "5c95ed2fecd6359cb7953350a68e81e9472f95d23d58973b7cd41f4a04d058ce",
+      "workflow_critic_protocol.py": "58f20f3a753d3e60d53d7b13f2fc8c950263afe87bacb8f35a69b33f60b2270a",
+      "test_workflow_critic_protocol.py": "5e1cfc48fd02a6b0781f4091d116eb8a6f58007f3bb8c503560b0508dff23fe5",
+      "test_research_portal.py": "c5d631bbbd65187229844fccf3709cdd3095ecd0cae2d8059f39df9c2e12d47a",
+      "research_portal_mcp.py": "b0d4c76afaac39e4142fa25e054f60c31b88bef5764e4764a731cfa0f18edc93"
+    },
+    "failures": []
+  },
+  "installation": {
+    "ok": true,
+    "new_files": [],
+    "expected_file_count": 16,
+    "production_files_changed": false
+  },
+  "initial_probe": {
+    "enabled": false,
+    "verified": 0,
+    "total": 0,
+    "expires_at": null,
+    "present": true,
+    "expired": false
+  },
+  "local_credential": {
+    "generated": false,
+    "included_in_results": false
+  },
+  "commands": [
+    {
+      "argv": [
+        "/home/ls/projects/analyst-desk/.venv-retrieval/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "monitoring/tests",
+        "-v"
+      ],
+      "started_utc": "2026-11-14T04:29:13.299897+00:00",
+      "exit_code": 0,
+      "seconds": 0.257,
+      "ended_utc": "2026-11-14T04:29:13.556755+00:00",
+      "output_sha256": "e5c411eb97718a88f3d94838c188fd6a185465d19f78ab84587d54136095d838",
+      "output_bytes": 2162,
+      "safe_summary": [
+        "Ran 15 tests in 0.143s",
+        "OK (skipped=2)"
+      ],
+      "tests_run": 15,
+      "tests_skipped": 2
+    },
+    {
+      "argv": [
+        "docker",
+        "context",
+        "inspect",
+        "--format",
+        "{{.Endpoints.docker.Host}}"
+      ],
+      "started_utc": "2026-11-14T04:29:13.562519+00:00",
+      "exit_code": 0,
+      "seconds": 0.254,
+      "ended_utc": "2026-11-14T04:29:13.816246+00:00",
+      "output_sha256": "90fd61af222a5cb6b9722773acfbb263a1012cf715ccc33a10b900f415c44d2b",
+      "output_bytes": 28,
+      "safe_summary": []
+    },
+    {
+      "argv": [
+        "docker",
+        "ps",
+        "-a",
+        "--filter",
+        "label=com.docker.compose.project=analyst-desk-monitoring",
+        "--format",
+        "{{.ID}}"
+      ],
+      "started_utc": "2026-11-14T04:29:13.822207+00:00",
+      "exit_code": 0,
+      "seconds": 0.253,
+      "ended_utc": "2026-11-14T04:29:14.075408+00:00",
+      "output_sha256": "eb49ff64c9559ba45b11746d6ae6fc1d012c277c9e76c0d3241f7730fb2d0778",
+      "output_bytes": 52,
+      "safe_summary": []
+    },
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "--format",
+        "{{index .Config.Labels \"com.docker.compose.project\"}}|{{index .Config.Labels \"com.docker.compose.service\"}}|{{index .Config.Labels \"com.docker.compose.project.working_dir\"}}|{{index .Config.Labels \"com.docker.compose.project.config_files\"}}|{{.Image}}|{{.State.Status}}|{{.Config.Image}}|{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}",
+        "8cebb731dddc"
+      ],
+      "started_utc": "2026-11-14T04:29:14.080863+00:00",
+      "exit_code": 0,
+      "seconds": 0.254,
+      "ended_utc": "2026-11-14T04:29:14.334445+00:00",
+      "output_sha256": "503e2aa5036ca7abf39e4c2d0fe6c62f4778cff5c0626701701ad0da22144760",
+      "output_bytes": 320,
+      "safe_summary": []
+    },
+    {
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "--format",
+        "{{.Id}}|{{json .RepoDigests}}",
+        "sha256:583b7f2fce1cdb8da5ad5c39ebd3c33b98b87d493190e548bdee1fa8c619c311"
+      ],
+      "started_utc": "2026-11-14T04:29:14.340834+00:00",
+      "exit_code": 0,
+      "seconds": 0.253,
+      "ended_utc": "2026-11-14T04:29:14.594057+00:00",
+      "output_sha256": "63ac722390f05043e5b1efd9241d3bc15ea783ab94868a314316cc461bc7c090",
+      "output_bytes": 154,
+      "safe_summary": []
+    },
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "--format",
+        "{{index .Config.Labels \"com.docker.compose.project\"}}|{{index .Config.Labels \"com.docker.compose.service\"}}|{{index .Config.Labels \"com.docker.compose.project.working_dir\"}}|{{index .Config.Labels \"com.docker.compose.project.config_files\"}}|{{.Image}}|{{.State.Status}}|{{.Config.Image}}|{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}",
+        "63e340f69cd9"
+      ],
+      "started_utc": "2026-11-14T04:29:14.600101+00:00",
+      "exit_code": 0,
+      "seconds": 0.253,
+      "ended_utc": "2026-11-14T04:29:14.853556+00:00",
+      "output_sha256": "4bc866360d9b655b8da207e24ae2898d3064c3e6f4639f0f56c0713082b8df76",
+      "output_bytes": 240,
+      "safe_summary": []
+    },
+    {
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "--format",
+        "{{.Id}}|{{json .RepoDigests}}",
+        "sha256:0615ec4fbd4072004b7d86b46ded63013a74b7d6eb1119273dd89e8fa25c13cf"
+      ],
+      "started_utc": "2026-11-14T04:29:14.859803+00:00",
+      "exit_code": 0,
+      "seconds": 0.253,
+      "ended_utc": "2026-11-14T04:29:15.113261+00:00",
+      "output_sha256": "5572e44ead007a4cbe14899c4d0b2555ed8ba97f4bd895abcc97c58f9b9dfc19",
+      "output_bytes": 164,
+      "safe_summary": []
+    },
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "--format",
+        "{{index .Config.Labels \"com.docker.compose.project\"}}|{{index .Config.Labels \"com.docker.compose.service\"}}|{{index .Config.Labels \"com.docker.compose.project.working_dir\"}}|{{index .Config.Labels \"com.docker.compose.project.config_files\"}}|{{.Image}}|{{.State.Status}}|{{.Config.Image}}|{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}",
+        "75b500a2305f"
+      ],
+      "started_utc": "2026-11-14T04:29:15.119341+00:00",
+      "exit_code": 0,
+      "seconds": 0.253,
+      "ended_utc": "2026-11-14T04:29:15.372595+00:00",
+      "output_sha256": "1e65056f47aa9b5a0481e8a347b6eb7116b9abee223ce31d0530616ffa11de7e",
+      "output_bytes": 244,
+      "safe_summary": []
+    },
+    {
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "--format",
+        "{{.Id}}|{{json .RepoDigests}}",
+        "sha256:aafa9d694e6a883c02db516d9f6e5b84e14195f49a2a6456a4cca815edda72b9"
+      ],
+      "started_utc": "2026-11-14T04:29:15.379011+00:00",
+      "exit_code": 0,
+      "seconds": 0.253,
+      "ended_utc": "2026-11-14T04:29:15.632500+00:00",
+      "output_sha256": "3636ce57aeed78d74799abd6824e1074e58071c13f2d509a84196e5ff97c91b7",
+      "output_bytes": 164,
+      "safe_summary": []
+    },
+    {
+      "argv": [
+        "docker",
+        "inspect",
+        "--format",
+        "{{index .Config.Labels \"com.docker.compose.project\"}}|{{index .Config.Labels \"com.docker.compose.service\"}}|{{index .Config.Labels \"com.docker.compose.project.working_dir\"}}|{{index .Config.Labels \"com.docker.compose.project.config_files\"}}|{{.Image}}|{{.State.Status}}|{{.Config.Image}}|{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}",
+        "74db6fc44bb5"
+      ],
+      "started_utc": "2026-11-14T04:29:15.638326+00:00",
+      "exit_code": 0,
+      "seconds": 0.253,
+      "ended_utc": "2026-11-14T04:29:15.891713+00:00",
+      "output_sha256": "5aa74e8b0b8d2bf9b159317115a694877d1511faf0d9894dab0e35dd083e734e",
+      "output_bytes": 257,
+      "safe_summary": []
+    },
+    {
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "--format",
+        "{{.Id}}|{{json .RepoDigests}}",
+        "sha256:a341be44229b327c4c005f3457cd8b0aac62997b851a79ec9d95893df07e23b9"
+      ],
+      "started_utc": "2026-11-14T04:29:15.897447+00:00",
+      "exit_code": 0,
+      "seconds": 0.254,
+      "ended_utc": "2026-11-14T04:29:16.151809+00:00",
+      "output_sha256": "3d299f3f779f2595839682e411eea321c8786bd8263226e48a70eb514c08236c",
+      "output_bytes": 181,
+      "safe_summary": []
+    },
+    {
+      "argv": [
+        "docker",
+        "compose",
+        "--env-file",
+        "/dev/null",
+        "-f",
+        "monitoring/compose.yaml",
+        "--project-directory",
+        "monitoring",
+        "-p",
+        "analyst-desk-monitoring",
+        "run",
+        "--rm",
+        "--no-deps",
+        "--entrypoint",
+        "/bin/promtool",
+        "prometheus",
+        "check",
+        "config",
+        "/etc/prometheus/prometheus.yml"
+      ],
+      "started_utc": "2026-11-14T04:29:16.160208+00:00",
+      "exit_code": 0,
+      "seconds": 0.763,
+      "ended_utc": "2026-11-14T04:29:16.922991+00:00",
+      "output_sha256": "c3d6c601dd3aa2d1996788a66508e1ec03f193374cf8004d1ed4602967fbb30a",
+      "output_bytes": 358,
+      "safe_summary": [
+        "SUCCESS: 1 rule files found",
+        "SUCCESS: /etc/prometheus/prometheus.yml is valid prometheus config file syntax",
+        "SUCCESS: 2 rules found"
+      ]
+    },
+    {
+      "argv": [
+        "docker",
+        "compose",
+        "--env-file",
+        "/dev/null",
+        "-f",
+        "monitoring/compose.yaml",
+        "--project-directory",
+        "monitoring",
+        "-p",
+        "analyst-desk-monitoring",
+        "run",
+        "--rm",
+        "--no-deps",
+        "--entrypoint",
+        "/bin/promtool",
+        "prometheus",
+        "check",
+        "rules",
+        "/etc/prometheus/alerts.yml"
+      ],
+      "started_utc": "2026-11-14T04:29:16.929009+00:00",
+      "exit_code": 0,
+      "seconds": 0.765,
+      "ended_utc": "2026-11-14T04:29:17.693828+00:00",
+      "output_sha256": "bf783424fb43dfb49bef53a4995b8452c23a90470166ce87d3d88d6e7f0c0d11",
+      "output_bytes": 207,
+      "safe_summary": [
+        "SUCCESS: 2 rules found"
+      ]
+    },
+    {
+      "argv": [
+        "docker",
+        "compose",
+        "--env-file",
+        "/dev/null",
+        "-f",
+        "monitoring/compose.yaml",
+        "--project-directory",
+        "monitoring",
+        "-p",
+        "analyst-desk-monitoring",
+        "run",
+        "--rm",
+        "--no-deps",
+        "--entrypoint",
+        "/bin/promtool",
+        "prometheus",
+        "test",
+        "rules",
+        "/etc/prometheus/alert_tests.yml"
+      ],
+      "started_utc": "2026-11-14T04:29:17.700233+00:00",
+      "exit_code": 0,
+      "seconds": 0.767,
+      "ended_utc": "2026-11-14T04:29:18.467520+00:00",
+      "output_sha256": "634e86f369495308ab5437cdf02f8ccb740852cbbca740fa84e1cd651a111cad",
+      "output_bytes": 156,
+      "safe_summary": [
+        "SUCCESS"
+      ]
+    },
+    {
+      "argv": [
+        "docker",
+        "exec",
+        "63e340f69cd9",
+        "/usr/share/grafana/bin/grafana",
+        "--version"
+      ],
+      "started_utc": "2026-11-14T04:29:18.472968+00:00",
+      "exit_code": 0,
+      "seconds": 0.253,
+      "ended_utc": "2026-11-14T04:29:18.726308+00:00",
+      "output_sha256": "b7c4b8f3af1fe9d79ecd636a503dc81ed14a01811f980d3d0552c024820dfa41",
+      "output_bytes": 23,
+      "safe_summary": []
+    }
+  ],
+  "docker_endpoint": {
+    "local_verified": true,
+    "transport": "unix",
+    "selection": "current_context"
+  },
+  "containers_before": [
+    {
+      "service": "monitoring-gateway",
+      "container_id": "8cebb731dddc",
+      "image_id": "sha256:583b7f2fce1cdb8da5ad5c39ebd3c33b98b87d493190e548bdee1fa8c619c311",
+      "repo_digests": [
+        "nginx@sha256:583b7f2fce1cdb8da5ad5c39ebd3c33b98b87d493190e548bdee1fa8c619c311"
+      ],
+      "config_image": "nginx:stable-alpine@sha256:583b7f2fce1cdb8da5ad5c39ebd3c33b98b87d493190e548bdee1fa8c619c311",
+      "config_image_sha256": "a0c45c45bba7bb2c4f197b322f8d015233380d19462d14ca8be54f009feaf459",
+      "image_matches_contract": true,
+      "health": "healthy",
+      "state": "running",
+      "observed_utc": "2026-11-14T04:29:14.597636+00:00"
+    },
+    {
+      "service": "grafana",
+      "container_id": "63e340f69cd9",
+      "image_id": "sha256:0615ec4fbd4072004b7d86b46ded63013a74b7d6eb1119273dd89e8fa25c13cf",
+      "repo_digests": [
+        "grafana/grafana@sha256:0615ec4fbd4072004b7d86b46ded63013a74b7d6eb1119273dd89e8fa25c13cf"
+      ],
+      "config_image": "grafana/grafana:13.3.1",
+      "config_image_sha256": "1b2c98fe4ac4ff7efb44508084d1e7a4dbb9af3ea84d6f37fba5b528b7028dac",
+      "image_matches_contract": true,
+      "health": "healthy",
+      "state": "running",
+      "observed_utc": "2026-11-14T04:29:15.116465+00:00"
+    },
+    {
+      "service": "prometheus",
+      "container_id": "75b500a2305f",
+      "image_id": "sha256:aafa9d694e6a883c02db516d9f6e5b84e14195f49a2a6456a4cca815edda72b9",
+      "repo_digests": [
+        "prom/prometheus@sha256:aafa9d694e6a883c02db516d9f6e5b84e14195f49a2a6456a4cca815edda72b9"
+      ],
+      "config_image": "prom/prometheus:v3.13.5",
+      "config_image_sha256": "14edba0f583df28a63166b4bd82e3d174907f6f16381fa3d57e25a113bb94cc0",
+      "image_matches_contract": true,
+      "health": "healthy",
+      "state": "running",
+      "observed_utc": "2026-11-14T04:29:15.635917+00:00"
+    },
+    {
+      "service": "exporter",
+      "container_id": "74db6fc44bb5",
+      "image_id": "sha256:a341be44229b327c4c005f3457cd8b0aac62997b851a79ec9d95893df07e23b9",
+      "repo_digests": [
+        "analyst-desk-monitoring-exporter@sha256:a341be44229b327c4c005f3457cd8b0aac62997b851a79ec9d95893df07e23b9"
+      ],
+      "config_image": "analyst-desk-monitoring-exporter:local",
+      "config_image_sha256": "b5e461f7621b3006bf8059fbce38ef229285582b2dd49892862b6c601d079471",
+      "image_matches_contract": true,
+      "health": "healthy",
+      "state": "running",
+      "observed_utc": "2026-11-14T04:29:16.154566+00:00"
+    }
+  ],
+  "stack_action": "reused_owned_exact_images_running_and_healthy",
+  "containers_after": [
+    {
+      "service": "monitoring-gateway",
+      "container_id": "8cebb731dddc",
+      "image_id": "sha256:583b7f2fce1cdb8da5ad5c39ebd3c33b98b87d493190e548bdee1fa8c619c311",
+      "repo_digests": [
+        "nginx@sha256:583b7f2fce1cdb8da5ad5c39ebd3c33b98b87d493190e548bdee1fa8c619c311"
+      ],
+      "config_image": "nginx:stable-alpine@sha256:583b7f2fce1cdb8da5ad5c39ebd3c33b98b87d493190e548bdee1fa8c619c311",
+      "config_image_sha256": "a0c45c45bba7bb2c4f197b322f8d015233380d19462d14ca8be54f009feaf459",
+      "image_matches_contract": true,
+      "health": "healthy",
+      "state": "running",
+      "observed_utc": "2026-11-14T04:29:14.597636+00:00"
+    },
+    {
+      "service": "grafana",
+      "container_id": "63e340f69cd9",
+      "image_id": "sha256:0615ec4fbd4072004b7d86b46ded63013a74b7d6eb1119273dd89e8fa25c13cf",
+      "repo_digests": [
+        "grafana/grafana@sha256:0615ec4fbd4072004b7d86b46ded63013a74b7d6eb1119273dd89e8fa25c13cf"
+      ],
+      "config_image": "grafana/grafana:13.3.1",
+      "config_image_sha256": "1b2c98fe4ac4ff7efb44508084d1e7a4dbb9af3ea84d6f37fba5b528b7028dac",
+      "image_matches_contract": true,
+      "health": "healthy",
+      "state": "running",
+      "observed_utc": "2026-11-14T04:29:15.116465+00:00"
+    },
+    {
+      "service": "prometheus",
+      "container_id": "75b500a2305f",
+      "image_id": "sha256:aafa9d694e6a883c02db516d9f6e5b84e14195f49a2a6456a4cca815edda72b9",
+      "repo_digests": [
+        "prom/prometheus@sha256:aafa9d694e6a883c02db516d9f6e5b84e14195f49a2a6456a4cca815edda72b9"
+      ],
+      "config_image": "prom/prometheus:v3.13.5",
+      "config_image_sha256": "14edba0f583df28a63166b4bd82e3d174907f6f16381fa3d57e25a113bb94cc0",
+      "image_matches_contract": true,
+      "health": "healthy",
+      "state": "running",
+      "observed_utc": "2026-11-14T04:29:15.635917+00:00"
+    },
+    {
+      "service": "exporter",
+      "container_id": "74db6fc44bb5",
+      "image_id": "sha256:a341be44229b327c4c005f3457cd8b0aac62997b851a79ec9d95893df07e23b9",
+      "repo_digests": [
+        "analyst-desk-monitoring-exporter@sha256:a341be44229b327c4c005f3457cd8b0aac62997b851a79ec9d95893df07e23b9"
+      ],
+      "config_image": "analyst-desk-monitoring-exporter:local",
+      "config_image_sha256": "b5e461f7621b3006bf8059fbce38ef229285582b2dd49892862b6c601d079471",
+      "image_matches_contract": true,
+      "health": "healthy",
+      "state": "running",
+      "observed_utc": "2026-11-14T04:29:16.154566+00:00"
+    }
+  ],
+  "grafana_binary_version": {
+    "expected": "13.3.1",
+    "observed": "13.3.1",
+    "matches": true,
+    "container_id": "63e340f69cd9",
+    "image_id": "sha256:0615ec4fbd4072004b7d86b46ded63013a74b7d6eb1119273dd89e8fa25c13cf",
+    "checked_utc": "2026-11-14T04:29:18.729945+00:00",
+    "method": "read-only invocation of /usr/share/grafana/bin/grafana --version in the validated owned container"
+  },
+  "readiness_attempts": [
+    {
+      "observed_utc": "2026-11-14T04:29:18.732258+00:00",
+      "endpoints": [
+        {
+          "endpoint": "exporter_health",
+          "port": 8085,
+          "path": "/health",
+          "observed_utc": "2026-11-14T04:29:18.734566+00:00",
+          "passed": true,
+          "http_status": 200,
+          "fields": {
+            "status_ok": true,
+            "dataset_matches": true,
+            "telemetry_kind_matches": true,
+            "probe_active": false
+          },
+          "category": "ready",
+          "seconds": 0.008
+        },
+        {
+          "endpoint": "gateway_health",
+          "port": 8085,
+          "path": "/__monitoring_health",
+          "observed_utc": "2026-11-14T04:29:18.745546+00:00",
+          "passed": true,
+          "http_status": 200,
+          "fields": {
+            "status_ok": true,
+            "service_matches": true
+          },
+          "category": "ready",
+          "seconds": 0.003
+        },
+        {
+          "endpoint": "grafana_health",
+          "port": 3000,
+          "path": "/api/health",
+          "observed_utc": "2026-11-14T04:29:18.751827+00:00",
+          "passed": true,
+          "http_status": 200,
+          "fields": {
+            "database_ok": true,
+            "version_present": false,
+            "expected_version": "13.3.1",
+            "version_hidden_as_configured": true,
+            "visible_version_matches": null
+          },
+          "category": "ready",
+          "seconds": 0.006
+        },
+        {
+          "endpoint": "prometheus_build",
+          "port": 9090,
+          "path": "/api/v1/status/buildinfo",
+          "observed_utc": "2026-11-14T04:29:18.760826+00:00",
+          "passed": true,
+          "http_status": 200,
+          "fields": {
+            "status_success": true,
+            "expected_version": "3.13.5",
+            "version_matches": true,
+            "observed_version": "3.13.5"
+          },
+          "category": "ready",
+          "seconds": 0.004
+        },
+        {
+          "endpoint": "prometheus_ready",
+          "port": 9090,
+          "path": "/-/ready",
+          "observed_utc": "2026-11-14T04:29:18.769207+00:00",
+          "passed": true,
+          "http_status": 200,
+          "fields": {
+            "http_ready": true
+          },
+          "category": "ready",
+          "seconds": 0.004
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "readiness_attempt_count": 1,
+  "observations": [
+    {
+      "check": "local monitoring services",
+      "observed_utc": "2026-11-14T04:29:18.775802+00:00",
+      "seconds": 0.046
+    },
+    {
+      "check": "saved metrics and Grafana query",
+      "observed_utc": "2026-11-14T04:29:18.872919+00:00",
+      "seconds": 0.097
+    },
+    {
+      "check": "synthetic 97% alert firing",
+      "observed_utc": "2026-11-14T04:29:34.994423+00:00",
+      "seconds": 16.114
+    },
+    {
+      "check": "synthetic 100% alert clearing",
+      "observed_utc": "2026-11-14T04:29:45.074667+00:00",
+      "seconds": 10.071
+    }
+  ],
+  "readout_stage": "complete",
+  "readout_stages": [
+    {
+      "stage": "snapshot",
+      "started_utc": "2026-11-14T04:29:18.784444+00:00"
+    },
+    {
+      "stage": "exporter_metrics",
+      "started_utc": "2026-11-14T04:29:18.800979+00:00"
+    },
+    {
+      "stage": "prometheus_metrics",
+      "started_utc": "2026-11-14T04:29:18.812177+00:00"
+    },
+    {
+      "stage": "grafana_dashboard",
+      "started_utc": "2026-11-14T04:29:18.820253+00:00"
+    },
+    {
+      "stage": "grafana_datasource_health",
+      "started_utc": "2026-11-14T04:29:18.837164+00:00"
+    },
+    {
+      "stage": "grafana_query",
+      "started_utc": "2026-11-14T04:29:18.848484+00:00"
+    },
+    {
+      "stage": "events",
+      "started_utc": "2026-11-14T04:29:18.863226+00:00"
+    }
+  ],
+  "exporter_snapshot_matches": true,
+  "exporter_snapshot_sha256": "351bc29a330d8c42aa0f442c0e4eb900e7f1fa7d4d0ccc0d78fcbed20237d6c0",
+  "static_metric_samples_verified": 64,
+  "prometheus_saved_samples": [
+    {
+      "metric": "analyst_desk_snapshot_valid{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 1.0
+    },
+    {
+      "metric": "analyst_desk_snapshot_timestamp_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 1794625607.0495436
+    },
+    {
+      "metric": "analyst_desk_llm_requests{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 31.0
+    },
+    {
+      "metric": "analyst_desk_llm_responses{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 31.0
+    },
+    {
+      "metric": "analyst_desk_reported_tokens{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 133710.0
+    },
+    {
+      "metric": "analyst_desk_reserved_tokens{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 638420.0
+    },
+    {
+      "metric": "analyst_desk_token_limit{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 900000.0
+    },
+    {
+      "metric": "analyst_desk_tool_limit{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 240.0
+    },
+    {
+      "metric": "analyst_desk_critic_rejections{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 0.0
+    },
+    {
+      "metric": "analyst_desk_model_response_cache_hits{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 0.0
+    },
+    {
+      "metric": "analyst_desk_financial_figures{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 12.0
+    },
+    {
+      "metric": "analyst_desk_verified_financial_figures{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 12.0
+    },
+    {
+      "metric": "analyst_desk_published_notes{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 1.0
+    },
+    {
+      "metric": "analyst_desk_cost_complete{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 1.0
+    },
+    {
+      "metric": "analyst_desk_unpaired_llm_requests{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 0.0
+    },
+    {
+      "metric": "analyst_desk_unpaired_tool_requests{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 0.0
+    },
+    {
+      "metric": "analyst_desk_reported_cost_usd{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 0.0634176
+    },
+    {
+      "metric": "analyst_desk_verified_financial_share{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 1.0
+    },
+    {
+      "metric": "analyst_desk_metric_available{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",metric=\"edgar_cache_hits\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 0.0
+    },
+    {
+      "metric": "analyst_desk_event_errors{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",kind=\"llm_error\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 0.0
+    },
+    {
+      "metric": "analyst_desk_event_errors{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",kind=\"tool_error\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 0.0
+    },
+    {
+      "metric": "analyst_desk_event_errors{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",kind=\"agent_response_limit\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 1.0
+    },
+    {
+      "metric": "analyst_desk_event_errors{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",kind=\"agent_step_limit\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 0.0
+    },
+    {
+      "metric": "analyst_desk_events{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",kind=\"agent_correction\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 9.0
+    },
+    {
+      "metric": "analyst_desk_events{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",kind=\"agent_response_limit\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 1.0
+    },
+    {
+      "metric": "analyst_desk_events{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",kind=\"deterministic_financial_narrative\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 1.0
+    },
+    {
+      "metric": "analyst_desk_events{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",kind=\"diagnostic_continuation_fork\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 1.0
+    },
+    {
+      "metric": "analyst_desk_events{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",kind=\"diagnostic_note_edit\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 1.0
+    },
+    {
+      "metric": "analyst_desk_events{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",kind=\"llm_end\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 31.0
+    },
+    {
+      "metric": "analyst_desk_events{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",kind=\"llm_start\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 31.0
+    },
+    {
+      "metric": "analyst_desk_events{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",kind=\"plan_created\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 2.0
+    },
+    {
+      "metric": "analyst_desk_events{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",kind=\"replan\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 1.0
+    },
+    {
+      "metric": "analyst_desk_events{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",kind=\"research_section_prefetch\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 8.0
+    },
+    {
+      "metric": "analyst_desk_events{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",kind=\"tool_end\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 83.0
+    },
+    {
+      "metric": "analyst_desk_events{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",kind=\"tool_start\",telemetry_kind=\"saved_snapshot\"}",
+      "value": 83.0
+    },
+    {
+      "metric": "analyst_desk_tool_calls{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"edgar\",status=\"ok\",telemetry_kind=\"saved_snapshot\",tool=\"get_annual_financial_fact\"}",
+      "value": 40.0
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"edgar\",stat=\"median\",telemetry_kind=\"saved_snapshot\",tool=\"get_annual_financial_fact\"}",
+      "value": 0.06215
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"edgar\",stat=\"p95\",telemetry_kind=\"saved_snapshot\",tool=\"get_annual_financial_fact\"}",
+      "value": 0.1073
+    },
+    {
+      "metric": "analyst_desk_tool_calls{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"edgar\",status=\"ok\",telemetry_kind=\"saved_snapshot\",tool=\"get_section\"}",
+      "value": 9.0
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"edgar\",stat=\"median\",telemetry_kind=\"saved_snapshot\",tool=\"get_section\"}",
+      "value": 0.0891
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"edgar\",stat=\"p95\",telemetry_kind=\"saved_snapshot\",tool=\"get_section\"}",
+      "value": 0.1365
+    },
+    {
+      "metric": "analyst_desk_tool_calls{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"kb\",status=\"ok\",telemetry_kind=\"saved_snapshot\",tool=\"get_passage\"}",
+      "value": 26.0
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"kb\",stat=\"median\",telemetry_kind=\"saved_snapshot\",tool=\"get_passage\"}",
+      "value": 0.03165
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"kb\",stat=\"p95\",telemetry_kind=\"saved_snapshot\",tool=\"get_passage\"}",
+      "value": 0.042
+    },
+    {
+      "metric": "analyst_desk_tool_calls{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"portal\",status=\"ok\",telemetry_kind=\"saved_snapshot\",tool=\"get_proposal\"}",
+      "value": 1.0
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"portal\",stat=\"median\",telemetry_kind=\"saved_snapshot\",tool=\"get_proposal\"}",
+      "value": 0.0471
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"portal\",stat=\"p95\",telemetry_kind=\"saved_snapshot\",tool=\"get_proposal\"}",
+      "value": 0.0471
+    },
+    {
+      "metric": "analyst_desk_tool_calls{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"portal\",status=\"ok\",telemetry_kind=\"saved_snapshot\",tool=\"prepare_note\"}",
+      "value": 2.0
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"portal\",stat=\"median\",telemetry_kind=\"saved_snapshot\",tool=\"prepare_note\"}",
+      "value": 0.1454
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"portal\",stat=\"p95\",telemetry_kind=\"saved_snapshot\",tool=\"prepare_note\"}",
+      "value": 0.2493
+    },
+    {
+      "metric": "analyst_desk_tool_calls{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"portal\",status=\"ok\",telemetry_kind=\"saved_snapshot\",tool=\"publish_note\"}",
+      "value": 1.0
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"portal\",stat=\"median\",telemetry_kind=\"saved_snapshot\",tool=\"publish_note\"}",
+      "value": 0.0842
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"portal\",stat=\"p95\",telemetry_kind=\"saved_snapshot\",tool=\"publish_note\"}",
+      "value": 0.0842
+    },
+    {
+      "metric": "analyst_desk_tool_calls{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"sandbox\",status=\"ok\",telemetry_kind=\"saved_snapshot\",tool=\"execute_python\"}",
+      "value": 4.0
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"sandbox\",stat=\"median\",telemetry_kind=\"saved_snapshot\",tool=\"execute_python\"}",
+      "value": 0.55935
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"sandbox\",stat=\"p95\",telemetry_kind=\"saved_snapshot\",tool=\"execute_python\"}",
+      "value": 0.7189
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"edgar\",stat=\"median\",telemetry_kind=\"saved_snapshot\",tool=\"__all__\"}",
+      "value": 0.0655
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"edgar\",stat=\"p95\",telemetry_kind=\"saved_snapshot\",tool=\"__all__\"}",
+      "value": 0.1365
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"kb\",stat=\"median\",telemetry_kind=\"saved_snapshot\",tool=\"__all__\"}",
+      "value": 0.03165
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"kb\",stat=\"p95\",telemetry_kind=\"saved_snapshot\",tool=\"__all__\"}",
+      "value": 0.042
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"portal\",stat=\"median\",telemetry_kind=\"saved_snapshot\",tool=\"__all__\"}",
+      "value": 0.06565
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"portal\",stat=\"p95\",telemetry_kind=\"saved_snapshot\",tool=\"__all__\"}",
+      "value": 0.2493
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"sandbox\",stat=\"median\",telemetry_kind=\"saved_snapshot\",tool=\"__all__\"}",
+      "value": 0.55935
+    },
+    {
+      "metric": "analyst_desk_tool_latency_seconds{dataset=\"google_meta_sequence25\",evidence_class=\"assisted_development\",service=\"sandbox\",stat=\"p95\",telemetry_kind=\"saved_snapshot\",tool=\"__all__\"}",
+      "value": 0.7189
+    }
+  ],
+  "grafana": {
+    "dashboard_uid": "analyst-desk-saved-runs",
+    "datasource_uid": "analyst-desk-prometheus",
+    "dashboard_provisioned": true,
+    "datasource_healthy": true,
+    "query_expected_value": 133710.0,
+    "query_verified": true
+  },
+  "event_endpoint_sha256": "2d1cf4cce2c22ff636d7bbc9d9506b04143fda43f678efecec6e4b15b1fbeb0e",
+  "readouts_verified": true,
+  "synthetic_probe": {
+    "started_utc": "2026-11-14T04:29:18.873020+00:00",
+    "real_dataset_modified": false,
+    "completed": true,
+    "fired": {
+      "dataset": "synthetic_alert_probe",
+      "firing": true,
+      "matching_alert_count": 1,
+      "observed_utc": "2026-11-14T04:29:34.994410+00:00"
+    },
+    "cleared": {
+      "dataset": "synthetic_alert_probe",
+      "firing": false,
+      "matching_alert_count": 0,
+      "observed_utc": "2026-11-14T04:29:45.074654+00:00"
+    },
+    "disabled_in_finally": true,
+    "finished_utc": "2026-11-14T04:29:45.076170+00:00"
+  },
+  "final_probe": {
+    "enabled": false,
+    "verified": 0,
+    "total": 0,
+    "expires_at": null,
+    "present": true,
+    "expired": false
+  },
+  "source_after": {
+    "matches": true,
+    "actual_sha256": {
+      "research_workflow.py": "76adba6e2d29414a73ac27ceab8bb66d7fa68ab532413d22fbba3a64a86fd435",
+      "workflow_agents.py": "25657494a264e5d27fa679d38257fe06d945c1a9fc20d389105228f262baac3c",
+      "workflow_contracts.py": "de3f7fda9d277f3ab94abc5d6fedbbdd112c5d21afaf6db2c619d9b816c50fae",
+      "workflow_render.py": "788592ec2052d42ff1c53fc3a54145f668da3def6fdc9b78b287800dc3b832c6",
+      "workflow_store.py": "465366ad2d3975c5b0c6f6319415f882e8585eab9278a30b23a307e4906a29ce",
+      "workflow_support.py": "af216558fd2daacf79f5cb6e65cb247e33c2545745000dd4faf6dbaec3fcfa39",
+      "workflow_tools.py": "341553354b88863fdf126973e8a08a9ff3148c28ad60244fae6d25cbaf7a7437",
+      "workflow_config.json": "6df563cef657730e870334dfa4c5acab98f990fd82d5ffe7f9e1522ac25c50fe",
+      "run_research_workflow.py": "7fa3bc8351a95ab8b2344a9902a5d6b02d05b20a9f5e3e5dd0387e00d07f94f7",
+      "check_research_workflow.py": "e32694a8fb8d236f0265e0036006aad2f57c276bf0d2fe7e0b88bc613ed02130",
+      "company_registry.py": "f204309c9d8fac1e1d7368a364f3feebe9752ebab8f12ffa56a714e5f2c9afd1",
+      "companies.json": "e2511c1a11ec0fa531a5779e4f395c27b01513c381a4b3d0cea9b8fb82ccd453",
+      "research_portal.py": "e2c5e6b9d1c15b91eceab364fc935f526ab92522f25976cf7bf446b3b475b9a3",
+      "research_tools_client.py": "3b0a650ec074f5a6c7e73dc06dc408e9e21c4b830037e18d0c3b34c1d02b64f7",
+      "review_portal_note.py": "4737884f6db5f88561c852c1354f9f744db92b0903792fb32f88315c8973f895",
+      "tool_security.py": "cf5b0ad04603018e9583edb07b2807c07a04e101703858d7cc4b10c9737bb67a",
+      "financial_contracts.py": "0710c7c5d973e35b5f8685b612fc6869f2b55d4b76c73a7598b3fc1caadf8c30",
+      "financial_data.py": "a435973731d7eb6dcc5c34a79f5786e72306ce8a85dcf5005737161ea326b746",
+      "financial_metrics.py": "1a6b1928541fb33a8276a0c29506e9e9c781036e41e3441da02615ef4435b273",
+      "sec_periods.py": "68e6b6648e76e90907284b06a4492e7b8d54045207803431887367c4ab751283",
+      "sec_fiscal_years.py": "9f71567256b34eae0e17c00fb563f75eb20d2079a1a67d4d99b4a6406e134f7b",
+      "filing_retrieval.py": "ef6c53f0b05c194a70bf8952ecb2a4c92791913476cf444e7ed43caa7abff959",
+      "retrieval_config.json": "544008638849d72eff77543a0cbaaa3a0b82027700231a8334d8ab12493017c6",
+      "retrieval_models.py": "29eb1fa15052fe42fd1ba3aa34252435fbd98023b7f760ebd95a17488f1ef610",
+      "retrieval_data.py": "6e3b3271b806bfb7bf85bbf78cae886b192ccb5cb554ac1f62570ee1dfdd21b8",
+      "filing_index.py": "cc81b7a598d93e7c23a3e054dd9a7e3a38c8e0d581ff3f26a4c9045435584557",
+      "filings_kb_mcp.py": "2075cfda6be9e5b1b092b214b32bef05ef272699db12d788636ac8fd9710f86e",
+      "requirements-workflow.txt": "9986be6b8461ea353695f0e709729e1924420503de7922e412d1d74e35571519",
+      "test_research_workflow.py": "f064620452e7b443e9c984c13c0939f6d6164f378eb3f7ab54af3500e679ded9",
+      "workflow_financial_narrative.py": "a88bbea019026928950fb727c08a34511c226705e510bb1e76cfb52becd10c61",
+      "test_workflow_financial_narrative.py": "f4d8fad452004fb1fc504fdc913a44d89586521054ee71b632d9ef94b6e7f36a",
+      "Dockerfile": "c6cb8e1aa9fd98022493364129913cbffc44fc1941bff0a92e482728cc296bb5",
+      ".dockerignore": "36818143230b17b0f463022e179c94b85c17b0ea1d6a3c0b4f2a62000d0bad72",
+      ".github/workflows/tests.yml": "4447de1e6205921ca85edc5e164494e6511437c7179f980766843486ff2843c3",
+      "test_workflow_clients.py": "bbca98ad171a6cda46088239d4541f14c48d07b8a862e196a69dcbaafec32aa6",
+      "test_workflow_research_prefetch.py": "5c95ed2fecd6359cb7953350a68e81e9472f95d23d58973b7cd41f4a04d058ce",
+      "workflow_critic_protocol.py": "58f20f3a753d3e60d53d7b13f2fc8c950263afe87bacb8f35a69b33f60b2270a",
+      "test_workflow_critic_protocol.py": "5e1cfc48fd02a6b0781f4091d116eb8a6f58007f3bb8c503560b0508dff23fe5",
+      "test_research_portal.py": "c5d631bbbd65187229844fccf3709cdd3095ecd0cae2d8059f39df9c2e12d47a",
+      "research_portal_mcp.py": "b0d4c76afaac39e4142fa25e054f60c31b88bef5764e4764a731cfa0f18edc93"
+    },
+    "failures": []
+  },
+  "monitoring_after": [],
+  "snapshot_after_sha256": "c7e9856e997c1d9b6f09329434d3571033467f7bd76343efb99fbddb45f428d5",
+  "finished_utc": "2026-11-14T04:29:45.081141+00:00"
+}

@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "scope": "Read-only classifier check against temporary SQLite reconstruction of actual uploaded S43 F020 journal; original user database unavailable and untouched.",
+  "original_zip_sha256": "0bb92afee402ee19bad8c769f9a97f87e7183cad73b2bf28636dc0e31e0a0b36",
+  "actual_f020_journal_reconstruction_classifies": true,
+  "classifier_preserved_fixture_database_bytes": true,
+  "changed_config_and_missing_run_rejected": true,
+  "known_other_active_inflight_allowed": true,
+  "orphaned_inflight_and_poison_rejected": true,
+  "actual_proof": {
+    "classification": "verified_case_local_budget_exhaustion",
+    "execution_id": "COMPLETION_DEV_COVERAGE_C2_F020_r1",
+    "frozen_config_sha256": "2ff0c23fbf774b38e4cc49e454589f8573fe9dcab5c07c30d02de873d9f2f566",
+    "original_budget": {
+      "id": "COMPLETION_DEV_COVERAGE_C2_F020_r1",
+      "config_hash": "2ff0c23fbf774b38e4cc49e454589f8573fe9dcab5c07c30d02de873d9f2f566",
+      "token_limit": 650000,
+      "tool_limit": 240,
+      "reserved_tokens": 642190,
+      "tool_calls": 43
+    },
+    "fully_costed_model_calls": 24,
+    "failed_outcome_retained": true,
+    "retry_permitted": false,
+    "limit_extension_permitted": false,
+    "proof_sha256": "7075c7eff006618876869400c15c563a698a8d8d65e66c0a6d1dbb303fc2b90d"
+  },
+  "paid_calls": 0
+}

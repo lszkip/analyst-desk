@@ -1,0 +1,25 @@
+{
+  "evidence_class": "actual_catalogue_discovery_and_synthetic_contract_execution",
+  "source_baseline": "S40",
+  "source_files": {
+    "edgar_mcp.py": "23f1ddd87c0cc1f8ea900ee6a4ca5173938e839c5d87acdeedc82df617107e7e",
+    "filings_kb_mcp.py": "2075cfda6be9e5b1b092b214b32bef05ef272699db12d788636ac8fd9710f86e",
+    "python_sandbox_mcp.py": "24f461d086208ff3c35bc22fde0f31bef9e5d1a3ed5049ffd8b4abc6b015d2ac",
+    "research_portal_mcp.py": "b0d4c76afaac39e4142fa25e054f60c31b88bef5764e4764a731cfa0f18edc93",
+    "test_edgar_mcp.py": "11f1c5c519af0d1799af16f8308767c370b638e5e07e1b9105a9871a64e79947",
+    "test_filings_kb_mcp.py": "01b70ad8f8baba113a26b7ee2b5e94a281d5d25d82cb398bf9cd50671ce2d6c1",
+    "test_research_tools_mcp.py": "e5d2296d2f82378c38b19ecbeed755205906cc24f501d74050478ed37ef6149d"
+  },
+  "generated_artifacts": {
+    "evidence/Tool_Schemas_Actual_Source.json": "104f49963ef1f4183206a5663bd4e98690f022357fb280e283f78193282e286d",
+    "evidence/Tool_Contract_Test_Report.json": "b801e98a553f3b29a157599a3d90739a4ec6109398804bb9ca2ee7436ca40a6e",
+    "evidence/Tool_Contract_Test_Execution.log": "d18234522638be74397dfe096afe5bf57bc58c46b4f5ba8a7a3591ba01bd498e",
+    "evidence/Tool_Test_Map.json": "cf2083880140b0eb9c0f78805fc0b44172bd9d7e5a636c015f429951b846f134",
+    "build/collect_tool_evidence.py": "77676912928d4b33cff13887f8d1d86fd32d616fde51fcc96a984a54394a5220"
+  },
+  "tools": 16,
+  "test_methods": 14,
+  "new_model_calls": 0,
+  "external_network_calls": 0,
+  "loopback_http": true
+}

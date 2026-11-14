@@ -1,0 +1,64 @@
+{
+  "schema_version": "independent-clean-install-audit-v1",
+  "status": "passed",
+  "source_zip": "Clean_Installation_43624655205_1.zip",
+  "source_zip_sha256": "2fc7509534c685ce1429c125c4bf3e6c197303e81cc0a8fe06ddf0aee602670e",
+  "report_sha256": "e5aea4721fe24bca47a07a3833946ecc8ad511121cb0d901d0da76282db88969",
+  "commit_sha": "3b1b96a72ca78dd3cd9296517fbd27fb9e1a6cbd",
+  "run_url": "https://github.com/lszkip/analyst-desk/actions/runs/43624655205",
+  "started_utc": "2026-11-14T18:06:21.879930+00:00",
+  "launcher_seconds": 126.98,
+  "checks": {
+    "report_passed": true,
+    "expected_commit": true,
+    "expected_run_url": true,
+    "eleven_commands_rc0": true,
+    "twelve_containers_running": true,
+    "eleven_healthchecks_healthy": true,
+    "nine_host_endpoints_200": true,
+    "qdrant_authenticated_ready": true,
+    "protocol_checks_passed": true,
+    "ui_positive_and_negative_checks": true,
+    "isolated_cleanup_complete": true,
+    "no_paid_research_or_approved_publication": true,
+    "performance_claim_false": true
+  },
+  "scope": "fresh GitHub-hosted runner; production stack with synthetic source fixtures",
+  "fixtures": {
+    "kind": "invented_filings_and_financial_facts",
+    "company_years": 4,
+    "tickers": [
+      "MSFT",
+      "GOOGL"
+    ],
+    "years": [
+      2024,
+      2025
+    ],
+    "corpus_replay_verified": true,
+    "monitoring": "existing_public_saved_snapshot_fixture",
+    "monitoring_fixture_sha256": "c7e9856e997c1d9b6f09329434d3571033467f7bd76343efb99fbddb45f428d5"
+  },
+  "protocol_checks": {
+    "edgar_fact": "passed",
+    "kb_five_tools_and_readonly_key": "passed",
+    "sandbox_and_unapproved_portal_publish_block": "passed"
+  },
+  "privacy_pattern_scan_counts": {
+    "recognizable_provider_or_git_token": 0,
+    "generated_invalid_model_key": 0,
+    "bearer_credential": 0
+  },
+  "l16_clean_machine_installation_evidence": "met within fresh GitHub-hosted runner with Docker prerequisites and synthetic fixture mode",
+  "still_pending": [
+    "actual controlled failed-CI run"
+  ],
+  "limitations": [
+    "This artifact verifies installation and service protocols, not held-out agent quality.",
+    "Synthetic invented source data cover two companies and two years, not real SEC ingestion.",
+    "UI SSE check used an unexecuted idle saved fixture; no paid workflow ran.",
+    "Monitoring uses a pre-existing public saved snapshot, not metrics from new research.",
+    "Recorded launcher duration excludes earlier GitHub dependency/setup phases.",
+    "Privacy scan checks common token patterns; it is not proof against every possible secret format."
+  ]
+}
