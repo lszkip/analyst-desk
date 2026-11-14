@@ -94,7 +94,7 @@ COPY download_company_facts.py check_financial_coverage.py \
     research_portal.py research_portal_mcp.py research_tools_client.py \
     setup_research_tools.py check_research_tools.py review_portal_note.py \
     test_python_sandbox.py test_research_portal.py test_research_tools_mcp.py test_research_tools_setup.py ./
-COPY workflow_financial_narrative.py workflow_critic_protocol.py test_workflow_critic_protocol.py test_workflow_financial_narrative.py test_workflow_research_prefetch.py workflow_contracts.py workflow_store.py workflow_tools.py workflow_agents.py workflow_render.py workflow_support.py workflow_source_safety.py research_workflow.py run_research_workflow.py check_research_workflow.py workflow_config.json workflow_demo_request.json test_research_workflow.py test_workflow_clients.py ./
+COPY workflow_financial_narrative.py workflow_critic_protocol.py test_workflow_critic_protocol.py test_workflow_financial_narrative.py test_workflow_research_prefetch.py workflow_contracts.py workflow_store.py workflow_tools.py workflow_agents.py workflow_render.py workflow_support.py workflow_source_safety.py workflow_memory.py workflow_lessons.py research_workflow.py run_research_workflow.py check_research_workflow.py workflow_config.json workflow_demo_request.json test_research_workflow.py test_workflow_clients.py ./
 HEALTHCHECK NONE
 CMD ["python", "-m", "unittest", "-v", "test_api.py", "test_financial_data.py", "test_edgar_mcp.py", "test_api_mcp.py", "test_filing_corpus.py", "test_filing_passages.py", "test_filing_supplements.py", "test_filing_retrieval.py", "test_retrieval_evaluation_metrics.py", "test_retrieval_rerank_fusion.py", "test_live_retrieval_parity.py", "test_filings_kb_mcp.py", "test_python_sandbox.py", "test_research_portal.py", "test_research_tools_mcp.py", "test_research_tools_setup.py", "test_research_workflow.py", "test_workflow_clients.py", "test_workflow_financial_narrative.py", "test_workflow_research_prefetch.py", "test_workflow_critic_protocol.py"]
 
@@ -116,6 +116,14 @@ EXPOSE 8004
 HEALTHCHECK --interval=15s --timeout=5s --start-period=15s --retries=3 \
     CMD ["python", "-c", "import json,urllib.request; r=urllib.request.urlopen('http://127.0.0.1:8004/health',timeout=3); assert json.load(r)['status']=='ok'"]
 CMD ["python", "research_portal_mcp.py", "--host", "0.0.0.0", "--port", "8004"]
+
+# Research UI and streaming API use the same verified workflow code.
+FROM mcp-tests AS research-app
+COPY research_app.py research_ui.html ./
+EXPOSE 8080
+HEALTHCHECK --interval=15s --timeout=5s --start-period=15s --retries=3 \
+    CMD ["python", "-c", "import json,urllib.request; r=urllib.request.urlopen('http://127.0.0.1:8080/health',timeout=3); assert json.load(r)['status']=='ok'"]
+CMD ["python", "-m", "uvicorn", "research_app:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "1"]
 
 # The default target remains the existing API runtime.
 FROM mcp-base AS runtime

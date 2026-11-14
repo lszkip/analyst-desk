@@ -1,6 +1,7 @@
 """Role-bound adapters to the four existing MCP servers. No arbitrary endpoint tool."""
 import asyncio
 from decimal import Decimal, ROUND_HALF_EVEN
+import re
 import time
 
 from fastmcp import Client
@@ -56,6 +57,63 @@ class MCPBackend:
 class ToolBroker:
     def __init__(self, backend, store, run, request):
         self.backend, self.store, self.run, self.request = backend, store, run, request
+        self.external_payload_guard = None
+
+    def requested_risk_query(self):
+        """Use only the immutable user question, never expected answers or gold."""
+        question = " ".join(self.request["question"].split())
+        # Prefer an explicitly stated topic clause over financial boilerplate.
+        # This is generic request decomposition: no company-specific terms,
+        # expected evidence IDs, labels or held-out answers are consulted.
+        focus = re.search(r"\b(?:about|regarding|concerning|focused on|focusing on)\s+([^.!?]+)",
+                          question, flags=re.I)
+        candidate = focus.group(1).strip() if focus else question
+        return (candidate if len(candidate) >= 3 else question)[:600]
+
+    async def request_topic_prefetch(self, company):
+        """Retrieve the requested risk topic once per scoped year, with receipts.
+
+        All evaluation architectures share this bounded retrieval. A resumed
+        run reuses successful, empty and failed receipts without hidden retries.
+        """
+        self.scope(company, self.request["years"][0], company)
+        if not self.request["include_risks"]:
+            return []
+        query = self.requested_risk_query()
+        prior = {e["details"]["operation_sha256"]: e["details"]
+                 for e in self.store.report(self.run)["events"]
+                 if e["kind"] == "requested_risk_prefetch"}
+        receipts = []
+        for year in self.request["years"]:
+            args = {"ticker": company, "year": year, "item": "1A", "query": query}
+            operation = digest(["search_filings", args])
+            receipt = prior.get(operation)
+            if receipt is None:
+                result = await self.agent_call("researcher", "search_filings", args, company)
+                receipt = {"operation_sha256": operation, "query_sha256": digest(query),
+                           "ticker": company, "year": year, "item": "1A",
+                           "result_sha256": digest(result),
+                           "status": "error" if result.get("status") == "error" else "ok",
+                           "passage_ids": [hit["passage_id"] for hit in result.get("hits", [])]}
+                self.store.event(self.run, "requested_risk_prefetch", "researcher", receipt)
+            for record in self.store.evidence(self.run, receipt["passage_ids"]).values():
+                if (record["kind"] != "passage" or record["ticker"] != company
+                        or record["year"] != year or record.get("item") != "1A"):
+                    raise WorkflowError("changed_evidence", "A requested-topic receipt no longer matches its scope.")
+            receipts.append(receipt)
+        return receipts
+
+    def requested_topic_ids(self, ticker, year, item):
+        """Prioritize actual requested-topic retrieval over first-page samples."""
+        if item != "1A" or not self.request["include_risks"]:
+            return []
+        operation = digest(["search_filings", {"ticker": ticker, "year": year,
+            "item": item, "query": self.requested_risk_query()}])
+        for event in reversed(self.store.report(self.run)["events"]):
+            if (event["kind"] == "requested_risk_prefetch"
+                    and event["details"].get("operation_sha256") == operation):
+                return list(event["details"]["passage_ids"])
+        return []
 
     def evidence_overview(self, role, company=None):
         """Small durable source index, independent of the last few observations.
@@ -74,8 +132,13 @@ class ToolBroker:
                 slot = (record["ticker"], record["year"], record["item"])
                 groups.setdefault(slot, []).append(key)
         wanted = [(t, y, i) for t in tickers for y in self.request["years"] for i in items]
-        slots = [{"ticker": t, "year": y, "item": i, "passage_count": len(groups.get((t,y,i), [])),
-                  "sample_ids": groups.get((t,y,i), [])[:2]} for t,y,i in wanted]
+        slots = []
+        for t, y, i in wanted:
+            available = groups.get((t, y, i), [])
+            preferred = [key for key in self.requested_topic_ids(t, y, i) if key in available]
+            samples = list(dict.fromkeys([*preferred, *available]))[:2]
+            slots.append({"ticker": t, "year": y, "item": i,
+                          "passage_count": len(available), "sample_ids": samples})
         return {"slots": slots, "missing_slots": [{k: v for k,v in s.items() if k in {"ticker","year","item"}}
                 for s in slots if s["passage_count"] == 0], "complete_section_coverage": False,
                 "instruction": "These are saved source samples, not complete coverage. Read known IDs with get_passage if needed. Prioritise missing company/year/Items; do not repeatedly fetch the same page. Report unresolved limits in the handoff."}
@@ -96,14 +159,16 @@ class ToolBroker:
                      for (ticker, year, item), keys in groups.items()]
         # Every registered ID stays visible. Prefer a bounded spread of samples
         # instead of repeatedly showing only the first two IDs in a slot.
-        selected = list(dict.fromkeys(key for keys in groups.values()
-                                     for key in ([keys[0], keys[-1]] if keys else [])))
+        selected = list(dict.fromkeys(key for slot, keys in groups.items()
+            for key in (list(dict.fromkeys([*[key for key in self.requested_topic_ids(*slot) if key in keys],
+                                            *([keys[0], keys[-1]] if keys else [])]))[:2])))
         allowance = min(1000, 8000 // max(1, len(selected)))
         samples = []
         for key in selected:
             record = records[key]
             raw = (record["passage"].get("text") or "").encode()
-            samples.append({"id": key, "source_excerpt": raw[:allowance].decode("utf-8", errors="ignore"),
+            samples.append({"id": key, "ticker": record["ticker"], "year": record["year"],
+                            "item": record["item"], "source_excerpt": raw[:allowance].decode("utf-8", errors="ignore"),
                             "excerpt_truncated": len(raw) > allowance, "untrusted_data": True})
         context = {"source_catalogue": catalogue, "source_samples": samples,
                    "complete_section_coverage": False,
@@ -257,6 +322,8 @@ class ToolBroker:
             raise WorkflowError("permission_denied", "This role has no permission for that MCP operation.")
         if service == "portal" and access != {"prepare_note":"draft","get_proposal":"read","publish_note":"publish"}[tool]:
             raise WorkflowError("permission_denied", "Wrong credential scope for the portal operation.")
+        if self.external_payload_guard is not None:
+            self.external_payload_guard(args)
         self.store.reserve(self.run, tools=1)
         started = time.monotonic()
         self.store.event(self.run, "tool_start", role, {"service": service, "tool": tool, "arguments_sha256": digest(args)})

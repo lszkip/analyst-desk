@@ -1,0 +1,10 @@
+{
+  "schema_version": "s40-paired-source-quarantine-completion-v1",
+  "case_timeout_seconds": 180,
+  "judge_timeout_seconds": 75,
+  "max_task_model_calls_per_execution": 4,
+  "max_model_calls_per_stage": 2,
+  "task_output_tokens": 800,
+  "judge_output_tokens": 800,
+  "repeats": 1
+}

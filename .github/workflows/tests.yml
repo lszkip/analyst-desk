@@ -51,3 +51,9 @@ jobs:
           HF_HUB_OFFLINE: "1"
           TOKENIZERS_PARALLELISM: "false"
         run: python -m unittest -v test_api.py test_financial_data.py test_edgar_mcp.py test_api_mcp.py test_filing_corpus.py test_filing_passages.py test_filing_supplements.py test_filing_retrieval.py test_retrieval_evaluation_metrics.py test_retrieval_rerank_fusion.py test_live_retrieval_parity.py test_filings_kb_mcp.py test_python_sandbox.py test_research_portal.py test_research_tools_mcp.py test_research_tools_setup.py test_research_workflow.py test_workflow_clients.py test_workflow_financial_narrative.py test_workflow_research_prefetch.py test_workflow_critic_protocol.py
+
+      - name: Check memory, UI and experiment harness offline
+        env:
+          HF_HUB_OFFLINE: "1"
+          TOKENIZERS_PARALLELISM: "false"
+        run: python evaluation/final/run_offline_checks.py --report final_offline_report.json

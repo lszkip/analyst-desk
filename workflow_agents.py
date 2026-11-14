@@ -181,6 +181,8 @@ class OpenRouterModel:
 class Agents:
     def __init__(self, model, broker, store, run, config):
         self.model, self.broker, self.store, self.run, self.config = model, broker, store, run, config
+        self.context_by_role = {}
+        self.external_payload_guard = None
 
     async def ask(self, role, task, output_type, company=None, *, require_sections=False, validate_final=None, system_prompt=None,
                   initial_section_lookups=None, response_format=None):
@@ -240,7 +242,9 @@ class Agents:
             # The full request remains immutable in workflow state. A writer
             # contributes only risk prose; code owns every financial sentence.
             request = {**self.broker.request,
-                "question": "Write a qualitative comparison of the requested sampled-risk disclosures for these companies and fiscal periods. Financial answers are generated separately by code."}
+                "question": "Write only the qualitative risk contribution for this original request: "
+                    + self.broker.request["question"]
+                    + " Financial answers, all quantities and operating-margin statements are generated separately by code and must not be repeated in this contribution."}
         if company is not None:
             # A narrowed ticker list with the original multi-company question
             # still asks this branch to compare peers it cannot access.
@@ -287,8 +291,12 @@ class Agents:
                 context["saved_evidence"] = overview
             if require_sections:
                 context["section_requirement"] = "Before finish, every missing saved_evidence slot must receive an actual get_section or search_filings lookup. Missing slots are outstanding work, not unavailable reports. A failed/empty lookup must be reported as a retrieval limitation."
+            if role in self.context_by_role:
+                context["approved_background"] = self.context_by_role[role]
             messages = [{"role": "system", "content": canonical(prompt)},
                         {"role": "user", "content": canonical(context)}]
+            if self.external_payload_guard is not None:
+                self.external_payload_guard(messages)
             size = len(canonical(messages).encode()) + format_bytes
             if size > self.config["max_context_bytes"]:
                 raise WorkflowError("context_limit", "The bounded context is full. Narrow the plan or reduce source scope.")

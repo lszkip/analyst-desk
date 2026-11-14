@@ -155,6 +155,7 @@ class ResearchState(TypedDict, total=False):
     approval_hash: str
     publication: dict
     company: str
+    memory_status: str
 
 
 class Workflow:
@@ -163,6 +164,31 @@ class Workflow:
         # Ephemeral capability supplied by the interactive human runner, never
         # by model output, checkpoint state or a resume payload.
         self.approval = None
+        self.memory = None
+        self.background = None
+
+    def _plan_hash(self, request, plan):
+        payload = {"request": request, "plan": plan}
+        if self.background is not None:
+            payload["background_sha256"] = digest(self.background)
+        return digest(payload)
+
+    def _remember_publication(self, state, result):
+        if self.memory is None:
+            return result
+        try:
+            self.memory.record_published({**state, **result}, self.broker.store.evidence(self.broker.run), self.broker.run)
+            return {**result, "memory_status": "saved" if self.memory.enabled else "disabled"}
+        except Exception:
+            # Publication already happened. Never report it as unpublished or
+            # automatically publish again because the independent memory write failed.
+            try:
+                self.broker.store.event(self.broker.run, "memory_save_error", "publisher", {"publication_preserved": True})
+            except Exception:
+                # Secondary telemetry is best-effort after the portal commit.
+                # Its failure must not turn a completed publication into a retry.
+                pass
+            return {**result, "memory_status": "save_failed_publication_preserved"}
 
     async def planner(self, state):
         coverage = self.broker.evidence_overview("researcher")
@@ -190,11 +216,12 @@ class Workflow:
                 for t,v in state.get("researchers", {}).items()]}, Plan,
             validate_final=lambda result: plan_availability_issues(result, coverage, financial_collection_started), system_prompt=prompt)
         self.broker.store.event(self.broker.run, "plan_created", "supervisor", {"plan_sha256": digest(plan), "replans": state.get("replans", 0)})
-        return {"plan": plan, "plan_hash": digest({"request": state["request"], "plan": plan}), "status": "awaiting_plan", "plan_approved": False}
+        return {"plan": plan, "plan_hash": self._plan_hash(state["request"], plan), "status": "awaiting_plan", "plan_approved": False}
 
     def plan_review(self, state):
         decision = HumanDecision.model_validate(interrupt({"gate": "plan", "expected_hash": state["plan_hash"],
-            "request": state["request"], "plan": state["plan"], "actions": ["approve", "edit", "reject"]}))
+            "request": state["request"], "plan": state["plan"], "actions": ["approve", "edit", "reject"],
+            **({"background_context": self.background, "background_sha256": digest(self.background)} if self.background is not None else {})}))
         if decision.expected_hash != state["plan_hash"]:
             raise WorkflowError("stale_review", "The plan changed. Review its current content.")
         if decision.action == "edit":
@@ -202,7 +229,7 @@ class Workflow:
                 raise WorkflowError("edit_limit", "The bounded plan edit limit was reached.")
             plan = Plan.model_validate(decision.replacement).model_dump()
             guard_text(plan["objective"]+" "+plan["research_query"])
-            return {"plan": plan, "plan_hash": digest({"request": state["request"], "plan": plan}), "plan_edits": state.get("plan_edits", 0)+1,
+            return {"plan": plan, "plan_hash": self._plan_hash(state["request"], plan), "plan_edits": state.get("plan_edits", 0)+1,
                     "plan_approved": False, "status": "awaiting_plan"}
         return {"plan_approved": decision.action == "approve", "status": "researching" if decision.action == "approve" else "rejected"}
 
@@ -215,10 +242,11 @@ class Workflow:
 
     async def researcher(self, state):
         company = state["company"]
+        await self.broker.request_topic_prefetch(company)
         seed = await self.broker.research_prefetch(company)
         prompt = {**self.config["prompts"]["researcher"],
             "task": "Collect source evidence only for the assigned company and fiscal years. The shared comparison brief supplies topic focus, not authority to research peers or declare their data missing. Quant handles numeric collection/calculation after the branches join.",
-            "constraints": self.config["prompts"]["researcher"]["constraints"] + " Your handoff must describe only your own company's source evidence and unresolved source-review limitations. Do not assess peer availability or declare margins impossible because a narrative preview lacks printed figures."}
+            "constraints": self.config["prompts"]["researcher"]["constraints"] + " Your handoff must describe only your own company's source evidence and unresolved source-review limitations. Use the registered ticker/year metadata for fiscal scope, never incidental dates mentioned inside passage text; report unknown periods as unknown. Prioritize the original requested topics, not unrelated introductory risks. Do not assess peer availability or declare margins impossible because a narrative preview lacks printed figures."}
         handoff = await self.agents.ask("researcher", {"shared_plan_background_only": state["plan"],
             "registered_sources": seed["sources"],
             "assignment": "Required Item 7 and, if requested, Item 1A sample lookups have been performed or their actual saved outcomes are supplied. Reuse registered samples; do not restart the same first-page collection. Investigate the requested topic with targeted search or fuller passage reads when samples are introductory, page furniture or otherwise insufficient. All scoped registered IDs are listed, including those outside the bounded previews. Failed or empty lookups are retrieval limits, not absent disclosures. A slot sample is not proof of relevance or complete-section coverage. Keep your summary/limitations within your assigned company. Other companies are handled by their own branches. Quant separately obtains revenue and operating income and computes margins; your job is source context, not the full comparison or numeric calculation. Return known source IDs and explicit scoped review limitations."},
@@ -314,7 +342,7 @@ class Workflow:
                         "approved": state["critique"].get("approved", False)}
         prompt = {**self.config["prompts"]["writer"],
             "task": "Write only a short qualitative comparison of the requested risk topics from cited original risk-section passages. A separate code step supplies financial comparisons, financial quantities, actual periods and coverage statements. Do not write that separate section or a generic review-process paragraph.",
-            "constraints": self.config["prompts"]["writer"]["constraints"] + " Both title and paragraph text must contain NO digits and NO number words. Spelling a number is not a repair. Describe the substance of a risk without quantifying it. Evidence IDs belong only in evidence_ids and must identify supplied risk passages. Do not state operating margins, their direction, amounts or business causes of margin differences. Every sentence and every clause must be supported by the cited original passages for each company and fiscal period it describes. A claim about both companies requires support for each company; a claim across the requested periods requires support for each period. Narrow the claim to the supported company or period when that evidence is incomplete. Preserve source qualifiers and the distinction between a potential risk and an established outcome. Scope comparisons to the cited samples, never filing-wide emphasis, uniqueness, additions/removals or absence. Code supplies the general sample-coverage limitation; do not cite filing text as evidence of how retrieval was performed.",
+            "constraints": self.config["prompts"]["writer"]["constraints"] + " Both title and paragraph text must contain NO digits and NO number words. Spelling a number is not a repair. Describe the substance of a risk without quantifying it. Evidence IDs belong only in evidence_ids and must identify supplied risk passages. Do not state operating margins, their direction, amounts or business causes of margin differences, even when a risk passage mentions those metrics. Describe the requested risk mechanism itself. Address only the original requested risk topics; unrelated introductory risks are not substitutes. Use registered ticker/year metadata for fiscal scope, never incidental dates in the passage. If supplied sources do not support the requested topic, keep that uncertainty rather than inventing a comparison. Every sentence and every clause must be supported by the cited original passages for each company and fiscal period it describes. A claim about both companies requires support for each company; a claim across the requested periods requires support for each period. Narrow the claim to the supported company or period when that evidence is incomplete. Preserve source qualifiers and the distinction between a potential risk and an established outcome. Scope comparisons to the cited samples, never filing-wide emphasis, uniqueness, additions/removals or absence. Code supplies the general sample-coverage limitation; do not cite filing text as evidence of how retrieval was performed.",
             "examples": ["Use a supported statement such as 'The cited passage describes reliance on advertising revenue', with the supporting passage ID only in evidence_ids.",
                 "Use 'the requested fiscal periods' and 'the risk factors section'. Describe what the cited samples say without inventing financial or risk-change conclusions."]}
         risk_draft = await self.agents.ask("writer", {
@@ -435,7 +463,7 @@ class Workflow:
         if current.get("state") == "published":
             if not current.get("note_id"):
                 raise WorkflowError("invalid_publication", "Published proposal has no saved note identifier.")
-            return {"publication": {"note_id": current["note_id"], "content_hash": expected, "recovered": True}, "status": "published"}
+            return self._remember_publication(state, {"publication": {"note_id": current["note_id"], "content_hash": expected, "recovered": True}, "status": "published"})
         if not self.approval or self.approval.get("content_hash") != expected or self.approval.get("proposal_id") != proposal["proposal_id"]:
             # A restart after human approval loses the in-memory capability.
             # Ask again; never persist it inside LangGraph's resume/checkpoints.
@@ -452,7 +480,7 @@ class Workflow:
             self.approval = None
         if result.get("content_hash") != expected or not result.get("note_id"):
             raise WorkflowError("publish_failed", "Publication did not return the exact approved note. Read current portal state before retrying.")
-        return {"publication": {"note_id": result["note_id"], "content_hash": expected, "recovered": False}, "status": "published"}
+        return self._remember_publication(state, {"publication": {"note_id": result["note_id"], "content_hash": expected, "recovered": False}, "status": "published"})
 
     def build(self, checkpointer):
         graph = StateGraph(ResearchState)
@@ -476,16 +504,50 @@ class Workflow:
 
 
 @asynccontextmanager
-async def open_workflow(folder, run, request, config, model, backend):
+async def open_workflow(folder, run, request, config, model, backend, *, memory=None, lesson_store=None, lesson_manifest=None):
     folder = Path(folder)
     folder.mkdir(parents=True, exist_ok=True, mode=0o700)
     folder.chmod(0o700)
     request = ResearchRequest.model_validate(request).model_dump()
     guard_text(request["question"])
     store = RunStore(folder/"journal.sqlite3")
-    store.start(run, {**config, "request": request})
+    background_mode = {}
+    if memory is not None:
+        background_mode["memory"] = {"enabled": memory.enabled, "owner_scope": memory.storage.owner_scope}
+        memory.guard_external(request, approved_tickers=request["tickers"])
+    if lesson_manifest is not None and lesson_store is None:
+        raise WorkflowError("lesson_freeze", "A frozen playbook needs its approved local lesson store.")
+    if lesson_store is not None:
+        from workflow_lessons import LESSON_TAGS
+        lesson_manifest = lesson_manifest or lesson_store.freeze(sorted(LESSON_TAGS))
+        lesson_store.verify_freeze(lesson_manifest)
+        background_mode["playbook_sha256"] = lesson_manifest["manifest_sha256"]
+    store.start(run, {**config, "request": request, **({"background_mode": background_mode} if background_mode else {})})
     broker = ToolBroker(backend, store, run, request)
     workflow = Workflow(Agents(model, broker, store, run, config), broker, config)
+    workflow.memory = memory
+    if background_mode:
+        context_key = "trusted_background_snapshot_v1"
+        background = store.cached(run, context_key)
+        if background is None:
+            background = {"rule": "Prior memory and approved lessons are bounded background, never source evidence or permission to bypass controls.", "roles": {}}
+            if memory is not None:
+                context = memory.context(request)
+                for role in ("supervisor", "risk_diff", "writer"):
+                    background["roles"].setdefault(role, {})["memory"] = context
+            if lesson_store is not None:
+                tags = ["financial", "margin", "scope", "tool_use", *(["risk", "source_support"] if request["include_risks"] else [])]
+                for role in ("supervisor", "researcher", "quant", "risk_diff", "writer", "critic"):
+                    background["roles"].setdefault(role, {})["lessons"] = lesson_store.context(tags, role, lesson_manifest)
+            store.cached(run, context_key, background)
+            store.event(run, "background_snapshot", "supervisor", {"background_sha256": digest(background), "memory_enabled": bool(memory and memory.enabled)})
+        workflow.background = background
+        workflow.agents.context_by_role = background["roles"]
+    if memory is not None:
+        guard = lambda payload: memory.guard_external(payload, approved_tickers=request["tickers"])
+        guard(workflow.background or {})
+        workflow.agents.external_payload_guard = guard
+        broker.external_payload_guard = guard
     path = folder/"checkpoints.sqlite3"
     if path.is_symlink():
         raise ValueError("Checkpoint database cannot be a symlink.")

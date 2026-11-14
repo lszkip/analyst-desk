@@ -1,0 +1,596 @@
+# Standalone final stack. Existing compose.yaml and data are preserved.
+# Use python start_analyst_desk.py for prerequisites and existing-monitoring handoff.
+name: analyst-desk
+services:
+  api:
+    build:
+      context: .
+      target: runtime
+    image: analyst-desk-api:local
+    user: ${ANALYST_UID:?Set ANALYST_UID using the Docker user setup step}:${ANALYST_GID:?Set
+      ANALYST_GID using the Docker user setup step}
+    environment:
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:?Set OPENROUTER_API_KEY in your existing
+        .env file}
+      EDGAR_MCP_URL: http://edgar:8001/mcp
+    depends_on:
+      edgar:
+        condition: service_healthy
+    ports:
+    - 127.0.0.1:8000:8000
+    volumes:
+    - type: bind
+      source: ./data
+      target: /app/data
+      read_only: true
+      bind:
+        create_host_path: false
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=64m,mode=1777
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    networks:
+    - retrieval
+    - retrieval-access
+  edgar:
+    build:
+      context: .
+      target: edgar
+    image: analyst-desk-edgar:local
+    user: ${ANALYST_UID:?Set ANALYST_UID using the Docker user setup step}:${ANALYST_GID:?Set
+      ANALYST_GID using the Docker user setup step}
+    volumes:
+    - type: bind
+      source: ./data
+      target: /app/data
+      read_only: true
+      bind:
+        create_host_path: false
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=64m,mode=1777
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    networks:
+    - retrieval
+  qdrant:
+    image: qdrant/qdrant:v1.20.0@sha256:9bfc89f9914fc14876a88c05270685921a55b8877b254a98bcc1cc2f0a424cd2
+    user: ${ANALYST_UID:?Set ANALYST_UID}:${ANALYST_GID:?Set ANALYST_GID}
+    environment:
+      QDRANT__SERVICE__API_KEY: ${QDRANT_API_KEY:?Run python setup_retrieval.py}
+      QDRANT__SERVICE__READ_ONLY_API_KEY: ${QDRANT_READ_ONLY_API_KEY:?Run python setup_retrieval.py}
+      QDRANT__SERVICE__ENABLE_CORS: 'false'
+      QDRANT__TELEMETRY_DISABLED: 'true'
+      QDRANT_INIT_FILE_PATH: /tmp/.qdrant-initialized
+      QDRANT__STORAGE__SNAPSHOTS_PATH: /qdrant/snapshots
+    volumes:
+    - type: bind
+      source: ./data/qdrant_storage
+      target: /qdrant/storage
+      bind:
+        create_host_path: false
+    - type: bind
+      source: ./data/qdrant_snapshots
+      target: /qdrant/snapshots
+      bind:
+        create_host_path: false
+    networks:
+    - retrieval
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=128m,mode=1777
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+  filings-kb:
+    build:
+      context: .
+      target: filings-kb
+    image: analyst-desk-filings-kb:local
+    user: ${ANALYST_UID:?Set ANALYST_UID}:${ANALYST_GID:?Set ANALYST_GID}
+    environment:
+      QDRANT_URL: http://qdrant:6333
+      QDRANT_READ_ONLY_API_KEY: ${QDRANT_READ_ONLY_API_KEY:?Run python setup_retrieval.py}
+    depends_on:
+      qdrant:
+        condition: service_started
+    volumes:
+    - type: bind
+      source: ./data
+      target: /app/data
+      read_only: true
+      bind:
+        create_host_path: false
+    networks:
+    - retrieval
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=128m,mode=1777
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    init: true
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+  python-sandbox:
+    build:
+      context: .
+      target: python-sandbox
+    image: analyst-desk-python-sandbox:local
+    user: ${ANALYST_UID:?Set ANALYST_UID}:${ANALYST_GID:?Set ANALYST_GID}
+    environment:
+      SANDBOX_API_TOKEN: ${SANDBOX_API_TOKEN:?Run python setup_research_tools.py}
+    networks:
+    - research-tools
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=64m,mode=1777
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    pids_limit: 64
+    mem_limit: 2g
+    cpus: 2.0
+    init: true
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+  research-portal:
+    build:
+      context: .
+      target: research-portal
+    image: analyst-desk-research-portal:local
+    user: ${ANALYST_UID:?Set ANALYST_UID}:${ANALYST_GID:?Set ANALYST_GID}
+    environment:
+      PORTAL_READ_TOKEN: ${PORTAL_READ_TOKEN:?Run python setup_research_tools.py}
+      PORTAL_DRAFT_TOKEN: ${PORTAL_DRAFT_TOKEN:?Run python setup_research_tools.py}
+      PORTAL_PUBLISH_TOKEN: ${PORTAL_PUBLISH_TOKEN:?Run python setup_research_tools.py}
+      PORTAL_REVIEW_TOKEN: ${PORTAL_REVIEW_TOKEN:?Run python setup_research_tools.py}
+    volumes:
+    - type: bind
+      source: ./data/research_portal
+      target: /app/data/research_portal
+      bind:
+        create_host_path: false
+    networks:
+    - research-tools
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=64m,mode=1777
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    pids_limit: 64
+    mem_limit: 512m
+    init: true
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+  retrieval-gateway:
+    image: nginx:stable-alpine@sha256:583b7f2fce1cdb8da5ad5c39ebd3c33b98b87d493190e548bdee1fa8c619c311
+    user: ${ANALYST_UID:?Set ANALYST_UID}:${ANALYST_GID:?Set ANALYST_GID}
+    entrypoint:
+    - nginx
+    command:
+    - -e
+    - /dev/stderr
+    - -c
+    - /etc/nginx/retrieval.conf
+    - -g
+    - daemon off;
+    depends_on:
+      qdrant:
+        condition: service_started
+      edgar:
+        condition: service_healthy
+    ports:
+    - 127.0.0.1:6333:6333
+    - 127.0.0.1:8001:8001
+    - 127.0.0.1:8002:8002
+    - 127.0.0.1:8003:8003
+    - 127.0.0.1:8004:8004
+    - 127.0.0.1:8080:8080
+    volumes:
+    - type: bind
+      source: ./retrieval_gateway.conf
+      target: /etc/nginx/retrieval.conf
+      read_only: true
+      bind:
+        create_host_path: false
+    networks:
+    - retrieval
+    - research-tools
+    - retrieval-access
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=64m,mode=1777
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    init: true
+    restart: unless-stopped
+    healthcheck:
+      test:
+      - CMD
+      - wget
+      - -q
+      - -O
+      - /dev/null
+      - http://127.0.0.1:6333/__gateway_health
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+  exporter:
+    read_only: true
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    init: true
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 5m
+        max-file: '2'
+    build:
+      context: ./monitoring
+      dockerfile: Dockerfile
+    image: analyst-desk-monitoring-exporter:local
+    user: 10001:10001
+    volumes:
+    - type: bind
+      source: ./monitoring/data
+      target: /data
+      read_only: true
+      bind:
+        create_host_path: false
+    networks:
+    - monitoring-internal
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=16m,mode=1777
+    pids_limit: 64
+    mem_limit: 128m
+    cpus: 0.5
+  prometheus:
+    read_only: true
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    init: true
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 5m
+        max-file: '2'
+    image: prom/prometheus:v3.13.5
+    user: 65534:65534
+    command:
+    - --config.file=/etc/prometheus/prometheus.yml
+    - --storage.tsdb.path=/prometheus
+    - --storage.tsdb.retention.time=7d
+    - --storage.tsdb.retention.size=256MB
+    - --web.listen-address=0.0.0.0:9090
+    - --log.level=warn
+    depends_on:
+      exporter:
+        condition: service_healthy
+    volumes:
+    - type: bind
+      source: ./monitoring/prometheus
+      target: /etc/prometheus
+      read_only: true
+      bind:
+        create_host_path: false
+    - prometheus-data:/prometheus
+    networks:
+    - monitoring-internal
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=16m,mode=1777
+    pids_limit: 128
+    mem_limit: 512m
+    cpus: 1.0
+    healthcheck:
+      test:
+      - CMD
+      - wget
+      - -q
+      - -O
+      - /dev/null
+      - http://127.0.0.1:9090/-/ready
+      interval: 5s
+      timeout: 3s
+      start_period: 10s
+      retries: 12
+  grafana:
+    read_only: true
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    init: true
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 5m
+        max-file: '2'
+    image: grafana/grafana:13.3.1
+    user: 472:472
+    environment:
+      GF_SERVER_ROOT_URL: http://localhost:3000/
+      GF_SERVER_ENFORCE_DOMAIN: 'false'
+      GF_AUTH_ANONYMOUS_ENABLED: 'true'
+      GF_AUTH_ANONYMOUS_ORG_NAME: Main Org.
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_AUTH_ANONYMOUS_HIDE_VERSION: 'true'
+      GF_AUTH_DISABLE_LOGIN_FORM: 'true'
+      GF_AUTH_BASIC_ENABLED: 'false'
+      GF_USERS_ALLOW_SIGN_UP: 'false'
+      GF_USERS_ALLOW_ORG_CREATE: 'false'
+      GF_SECURITY_ADMIN_USER: monitoring-admin
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin_password
+      GF_SECURITY_DISABLE_GRAVATAR: 'true'
+      GF_SECURITY_COOKIE_SAMESITE: strict
+      GF_ANALYTICS_REPORTING_ENABLED: 'false'
+      GF_ANALYTICS_CHECK_FOR_UPDATES: 'false'
+      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: 'false'
+      GF_NEWS_NEWS_FEED_ENABLED: 'false'
+      GF_PLUGINS_PREINSTALL_DISABLED: 'true'
+      GF_PLUGINS_PUBLIC_KEY_RETRIEVAL_DISABLED: 'true'
+      GF_SNAPSHOTS_EXTERNAL_ENABLED: 'false'
+      GF_UNIFIED_ALERTING_ENABLED: 'false'
+      GF_LIVE_MAX_CONNECTIONS: '0'
+      GF_LOG_MODE: console
+      GF_LOG_LEVEL: warn
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    volumes:
+    - type: bind
+      source: ./monitoring/grafana/provisioning
+      target: /etc/grafana/provisioning
+      read_only: true
+      bind:
+        create_host_path: false
+    - type: bind
+      source: ./monitoring/grafana/dashboards
+      target: /var/lib/grafana/dashboards
+      read_only: true
+      bind:
+        create_host_path: false
+    - type: bind
+      source: ./monitoring/secrets/grafana_admin_password
+      target: /run/secrets/grafana_admin_password
+      read_only: true
+      bind:
+        create_host_path: false
+    - grafana-data:/var/lib/grafana
+    networks:
+    - monitoring-internal
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m,mode=1777
+    pids_limit: 256
+    mem_limit: 512m
+    cpus: 1.0
+    healthcheck:
+      test:
+      - CMD
+      - wget
+      - -q
+      - -O
+      - /dev/null
+      - http://127.0.0.1:3000/api/health
+      interval: 5s
+      timeout: 3s
+      start_period: 20s
+      retries: 18
+  monitoring-gateway:
+    read_only: true
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    init: true
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 5m
+        max-file: '2'
+    image: nginx:stable-alpine@sha256:583b7f2fce1cdb8da5ad5c39ebd3c33b98b87d493190e548bdee1fa8c619c311
+    user: 10001:10001
+    entrypoint:
+    - nginx
+    command:
+    - -e
+    - /dev/stderr
+    - -c
+    - /etc/nginx/monitoring.conf
+    - -g
+    - daemon off;
+    depends_on:
+      exporter:
+        condition: service_healthy
+      prometheus:
+        condition: service_healthy
+      grafana:
+        condition: service_healthy
+    ports:
+    - 127.0.0.1:8085:8085
+    - 127.0.0.1:9090:9090
+    - 127.0.0.1:3000:3000
+    volumes:
+    - type: bind
+      source: ./monitoring/gateway.conf
+      target: /etc/nginx/monitoring.conf
+      read_only: true
+      bind:
+        create_host_path: false
+    networks:
+    - monitoring-internal
+    - monitoring-access
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m,mode=1777
+    pids_limit: 64
+    mem_limit: 64m
+    cpus: 0.5
+    healthcheck:
+      test:
+      - CMD
+      - wget
+      - -q
+      - -O
+      - /dev/null
+      - http://127.0.0.1:8085/__monitoring_health
+      interval: 5s
+      timeout: 3s
+      retries: 12
+  research-app:
+    build:
+      context: .
+      target: research-app
+    image: analyst-desk-research-app:local
+    user: ${ANALYST_UID:?Set ANALYST_UID}:${ANALYST_GID:?Set ANALYST_GID}
+    network_mode: service:retrieval-gateway
+    depends_on:
+      retrieval-gateway:
+        condition: service_healthy
+      edgar:
+        condition: service_healthy
+      filings-kb:
+        condition: service_healthy
+      python-sandbox:
+        condition: service_healthy
+      research-portal:
+        condition: service_healthy
+    environment:
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:?Run the documented local credential
+        setup}
+      SANDBOX_API_TOKEN: ${SANDBOX_API_TOKEN:?Run the documented local credential
+        setup}
+      PORTAL_READ_TOKEN: ${PORTAL_READ_TOKEN:?Run the documented local credential
+        setup}
+      PORTAL_DRAFT_TOKEN: ${PORTAL_DRAFT_TOKEN:?Run the documented local credential
+        setup}
+      PORTAL_PUBLISH_TOKEN: ${PORTAL_PUBLISH_TOKEN:?Run the documented local credential
+        setup}
+      PORTAL_REVIEW_TOKEN: ${PORTAL_REVIEW_TOKEN:?Run the documented local credential
+        setup}
+      RESEARCH_UI_STATE_DIR: /app/data/workflow_final
+      ANALYST_UI_TOKEN_FILE: /run/secrets/analyst_ui_access_token
+      LANGSMITH_TRACING: 'false'
+      LANGCHAIN_TRACING_V2: 'false'
+    volumes:
+    - type: bind
+      source: ./data
+      target: /app/data
+      read_only: true
+      bind:
+        create_host_path: false
+    - type: bind
+      source: ./data/workflow_final
+      target: /app/data/workflow_final
+      bind:
+        create_host_path: false
+    - type: bind
+      source: ./data/research_app/access_token
+      target: /run/secrets/analyst_ui_access_token
+      read_only: true
+      bind:
+        create_host_path: false
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=128m,mode=1777
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 40s
+    pids_limit: 256
+    mem_limit: 2g
+    healthcheck:
+      test:
+      - CMD
+      - python
+      - -c
+      - import json,urllib.request; r=urllib.request.urlopen('http://127.0.0.1:8080/health',timeout=3);
+        assert json.load(r)['status']=='ok'
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 6
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+networks:
+  retrieval:
+    internal: true
+  retrieval-access:
+    driver: bridge
+  research-tools:
+    internal: true
+  monitoring-internal:
+    internal: true
+  monitoring-access:
+    driver: bridge
+volumes:
+  prometheus-data:
+    name: analyst-desk-monitoring_prometheus-data
+  grafana-data:
+    name: analyst-desk-monitoring_grafana-data
