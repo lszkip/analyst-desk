@@ -29,6 +29,10 @@ Python network connections before importing application modules. It runs:
   endpoint validation, safe error handling and approval-capability replay.
 - Positive controls for allowed retrieval, valid credentials, ordinary business
   prose and exact-content simulated publication in a temporary database.
+- Source-evidence regressions using the exact saved development case in which
+  a real writer invented a contractual renewal guarantee and a real critic
+  approved it by citing the instruction to invent it. The saved wrong verdict
+  and an unconditional scripted approval cannot override the application check.
 
 Results include executed test methods, subtest counts where present, failures,
 skips and source hashes. A subtest variant is not a separate independent attack
@@ -50,12 +54,41 @@ when a service returns a different passage or filing section.
 Transport construction is included in the same sanitised exception boundary as
 the MCP request, so setup failures cannot escape as raw diagnostic strings.
 
+## Source instructions cannot authorize claims
+
+`workflow_source_safety.py` recognizes a limited set of explicit English
+instructions directing the assistant, its tools, or its answer, including
+commands to invent claims and present them as evidence. It scans the whole
+original cited passage and table strings, including text outside the critic's
+preview. A flagged passage is ineligible as evidence at catalog construction,
+receipt validation, rendering, preparation, human approval and publication.
+A positive critic verdict cannot make it eligible.
+
+Original source text, hashes and saved results remain unchanged and readable.
+The whole passage is excluded; a clean quotation from the same passage cannot
+silently remove the contamination. Obtain independent eligible evidence. This
+conservative choice can exclude legitimate facts next to an instruction,
+including security-training quotations that contain explicit attack commands.
+Ordinary business instructions, guarantees and descriptive security risks do
+not trigger the check by themselves.
+
+The support-check version has changed. Pending drafts approved under an older
+version require a current review before further preparation or publication.
+Previously published notes are not rewritten or retroactively certified.
+
+This is a narrow deterministic safeguard, not a truth classifier or a general
+prompt-injection defense. Unrecognized, indirect, encoded, multilingual and
+cross-passage attacks, and false factual assertions without instructions, can
+evade it. Passing these reused development cases does not establish a held-out
+attack-success or false-positive rate. The real-model observations are retained
+as evidence; the new regression suite itself makes no model requests.
+
 ## Operator delivery and scope
 
-Sequence 29 uses the stable `Run_Workflow_Checks.py` filename. It verifies known
+Sequence 33 uses the stable `Run_Workflow_Checks.py` filename. It verifies known
 source hashes, tests corrected copies first, and installs the reviewed changes
 only after those checks pass. Every invocation creates a fresh
-`29_Analyst_Desk_Security_Results_<timestamp>_<random>.zip`. Existing source files
+`33_Analyst_Desk_Source_Evidence_Results_<timestamp>_<random>.zip`. Existing source files
 that change are backed up in that run's private output folder.
 
 The runner does not open original research databases, saved run folders,

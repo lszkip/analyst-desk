@@ -31,7 +31,8 @@ SOURCE_FILES = (
     "test_workflow_critic_protocol.py", "test_workflow_financial_narrative.py", "tool_security.py",
     "workflow_agents.py", "workflow_contracts.py", "workflow_critic_protocol.py",
     "workflow_financial_narrative.py", "workflow_render.py", "workflow_store.py",
-    "workflow_support.py", "workflow_tools.py", "companies.json", "workflow_config.json",
+    "workflow_support.py", "workflow_tools.py", "workflow_source_safety.py", "companies.json", "workflow_config.json",
+    "security/source_instruction_regressions.json",
 )
 BASE_TEST_MODULES = ("test_research_workflow", "test_research_portal", "test_python_sandbox",
     "test_workflow_research_prefetch", "test_workflow_critic_protocol", "test_workflow_financial_narrative")

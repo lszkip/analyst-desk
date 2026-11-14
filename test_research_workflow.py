@@ -1098,7 +1098,9 @@ class EvidenceSupportTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaisesRegex(WorkflowError,"current sentence-level"):
             require_current_support(state)
         state["critique"].update(check_version=SUPPORT_VERSION,draft_sha256=digest(draft))
-        require_current_support(state)
+        with self.assertRaisesRegex(WorkflowError, "Current source records"):
+            require_current_support(state)
+        require_current_support(state, {"p_GOOGL": {"kind":"passage", "passage":{"text":"The company describes operational risks."}}})
         state["draft"]["title"] = "Different research"
         with self.assertRaises(WorkflowError): require_current_support(state)
 

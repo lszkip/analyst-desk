@@ -78,6 +78,7 @@
 !test_research_workflow.py
 !test_workflow_clients.py
 !workflow_support.py
+!workflow_source_safety.py
 !workflow_financial_narrative.py
 !test_workflow_financial_narrative.py
 !test_workflow_research_prefetch.py
