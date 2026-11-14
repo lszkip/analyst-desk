@@ -399,7 +399,7 @@ class Workflow:
 
     async def prepare(self, state):
         from research_portal import ResearchNote
-        require_current_support(state)
+        require_current_support(state, self.broker.store.evidence(self.broker.run))
         content_hash = note_hash(ResearchNote.model_validate(state["note"]))
         result = await self.broker.invoke("publisher", "portal", "prepare_note", {"note": state["note"],
             "idempotency_key": "workflow_"+digest([self.broker.run, content_hash, state.get("note_edits",0)])}, "draft")
@@ -424,7 +424,7 @@ class Workflow:
 
     async def publish(self, state):
         from research_portal import ResearchNote
-        require_current_support(state)
+        require_current_support(state, self.broker.store.evidence(self.broker.run))
         proposal = state["proposal"]
         expected = note_hash(ResearchNote.model_validate(state["note"]))
         if expected != state.get("approval_hash") or expected != proposal["content_hash"]:

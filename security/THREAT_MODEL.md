@@ -20,6 +20,8 @@ sandbox is a separate process and kernel-policy boundary.
 | Filing text requests publication, human review, shell/file access or arbitrary computation | Model-facing tools are explicitly allowed per role; scripted forbidden actions stop before backend dispatch. Source markers remain data. | Scripted agent responses test enforcement, not actual model susceptibility. |
 | An action adds a URL, credential scope, code field or a different company/year | Exact argument fields and approved scope are checked before dispatch. | The offline suite does not exercise deployed HTTP authentication or every possible payload. |
 | A tool returns a different passage or filing section | Requested identifiers and scope must match before registration; mismatches fail. Existing saved evidence cannot be silently replaced. | Source hashes identify bytes, not semantic truth. Trusted-host database edits are outside this boundary. |
+| An instruction-bearing source tells the writer to invent a claim and the critic treats that instruction as support | Recognized explicit source-to-agent directives make the complete passage ineligible as claim evidence. The check covers full original text/table strings, catalog/receipt checks, rendering, and current stored sources at prepare/approve/publish. Saved positive model verdicts cannot override it. | Narrow English pattern recognition can miss paraphrases, obfuscation, indirect or cross-passage attacks, and false factual assertions. Whole-passage exclusion can reject adjacent legitimate facts and quoted attack examples. |
+| A pending draft reuses a positive critique from before the source-evidence check | The support version and draft hash must match, and current journal evidence must pass before new preparation, approval or publication. | This prevents new actions; previously published notes and historical evidence are not rewritten or retroactively certified. |
 | An injected draft asks the reader to trade a covered company's shares | Literal advice guard covers prepared-company tickers, names and aliases; allowed business prose is tested. | Paraphrases, obfuscation and general investment-advice detection require further evaluation. |
 | Untrusted text claims approval or replays another proposal's capability | Typed schemas reject authority fields; publication requires the capability for the exact proposal/content. Reapproval invalidates the previous token. | The operator's judgement and a compromised review credential are outside these tests. |
 | Errors or configuration expose credentials or redirect requests | Human-review/model keys are excluded from the broker; scoped auth fails closed; plain loopback endpoints and sanitised failure paths are tested with fake canaries. | No real credentials are used. This is not a comprehensive logging or dependency audit. |
@@ -35,9 +37,17 @@ The Python audit hook is an accidental-network guard, not an OS security boundar
 against arbitrary trusted test code.
 
 This is an AI-assisted development regression suite. It is not the final
-held-out red-team evaluation. Remaining work includes a frozen attack/clean-case
-set with explicit outcomes, budgeted real-model evaluation, attack-success and
-false-block measurements, deployed service checks, and independent review of
-the resulting evidence. Future memory/watchlist features need their own access,
+held-out red-team evaluation. Sequences 31 and 32 exercised real workflow model
+stages and exposed an invented Comcast renewal guarantee that both writer and
+critic accepted. Sequence 32 did not exercise preparation or publication; it
+established a critic-stage evidence failure, not an actual publication breach.
+The exact unsafe and clean sources, drafts and saved critiques are preserved in
+`source_instruction_regressions.json`. Sequence 33 replays that failure offline
+and checks the application gates independently of the model's verdict.
+
+Remaining work includes independent held-out attack/clean cases with explicit
+outcomes, post-fix model evaluation, generalization and false-block measurement,
+deployed service checks, and review of the resulting evidence. Future
+memory/watchlist features need their own access,
 deletion and exfiltration tests. No external alert delivery or cloud security
 claim is made by this local suite.

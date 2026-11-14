@@ -6,9 +6,43 @@ from pydantic import Field
 
 from company_registry import COMPANIES
 from workflow_contracts import Strict, WorkflowError, digest
+from workflow_source_safety import source_instruction_findings
 
 
-SUPPORT_VERSION = "sentence-evidence-v2-catalog"
+SUPPORT_VERSION = "sentence-evidence-v3-source-instructions"
+
+
+def evidence_source_issues(records, keys):
+    """Check original cited passages, never just the critic's chosen quote window.
+
+    Flagged originals stay in the journal for inspection. They cannot authorize
+    a financial/risk claim, even when the critic returns a positive verdict.
+    """
+    issues = []
+    for key in sorted(set(keys)):
+        if key not in records:
+            issues.append(f"{key}: current source evidence is unavailable.")
+            continue
+        record = records[key]
+        if record.get("kind") != "passage":
+            continue
+        passage = record.get("passage", {})
+        texts = [passage.get("text", "")]
+        # Table passages can carry instructions in captions or cells too.
+        def strings(value):
+            if isinstance(value, str):
+                yield value
+            elif isinstance(value, dict):
+                for item in value.values():
+                    yield from strings(item)
+            elif isinstance(value, (list, tuple)):
+                for item in value:
+                    yield from strings(item)
+        texts.extend(strings(passage.get("table", {})))
+        findings = source_instruction_findings("\n".join(t for t in texts if isinstance(t, str)))
+        if findings:
+            issues.append(f"{key}: source contains explicit instructions directing the assistant, its tools or its answer. The original passage is retained but cannot support claims; use an independent eligible source.")
+    return issues
 
 
 class SupportReference(Strict):
@@ -44,6 +78,11 @@ class ParagraphSelection(Strict):
 
 
 def support_catalog(paragraph, records):
+    if set(paragraph["evidence_ids"]) - records.keys():
+        raise WorkflowError("unknown_evidence", "A review source was never loaded.")
+    blocked = evidence_source_issues(records, paragraph["evidence_ids"])
+    if blocked:
+        raise WorkflowError("untrusted_source_instruction", "\n".join(blocked))
     sources, references = {}, {}
     for key in sorted(set(paragraph["evidence_ids"])):
         if key not in records:
@@ -160,6 +199,10 @@ def support_issues(draft, records, request):
         if set(p["evidence_ids"])-records.keys():
             issues.append(f"{prefix}: cites evidence that was never loaded.")
             continue
+        blocked = evidence_source_issues(records, p["evidence_ids"])
+        if blocked:
+            issues.extend(f"{prefix}: {issue}" for issue in blocked)
+            continue
         cited = [records[k] for k in p["evidence_ids"]]
         tickers = {r["ticker"] for r in cited}
         text = normalise(p["text"])
@@ -195,7 +238,7 @@ def receipt_issues(review, paragraph, records):
     """Repair malformed review receipts separately from unsupported draft claims."""
     units = sentences(paragraph["text"])
     rows = review["sentences"]
-    issues = []
+    issues = evidence_source_issues(records, paragraph["evidence_ids"])
     if [r["sentence_index"] for r in rows] != list(range(len(units))):
         issues.append("final.sentences: review every supplied sentence exactly once in order.")
     cited = set(paragraph["evidence_ids"])
@@ -231,8 +274,14 @@ def validate_support(review, paragraph, records):
     return list(dict.fromkeys(issues))
 
 
-def require_current_support(state):
+def require_current_support(state, records=None):
     critique = state.get("critique", {})
     if (critique.get("check_version") != SUPPORT_VERSION or not critique.get("approved")
             or critique.get("draft_sha256") != digest(state.get("draft"))):
         raise WorkflowError("stale_critique", "This draft needs the current sentence-level evidence check. Use review --action edit with a corrected draft before approving publication.")
+    if not isinstance(records, dict):
+        raise WorkflowError("source_review_required", "Current source records are required before preparing, approving or publishing a note.")
+    keys = [key for paragraph in state["draft"]["paragraphs"] for key in paragraph["evidence_ids"]]
+    blocked = evidence_source_issues(records, keys)
+    if blocked:
+        raise WorkflowError("untrusted_source_instruction", "\n".join(blocked))

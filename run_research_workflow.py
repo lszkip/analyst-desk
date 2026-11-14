@@ -155,7 +155,7 @@ async def run(args):
                     display(snapshot, workflow.broker.store, args.run_id)
                     return
                 if gate["gate"] == "note" and args.action == "approve":
-                    require_current_support(snapshot.values)
+                    require_current_support(snapshot.values, workflow.broker.store.evidence(args.run_id))
                 replacement = None
                 if args.action == "edit":
                     if not args.edited_json:
