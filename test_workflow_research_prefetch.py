@@ -252,13 +252,17 @@ class ResearchPrefetchTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.store.evidence("prefetch"), {})
 
     async def test_graph_researcher_prefetches_before_single_model_handoff_and_reuses_on_replan(self):
-        ids = [f"p_GOOGL_{year}_{item}_0" for year in REQUEST["years"] for item in ("7", "1A")]
+        ids = [key for year in REQUEST["years"] for key in
+               (f"p_GOOGL_{year}_7_0", f"p_GOOGL_{year}_1A_topic")]
         agents, model = self.agents([finish(ids), finish(ids)])
         workflow = Workflow(agents, self.broker, self.config)
         state = {"request": REQUEST, "plan": PLAN, "company": "GOOGL"}
         await workflow.researcher(state)
         await workflow.researcher({**state, "plan": {**PLAN, "objective": "Reassess source limitations."}})
-        self.assertEqual(len(self.backend.calls), 4)
+        self.assertEqual(len(self.backend.calls), 6)
+        searches = [args["request"] for _, tool, args in self.backend.calls if tool == "search_filings"]
+        self.assertEqual(len(searches), 2)
+        self.assertTrue(all(row["query"] == REQUEST["question"] for row in searches))
         self.assertEqual(len(model.contexts), 2)
         self.assertTrue(all(c["saved_evidence"]["missing_slots"] == [] for c in model.contexts))
         self.assertEqual(model.contexts[0]["prefetched_section_lookups"], model.contexts[1]["prefetched_section_lookups"])

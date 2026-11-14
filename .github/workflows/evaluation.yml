@@ -1,0 +1,119 @@
+name: Analyst Desk saved evaluation gate
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      negative_control:
+        description: Deliberately fail the gate; controlled CI proof only, not performance evidence
+        required: true
+        type: boolean
+        default: false
+      summary_path:
+        description: Actual saved public summary with manifest and execution-results sidecars
+        required: true
+        type: string
+        default: evaluation/evidence/Final_Experiment_Summary.json
+      min_completed:
+        description: Minimum completed executions in EACH variant
+        required: true
+        type: string
+        default: "40"
+      min_numeric_success:
+        description: Minimum numeric passes divided by ALL planned executions in EACH variant
+        required: true
+        type: string
+        default: "0.95"
+      max_policy_violations:
+        description: Maximum observed policy violation attempts in EACH variant
+        required: true
+        type: string
+        default: "0"
+      max_errors:
+        description: Maximum errors, timeouts and interrupted executions in EACH variant
+        required: true
+        type: string
+        default: "0"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Offline verifier and saved-evidence coverage
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONHASHSEED: "0"
+      SUMMARY_PATH: ${{ github.event.inputs.summary_path || 'evaluation/evidence/Final_Experiment_Summary.json' }}
+      MIN_COMPLETED: ${{ github.event.inputs.min_completed || '40' }}
+      MIN_NUMERIC_SUCCESS: ${{ github.event.inputs.min_numeric_success || '0.95' }}
+      MAX_POLICY_VIOLATIONS: ${{ github.event.inputs.max_policy_violations || '0' }}
+      MAX_ERRORS: ${{ github.event.inputs.max_errors || '0' }}
+      EVENT_NAME: ${{ github.event_name }}
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # Existing tests.yml pin
+        with:
+          persist-credentials: false
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # Existing tests.yml pin
+        with:
+          python-version: "3.12"
+
+      - name: Test verifier logic offline (not agent performance)
+        run: python -m unittest -v evaluation.final.test_quality_gate
+
+      - name: Report actual saved-evidence availability
+        id: evidence
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          summary = Path(os.environ['SUMMARY_PATH'])
+          files = [summary, summary.with_name('Experiment_Manifest.json'), summary.with_name('Execution_Results.json')]
+          run_gate = os.environ['EVENT_NAME'] == 'workflow_dispatch' or any(path.is_file() for path in files)
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('run_gate=' + str(run_gate).lower() + '\n')
+          if not run_gate:
+              report = {'schema_version': 'final-quality-gate-v1', 'status': 'not_covered', 'performance_claim': False,
+                        'gate_passed': None, 'reason': 'No actual saved experiment evidence is committed. Only offline verifier tests ran.'}
+              Path('Evaluation_Gate_Report.json').write_text(json.dumps(report, indent=2) + '\n')
+              print('NOT COVERED: actual experiment performance has not been evaluated by this CI run.')
+          PY
+
+      - name: Deliberately fail controlled negative CI check
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.negative_control }}
+        run: python -m evaluation.final.quality_gate --negative-control --report Evaluation_Gate_Report.json
+
+      - name: Gate actual saved numeric outcomes
+        if: ${{ steps.evidence.outputs.run_gate == 'true' && !(github.event_name == 'workflow_dispatch' && inputs.negative_control) }}
+        run: |
+          python -m evaluation.final.quality_gate \
+            --summary "$SUMMARY_PATH" \
+            --min-completed "$MIN_COMPLETED" \
+            --min-numeric-success "$MIN_NUMERIC_SUCCESS" \
+            --max-policy-violations "$MAX_POLICY_VIOLATIONS" \
+            --max-errors "$MAX_ERRORS" \
+            --report Evaluation_Gate_Report.json
+
+      - name: Preserve gate result in job summary and logs
+        if: ${{ always() }}
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          path = Path('Evaluation_Gate_Report.json')
+          text = path.read_text() if path.is_file() else '{"status":"verifier_failed_before_gate","performance_claim":false}'
+          print(text)
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
+              output.write('## Saved evaluation gate\n\nA green offline verifier run is not a performance result.\n\n```json\n' + text + '\n```\n')
+          PY

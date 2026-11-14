@@ -84,3 +84,8 @@
 !test_workflow_research_prefetch.py
 !workflow_critic_protocol.py
 !test_workflow_critic_protocol.py
+
+!workflow_memory.py
+!workflow_lessons.py
+!research_app.py
+!research_ui.html

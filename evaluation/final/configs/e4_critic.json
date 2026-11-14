@@ -1,0 +1,37 @@
+{
+  "schema_version": "final-experiments-v1",
+  "repeats": 3,
+  "concurrency": 3,
+  "case_timeout_seconds": 600,
+  "splits": [
+    "heldout"
+  ],
+  "workflow": {
+    "model": "openai/gpt-4.1-mini",
+    "temperature": 0,
+    "token_budget": 650000,
+    "tool_budget": 240,
+    "max_output_tokens": 2200,
+    "max_context_bytes": 50000,
+    "max_agent_steps": 10,
+    "max_revisions": 2
+  },
+  "experiment_id": "E4_CRITIC",
+  "variants": [
+    {
+      "id": "critic_on",
+      "architecture": "team",
+      "critic": true,
+      "lessons": false,
+      "retrieval": "production_hybrid"
+    },
+    {
+      "id": "critic_off",
+      "architecture": "team",
+      "critic": false,
+      "lessons": false,
+      "retrieval": "production_hybrid"
+    }
+  ],
+  "interpretation": "Evaluation only; plan approvals are simulated; no publication. Shared critic is counted separately for all architectures. Stop at the shared approved budget; report unrun rows."
+}
