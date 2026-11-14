@@ -1,0 +1,182 @@
+name: analyst-desk-monitoring
+
+x-restrictions: &restrictions
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+  init: true
+  restart: unless-stopped
+  logging:
+    driver: json-file
+    options:
+      max-size: "5m"
+      max-file: "2"
+
+services:
+  exporter:
+    <<: *restrictions
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: analyst-desk-monitoring-exporter:local
+    user: "10001:10001"
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data
+        read_only: true
+        bind:
+          create_host_path: false
+    networks: [monitoring-internal]
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m,mode=1777
+    pids_limit: 64
+    mem_limit: 128m
+    cpus: 0.5
+
+  prometheus:
+    <<: *restrictions
+    image: prom/prometheus:v3.13.5
+    user: "65534:65534"
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=7d
+      - --storage.tsdb.retention.size=256MB
+      - --web.listen-address=0.0.0.0:9090
+      - --log.level=warn
+    depends_on:
+      exporter:
+        condition: service_healthy
+    volumes:
+      - type: bind
+        source: ./prometheus
+        target: /etc/prometheus
+        read_only: true
+        bind:
+          create_host_path: false
+      - prometheus-data:/prometheus
+    networks: [monitoring-internal]
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m,mode=1777
+    pids_limit: 128
+    mem_limit: 512m
+    cpus: 1.0
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:9090/-/ready"]
+      interval: 5s
+      timeout: 3s
+      start_period: 10s
+      retries: 12
+
+  grafana:
+    <<: *restrictions
+    image: grafana/grafana:13.3.1
+    user: "472:472"
+    environment:
+      GF_SERVER_ROOT_URL: http://localhost:3000/
+      GF_SERVER_ENFORCE_DOMAIN: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_NAME: Main Org.
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_AUTH_ANONYMOUS_HIDE_VERSION: "true"
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+      GF_AUTH_BASIC_ENABLED: "false"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_USERS_ALLOW_ORG_CREATE: "false"
+      GF_SECURITY_ADMIN_USER: monitoring-admin
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin_password
+      GF_SECURITY_DISABLE_GRAVATAR: "true"
+      GF_SECURITY_COOKIE_SAMESITE: strict
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: "false"
+      GF_NEWS_NEWS_FEED_ENABLED: "false"
+      GF_PLUGINS_PREINSTALL_DISABLED: "true"
+      GF_PLUGINS_PUBLIC_KEY_RETRIEVAL_DISABLED: "true"
+      GF_SNAPSHOTS_EXTERNAL_ENABLED: "false"
+      GF_UNIFIED_ALERTING_ENABLED: "false"
+      GF_LIVE_MAX_CONNECTIONS: "0"
+      GF_LOG_MODE: console
+      GF_LOG_LEVEL: warn
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    volumes:
+      - type: bind
+        source: ./grafana/provisioning
+        target: /etc/grafana/provisioning
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./grafana/dashboards
+        target: /var/lib/grafana/dashboards
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./secrets/grafana_admin_password
+        target: /run/secrets/grafana_admin_password
+        read_only: true
+        bind:
+          create_host_path: false
+      - grafana-data:/var/lib/grafana
+    networks: [monitoring-internal]
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=32m,mode=1777
+    pids_limit: 256
+    mem_limit: 512m
+    cpus: 1.0
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:3000/api/health"]
+      interval: 5s
+      timeout: 3s
+      start_period: 20s
+      retries: 18
+
+  monitoring-gateway:
+    <<: *restrictions
+    image: nginx:stable-alpine@sha256:583b7f2fce1cdb8da5ad5c39ebd3c33b98b87d493190e548bdee1fa8c619c311
+    user: "10001:10001"
+    entrypoint: ["nginx"]
+    command: ["-e", "/dev/stderr", "-c", "/etc/nginx/monitoring.conf", "-g", "daemon off;"]
+    depends_on:
+      exporter:
+        condition: service_healthy
+      prometheus:
+        condition: service_healthy
+      grafana:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8085:8085"
+      - "127.0.0.1:9090:9090"
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - type: bind
+        source: ./gateway.conf
+        target: /etc/nginx/monitoring.conf
+        read_only: true
+        bind:
+          create_host_path: false
+    networks: [monitoring-internal, monitoring-access]
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=32m,mode=1777
+    pids_limit: 64
+    mem_limit: 64m
+    cpus: 0.5
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8085/__monitoring_health"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+networks:
+  monitoring-internal:
+    internal: true
+  monitoring-access:
+    driver: bridge
+
+volumes:
+  prometheus-data: {}
+  grafana-data: {}
