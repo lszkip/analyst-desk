@@ -61,7 +61,7 @@ def render_note(draft, records, request):
     if not ids:
         raise WorkflowError("no_evidence", "No verified evidence supports this note.")
     body = [f"Companies: {', '.join(request['tickers'])}. Fiscal years: {', '.join(map(str, request['years']))}.",
-            "Fiscal years are company reporting periods, not aligned calendar years. Compare the actual start/end dates below."]
+            "Fiscal years are company reporting periods and may differ from calendar years. Compare the actual start/end dates below."]
     table = ["| Company | FY | Reporting period | Revenue (USD) | Operating income (USD) | Operating margin |",
              "|---|---|---|---:|---:|---:|"]
     figures = 0

@@ -80,6 +80,106 @@ class ToolBroker:
                 for s in slots if s["passage_count"] == 0], "complete_section_coverage": False,
                 "instruction": "These are saved source samples, not complete coverage. Read known IDs with get_passage if needed. Prioritise missing company/year/Items; do not repeatedly fetch the same page. Report unresolved limits in the handoff."}
 
+    def research_source_context(self, company):
+        """Expose scoped originals once, including IDs beyond the first samples."""
+        self.scope(company, self.request["years"][0], company)
+        coverage = self.evidence_overview("researcher", company)
+        groups = {(s["ticker"], s["year"], s["item"]): [] for s in coverage["slots"]}
+        records = self.store.evidence(self.run)
+        for key, record in records.items():
+            slot = (record["ticker"], record["year"], record.get("item"))
+            if record["kind"] == "passage" and slot in groups:
+                groups[slot].append(key)
+        catalogue = [{"ticker": ticker, "year": year, "item": item,
+                      "passages": [{"id": key, "source_characters": len(records[key]["passage"].get("text") or "")}
+                                   for key in keys]}
+                     for (ticker, year, item), keys in groups.items()]
+        # Every registered ID stays visible. Prefer a bounded spread of samples
+        # instead of repeatedly showing only the first two IDs in a slot.
+        selected = list(dict.fromkeys(key for keys in groups.values()
+                                     for key in ([keys[0], keys[-1]] if keys else [])))
+        allowance = min(1000, 8000 // max(1, len(selected)))
+        samples = []
+        for key in selected:
+            record = records[key]
+            raw = (record["passage"].get("text") or "").encode()
+            samples.append({"id": key, "source_excerpt": raw[:allowance].decode("utf-8", errors="ignore"),
+                            "excerpt_truncated": len(raw) > allowance, "untrusted_data": True})
+        context = {"source_catalogue": catalogue, "source_samples": samples,
+                   "complete_section_coverage": False,
+                   "instruction": "These are registered original-source samples, not complete section or topic coverage. Every scoped registered passage ID is listed, including IDs outside the bounded previews. Use get_passage for fuller text and targeted search for unresolved topics. A short preview does not establish an absent disclosure."}
+        if len(canonical(context).encode()) > 18000:
+            raise WorkflowError("evidence_context_limit", "The scoped source index exceeds the bounded research context. Narrow the source scope.")
+        return context
+
+    async def research_prefetch(self, company):
+        """Perform required missing-slot lookups without model round trips.
+
+        Only actual calls supply operation receipts. Existing passage records
+        independently supply samples, never an invented page-fetch receipt.
+        Prior failed/empty prefetches remain visible and are not auto-retried.
+        """
+        self.scope(company, self.request["years"][0], company)
+        coverage = self.evidence_overview("researcher", company)
+        prior = {e["details"]["operation_sha256"]: e["details"]
+                 for e in self.store.report(self.run)["events"]
+                 if e["kind"] == "research_section_prefetch" and e["role"] == "researcher"}
+        lookups = []
+        for slot in coverage["slots"]:
+            args = {k: slot[k] for k in ("ticker", "year", "item")}
+            args["offset"] = 0
+            operation = digest(["get_section", args])
+            receipt = prior.get(operation)
+            reused = receipt is not None
+            if receipt is None and not slot["passage_count"]:
+                result = await self.agent_call("researcher", "get_section", args, company)
+                receipt = {"operation_sha256": operation, "result_sha256": digest(result),
+                           "status": "error" if result.get("status") == "error" else "ok",
+                           "passage_ids": [p["passage_id"] for p in result.get("passages", [])]}
+                for field in ("next_offset", "total_passages"):
+                    if result.get(field) is None or type(result.get(field)) is int:
+                        receipt[field] = result.get(field)
+                if receipt["status"] == "error":
+                    receipt["code"] = "evidence_unavailable"
+                self.store.event(self.run, "research_section_prefetch", "researcher", receipt)
+            if receipt is not None:
+                # The current registry must still contain exactly scoped source
+                # records before a historical operation is offered for reuse.
+                for record in self.store.evidence(self.run, receipt["passage_ids"]).values():
+                    self.scope(record["ticker"], record["year"], company)
+                    if record["kind"] != "passage" or record.get("item") != args["item"] or record["year"] != args["year"]:
+                        raise WorkflowError("changed_evidence", "A saved prefetch receipt no longer matches its section scope.")
+                lookups.append({"arguments": args, "receipt": receipt, "reused": reused})
+        return {"lookups": lookups, "sources": self.research_source_context(company)}
+
+    def validate_research_prefetch(self, company, lookups):
+        """Only journaled broker operations may seed an agent's call history."""
+        self.scope(company, self.request["years"][0], company)
+        if not isinstance(lookups, list) or len(lookups) > len(self.request["years"]) * 2:
+            raise WorkflowError("invalid_prefetch_seed", "Invalid required-section lookup seed.")
+        receipts = {e["details"]["operation_sha256"]: e["details"]
+                    for e in self.store.report(self.run)["events"]
+                    if e["kind"] == "research_section_prefetch" and e["role"] == "researcher"}
+        seen = set()
+        for lookup in lookups:
+            if not isinstance(lookup, dict) or set(lookup) != {"arguments", "receipt", "reused"}:
+                raise WorkflowError("invalid_prefetch_seed", "Invalid required-section lookup seed.")
+            args = lookup["arguments"]
+            if (not isinstance(args, dict) or set(args) != {"ticker", "year", "item", "offset"}
+                    or args["ticker"] != company or type(args["year"]) is not int
+                    or args["year"] not in self.request["years"] or type(args["offset"]) is not int
+                    or args["offset"] != 0 or args["item"] not in ["7", *(["1A"] if self.request["include_risks"] else [])]):
+                raise WorkflowError("invalid_prefetch_seed", "A required-section seed is outside the company scope.")
+            operation = digest(["get_section", args])
+            if (operation in seen or operation not in receipts or not isinstance(lookup["receipt"], dict)
+                    or receipts[operation] != lookup["receipt"] or type(lookup["reused"]) is not bool):
+                raise WorkflowError("invalid_prefetch_seed", "A required-section seed lacks its exact broker receipt.")
+            seen.add(operation)
+            for record in self.store.evidence(self.run, lookup["receipt"]["passage_ids"]).values():
+                if (record["kind"] != "passage" or record["ticker"] != company
+                        or record["year"] != args["year"] or record.get("item") != args["item"]):
+                    raise WorkflowError("invalid_prefetch_seed", "A required-section seed contains evidence outside its slot.")
+
     def tool_specs(self, role, company=None):
         """Give each model branch exact types, required fields and its own scope."""
         tickers = [company] if company is not None else list(self.request["tickers"])
