@@ -1,0 +1,67 @@
+{
+  "status": "passed",
+  "script_sha256": "ddb51ee4cbc19a60296c896ca31832e024f5305c52b53bf38c6f165f48e3aa10",
+  "runs": [
+    {
+      "archive": "/workspace/scratch/f030edfecd81/capstone_final42_work/tests/results/final42-smoke-np3b6fp0/analyst-desk/LSOutput/42_Analyst_Desk_All_Company_Source_Compatibility_20261114T145622Z_7de43c9c/42_Analyst_Desk_All_Company_Source_Compatibility_Results_20261114T145622Z_7de43c9c.zip",
+      "sha256": "29203a3c85c1ed2f39733eee2e52738447bd212dd9e158a93b0ef79b17a03b04",
+      "installed_files": 8,
+      "backups": 6,
+      "passed": 236,
+      "final_integration_passed": 304,
+      "skipped": 0,
+      "module_test_counts": {
+        "test_publication_security": 9,
+        "test_python_sandbox": 14,
+        "test_research_portal": 18,
+        "test_research_workflow": 101,
+        "test_source_evidence_enforcement": 15,
+        "test_source_instruction_detection": 13,
+        "test_tool_security": 11,
+        "test_transport_security": 12,
+        "test_workflow_critic_protocol": 17,
+        "test_workflow_financial_narrative": 10,
+        "test_workflow_research_prefetch": 16
+      },
+      "source_unchanged": true
+    },
+    {
+      "archive": "/workspace/scratch/f030edfecd81/capstone_final42_work/tests/results/final42-smoke-np3b6fp0/analyst-desk/LSOutput/42_Analyst_Desk_All_Company_Source_Compatibility_20261114T145725Z_576a01e3/42_Analyst_Desk_All_Company_Source_Compatibility_Results_20261114T145725Z_576a01e3.zip",
+      "sha256": "61f2e057dc5f54c2eb56b214ec5f99e323c4934bcac327f641d4bfa5163d6bbd",
+      "installed_files": 0,
+      "backups": 0,
+      "passed": 236,
+      "final_integration_passed": 304,
+      "skipped": 0,
+      "module_test_counts": {
+        "test_publication_security": 9,
+        "test_python_sandbox": 14,
+        "test_research_portal": 18,
+        "test_research_workflow": 101,
+        "test_source_evidence_enforcement": 15,
+        "test_source_instruction_detection": 13,
+        "test_tool_security": 11,
+        "test_transport_security": 12,
+        "test_workflow_critic_protocol": 17,
+        "test_workflow_financial_narrative": 10,
+        "test_workflow_research_prefetch": 16
+      },
+      "source_unchanged": true
+    }
+  ],
+  "prior_files_and_runtime_unchanged": true,
+  "git_index_unchanged": true,
+  "original_source_backups_verified": 6,
+  "unique_zip_per_invocation": true,
+  "changed_existing_files": 6,
+  "new_source_files": 2,
+  "original_file_inventory_checked": 166,
+  "unchanged_monitoring_pins": 20,
+  "full_baseline_pins": 160,
+  "actual_dependency_environment_used": true,
+  "external_model_calls": 0,
+  "docker_execution": false,
+  "paid_operator_execution": false,
+  "user_laptop_execution": false,
+  "github_actions_execution": false
+}

@@ -1,0 +1,73 @@
+{
+  "status": "passed",
+  "sequence": 42,
+  "package_sha256": "ddb51ee4cbc19a60296c896ca31832e024f5305c52b53bf38c6f165f48e3aa10",
+  "package_bytes": 441128,
+  "installer_unit_tests": {
+    "passed": 36,
+    "failed": 0,
+    "errors": 0,
+    "log": "Runner_Unit_Tests.log"
+  },
+  "packaged_smoke": {
+    "runs": 2,
+    "passed_per_run": 540,
+    "security_per_run": 236,
+    "final_integration_per_run": 304,
+    "skipped": 0,
+    "initial_installed_files": 8,
+    "initial_backups": 6,
+    "repeat_installed_files": 0,
+    "repeat_backups": 0,
+    "details": "Packaged_Smoke_Result.json"
+  },
+  "baseline_source_pins": 160,
+  "final_source_pins": 162,
+  "changed_existing_files": 6,
+  "new_source_files": 2,
+  "source_baseline": "exact frozen S41 pins",
+  "source_cache_certificate_sha256": "2a429342887848bf1cf786df03d474ce18e6adad269aa1150dd65c247a756362",
+  "private_inputs_preserved_except_declared_readiness_and_added_certificate": true,
+  "completion_baseline_protocol_checked": {
+    "C0_critic": false,
+    "C1_critic": false,
+    "C2_critic": true,
+    "shared_model_and_budget_ceiling_unchanged": true,
+    "all_other_experiment_settings_unchanged_except_interpretation": true,
+    "historical_e1_pilot_full_matrix_configs_unchanged": true
+  },
+  "shared_budget_state": "LSOutput/.final_pilot_state36",
+  "shared_lock": "LSOutput/36_Final_Integration.lock",
+  "protected_prior_data_and_git_index_unchanged": true,
+  "unique_result_archives": true,
+  "interactive_runner_checks": {
+    "stdin_inherited": true,
+    "no_automatic_approval": true,
+    "preview_only_omits_execute": true,
+    "human_review_explicit_root_then_private_fallback": true,
+    "invalid_or_symlink_human_review_fails_closed": true
+  },
+  "export_checks": {
+    "allowlisted_reports_only": true,
+    "raw_human_review_excluded": true,
+    "private_source_certificate_excluded": true,
+    "sqlite_excluded": true,
+    "unknown_files_excluded": true
+  },
+  "execution_scope": {
+    "external_model_calls": 0,
+    "docker": false,
+    "github_actions": false,
+    "actual_user_laptop": false,
+    "actual_human_approval": false,
+    "actual_heldout_results": false
+  },
+  "limitations": [
+    "This validates the exact installer and offline source checks in an isolated local fixture. Actual user installation, cache validation and optional paid evaluation remain separate evidence.",
+    "Earlier cache-only package proof is preserved in intermediate_cache_fix and is not the released package validation."
+  ],
+  "test_sha256": {
+    "test_runner42.py": "e8a4f4a23a1ea26981150e1a8fdbc801f9dba33d4388bd259511e8ff5e778de3",
+    "run_packaged_smoke.py": "ae9480faccc3ae8743ed509ca9c5406b0021a95ff6d4a5552b37829e1107786a"
+  }
+}

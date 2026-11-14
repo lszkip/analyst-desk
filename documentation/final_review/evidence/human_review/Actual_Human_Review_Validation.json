@@ -1,0 +1,20 @@
+{
+  "schema_version": "completion-human-review-v1",
+  "packet_sha256": "e7b5be45054d73e32da3b45069dc4b12f09eb83954e906ef01d8ce68c129c2c1",
+  "export_sha256": "de4cb40bfde8eddf4f41e75c574151c29ce90a1bb8af524a9578748e89a25a55",
+  "actual_human_labels": 24,
+  "human_review_attested": true,
+  "label_counts": {
+    "supported": 12,
+    "unsupported": 6,
+    "uncertain": 6
+  },
+  "lesson_approvals": 3,
+  "lesson_rejections": 1,
+  "human_authorship_basis": "User-entered labels, reasons, name and explicit personal review attestation; not external identity verification.",
+  "raw_uploaded_sha256": "b0b6309750735032e3c358438fe1b3a42c68f5b92966928d8dfe85edbe261c0d",
+  "validation_only": true,
+  "live_evaluation_started": false,
+  "paid_calls": 0,
+  "live_playbook_freeze": "Pending import by the live completion operator; validation used a disposable store."
+}

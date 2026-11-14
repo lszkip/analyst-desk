@@ -1,0 +1,94 @@
+{
+  "audit": "ActualS43developmentcoverage stop",
+  "generated_utc": "2026-11-14T17:12:09.581643+00:00",
+  "archive": "43_Analyst_Desk_Prioritized_Final_Evaluation_Results_20261114T165248Z_65fbd16f.zip",
+  "archive_sha256": "0bb92afee402ee19bad8c769f9a97f87e7183cad73b2bf28636dc0e31e0a0b36",
+  "scope_sha256": "49267c92182e0a88aa92523297c7acc4b16fd565e35f9e05a5eca174b8923c8a",
+  "status": "blocked_development_coverage",
+  "heldout_started": false,
+  "matrix_members": 0,
+  "all_new_workflow_attempts": 24,
+  "new_attempt_status_counts": {
+    "completed": 11,
+    "error": 2,
+    "blocked": 11
+  },
+  "new_unique_dev_cases": 20,
+  "new_numeric_passes": 11,
+  "C2_development_by_task_type": {
+    "numeric_only": {
+      "cases": 10,
+      "status_counts": {
+        "completed": 7,
+        "blocked": 3
+      },
+      "numeric_passes": 7,
+      "task_passes": 7,
+      "task_unknown": 0
+    },
+    "risk": {
+      "cases": 10,
+      "status_counts": {
+        "blocked": 7,
+        "completed": 2,
+        "error": 1
+      },
+      "numeric_passes": 2,
+      "task_passes": 0,
+      "task_unknown": 10
+    }
+  },
+  "global_budget": {
+    "reserved_requests": 368,
+    "known_actual_usd": 0.60079594,
+    "reserved_usd": 3.63497986,
+    "requests_without_actual_cost": 0,
+    "in_flight_requests": 0,
+    "poisoned": false,
+    "stop_code": null,
+    "original_started_at": "1794663648.8437135"
+  },
+  "new_requests_sinceS42": 285,
+  "new_actual_usd_sinceS42": "0.5064152",
+  "approval": {
+    "explicit": "APPROVE",
+    "approved_at": "2026-11-14T17:00:44.625234+00:00",
+    "plan_sha256": "49267c92182e0a88aa92523297c7acc4b16fd565e35f9e05a5eca174b8923c8a",
+    "new_limits": {
+      "max_calls": 12000,
+      "max_calls_per_case": 50,
+      "max_input_bytes": 100000,
+      "max_output_tokens": 2200,
+      "max_reserved_usd": "150.00",
+      "max_runtime_seconds": 16200
+    },
+    "time_anchor_reset": false
+  },
+  "blocking_case": {
+    "execution_id": "COMPLETION_DEV_COVERAGE_C2_F020_r1",
+    "error_code": "budget_exhausted",
+    "journal_budget": {
+      "id": "COMPLETION_DEV_COVERAGE_C2_F020_r1",
+      "config_hash": "2ff0c23fbf774b38e4cc49e454589f8573fe9dcab5c07c30d02de873d9f2f566",
+      "token_limit": 650000,
+      "tool_limit": 240,
+      "reserved_tokens": 642190,
+      "tool_calls": 43
+    },
+    "journal_metrics": {
+      "llm_requests_started": 24,
+      "llm_responses_received": 24,
+      "reported_total_tokens": 135081,
+      "reported_cost_usd": "0.0603600",
+      "cost_complete": true,
+      "critic_rejections": 2,
+      "model_response_cache_hits": 6,
+      "development_budget_extensions": 0,
+      "budget_protocol": "original_fixed_limit"
+    },
+    "diagnosis": "Per-workflow conservative reservation ceiling prevented another call. This is a bounded budget-limited development quality/delivery outcome, not a poisoned or exhausted cumulative paid ledger. Preservefailure, do notraiseceilingorretry."
+  },
+  "readiness_classification": "budget_exhausted absent from quality_errors, classified as unreviewed_runtime_or_infrastructure_failure. A narrowly reviewed continuation may accept this measured qualityfailure while retaining exactcase/error/result; global financial/integrity stops mustremainblocking.",
+  "continuation_constraint": "ApprovedS43scopeincludesreviewedsoftwarepins. Currentunapprovedpreviewhandoff correctlyforbidsreplacement after24attempts. Anycodechange requires explicitlytrackedreviewedsoftware/scopecontinuation, preservingoriginal$150cap,originalclock,source/gold/configs andallpriorresults.",
+  "additional_runner_issue": "completion_runner imports BUDGET_CODES containing local budget_exhausted and also globally stops on any budget_ prefix. A bounded local workflow exhaustion should remain a failed case without stopping unrelated cases; preserve all global financial/accounting/time/integrity stop codes. This issue was invisible in S43coverage because F020was thelastscheduledcase."
+}

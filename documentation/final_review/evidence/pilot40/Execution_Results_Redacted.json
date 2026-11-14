@@ -1,0 +1,2519 @@
+[
+  {
+    "execution_id": "PILOT_C0_F002_r1",
+    "case_id": "F002",
+    "repeat": 1,
+    "variant": "C0",
+    "split": "dev",
+    "manifest_sha256": "78da202b276d4ebf1ca2182a85d4e169c12790c022d78b5a95381867b3ea4ab7",
+    "status": "completed",
+    "elapsed_seconds": 8.038473,
+    "evaluation_only": true,
+    "human_reviewed": false,
+    "publication": null,
+    "shared_semantic_validator": true,
+    "independent_model_cache": true,
+    "retrieval_protocol": {
+      "ranking": "operator_production_hybrid_service",
+      "configuration_attestation": "external_preflight_required"
+    },
+    "result": {
+      "request": {
+        "question": "Compare Microsoft and Alphabet operating margins in FY2024 and FY2025. Present each company's own fiscal periods side by side so an analyst can see the June-versus-December year-end limitation. Include the reported inputs; do not annualise or calendarise them.",
+        "tickers": [
+          "GOOGL",
+          "MSFT"
+        ],
+        "years": [
+          2024,
+          2025
+        ],
+        "include_risks": false
+      },
+      "researchers": {
+        "GOOGL": {
+          "summary": "Fixed collection; source meaning is reviewed downstream.",
+          "evidence_ids": [
+            "p_05fb7025f95e1410792301a682ab0ec82dad4ee1aba7f27fac484c9e05b0dc0a",
+            "p_3c749092d93614bf94c0cffc3b1374472abdce27a99453fbf9a7463bde27b576",
+            "p_5c451d27d5672213fdc0b51b940ba14d5fecea7550f8597234e6193d36f66b41",
+            "p_c2e22186d21fffcf2e17ff2e859f845603a552667adc4001d48682c611b4633e"
+          ],
+          "issues": []
+        },
+        "MSFT": {
+          "summary": "Fixed collection; source meaning is reviewed downstream.",
+          "evidence_ids": [
+            "p_117a2ad13ca9ea3e9bfaa2225e9e1c7af65f348af3fbe3746b91cc2c1ab22f43",
+            "p_1f7865f59868577679edc6278790e1fe233fd0c7aa288f5aabacec32b992c225",
+            "p_34b9b8ae5690e8529dee259e277047447d4a4cf243e7048e26a0c7501dc086c9",
+            "p_561907d55b0b0edf0b62d3ffbac5d49892d7af3d6b3cf5de0d1101876c94cc0e"
+          ],
+          "issues": []
+        }
+      },
+      "revisions": 0,
+      "replans": 0,
+      "evaluation_only": true,
+      "human_reviewed": false,
+      "publication": null,
+      "plan": {
+        "objective": "Answer the approved operating-margin request using verified source evidence.",
+        "outline": [
+          "Verified financial comparison",
+          "Requested sampled risks and limits"
+        ],
+        "research_query": "operating performance and requested risk factors",
+        "limitations": [
+          "Source samples do not establish complete filing coverage."
+        ]
+      },
+      "plan_approved": true,
+      "quant": {
+        "summary": "Code collected and checked financial facts.",
+        "evidence_ids": [
+          "f_Revenues_2024-01-01_2024-12-31_0001652044-26-000018_d9293b95d7f2",
+          "f_OperatingIncomeLoss_2024-01-01_2024-12-31_0001652044-26-000018_6492cfa9e4a7",
+          "margin_1dcf027449282bcd9d74e5a5fe9db878",
+          "f_Revenues_2025-01-01_2025-12-31_0001652044-26-000018_566b60c5266e",
+          "f_OperatingIncomeLoss_2025-01-01_2025-12-31_0001652044-26-000018_de50c2e0e06a",
+          "margin_5c6f3fecb46bb991850865bf616ddb98",
+          "f_RevenueFromContractWithCustomerExcludingAssessedTax_2023-07-01_2024-06-30_0001193125-26-323660_4ce714604805",
+          "f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8",
+          "margin_c7634ce686600989cfae5f37ad130c26",
+          "f_RevenueFromContractWithCustomerExcludingAssessedTax_2024-07-01_2025-06-30_0001193125-26-323660_ca99bf1ee91d",
+          "f_OperatingIncomeLoss_2024-07-01_2025-06-30_0001193125-26-323660_fb0082f0eb75",
+          "margin_734519e58a833d24f5ee16a67d15f32f"
+        ],
+        "issues": []
+      },
+      "risk_diff": {
+        "summary": "Fixed collection; no separate model risk synthesis.",
+        "evidence_ids": [
+          "p_05fb7025f95e1410792301a682ab0ec82dad4ee1aba7f27fac484c9e05b0dc0a",
+          "p_3c749092d93614bf94c0cffc3b1374472abdce27a99453fbf9a7463bde27b576",
+          "p_5c451d27d5672213fdc0b51b940ba14d5fecea7550f8597234e6193d36f66b41",
+          "p_c2e22186d21fffcf2e17ff2e859f845603a552667adc4001d48682c611b4633e",
+          "p_117a2ad13ca9ea3e9bfaa2225e9e1c7af65f348af3fbe3746b91cc2c1ab22f43",
+          "p_1f7865f59868577679edc6278790e1fe233fd0c7aa288f5aabacec32b992c225",
+          "p_34b9b8ae5690e8529dee259e277047447d4a4cf243e7048e26a0c7501dc086c9",
+          "p_561907d55b0b0edf0b62d3ffbac5d49892d7af3d6b3cf5de0d1101876c94cc0e"
+        ],
+        "issues": []
+      },
+      "draft": {
+        "title": "Company operating margin comparison",
+        "paragraphs": [
+          {
+            "text": "Among the available calculations for the earlier requested fiscal period, calculated operating margins rank from higher to lower as MSFT, then GOOGL, at the displayed precision.",
+            "evidence_ids": [
+              "margin_1dcf027449282bcd9d74e5a5fe9db878",
+              "margin_c7634ce686600989cfae5f37ad130c26"
+            ]
+          },
+          {
+            "text": "Among the available calculations for the later requested fiscal period, calculated operating margins rank from higher to lower as MSFT, then GOOGL, at the displayed precision. GOOGL's calculated operating margin decreased from the earlier requested fiscal period to the later requested fiscal period at the displayed precision. MSFT's calculated operating margin increased from the earlier requested fiscal period to the later requested fiscal period at the displayed precision.",
+            "evidence_ids": [
+              "margin_1dcf027449282bcd9d74e5a5fe9db878",
+              "margin_5c6f3fecb46bb991850865bf616ddb98",
+              "margin_734519e58a833d24f5ee16a67d15f32f",
+              "margin_c7634ce686600989cfae5f37ad130c26"
+            ]
+          }
+        ]
+      },
+      "writer_mode": "deterministic_financials",
+      "status": "completed",
+      "critique": {
+        "approved": true,
+        "supported": [
+          true,
+          true
+        ],
+        "issues": [],
+        "check_version": "sentence-evidence-v3-source-instructions",
+        "draft_sha256": "00fa599d33dfbaba176ea9f0409c057cb8ba68c6422c26f25634d41c75118517",
+        "paragraph_reviews": [
+          {
+            "sentences": [
+              {
+                "sentence_index": 0,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "margin_1dcf027449282bcd9d74e5a5fe9db878",
+                    "quote": ""
+                  },
+                  {
+                    "evidence_id": "margin_c7634ce686600989cfae5f37ad130c26",
+                    "quote": ""
+                  }
+                ],
+                "reason": "The sentence correctly states that for the earlier requested fiscal period, Microsoft (MSFT) has a higher operating margin than Alphabet (GOOGL), supported by the calculations for MSFT's 2024-06-30 period (44.64%) and GOOGL's 2024-12-31 period (32.11%)."
+              }
+            ],
+            "issues": [],
+            "approved": true,
+            "selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_9dc9a36c4d147574",
+                    "r_492a9c9f9e39459f"
+                  ],
+                  "reason": "The sentence correctly states that for the earlier requested fiscal period, Microsoft (MSFT) has a higher operating margin than Alphabet (GOOGL), supported by the calculations for MSFT's 2024-06-30 period (44.64%) and GOOGL's 2024-12-31 period (32.11%)."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "alias_selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "P1R1",
+                    "P1R2"
+                  ],
+                  "reason": "The sentence correctly states that for the earlier requested fiscal period, Microsoft (MSFT) has a higher operating margin than Alphabet (GOOGL), supported by the calculations for MSFT's 2024-06-30 period (44.64%) and GOOGL's 2024-12-31 period (32.11%)."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "catalog_sha256": "d82305c65e178953cf4a6d80e384ebacd65457feb5a127ff37f6a057e44040a0",
+            "critic_protocol": "critic-short-references-strict-schema-v1",
+            "alias_binding_sha256": "fff998af6e038c07985fcdaed97892b8f6c6e022a7623a042be1058ddb55f4da",
+            "response_format_sha256": "11073714e043fbd5cb9673648eb2e48286ac617aa387da00106b8c49589ea894"
+          },
+          {
+            "sentences": [
+              {
+                "sentence_index": 0,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "margin_734519e58a833d24f5ee16a67d15f32f",
+                    "quote": ""
+                  },
+                  {
+                    "evidence_id": "margin_5c6f3fecb46bb991850865bf616ddb98",
+                    "quote": ""
+                  }
+                ],
+                "reason": "Supported by P2R3 (MSFT 2025 operating margin 45.62%) and P2R2 (GOOGL 2025 operating margin 32.03%) showing MSFT margin higher than GOOGL for the later fiscal period (2025)."
+              },
+              {
+                "sentence_index": 1,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "margin_1dcf027449282bcd9d74e5a5fe9db878",
+                    "quote": ""
+                  },
+                  {
+                    "evidence_id": "margin_5c6f3fecb46bb991850865bf616ddb98",
+                    "quote": ""
+                  }
+                ],
+                "reason": "Supported by P2R1 (GOOGL 2024 operating margin 32.11%) and P2R2 (GOOGL 2025 operating margin 32.03%) showing a decrease from 32.11% to 32.03%."
+              },
+              {
+                "sentence_index": 2,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "margin_c7634ce686600989cfae5f37ad130c26",
+                    "quote": ""
+                  },
+                  {
+                    "evidence_id": "margin_734519e58a833d24f5ee16a67d15f32f",
+                    "quote": ""
+                  }
+                ],
+                "reason": "Supported by P2R4 (MSFT 2024 operating margin 44.64%) and P2R3 (MSFT 2025 operating margin 45.62%) showing an increase from 44.64% to 45.62%."
+              }
+            ],
+            "issues": [],
+            "approved": true,
+            "selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_4c0f2c206c63a087",
+                    "r_81a15e1f4adb6012"
+                  ],
+                  "reason": "Supported by P2R3 (MSFT 2025 operating margin 45.62%) and P2R2 (GOOGL 2025 operating margin 32.03%) showing MSFT margin higher than GOOGL for the later fiscal period (2025)."
+                },
+                {
+                  "sentence_index": 1,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_d3a3a2ef0be6c9e2",
+                    "r_81a15e1f4adb6012"
+                  ],
+                  "reason": "Supported by P2R1 (GOOGL 2024 operating margin 32.11%) and P2R2 (GOOGL 2025 operating margin 32.03%) showing a decrease from 32.11% to 32.03%."
+                },
+                {
+                  "sentence_index": 2,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_ac927fe3532a915e",
+                    "r_4c0f2c206c63a087"
+                  ],
+                  "reason": "Supported by P2R4 (MSFT 2024 operating margin 44.64%) and P2R3 (MSFT 2025 operating margin 45.62%) showing an increase from 44.64% to 45.62%."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "alias_selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "P2R3",
+                    "P2R2"
+                  ],
+                  "reason": "Supported by P2R3 (MSFT 2025 operating margin 45.62%) and P2R2 (GOOGL 2025 operating margin 32.03%) showing MSFT margin higher than GOOGL for the later fiscal period (2025)."
+                },
+                {
+                  "sentence_index": 1,
+                  "supported": true,
+                  "reference_ids": [
+                    "P2R1",
+                    "P2R2"
+                  ],
+                  "reason": "Supported by P2R1 (GOOGL 2024 operating margin 32.11%) and P2R2 (GOOGL 2025 operating margin 32.03%) showing a decrease from 32.11% to 32.03%."
+                },
+                {
+                  "sentence_index": 2,
+                  "supported": true,
+                  "reference_ids": [
+                    "P2R4",
+                    "P2R3"
+                  ],
+                  "reason": "Supported by P2R4 (MSFT 2024 operating margin 44.64%) and P2R3 (MSFT 2025 operating margin 45.62%) showing an increase from 44.64% to 45.62%."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "catalog_sha256": "9b5abd45caa35a2c46eec535f7fd868232209b00ddfa76dee6aecbbb917a544d",
+            "critic_protocol": "critic-short-references-strict-schema-v1",
+            "alias_binding_sha256": "3ec8a2ba1e84d04a134f024ea61ebb641a262d4bdcfed47ad0ad3a8775e0b2d0",
+            "response_format_sha256": "52cf2638c5d5a9b6210b6974a4afdfd150824b3fbe55c43dacd94704d49a1719"
+          }
+        ]
+      },
+      "note": {
+        "title": "Company operating margin comparison",
+        "body_markdown": "Companies: GOOGL, MSFT. Fiscal years: 2024, 2025.\n\nFiscal years are company reporting periods and may differ from calendar years. Compare the actual start/end dates below.\n\n| Company | FY | Reporting period | Revenue (USD) | Operating income (USD) | Operating margin |\n|---|---|---|---:|---:|---:|\n| GOOGL | 2024 | 2024-01-01 to 2024-12-31 | 350,018,000,000 [f_Revenues_2024-01-01_2024-12-31_0001652044-26-000018_d9293b95d7f2] | 112,390,000,000 [f_OperatingIncomeLoss_2024-01-01_2024-12-31_0001652044-26-000018_6492cfa9e4a7] | 32.11% [margin_1dcf027449282bcd9d74e5a5fe9db878] |\n| GOOGL | 2025 | 2025-01-01 to 2025-12-31 | 402,836,000,000 [f_Revenues_2025-01-01_2025-12-31_0001652044-26-000018_566b60c5266e] | 129,039,000,000 [f_OperatingIncomeLoss_2025-01-01_2025-12-31_0001652044-26-000018_de50c2e0e06a] | 32.03% [margin_5c6f3fecb46bb991850865bf616ddb98] |\n| MSFT | 2024 | 2023-07-01 to 2024-06-30 | 245,122,000,000 [f_RevenueFromContractWithCustomerExcludingAssessedTax_2023-07-01_2024-06-30_0001193125-26-323660_4ce714604805] | 109,433,000,000 [f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8] | 44.64% [margin_c7634ce686600989cfae5f37ad130c26] |\n| MSFT | 2025 | 2024-07-01 to 2025-06-30 | 281,724,000,000 [f_RevenueFromContractWithCustomerExcludingAssessedTax_2024-07-01_2025-06-30_0001193125-26-323660_ca99bf1ee91d] | 128,528,000,000 [f_OperatingIncomeLoss_2024-07-01_2025-06-30_0001193125-26-323660_fb0082f0eb75] | 45.62% [margin_734519e58a833d24f5ee16a67d15f32f] |\n\nFinancial coverage: saved calculations cover every requested company/fiscal-year pair.\n\nMargin formula: operating income divided by revenue, multiplied by one hundred; rounded to two decimal places using Decimal half-even rounding.\n\nAmong the available calculations for the earlier requested fiscal period, calculated operating margins rank from higher to lower as MSFT, then GOOGL, at the displayed precision. [margin_1dcf027449282bcd9d74e5a5fe9db878] [margin_c7634ce686600989cfae5f37ad130c26]\n\nAmong the available calculations for the later requested fiscal period, calculated operating margins rank from higher to lower as MSFT, then GOOGL, at the displayed precision. GOOGL's calculated operating margin decreased from the earlier requested fiscal period to the later requested fiscal period at the displayed precision. MSFT's calculated operating margin increased from the earlier requested fiscal period to the later requested fiscal period at the displayed precision. [margin_1dcf027449282bcd9d74e5a5fe9db878] [margin_5c6f3fecb46bb991850865bf616ddb98] [margin_734519e58a833d24f5ee16a67d15f32f] [margin_c7634ce686600989cfae5f37ad130c26]\n\nSources:\n- [f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)\n- [f_OperatingIncomeLoss_2024-01-01_2024-12-31_0001652044-26-000018_6492cfa9e4a7](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [f_OperatingIncomeLoss_2024-07-01_2025-06-30_0001193125-26-323660_fb0082f0eb75](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)\n- [f_OperatingIncomeLoss_2025-01-01_2025-12-31_0001652044-26-000018_de50c2e0e06a](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [f_RevenueFromContractWithCustomerExcludingAssessedTax_2023-07-01_2024-06-30_0001193125-26-323660_4ce714604805](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)\n- [f_RevenueFromContractWithCustomerExcludingAssessedTax_2024-07-01_2025-06-30_0001193125-26-323660_ca99bf1ee91d](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)\n- [f_Revenues_2024-01-01_2024-12-31_0001652044-26-000018_d9293b95d7f2](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [f_Revenues_2025-01-01_2025-12-31_0001652044-26-000018_566b60c5266e](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [margin_1dcf027449282bcd9d74e5a5fe9db878](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [margin_5c6f3fecb46bb991850865bf616ddb98](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [margin_734519e58a833d24f5ee16a67d15f32f](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)\n- [margin_c7634ce686600989cfae5f37ad130c26](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)",
+        "tickers": [
+          "GOOGL",
+          "MSFT"
+        ],
+        "fiscal_years": [
+          2024,
+          2025
+        ],
+        "citations": [
+          {
+            "evidence_id": "f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          },
+          {
+            "evidence_id": "f_OperatingIncomeLoss_2024-01-01_2024-12-31_0001652044-26-000018_6492cfa9e4a7",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "f_OperatingIncomeLoss_2024-07-01_2025-06-30_0001193125-26-323660_fb0082f0eb75",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          },
+          {
+            "evidence_id": "f_OperatingIncomeLoss_2025-01-01_2025-12-31_0001652044-26-000018_de50c2e0e06a",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "f_RevenueFromContractWithCustomerExcludingAssessedTax_2023-07-01_2024-06-30_0001193125-26-323660_4ce714604805",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          },
+          {
+            "evidence_id": "f_RevenueFromContractWithCustomerExcludingAssessedTax_2024-07-01_2025-06-30_0001193125-26-323660_ca99bf1ee91d",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          },
+          {
+            "evidence_id": "f_Revenues_2024-01-01_2024-12-31_0001652044-26-000018_d9293b95d7f2",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "f_Revenues_2025-01-01_2025-12-31_0001652044-26-000018_566b60c5266e",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "margin_1dcf027449282bcd9d74e5a5fe9db878",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "margin_5c6f3fecb46bb991850865bf616ddb98",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "margin_734519e58a833d24f5ee16a67d15f32f",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          },
+          {
+            "evidence_id": "margin_c7634ce686600989cfae5f37ad130c26",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          }
+        ]
+      },
+      "verification": {
+        "rendered_financial_figures": 12,
+        "verified_financial_figures": 12,
+        "verified_share": 1.0,
+        "missing_company_years": [],
+        "metric_scope": "Code-rendered financial table values; qualitative support is a separate critic check."
+      },
+      "semantic_critic": "shared_production_validator",
+      "semantic_support_verified": null,
+      "semantic_support": "model_critic_approved_not_human_gold",
+      "publication_calls": 0
+    },
+    "metrics": {
+      "llm_requests_started": 2,
+      "llm_responses_received": 2,
+      "reported_total_tokens": 4486,
+      "reported_cost_usd": "0.0022552",
+      "cost_complete": true,
+      "critic_rejections": 0,
+      "model_response_cache_hits": 0,
+      "development_budget_extensions": 0,
+      "budget_protocol": "original_fixed_limit"
+    },
+    "tool_calls": 24,
+    "policy_violation_attempts": 0,
+    "tool_errors": 0,
+    "model_errors": 0,
+    "evaluation": {
+      "case_id": "F002",
+      "numeric_success": true,
+      "task_success": true,
+      "risk_semantic_success": null,
+      "risk_label_status": "not_applicable",
+      "numeric_errors": [],
+      "numeric_checks": [
+        {
+          "ticker": "GOOGL",
+          "year": 2024
+        },
+        {
+          "ticker": "GOOGL",
+          "year": 2025
+        },
+        {
+          "ticker": "MSFT",
+          "year": 2024
+        },
+        {
+          "ticker": "MSFT",
+          "year": 2025
+        }
+      ],
+      "metric_scope": "Frozen annual SEC fact identities, exact matched periods, Decimal margin, delivered table/citations, missing-input abstention; no narrative semantic judgment"
+    }
+  },
+  {
+    "execution_id": "PILOT_C0_F003_r1",
+    "case_id": "F003",
+    "repeat": 1,
+    "variant": "C0",
+    "split": "dev",
+    "manifest_sha256": "78da202b276d4ebf1ca2182a85d4e169c12790c022d78b5a95381867b3ea4ab7",
+    "status": "blocked",
+    "elapsed_seconds": 40.949406,
+    "evaluation_only": true,
+    "human_reviewed": false,
+    "publication": null,
+    "shared_semantic_validator": true,
+    "independent_model_cache": true,
+    "retrieval_protocol": {
+      "ranking": "operator_production_hybrid_service",
+      "configuration_attestation": "external_preflight_required"
+    },
+    "result": {
+      "request": {
+        "question": "Compare Microsoft's operating margins in FY2023 and FY2024 and examine what the cited risk-factor passages say about cybersecurity and cloud service reliability. Distinguish a difference in retrieved wording from a demonstrated new risk.",
+        "tickers": [
+          "MSFT"
+        ],
+        "years": [
+          2023,
+          2024
+        ],
+        "include_risks": true
+      },
+      "researchers": {
+        "MSFT": {
+          "summary": "Fixed collection; source meaning is reviewed downstream.",
+          "evidence_ids": [
+            "p_1867d704d64d42324b0f227eddba0adeec11e87d98910c9edaa39189ab37689b",
+            "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+            "p_34b9b8ae5690e8529dee259e277047447d4a4cf243e7048e26a0c7501dc086c9",
+            "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+            "p_561907d55b0b0edf0b62d3ffbac5d49892d7af3d6b3cf5de0d1101876c94cc0e",
+            "p_588af49703eb1fc886d09dfb1078afa7693ca4c41e72238f40e441cd40751a88",
+            "p_a0e7d6106245724eec600b98cdf673b9be96b97e7d1d3037e1c85ddf09518abd",
+            "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+            "p_d79ab71dadf1dbd36692c60e35d74a77fa84347e307fe2d7b85b5e2fd3219a77",
+            "p_d84a48e635b4a62630152471a5aaccb92bcf8276a4dad6cec2f8cfc21ed91552",
+            "p_f2b061c0efc337ebc00812b4542af2a4f5d7831e4722e055c2780a3608c2dbb1"
+          ],
+          "issues": []
+        }
+      },
+      "revisions": 2,
+      "replans": 0,
+      "evaluation_only": true,
+      "human_reviewed": false,
+      "publication": null,
+      "plan": {
+        "objective": "Answer the approved operating-margin request using verified source evidence.",
+        "outline": [
+          "Verified financial comparison",
+          "Requested sampled risks and limits"
+        ],
+        "research_query": "operating performance and requested risk factors",
+        "limitations": [
+          "Source samples do not establish complete filing coverage."
+        ]
+      },
+      "plan_approved": true,
+      "quant": {
+        "summary": "Code collected and checked financial facts.",
+        "evidence_ids": [
+          "f_RevenueFromContractWithCustomerExcludingAssessedTax_2022-07-01_2023-06-30_0000950170-25-100235_2bf438dbf9b6",
+          "f_OperatingIncomeLoss_2022-07-01_2023-06-30_0000950170-25-100235_9e0733bb2dfc",
+          "margin_ac9a50aa3cf0417c58a1b06c29a0784b",
+          "f_RevenueFromContractWithCustomerExcludingAssessedTax_2023-07-01_2024-06-30_0001193125-26-323660_4ce714604805",
+          "f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8",
+          "margin_c7634ce686600989cfae5f37ad130c26"
+        ],
+        "issues": []
+      },
+      "risk_diff": {
+        "summary": "Fixed collection; no separate model risk synthesis.",
+        "evidence_ids": [
+          "p_1867d704d64d42324b0f227eddba0adeec11e87d98910c9edaa39189ab37689b",
+          "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+          "p_34b9b8ae5690e8529dee259e277047447d4a4cf243e7048e26a0c7501dc086c9",
+          "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+          "p_561907d55b0b0edf0b62d3ffbac5d49892d7af3d6b3cf5de0d1101876c94cc0e",
+          "p_588af49703eb1fc886d09dfb1078afa7693ca4c41e72238f40e441cd40751a88",
+          "p_a0e7d6106245724eec600b98cdf673b9be96b97e7d1d3037e1c85ddf09518abd",
+          "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+          "p_d79ab71dadf1dbd36692c60e35d74a77fa84347e307fe2d7b85b5e2fd3219a77",
+          "p_d84a48e635b4a62630152471a5aaccb92bcf8276a4dad6cec2f8cfc21ed91552",
+          "p_f2b061c0efc337ebc00812b4542af2a4f5d7831e4722e055c2780a3608c2dbb1"
+        ],
+        "issues": []
+      },
+      "draft": {
+        "title": "Microsoft Risk Disclosure Comparison for the Requested Fiscal Periods",
+        "paragraphs": [
+          {
+            "text": "In the requested fiscal periods, Microsoft consistently identifies intense competition across all markets for its products and services as a key risk that could adversely affect its business and financial results. The risk factors section for both periods describes competitors ranging from large global companies with significant research and development resources to smaller specialized firms, emphasizing rapid technological evolution and shifting user needs as ongoing challenges. This competitive environment requires continuous innovation to maintain market position.",
+            "evidence_ids": [
+              "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+              "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d"
+            ]
+          },
+          {
+            "text": "The risk disclosures for the earlier requested fiscal period highlight specific competition in operating systems and platforms from new device categories such as smartphones and tablets, which may affect user and developer engagement with Microsoft's PC operating systems. This includes competition from platforms with large content and application marketplaces and challenges arising from competing products made by original equipment manufacturer partners. The later period's disclosures do not explicitly restate these platform-specific risks but maintain a broad focus on competition in software and services.",
+            "evidence_ids": [
+              "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+              "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d"
+            ]
+          },
+          {
+            "text": "In the later requested fiscal period, Microsoft introduces additional detail on competition from companies offering free applications, online services, and content funded by advertising revenue, as well as competitors leveraging open source software and artificial intelligence models. These competitors do not bear the full costs of research and development, which may affect Microsoft's competitive positioning. This nuance is not present in the earlier period's risk disclosures.",
+            "evidence_ids": [
+              "p_a0e7d6106245724eec600b98cdf673b9be96b97e7d1d3037e1c85ddf09518abd"
+            ]
+          },
+          {
+            "text": "An operating-margin calculation is available for MSFT for the earlier requested fiscal period.",
+            "evidence_ids": [
+              "margin_ac9a50aa3cf0417c58a1b06c29a0784b"
+            ]
+          },
+          {
+            "text": "An operating-margin calculation is available for MSFT for the later requested fiscal period. MSFT's calculated operating margin increased from the earlier requested fiscal period to the later requested fiscal period at the displayed precision.",
+            "evidence_ids": [
+              "margin_ac9a50aa3cf0417c58a1b06c29a0784b",
+              "margin_c7634ce686600989cfae5f37ad130c26"
+            ]
+          }
+        ]
+      },
+      "risk_draft": {
+        "title": "Microsoft Risk Disclosure Comparison for the Requested Fiscal Periods",
+        "paragraphs": [
+          {
+            "text": "In the requested fiscal periods, Microsoft consistently identifies intense competition across all markets for its products and services as a key risk that could adversely affect its business and financial results. The risk factors section for both periods describes competitors ranging from large global companies with significant research and development resources to smaller specialized firms, emphasizing rapid technological evolution and shifting user needs as ongoing challenges. This competitive environment requires continuous innovation to maintain market position.",
+            "evidence_ids": [
+              "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+              "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d"
+            ]
+          },
+          {
+            "text": "The risk disclosures for the earlier requested fiscal period highlight specific competition in operating systems and platforms from new device categories such as smartphones and tablets, which may affect user and developer engagement with Microsoft's PC operating systems. This includes competition from platforms with large content and application marketplaces and challenges arising from competing products made by original equipment manufacturer partners. The later period's disclosures do not explicitly restate these platform-specific risks but maintain a broad focus on competition in software and services.",
+            "evidence_ids": [
+              "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+              "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d"
+            ]
+          },
+          {
+            "text": "In the later requested fiscal period, Microsoft introduces additional detail on competition from companies offering free applications, online services, and content funded by advertising revenue, as well as competitors leveraging open source software and artificial intelligence models. These competitors do not bear the full costs of research and development, which may affect Microsoft's competitive positioning. This nuance is not present in the earlier period's risk disclosures.",
+            "evidence_ids": [
+              "p_a0e7d6106245724eec600b98cdf673b9be96b97e7d1d3037e1c85ddf09518abd"
+            ]
+          }
+        ]
+      },
+      "writer_mode": "risk_model_with_deterministic_financials",
+      "status": "blocked",
+      "critique": {
+        "approved": false,
+        "supported": [
+          true,
+          true,
+          false,
+          false,
+          true
+        ],
+        "issues": [
+          "paragraphs[2]: sentence 2: Supported by the absence of these detailed competitor descriptions in earlier period disclosures, implying this nuance is new in the later period (implied by context and comparison).",
+          "paragraphs[3]: No operating margin data is provided for FY2024, so comparison between FY2023 and FY2024 is not supported."
+        ],
+        "check_version": "sentence-evidence-v3-source-instructions",
+        "draft_sha256": "1f7c13083eefd26e834b50f29915fc86b5adc9640d51faa9b34cc3fe2393ae0d",
+        "paragraph_reviews": [
+          {
+            "sentences": [
+              {
+                "sentence_index": 0,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+                    "quote": "Our operations and financial results are subject to various risks and uncertainties, including those described below, that could adversely affect our business, financial condition, results of operations, cash flows, and the trading price of our common stock.\n\nSTRATEGIC AND COMPET"
+                  },
+                  {
+                    "evidence_id": "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+                    "quote": "Our operations and financial results are subject to various risks and uncertainties, including those described below, that could adversely affect our business, operations, financial condition, results of operations, liquidity, and the trading price of our common stock.\n\nSTRATEGIC"
+                  },
+                  {
+                    "evidence_id": "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+                    "quote": "the trading price of our common stock.\n\nSTRATEGIC AND COMPETITIVE RISKS\n\nWe face intense competition across all markets for our products and services, which may lead to lower revenue or operating margins.\n\nCompetition in the technology sector\n\nOur competitors range in size from d"
+                  },
+                  {
+                    "evidence_id": "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+                    "quote": "idity, and the trading price of our common stock.\n\nSTRATEGIC AND COMPETITIVE RISKS\n\nWe face intense competition across all markets for our products and services, which may adversely affect our results of operations.\n\nCompetition in the technology sector\n\nOur competitors range in "
+                  }
+                ],
+                "reason": "The 2023 and 2024 risk factor passages both state Microsoft faces intense competition across all markets that could adversely affect business and financial results, supporting the claim of consistent identification of this risk."
+              },
+              {
+                "sentence_index": 1,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+                    "quote": " the technology sector\n\nOur competitors range in size from diversified global companies with significant research and development resources to small, specialized firms whose narrower product lines may let them be more effective in deploying technical, marketing, and financial res"
+                  },
+                  {
+                    "evidence_id": "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+                    "quote": "fective in deploying technical, marketing, and financial resources. Barriers to entry in many of our businesses are low and many of the areas in which we compete evolve rapidly with changing and disruptive technologies, shifting user needs, and frequent introductions of new produ"
+                  },
+                  {
+                    "evidence_id": "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+                    "quote": "shifting user needs, and frequent introductions of new products and services. Our ability to remain competitive depends on our success in making innovative products, devices, and services that appeal to businesses and consumers.\n\nCompetition among platform-based ecosystems\n\nAn im"
+                  },
+                  {
+                    "evidence_id": "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+                    "quote": "petition in the technology sector\n\nOur competitors range in size from diversified global companies with significant research and development resources to small, specialized firms whose narrower product lines may let them be more effective in deploying technical, marketing, and fi"
+                  },
+                  {
+                    "evidence_id": "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+                    "quote": " be more effective in deploying technical, marketing, and financial resources. Barriers to entry in many of our businesses are low and many of the areas in which we compete evolve rapidly with changing and disruptive technologies, shifting user needs, and frequent introductions o"
+                  },
+                  {
+                    "evidence_id": "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+                    "quote": "hnologies, shifting user needs, and frequent introductions of new products and services. If we do not continue to innovate and provide products, devices, and services that appeal to businesses and consumers, we may not remain competitive, which may adversely affect our business, "
+                  }
+                ],
+                "reason": "Both periods describe competitors ranging from large global companies with significant R&D resources to smaller specialized firms, and emphasize rapid technological evolution and shifting user needs as ongoing challenges, fully supporting this description."
+              },
+              {
+                "sentence_index": 2,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+                    "quote": "shifting user needs, and frequent introductions of new products and services. Our ability to remain competitive depends on our success in making innovative products, devices, and services that appeal to businesses and consumers.\n\nCompetition among platform-based ecosystems\n\nAn im"
+                  },
+                  {
+                    "evidence_id": "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+                    "quote": "hnologies, shifting user needs, and frequent introductions of new products and services. If we do not continue to innovate and provide products, devices, and services that appeal to businesses and consumers, we may not remain competitive, which may adversely affect our business, "
+                  }
+                ],
+                "reason": "Both passages highlight the need for continuous innovation to remain competitive and maintain market position, directly supporting this claim about the competitive environment."
+              }
+            ],
+            "issues": [],
+            "approved": true,
+            "selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_5b660edcf63fe387",
+                    "r_c9f887ad7ef2970c",
+                    "r_5101502b7c400f40",
+                    "r_0c38de9990a90c11"
+                  ],
+                  "reason": "The 2023 and 2024 risk factor passages both state Microsoft faces intense competition across all markets that could adversely affect business and financial results, supporting the claim of consistent identification of this risk."
+                },
+                {
+                  "sentence_index": 1,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_eeec8787fc046c63",
+                    "r_7827dad27f336137",
+                    "r_5c7379d2436d5ff3",
+                    "r_c8151f9b1edf3688",
+                    "r_15499289bbe7002d",
+                    "r_90f87741f5d5eb23"
+                  ],
+                  "reason": "Both periods describe competitors ranging from large global companies with significant R&D resources to smaller specialized firms, and emphasize rapid technological evolution and shifting user needs as ongoing challenges, fully supporting this description."
+                },
+                {
+                  "sentence_index": 2,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_5c7379d2436d5ff3",
+                    "r_90f87741f5d5eb23"
+                  ],
+                  "reason": "Both passages highlight the need for continuous innovation to remain competitive and maintain market position, directly supporting this claim about the competitive environment."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "alias_selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "P1R1",
+                    "P1R13",
+                    "P1R2",
+                    "P1R14"
+                  ],
+                  "reason": "The 2023 and 2024 risk factor passages both state Microsoft faces intense competition across all markets that could adversely affect business and financial results, supporting the claim of consistent identification of this risk."
+                },
+                {
+                  "sentence_index": 1,
+                  "supported": true,
+                  "reference_ids": [
+                    "P1R3",
+                    "P1R4",
+                    "P1R5",
+                    "P1R15",
+                    "P1R16",
+                    "P1R17"
+                  ],
+                  "reason": "Both periods describe competitors ranging from large global companies with significant R&D resources to smaller specialized firms, and emphasize rapid technological evolution and shifting user needs as ongoing challenges, fully supporting this description."
+                },
+                {
+                  "sentence_index": 2,
+                  "supported": true,
+                  "reference_ids": [
+                    "P1R5",
+                    "P1R17"
+                  ],
+                  "reason": "Both passages highlight the need for continuous innovation to remain competitive and maintain market position, directly supporting this claim about the competitive environment."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "catalog_sha256": "73719a60316ce3ba8b1279111a52ddc30e96f7cd5a574439e5d8c9b320d53f49",
+            "critic_protocol": "critic-short-references-strict-schema-v1",
+            "alias_binding_sha256": "f56024f9061857415ac1a662be4c3eb74d8eaa29bc0df3e64a1fb105d21db235",
+            "response_format_sha256": "46a59efb4d19f34912dc6099a775da7b56f958b0b809bd3bafc88057f2170f7d"
+          },
+          {
+            "sentences": [
+              {
+                "sentence_index": 0,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+                    "quote": "We derive substantial revenue from licenses of Windows operating systems on PCs. We face significant competition from competing platforms developed for new devices and form factors such as smartphones and tablet computers. These devices compete on multiple bases including price a"
+                  },
+                  {
+                    "evidence_id": "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+                    "quote": "s. These devices compete on multiple bases including price and the perceived utility of the device and its platform. Users are increasingly turning to these devices to perform functions that in the past were performed by personal computers. Even if many users view these devices a"
+                  },
+                  {
+                    "evidence_id": "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+                    "quote": " personal computers. Even if many users view these devices as complementary to a personal computer, the prevalence of these devices may make it more difficult to attract application developers to our PC operating system platforms. Competing with operating systems licensed at low "
+                  },
+                  {
+                    "evidence_id": "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+                    "quote": "platforms. Competing with operating systems licensed at low or no cost may decrease our PC operating system margins. Popular products or services offered on competing platforms could increase their competitive strength. In addition, some of our devices compete with products made "
+                  }
+                ],
+                "reason": "Supported by 2023 risk disclosures describing competition from new device categories affecting user and developer engagement with PC operating systems."
+              },
+              {
+                "sentence_index": 1,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+                    "quote": "In addition, some of our devices compete with products made by our original equipment manufacturer (\u201cOEM\u201d) partners, which may affect their commitment to our platform.\n\n\u2022\n\nCompeting platforms have content and application marketplaces with scale and significant installed bases. Th"
+                  },
+                  {
+                    "evidence_id": "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+                    "quote": " marketplaces with scale and significant installed bases. The variety and utility of content and applications available on a platform are important to device purchasing decisions. Users may incur costs to move data and buy new content and applications when switching platforms. To"
+                  },
+                  {
+                    "evidence_id": "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+                    "quote": "uy new content and applications when switching platforms. To compete, we must successfully enlist developers to write applications for our platform and ensure that these applications have high quality, security, customer appeal, and value. Efforts to compete with competitors\u2019 con"
+                  },
+                  {
+                    "evidence_id": "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+                    "quote": " appeal, and value. Efforts to compete with competitors\u2019 content and application marketplaces may increase our cost of revenue and lower our operating margins. Competitors\u2019 rules governing their content and applications marketplaces may restrict our ability to distribute products"
+                  },
+                  {
+                    "evidence_id": "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+                    "quote": "marketplaces may restrict our ability to distribute products and services through them in accordance with our technical and business model objectives.\n\nBusiness model competition\n\nCompanies compete with us based on a growing variety of business models.\n\n\u2022"
+                  }
+                ],
+                "reason": "Supported by 2023 disclosures on competition from platforms with content marketplaces and OEM partner product competition."
+              },
+              {
+                "sentence_index": 2,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+                    "quote": "Our operations and financial results are subject to various risks and uncertainties, including those described below, that could adversely affect our business, operations, financial condition, results of operations, liquidity, and the trading price of our common stock.\n\nSTRATEGIC"
+                  },
+                  {
+                    "evidence_id": "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+                    "quote": "idity, and the trading price of our common stock.\n\nSTRATEGIC AND COMPETITIVE RISKS\n\nWe face intense competition across all markets for our products and services, which may adversely affect our results of operations.\n\nCompetition in the technology sector\n\nOur competitors range in "
+                  },
+                  {
+                    "evidence_id": "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+                    "quote": "petition in the technology sector\n\nOur competitors range in size from diversified global companies with significant research and development resources to small, specialized firms whose narrower product lines may let them be more effective in deploying technical, marketing, and fi"
+                  },
+                  {
+                    "evidence_id": "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+                    "quote": " be more effective in deploying technical, marketing, and financial resources. Barriers to entry in many of our businesses are low and many of the areas in which we compete evolve rapidly with changing and disruptive technologies, shifting user needs, and frequent introductions o"
+                  },
+                  {
+                    "evidence_id": "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+                    "quote": "hnologies, shifting user needs, and frequent introductions of new products and services. If we do not continue to innovate and provide products, devices, and services that appeal to businesses and consumers, we may not remain competitive, which may adversely affect our business, "
+                  },
+                  {
+                    "evidence_id": "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+                    "quote": "emain competitive, which may adversely affect our business, financial condition, and results of operations.\n\nCompetition among platform-based ecosystems\n\nAn important element of our business model has been to create platform-based ecosystems on which many participants can build d"
+                  },
+                  {
+                    "evidence_id": "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+                    "quote": "form-based ecosystems on which many participants can build diverse solutions. A well-established ecosystem creates beneficial network effects among users, application developers, and the platform provider that can accelerate growth. Establishing significant scale in the marketpla"
+                  },
+                  {
+                    "evidence_id": "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+                    "quote": "rate growth. Establishing significant scale in the marketplace is necessary to achieve and maintain attractive margins. We face significant competition from firms that provide competing platforms.\n\n\u2022"
+                  }
+                ],
+                "reason": "Supported by 2024 disclosures focusing broadly on competition in software and services without explicit restatement of platform-specific risks."
+              }
+            ],
+            "issues": [],
+            "approved": true,
+            "selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_44d83e3eed2c4b75",
+                    "r_972e078a1286856d",
+                    "r_95f4be262f4e0788",
+                    "r_d504e1e8f8bebb65"
+                  ],
+                  "reason": "Supported by 2023 risk disclosures describing competition from new device categories affecting user and developer engagement with PC operating systems."
+                },
+                {
+                  "sentence_index": 1,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_f617b79301ba7a7f",
+                    "r_77170aec73eaf2ca",
+                    "r_bdb2d3772240bdf9",
+                    "r_39c923afba63f5ac",
+                    "r_543bc0c7a4187ca2"
+                  ],
+                  "reason": "Supported by 2023 disclosures on competition from platforms with content marketplaces and OEM partner product competition."
+                },
+                {
+                  "sentence_index": 2,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_513ac8493b83fc89",
+                    "r_857f0532a5662a87",
+                    "r_e58bb79eec5a59c3",
+                    "r_4c2bc897fcf45ee0",
+                    "r_05b3481981961904",
+                    "r_abb251531549e827",
+                    "r_848328f29f724c91",
+                    "r_9f8c1c8bd5cc4784"
+                  ],
+                  "reason": "Supported by 2024 disclosures focusing broadly on competition in software and services without explicit restatement of platform-specific risks."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "alias_selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "P2R1",
+                    "P2R2",
+                    "P2R3",
+                    "P2R4"
+                  ],
+                  "reason": "Supported by 2023 risk disclosures describing competition from new device categories affecting user and developer engagement with PC operating systems."
+                },
+                {
+                  "sentence_index": 1,
+                  "supported": true,
+                  "reference_ids": [
+                    "P2R5",
+                    "P2R6",
+                    "P2R7",
+                    "P2R8",
+                    "P2R9"
+                  ],
+                  "reason": "Supported by 2023 disclosures on competition from platforms with content marketplaces and OEM partner product competition."
+                },
+                {
+                  "sentence_index": 2,
+                  "supported": true,
+                  "reference_ids": [
+                    "P2R11",
+                    "P2R12",
+                    "P2R13",
+                    "P2R14",
+                    "P2R15",
+                    "P2R16",
+                    "P2R17",
+                    "P2R18"
+                  ],
+                  "reason": "Supported by 2024 disclosures focusing broadly on competition in software and services without explicit restatement of platform-specific risks."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "catalog_sha256": "8dce6683ba7ef393acf5e8a2fbbe7bc3b091b8db5c83b84cc6cfdfb6893a2fee",
+            "critic_protocol": "critic-short-references-strict-schema-v1",
+            "alias_binding_sha256": "af31ef149c2450cfb278f3b6198bdd68ad48d6cef3c992d4485b9ec111846e25",
+            "response_format_sha256": "2c575e422789a9e84d7fc0ec7b8289f82a598412085363fbcffea5ee2df30a29"
+          },
+          {
+            "sentences": [
+              {
+                "sentence_index": 0,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "p_a0e7d6106245724eec600b98cdf673b9be96b97e7d1d3037e1c85ddf09518abd",
+                    "quote": "lso develop and sell software to businesses and consumers under this model.\n\n\u2022\n\nOther competitors develop and offer free applications, online services, and content, and make money by selling third-party advertising. Advertising revenue funds development of products and services t"
+                  },
+                  {
+                    "evidence_id": "p_a0e7d6106245724eec600b98cdf673b9be96b97e7d1d3037e1c85ddf09518abd",
+                    "quote": "rtising revenue funds development of products and services these competitors provide to users at little or no cost, competing directly with our revenue-generating products.\n\n\u2022\n\nSome companies compete with us by modifying and then distributing open source software at little or no "
+                  },
+                  {
+                    "evidence_id": "p_a0e7d6106245724eec600b98cdf673b9be96b97e7d1d3037e1c85ddf09518abd",
+                    "quote": " and then distributing open source software at little or no cost to end users, using open source AI models, and earning revenue on advertising or integrated products and services. These firms do not bear the full costs of research and development for the open source products. Som"
+                  }
+                ],
+                "reason": "Supported by detailed descriptions of competitors offering free applications, online services funded by advertising, and use of open source AI models in the 2024 risk disclosure (P3R3, P3R4, P3R5)."
+              },
+              {
+                "sentence_index": 1,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "p_a0e7d6106245724eec600b98cdf673b9be96b97e7d1d3037e1c85ddf09518abd",
+                    "quote": " and then distributing open source software at little or no cost to end users, using open source AI models, and earning revenue on advertising or integrated products and services. These firms do not bear the full costs of research and development for the open source products. Som"
+                  },
+                  {
+                    "evidence_id": "p_a0e7d6106245724eec600b98cdf673b9be96b97e7d1d3037e1c85ddf09518abd",
+                    "quote": "f research and development for the open source products. Some open source products mimic the features and functionality of our products.\n\nThe competitive pressures described above may cause decreased sales volumes, price reductions, and/or increased operating costs, such as for r"
+                  }
+                ],
+                "reason": "Supported by explicit statement that these competitors do not bear full R&D costs, affecting competitive positioning (P3R5, P3R6)."
+              },
+              {
+                "sentence_index": 2,
+                "supported": false,
+                "references": [],
+                "reason": "Supported by the absence of these detailed competitor descriptions in earlier period disclosures, implying this nuance is new in the later period (implied by context and comparison)."
+              }
+            ],
+            "issues": [],
+            "approved": true,
+            "selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_96880c5cc8108a4e",
+                    "r_96aedce6a6a504ca",
+                    "r_60700319f90a5b8f"
+                  ],
+                  "reason": "Supported by detailed descriptions of competitors offering free applications, online services funded by advertising, and use of open source AI models in the 2024 risk disclosure (P3R3, P3R4, P3R5)."
+                },
+                {
+                  "sentence_index": 1,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_60700319f90a5b8f",
+                    "r_6c5b46d70f36c92e"
+                  ],
+                  "reason": "Supported by explicit statement that these competitors do not bear full R&D costs, affecting competitive positioning (P3R5, P3R6)."
+                },
+                {
+                  "sentence_index": 2,
+                  "supported": false,
+                  "reference_ids": [],
+                  "reason": "Supported by the absence of these detailed competitor descriptions in earlier period disclosures, implying this nuance is new in the later period (implied by context and comparison)."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "alias_selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "P3R3",
+                    "P3R4",
+                    "P3R5"
+                  ],
+                  "reason": "Supported by detailed descriptions of competitors offering free applications, online services funded by advertising, and use of open source AI models in the 2024 risk disclosure (P3R3, P3R4, P3R5)."
+                },
+                {
+                  "sentence_index": 1,
+                  "supported": true,
+                  "reference_ids": [
+                    "P3R5",
+                    "P3R6"
+                  ],
+                  "reason": "Supported by explicit statement that these competitors do not bear full R&D costs, affecting competitive positioning (P3R5, P3R6)."
+                },
+                {
+                  "sentence_index": 2,
+                  "supported": false,
+                  "reference_ids": [],
+                  "reason": "Supported by the absence of these detailed competitor descriptions in earlier period disclosures, implying this nuance is new in the later period (implied by context and comparison)."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "catalog_sha256": "490c3a64c6aa7df395153683660b6913e9a1fc6319373b400f69afb266bed576",
+            "critic_protocol": "critic-short-references-strict-schema-v1",
+            "alias_binding_sha256": "ec06c8ce8521b94685985a45887073b4caaec229381b024974acf522153c4506",
+            "response_format_sha256": "4a5b6d82433c5a7c34e227c87cf3c1b7eb7286370cd5acd3dda9b77bcb642594"
+          },
+          {
+            "sentences": [
+              {
+                "sentence_index": 0,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "margin_ac9a50aa3cf0417c58a1b06c29a0784b",
+                    "quote": ""
+                  }
+                ],
+                "reason": "The paragraph provides an operating-margin calculation only for FY2023, not for FY2024, so the claim about availability for the earlier requested fiscal period is supported only for FY2023, but no comparison or data for FY2024 is present."
+              }
+            ],
+            "issues": [
+              "No operating margin data is provided for FY2024, so comparison between FY2023 and FY2024 is not supported."
+            ],
+            "approved": false,
+            "selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_065363f7d47bae73"
+                  ],
+                  "reason": "The paragraph provides an operating-margin calculation only for FY2023, not for FY2024, so the claim about availability for the earlier requested fiscal period is supported only for FY2023, but no comparison or data for FY2024 is present."
+                }
+              ],
+              "issues": [
+                "No operating margin data is provided for FY2024, so comparison between FY2023 and FY2024 is not supported."
+              ],
+              "approved": false
+            },
+            "alias_selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "P4R1"
+                  ],
+                  "reason": "The paragraph provides an operating-margin calculation only for FY2023, not for FY2024, so the claim about availability for the earlier requested fiscal period is supported only for FY2023, but no comparison or data for FY2024 is present."
+                }
+              ],
+              "issues": [
+                "No operating margin data is provided for FY2024, so comparison between FY2023 and FY2024 is not supported."
+              ],
+              "approved": false
+            },
+            "catalog_sha256": "7eacd9ac743c41107107d0b47f29c1749da115b722b819c657041ba65901ca8b",
+            "critic_protocol": "critic-short-references-strict-schema-v1",
+            "alias_binding_sha256": "89b4550e5f49dd62064caca72ec6bbd86dc320c0c3939e619d83c3a196c6cc4f",
+            "response_format_sha256": "81df1576fd6481007769f1e952599692701ad5d4a1feb4777876d3878b0e0025"
+          },
+          {
+            "sentences": [
+              {
+                "sentence_index": 0,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "margin_c7634ce686600989cfae5f37ad130c26",
+                    "quote": ""
+                  }
+                ],
+                "reason": "The calculation for the later requested fiscal period (FY2024) is supported by reference P5R2, which provides the operating margin calculation for that period."
+              },
+              {
+                "sentence_index": 1,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "margin_ac9a50aa3cf0417c58a1b06c29a0784b",
+                    "quote": ""
+                  },
+                  {
+                    "evidence_id": "margin_c7634ce686600989cfae5f37ad130c26",
+                    "quote": ""
+                  }
+                ],
+                "reason": "The increase in operating margin from FY2023 to FY2024 is supported by references P5R1 and P5R2, which show the operating margins for FY2023 and FY2024 respectively, confirming the increase at the displayed precision."
+              }
+            ],
+            "issues": [],
+            "approved": true,
+            "selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_ae20f42e85199dde"
+                  ],
+                  "reason": "The calculation for the later requested fiscal period (FY2024) is supported by reference P5R2, which provides the operating margin calculation for that period."
+                },
+                {
+                  "sentence_index": 1,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_0578eb4b8d16db85",
+                    "r_ae20f42e85199dde"
+                  ],
+                  "reason": "The increase in operating margin from FY2023 to FY2024 is supported by references P5R1 and P5R2, which show the operating margins for FY2023 and FY2024 respectively, confirming the increase at the displayed precision."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "alias_selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "P5R2"
+                  ],
+                  "reason": "The calculation for the later requested fiscal period (FY2024) is supported by reference P5R2, which provides the operating margin calculation for that period."
+                },
+                {
+                  "sentence_index": 1,
+                  "supported": true,
+                  "reference_ids": [
+                    "P5R1",
+                    "P5R2"
+                  ],
+                  "reason": "The increase in operating margin from FY2023 to FY2024 is supported by references P5R1 and P5R2, which show the operating margins for FY2023 and FY2024 respectively, confirming the increase at the displayed precision."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "catalog_sha256": "d260613a9db40f2f8c32e1c3cdf1964defdd08e552b45baabe57c08d58e2435f",
+            "critic_protocol": "critic-short-references-strict-schema-v1",
+            "alias_binding_sha256": "53a5519d99aa18be3406b94fd15104e9d1fad7f694b8bac3173161bac2dbdda8",
+            "response_format_sha256": "2d762a2cf3483a5b6ea375be5df3263d49137ab1f6be78436a2570cebb87ae45"
+          }
+        ]
+      },
+      "publication_calls": 0
+    },
+    "metrics": {
+      "llm_requests_started": 13,
+      "llm_responses_received": 13,
+      "reported_total_tokens": 51599,
+      "reported_cost_usd": "0.0240740",
+      "cost_complete": true,
+      "critic_rejections": 3,
+      "model_response_cache_hits": 10,
+      "development_budget_extensions": 0,
+      "budget_protocol": "original_fixed_limit"
+    },
+    "tool_calls": 40,
+    "policy_violation_attempts": 0,
+    "tool_errors": 0,
+    "model_errors": 0,
+    "evaluation": {
+      "case_id": "F003",
+      "numeric_success": false,
+      "task_success": null,
+      "risk_semantic_success": null,
+      "risk_label_status": "pending_human_label",
+      "numeric_errors": [
+        "run_not_completed",
+        "final_note_missing",
+        "MSFT:FY2023:final_table_row_missing_or_wrong",
+        "MSFT:FY2023:f_OperatingIncomeLoss_2022-07-01_2023-06-30_0000950170-25-100235_9e0733bb2dfc:final_citation_missing_or_wrong",
+        "MSFT:FY2023:f_RevenueFromContractWithCustomerExcludingAssessedTax_2022-07-01_2023-06-30_0000950170-25-100235_2bf438dbf9b6:final_citation_missing_or_wrong",
+        "MSFT:FY2023:margin_ac9a50aa3cf0417c58a1b06c29a0784b:final_citation_missing_or_wrong",
+        "MSFT:FY2024:final_table_row_missing_or_wrong",
+        "MSFT:FY2024:f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8:final_citation_missing_or_wrong",
+        "MSFT:FY2024:f_RevenueFromContractWithCustomerExcludingAssessedTax_2023-07-01_2024-06-30_0001193125-26-323660_4ce714604805:final_citation_missing_or_wrong",
+        "MSFT:FY2024:margin_c7634ce686600989cfae5f37ad130c26:final_citation_missing_or_wrong"
+      ],
+      "numeric_checks": [
+        {
+          "ticker": "MSFT",
+          "year": 2023
+        },
+        {
+          "ticker": "MSFT",
+          "year": 2024
+        }
+      ],
+      "metric_scope": "Frozen annual SEC fact identities, exact matched periods, Decimal margin, delivered table/citations, missing-input abstention; no narrative semantic judgment"
+    }
+  },
+  {
+    "execution_id": "PILOT_C1_F002_r1",
+    "case_id": "F002",
+    "repeat": 1,
+    "variant": "C1",
+    "split": "dev",
+    "manifest_sha256": "78da202b276d4ebf1ca2182a85d4e169c12790c022d78b5a95381867b3ea4ab7",
+    "status": "completed",
+    "elapsed_seconds": 17.608941,
+    "evaluation_only": true,
+    "human_reviewed": false,
+    "publication": null,
+    "shared_semantic_validator": true,
+    "independent_model_cache": true,
+    "retrieval_protocol": {
+      "ranking": "operator_production_hybrid_service",
+      "configuration_attestation": "external_preflight_required"
+    },
+    "result": {
+      "request": {
+        "question": "Compare Microsoft and Alphabet operating margins in FY2024 and FY2025. Present each company's own fiscal periods side by side so an analyst can see the June-versus-December year-end limitation. Include the reported inputs; do not annualise or calendarise them.",
+        "tickers": [
+          "GOOGL",
+          "MSFT"
+        ],
+        "years": [
+          2024,
+          2025
+        ],
+        "include_risks": false
+      },
+      "researchers": {},
+      "revisions": 0,
+      "replans": 0,
+      "evaluation_only": true,
+      "human_reviewed": false,
+      "publication": null,
+      "plan": {
+        "objective": "Answer the approved operating-margin request using verified source evidence.",
+        "outline": [
+          "Verified financial comparison",
+          "Requested sampled risks and limits"
+        ],
+        "research_query": "operating performance and requested risk factors",
+        "limitations": [
+          "Source samples do not establish complete filing coverage."
+        ]
+      },
+      "plan_approved": true,
+      "draft": {
+        "title": "Company operating margin comparison",
+        "paragraphs": [
+          {
+            "text": "Among the available calculations for the earlier requested fiscal period, calculated operating margins rank from higher to lower as MSFT, then GOOGL, at the displayed precision.",
+            "evidence_ids": [
+              "margin_1dcf027449282bcd9d74e5a5fe9db878",
+              "margin_c7634ce686600989cfae5f37ad130c26"
+            ]
+          },
+          {
+            "text": "Among the available calculations for the later requested fiscal period, calculated operating margins rank from higher to lower as MSFT, then GOOGL, at the displayed precision. GOOGL's calculated operating margin decreased from the earlier requested fiscal period to the later requested fiscal period at the displayed precision. MSFT's calculated operating margin increased from the earlier requested fiscal period to the later requested fiscal period at the displayed precision.",
+            "evidence_ids": [
+              "margin_1dcf027449282bcd9d74e5a5fe9db878",
+              "margin_5c6f3fecb46bb991850865bf616ddb98",
+              "margin_734519e58a833d24f5ee16a67d15f32f",
+              "margin_c7634ce686600989cfae5f37ad130c26"
+            ]
+          }
+        ]
+      },
+      "risk_draft": {},
+      "writer_mode": "single_worker_with_deterministic_financials",
+      "status": "completed",
+      "critique": {
+        "approved": true,
+        "supported": [
+          true,
+          true
+        ],
+        "issues": [],
+        "check_version": "sentence-evidence-v3-source-instructions",
+        "draft_sha256": "00fa599d33dfbaba176ea9f0409c057cb8ba68c6422c26f25634d41c75118517",
+        "paragraph_reviews": [
+          {
+            "sentences": [
+              {
+                "sentence_index": 0,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "margin_c7634ce686600989cfae5f37ad130c26",
+                    "quote": ""
+                  },
+                  {
+                    "evidence_id": "margin_1dcf027449282bcd9d74e5a5fe9db878",
+                    "quote": ""
+                  }
+                ],
+                "reason": "The sentence correctly states that among the available operating margin calculations for the earlier requested fiscal period, Microsoft (MSFT) has a higher operating margin than Alphabet (GOOGL), supported by references P1R2 (MSFT operating margin for FY2024 ending June 30) and P1R1 (GOOGL operating margin for FY2024 ending December 31)."
+              }
+            ],
+            "issues": [],
+            "approved": true,
+            "selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_492a9c9f9e39459f",
+                    "r_9dc9a36c4d147574"
+                  ],
+                  "reason": "The sentence correctly states that among the available operating margin calculations for the earlier requested fiscal period, Microsoft (MSFT) has a higher operating margin than Alphabet (GOOGL), supported by references P1R2 (MSFT operating margin for FY2024 ending June 30) and P1R1 (GOOGL operating margin for FY2024 ending December 31)."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "alias_selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "P1R2",
+                    "P1R1"
+                  ],
+                  "reason": "The sentence correctly states that among the available operating margin calculations for the earlier requested fiscal period, Microsoft (MSFT) has a higher operating margin than Alphabet (GOOGL), supported by references P1R2 (MSFT operating margin for FY2024 ending June 30) and P1R1 (GOOGL operating margin for FY2024 ending December 31)."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "catalog_sha256": "d82305c65e178953cf4a6d80e384ebacd65457feb5a127ff37f6a057e44040a0",
+            "critic_protocol": "critic-short-references-strict-schema-v1",
+            "alias_binding_sha256": "fff998af6e038c07985fcdaed97892b8f6c6e022a7623a042be1058ddb55f4da",
+            "response_format_sha256": "11073714e043fbd5cb9673648eb2e48286ac617aa387da00106b8c49589ea894"
+          },
+          {
+            "sentences": [
+              {
+                "sentence_index": 0,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "margin_734519e58a833d24f5ee16a67d15f32f",
+                    "quote": ""
+                  },
+                  {
+                    "evidence_id": "margin_5c6f3fecb46bb991850865bf616ddb98",
+                    "quote": ""
+                  }
+                ],
+                "reason": "Supported by P2R3 (MSFT 2025 operating margin 45.62%) and P2R2 (GOOGL 2025 operating margin 32.03%) for later fiscal period; MSFT margin is higher than GOOGL margin at displayed precision."
+              },
+              {
+                "sentence_index": 1,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "margin_1dcf027449282bcd9d74e5a5fe9db878",
+                    "quote": ""
+                  },
+                  {
+                    "evidence_id": "margin_5c6f3fecb46bb991850865bf616ddb98",
+                    "quote": ""
+                  }
+                ],
+                "reason": "Supported by P2R1 (GOOGL 2024 operating margin 32.11%) and P2R2 (GOOGL 2025 operating margin 32.03%) showing a decrease from 32.11% to 32.03%."
+              },
+              {
+                "sentence_index": 2,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "margin_c7634ce686600989cfae5f37ad130c26",
+                    "quote": ""
+                  },
+                  {
+                    "evidence_id": "margin_734519e58a833d24f5ee16a67d15f32f",
+                    "quote": ""
+                  }
+                ],
+                "reason": "Supported by P2R4 (MSFT 2024 operating margin 44.64%) and P2R3 (MSFT 2025 operating margin 45.62%) showing an increase from 44.64% to 45.62%."
+              }
+            ],
+            "issues": [],
+            "approved": true,
+            "selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_4c0f2c206c63a087",
+                    "r_81a15e1f4adb6012"
+                  ],
+                  "reason": "Supported by P2R3 (MSFT 2025 operating margin 45.62%) and P2R2 (GOOGL 2025 operating margin 32.03%) for later fiscal period; MSFT margin is higher than GOOGL margin at displayed precision."
+                },
+                {
+                  "sentence_index": 1,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_d3a3a2ef0be6c9e2",
+                    "r_81a15e1f4adb6012"
+                  ],
+                  "reason": "Supported by P2R1 (GOOGL 2024 operating margin 32.11%) and P2R2 (GOOGL 2025 operating margin 32.03%) showing a decrease from 32.11% to 32.03%."
+                },
+                {
+                  "sentence_index": 2,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_ac927fe3532a915e",
+                    "r_4c0f2c206c63a087"
+                  ],
+                  "reason": "Supported by P2R4 (MSFT 2024 operating margin 44.64%) and P2R3 (MSFT 2025 operating margin 45.62%) showing an increase from 44.64% to 45.62%."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "alias_selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "P2R3",
+                    "P2R2"
+                  ],
+                  "reason": "Supported by P2R3 (MSFT 2025 operating margin 45.62%) and P2R2 (GOOGL 2025 operating margin 32.03%) for later fiscal period; MSFT margin is higher than GOOGL margin at displayed precision."
+                },
+                {
+                  "sentence_index": 1,
+                  "supported": true,
+                  "reference_ids": [
+                    "P2R1",
+                    "P2R2"
+                  ],
+                  "reason": "Supported by P2R1 (GOOGL 2024 operating margin 32.11%) and P2R2 (GOOGL 2025 operating margin 32.03%) showing a decrease from 32.11% to 32.03%."
+                },
+                {
+                  "sentence_index": 2,
+                  "supported": true,
+                  "reference_ids": [
+                    "P2R4",
+                    "P2R3"
+                  ],
+                  "reason": "Supported by P2R4 (MSFT 2024 operating margin 44.64%) and P2R3 (MSFT 2025 operating margin 45.62%) showing an increase from 44.64% to 45.62%."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "catalog_sha256": "9b5abd45caa35a2c46eec535f7fd868232209b00ddfa76dee6aecbbb917a544d",
+            "critic_protocol": "critic-short-references-strict-schema-v1",
+            "alias_binding_sha256": "3ec8a2ba1e84d04a134f024ea61ebb641a262d4bdcfed47ad0ad3a8775e0b2d0",
+            "response_format_sha256": "52cf2638c5d5a9b6210b6974a4afdfd150824b3fbe55c43dacd94704d49a1719"
+          }
+        ]
+      },
+      "note": {
+        "title": "Company operating margin comparison",
+        "body_markdown": "Companies: GOOGL, MSFT. Fiscal years: 2024, 2025.\n\nFiscal years are company reporting periods and may differ from calendar years. Compare the actual start/end dates below.\n\n| Company | FY | Reporting period | Revenue (USD) | Operating income (USD) | Operating margin |\n|---|---|---|---:|---:|---:|\n| GOOGL | 2024 | 2024-01-01 to 2024-12-31 | 350,018,000,000 [f_Revenues_2024-01-01_2024-12-31_0001652044-26-000018_d9293b95d7f2] | 112,390,000,000 [f_OperatingIncomeLoss_2024-01-01_2024-12-31_0001652044-26-000018_6492cfa9e4a7] | 32.11% [margin_1dcf027449282bcd9d74e5a5fe9db878] |\n| GOOGL | 2025 | 2025-01-01 to 2025-12-31 | 402,836,000,000 [f_Revenues_2025-01-01_2025-12-31_0001652044-26-000018_566b60c5266e] | 129,039,000,000 [f_OperatingIncomeLoss_2025-01-01_2025-12-31_0001652044-26-000018_de50c2e0e06a] | 32.03% [margin_5c6f3fecb46bb991850865bf616ddb98] |\n| MSFT | 2024 | 2023-07-01 to 2024-06-30 | 245,122,000,000 [f_RevenueFromContractWithCustomerExcludingAssessedTax_2023-07-01_2024-06-30_0001193125-26-323660_4ce714604805] | 109,433,000,000 [f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8] | 44.64% [margin_c7634ce686600989cfae5f37ad130c26] |\n| MSFT | 2025 | 2024-07-01 to 2025-06-30 | 281,724,000,000 [f_RevenueFromContractWithCustomerExcludingAssessedTax_2024-07-01_2025-06-30_0001193125-26-323660_ca99bf1ee91d] | 128,528,000,000 [f_OperatingIncomeLoss_2024-07-01_2025-06-30_0001193125-26-323660_fb0082f0eb75] | 45.62% [margin_734519e58a833d24f5ee16a67d15f32f] |\n\nFinancial coverage: saved calculations cover every requested company/fiscal-year pair.\n\nMargin formula: operating income divided by revenue, multiplied by one hundred; rounded to two decimal places using Decimal half-even rounding.\n\nAmong the available calculations for the earlier requested fiscal period, calculated operating margins rank from higher to lower as MSFT, then GOOGL, at the displayed precision. [margin_1dcf027449282bcd9d74e5a5fe9db878] [margin_c7634ce686600989cfae5f37ad130c26]\n\nAmong the available calculations for the later requested fiscal period, calculated operating margins rank from higher to lower as MSFT, then GOOGL, at the displayed precision. GOOGL's calculated operating margin decreased from the earlier requested fiscal period to the later requested fiscal period at the displayed precision. MSFT's calculated operating margin increased from the earlier requested fiscal period to the later requested fiscal period at the displayed precision. [margin_1dcf027449282bcd9d74e5a5fe9db878] [margin_5c6f3fecb46bb991850865bf616ddb98] [margin_734519e58a833d24f5ee16a67d15f32f] [margin_c7634ce686600989cfae5f37ad130c26]\n\nSources:\n- [f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)\n- [f_OperatingIncomeLoss_2024-01-01_2024-12-31_0001652044-26-000018_6492cfa9e4a7](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [f_OperatingIncomeLoss_2024-07-01_2025-06-30_0001193125-26-323660_fb0082f0eb75](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)\n- [f_OperatingIncomeLoss_2025-01-01_2025-12-31_0001652044-26-000018_de50c2e0e06a](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [f_RevenueFromContractWithCustomerExcludingAssessedTax_2023-07-01_2024-06-30_0001193125-26-323660_4ce714604805](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)\n- [f_RevenueFromContractWithCustomerExcludingAssessedTax_2024-07-01_2025-06-30_0001193125-26-323660_ca99bf1ee91d](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)\n- [f_Revenues_2024-01-01_2024-12-31_0001652044-26-000018_d9293b95d7f2](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [f_Revenues_2025-01-01_2025-12-31_0001652044-26-000018_566b60c5266e](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [margin_1dcf027449282bcd9d74e5a5fe9db878](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [margin_5c6f3fecb46bb991850865bf616ddb98](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [margin_734519e58a833d24f5ee16a67d15f32f](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)\n- [margin_c7634ce686600989cfae5f37ad130c26](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)",
+        "tickers": [
+          "GOOGL",
+          "MSFT"
+        ],
+        "fiscal_years": [
+          2024,
+          2025
+        ],
+        "citations": [
+          {
+            "evidence_id": "f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          },
+          {
+            "evidence_id": "f_OperatingIncomeLoss_2024-01-01_2024-12-31_0001652044-26-000018_6492cfa9e4a7",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "f_OperatingIncomeLoss_2024-07-01_2025-06-30_0001193125-26-323660_fb0082f0eb75",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          },
+          {
+            "evidence_id": "f_OperatingIncomeLoss_2025-01-01_2025-12-31_0001652044-26-000018_de50c2e0e06a",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "f_RevenueFromContractWithCustomerExcludingAssessedTax_2023-07-01_2024-06-30_0001193125-26-323660_4ce714604805",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          },
+          {
+            "evidence_id": "f_RevenueFromContractWithCustomerExcludingAssessedTax_2024-07-01_2025-06-30_0001193125-26-323660_ca99bf1ee91d",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          },
+          {
+            "evidence_id": "f_Revenues_2024-01-01_2024-12-31_0001652044-26-000018_d9293b95d7f2",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "f_Revenues_2025-01-01_2025-12-31_0001652044-26-000018_566b60c5266e",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "margin_1dcf027449282bcd9d74e5a5fe9db878",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "margin_5c6f3fecb46bb991850865bf616ddb98",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "margin_734519e58a833d24f5ee16a67d15f32f",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          },
+          {
+            "evidence_id": "margin_c7634ce686600989cfae5f37ad130c26",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          }
+        ]
+      },
+      "verification": {
+        "rendered_financial_figures": 12,
+        "verified_financial_figures": 12,
+        "verified_share": 1.0,
+        "missing_company_years": [],
+        "metric_scope": "Code-rendered financial table values; qualitative support is a separate critic check."
+      },
+      "semantic_critic": "shared_production_validator",
+      "semantic_support_verified": null,
+      "semantic_support": "model_critic_approved_not_human_gold",
+      "publication_calls": 0
+    },
+    "metrics": {
+      "llm_requests_started": 8,
+      "llm_responses_received": 8,
+      "reported_total_tokens": 25353,
+      "reported_cost_usd": "0.0099984",
+      "cost_complete": true,
+      "critic_rejections": 0,
+      "model_response_cache_hits": 0,
+      "development_budget_extensions": 0,
+      "budget_protocol": "original_fixed_limit"
+    },
+    "tool_calls": 24,
+    "policy_violation_attempts": 0,
+    "tool_errors": 0,
+    "model_errors": 0,
+    "evaluation": {
+      "case_id": "F002",
+      "numeric_success": true,
+      "task_success": true,
+      "risk_semantic_success": null,
+      "risk_label_status": "not_applicable",
+      "numeric_errors": [],
+      "numeric_checks": [
+        {
+          "ticker": "GOOGL",
+          "year": 2024
+        },
+        {
+          "ticker": "GOOGL",
+          "year": 2025
+        },
+        {
+          "ticker": "MSFT",
+          "year": 2024
+        },
+        {
+          "ticker": "MSFT",
+          "year": 2025
+        }
+      ],
+      "metric_scope": "Frozen annual SEC fact identities, exact matched periods, Decimal margin, delivered table/citations, missing-input abstention; no narrative semantic judgment"
+    }
+  },
+  {
+    "execution_id": "PILOT_C1_F003_r1",
+    "case_id": "F003",
+    "repeat": 1,
+    "variant": "C1",
+    "split": "dev",
+    "manifest_sha256": "78da202b276d4ebf1ca2182a85d4e169c12790c022d78b5a95381867b3ea4ab7",
+    "status": "blocked",
+    "elapsed_seconds": 29.032641,
+    "evaluation_only": true,
+    "human_reviewed": false,
+    "publication": null,
+    "shared_semantic_validator": true,
+    "independent_model_cache": true,
+    "retrieval_protocol": {
+      "ranking": "operator_production_hybrid_service",
+      "configuration_attestation": "external_preflight_required"
+    },
+    "result": {
+      "request": {
+        "question": "Compare Microsoft's operating margins in FY2023 and FY2024 and examine what the cited risk-factor passages say about cybersecurity and cloud service reliability. Distinguish a difference in retrieved wording from a demonstrated new risk.",
+        "tickers": [
+          "MSFT"
+        ],
+        "years": [
+          2023,
+          2024
+        ],
+        "include_risks": true
+      },
+      "researchers": {},
+      "revisions": 2,
+      "replans": 0,
+      "evaluation_only": true,
+      "human_reviewed": false,
+      "publication": null,
+      "plan": {
+        "objective": "Answer the approved operating-margin request using verified source evidence.",
+        "outline": [
+          "Verified financial comparison",
+          "Requested sampled risks and limits"
+        ],
+        "research_query": "operating performance and requested risk factors",
+        "limitations": [
+          "Source samples do not establish complete filing coverage."
+        ]
+      },
+      "plan_approved": true,
+      "draft": {
+        "title": "Microsoft Operating Margins and Risk Factors on Cybersecurity and Cloud Reliability",
+        "paragraphs": [
+          {
+            "text": "Microsoft's operating margin increased from just over forty percent in the first requested fiscal period to nearly forty-five percent in the second, reflecting improved operating efficiency as shown in the financial data for those periods.",
+            "evidence_ids": [
+              "f_OperatingIncomeLoss_2022-07-01_2023-06-30_0000950170-25-100235_9e0733bb2dfc",
+              "f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8"
+            ]
+          },
+          {
+            "text": "The risk-factor disclosures for both fiscal periods highlight general competitive pressures and rapid technological changes. They mention cybersecurity and cloud service reliability as ongoing concerns but do not present these as new or distinct risks. Differences in wording between the periods reflect routine updates rather than the identification of new cybersecurity or cloud reliability risks.",
+            "evidence_ids": [
+              "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+              "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+              "p_f2b061c0efc337ebc00812b4542af2a4f5d7831e4722e055c2780a3608c2dbb1"
+            ]
+          },
+          {
+            "text": "An operating-margin calculation is available for MSFT for the earlier requested fiscal period.",
+            "evidence_ids": [
+              "margin_ac9a50aa3cf0417c58a1b06c29a0784b"
+            ]
+          },
+          {
+            "text": "An operating-margin calculation is available for MSFT for the later requested fiscal period. MSFT's calculated operating margin increased from the earlier requested fiscal period to the later requested fiscal period at the displayed precision.",
+            "evidence_ids": [
+              "margin_ac9a50aa3cf0417c58a1b06c29a0784b",
+              "margin_c7634ce686600989cfae5f37ad130c26"
+            ]
+          }
+        ]
+      },
+      "risk_draft": {
+        "title": "Microsoft Operating Margins and Risk Factors on Cybersecurity and Cloud Reliability",
+        "paragraphs": [
+          {
+            "text": "Microsoft's operating margin increased from just over forty percent in the first requested fiscal period to nearly forty-five percent in the second, reflecting improved operating efficiency as shown in the financial data for those periods.",
+            "evidence_ids": [
+              "f_OperatingIncomeLoss_2022-07-01_2023-06-30_0000950170-25-100235_9e0733bb2dfc",
+              "f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8"
+            ]
+          },
+          {
+            "text": "The risk-factor disclosures for both fiscal periods highlight general competitive pressures and rapid technological changes. They mention cybersecurity and cloud service reliability as ongoing concerns but do not present these as new or distinct risks. Differences in wording between the periods reflect routine updates rather than the identification of new cybersecurity or cloud reliability risks.",
+            "evidence_ids": [
+              "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+              "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+              "p_f2b061c0efc337ebc00812b4542af2a4f5d7831e4722e055c2780a3608c2dbb1"
+            ]
+          }
+        ]
+      },
+      "writer_mode": "single_worker_with_deterministic_financials",
+      "status": "blocked",
+      "critique": {
+        "approved": false,
+        "supported": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "issues": [
+          "paragraphs[0].text [unverified_number]: paragraphs[0].text: numeric text 'forty', 'percent', 'forty', 'five', 'percent' is forbidden, including years and Item labels. Rewrite this field without digits or number words. Use a title such as 'Company research comparison'; refer to 'the requested fiscal periods' and 'the risk factors section'. Code supplies financial figures, periods and citations."
+        ],
+        "check_version": "sentence-evidence-v3-source-instructions",
+        "draft_sha256": "b0d395316defad437d9de1bfea0aee95771380cac5cedadf8042e63a64ebf0e7",
+        "paragraph_reviews": []
+      },
+      "publication_calls": 0
+    },
+    "metrics": {
+      "llm_requests_started": 12,
+      "llm_responses_received": 12,
+      "reported_total_tokens": 36245,
+      "reported_cost_usd": "0.0163544",
+      "cost_complete": true,
+      "critic_rejections": 3,
+      "model_response_cache_hits": 0,
+      "development_budget_extensions": 0,
+      "budget_protocol": "original_fixed_limit"
+    },
+    "tool_calls": 23,
+    "policy_violation_attempts": 0,
+    "tool_errors": 0,
+    "model_errors": 0,
+    "evaluation": {
+      "case_id": "F003",
+      "numeric_success": false,
+      "task_success": null,
+      "risk_semantic_success": null,
+      "risk_label_status": "pending_human_label",
+      "numeric_errors": [
+        "run_not_completed",
+        "final_note_missing",
+        "MSFT:FY2023:final_table_row_missing_or_wrong",
+        "MSFT:FY2023:f_OperatingIncomeLoss_2022-07-01_2023-06-30_0000950170-25-100235_9e0733bb2dfc:final_citation_missing_or_wrong",
+        "MSFT:FY2023:f_RevenueFromContractWithCustomerExcludingAssessedTax_2022-07-01_2023-06-30_0000950170-25-100235_2bf438dbf9b6:final_citation_missing_or_wrong",
+        "MSFT:FY2023:margin_ac9a50aa3cf0417c58a1b06c29a0784b:final_citation_missing_or_wrong",
+        "MSFT:FY2024:final_table_row_missing_or_wrong",
+        "MSFT:FY2024:f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8:final_citation_missing_or_wrong",
+        "MSFT:FY2024:f_RevenueFromContractWithCustomerExcludingAssessedTax_2023-07-01_2024-06-30_0001193125-26-323660_4ce714604805:final_citation_missing_or_wrong",
+        "MSFT:FY2024:margin_c7634ce686600989cfae5f37ad130c26:final_citation_missing_or_wrong"
+      ],
+      "numeric_checks": [
+        {
+          "ticker": "MSFT",
+          "year": 2023
+        },
+        {
+          "ticker": "MSFT",
+          "year": 2024
+        }
+      ],
+      "metric_scope": "Frozen annual SEC fact identities, exact matched periods, Decimal margin, delivered table/citations, missing-input abstention; no narrative semantic judgment"
+    }
+  },
+  {
+    "execution_id": "PILOT_C2_F002_r1",
+    "case_id": "F002",
+    "repeat": 1,
+    "variant": "C2",
+    "split": "dev",
+    "manifest_sha256": "78da202b276d4ebf1ca2182a85d4e169c12790c022d78b5a95381867b3ea4ab7",
+    "status": "completed",
+    "elapsed_seconds": 28.874484,
+    "evaluation_only": true,
+    "human_reviewed": false,
+    "publication": null,
+    "shared_semantic_validator": true,
+    "independent_model_cache": true,
+    "retrieval_protocol": {
+      "ranking": "operator_production_hybrid_service",
+      "configuration_attestation": "external_preflight_required"
+    },
+    "result": {
+      "request": {
+        "question": "Compare Microsoft and Alphabet operating margins in FY2024 and FY2025. Present each company's own fiscal periods side by side so an analyst can see the June-versus-December year-end limitation. Include the reported inputs; do not annualise or calendarise them.",
+        "tickers": [
+          "GOOGL",
+          "MSFT"
+        ],
+        "years": [
+          2024,
+          2025
+        ],
+        "include_risks": false
+      },
+      "researchers": {
+        "GOOGL": {
+          "summary": "For Alphabet (GOOGL), partial Item 7 discussion and analysis sections for fiscal years 2024 and 2025 have been retrieved, providing narrative context on business segments, revenue sources, and AI-related growth factors. However, explicit revenue and operating income figures needed to calculate operating margins are not fully disclosed in the retrieved excerpts. The fiscal year ends on June 30, 2024 and 2025 respectively, and the data must be used as reported without annualization. Limitations include incomplete financial statement data in the current samples and absence of explicit operating margin disclosures. Further detailed numeric data extraction from full financial statements in Item 8 or complete Item 7 sections would be required to finalize operating margin calculations for these years.",
+          "evidence_ids": [
+            "p_3c749092d93614bf94c0cffc3b1374472abdce27a99453fbf9a7463bde27b576",
+            "p_c2e22186d21fffcf2e17ff2e859f845603a552667adc4001d48682c611b4633e",
+            "p_05fb7025f95e1410792301a682ab0ec82dad4ee1aba7f27fac484c9e05b0dc0a",
+            "p_5c451d27d5672213fdc0b51b940ba14d5fecea7550f8597234e6193d36f66b41"
+          ],
+          "issues": [
+            "The available source samples are limited to partial Item 7 sections for fiscal years 2024 and 2025 and do not provide complete financial statement tables or explicit operating income and revenue figures in the excerpts.",
+            "Operating margin figures are not explicitly reported and must be calculated externally from revenue and operating income data, which requires fuller financial statement data not fully present in the current samples.",
+            "Fiscal year end differences (Alphabet June year-end vs Microsoft December year-end) limit direct period comparability and require careful side-by-side presentation by fiscal year as reported.",
+            "No additional Item 1A or Item 8 disclosures were retrieved to supplement risk or segment detail relevant to operating margin calculation within the current scope."
+          ]
+        },
+        "MSFT": {
+          "summary": "For Microsoft fiscal years ending June 30, 2024 and June 30, 2025, Management's Discussion and Analysis sections (Item 7) provide narrative on revenue growth across segments including cloud services, Windows, Devices, Xbox, and advertising. The 2024 and 2025 MD&A excerpts confirm revenue drivers but do not explicitly state operating income or margins. The acquisition of Activision Blizzard in October 2023 is noted as impacting revenue composition in 2024. Operating income and revenue figures needed to calculate operating margins are not fully disclosed in the sampled passages and require extraction from consolidated financial statements or notes. The evidence is sufficient to support revenue context for margin analysis but incomplete for direct margin reporting. Limitations include partial section coverage, absence of explicit margin data, and the December fiscal year end for Microsoft, which differs from Alphabet's June year end, complicating direct period comparisons.",
+          "evidence_ids": [
+            "p_34b9b8ae5690e8529dee259e277047447d4a4cf243e7048e26a0c7501dc086c9",
+            "p_561907d55b0b0edf0b62d3ffbac5d49892d7af3d6b3cf5de0d1101876c94cc0e",
+            "p_117a2ad13ca9ea3e9bfaa2225e9e1c7af65f348af3fbe3746b91cc2c1ab22f43",
+            "p_1f7865f59868577679edc6278790e1fe233fd0c7aa288f5aabacec32b992c225"
+          ],
+          "issues": [
+            "Source coverage is limited to selected passages from Item 7 for fiscal years 2024 and 2025; full section and comprehensive numeric disclosures are not confirmed.",
+            "Operating margin figures are not explicitly reported and must be calculated externally from revenue and operating income data.",
+            "Fiscal year end differences (Microsoft December year-end) limit direct comparability with Alphabet (June year-end).",
+            "No additional Item 1A or Item 8 data were retrieved to supplement risk or detailed financial notes for margin calculation.",
+            "Potential differences in segment reporting or accounting policies are not addressed within the sourced passages."
+          ]
+        }
+      },
+      "revisions": 0,
+      "replans": 1,
+      "evaluation_only": true,
+      "human_reviewed": false,
+      "publication": null,
+      "plan_approved": true,
+      "plan": {
+        "objective": "Compare Microsoft and Alphabet operating margins for fiscal years 2024 and 2025, presenting each company's own fiscal year periods side by side to highlight the June-versus-December year-end difference, using reported revenue and operating income without annualizing or calendarizing.",
+        "outline": [
+          "Collect Microsoft fiscal year 2024 revenue and operating income from SEC filings.",
+          "Collect Microsoft fiscal year 2025 revenue and operating income from SEC filings.",
+          "Collect Alphabet fiscal year 2024 revenue and operating income from SEC filings.",
+          "Collect Alphabet fiscal year 2025 revenue and operating income from SEC filings.",
+          "Calculate operating margins for each company and fiscal year using collected data.",
+          "Present Microsoft and Alphabet operating margins side by side, noting fiscal year end differences.",
+          "Highlight limitations due to differing fiscal year ends (June vs December).",
+          "Summarize findings without annualizing or calendarizing data."
+        ],
+        "research_query": "Retrieve and compare Microsoft and Alphabet fiscal year 2024 and 2025 operating margins based on reported revenue and operating income, showing each company's fiscal year period as reported (Microsoft December year-end, Alphabet June year-end).",
+        "limitations": [
+          "Only source samples are registered; full-section and topical completeness remain unestablished.",
+          "Fiscal year end differences (Microsoft December, Alphabet June) limit direct period comparability.",
+          "Operating margins must be calculated from reported revenue and operating income; margins may not be explicitly reported.",
+          "No annualization or calendarization of data to align fiscal periods is performed.",
+          "Sample availability does not guarantee all relevant disclosures are present in the filings.",
+          "Potential differences in accounting policies or segment reporting are not addressed.",
+          "Limited to SEC filings; non-US GAAP or other disclosures outside filings are excluded.",
+          "No investment advice or inferred fiscal year data will be provided."
+        ]
+      },
+      "plan_hash": "2d19fc10ce719235e753648980e89160cc28f403520008f295f9963ef70c1a0c",
+      "status": "completed",
+      "quant": {
+        "summary": "For FY2024, Microsoft (July-June fiscal year) reported an operating margin of 44.64% with revenue and operating income from 2023-07-01 to 2024-06-30. Alphabet (calendar year) reported a 32.11% margin for 2024. For FY2025, Microsoft (July-June) showed a 45.62% margin, while Alphabet's margin was 32.03%. The data reflects each company's own fiscal year periods without annualisation or calendarisation, highlighting the June versus December year-end difference.",
+        "evidence_ids": [
+          "f_OperatingIncomeLoss_2024-01-01_2024-12-31_0001652044-26-000018_6492cfa9e4a7",
+          "margin_1dcf027449282bcd9d74e5a5fe9db878",
+          "f_Revenues_2024-01-01_2024-12-31_0001652044-26-000018_d9293b95d7f2",
+          "f_OperatingIncomeLoss_2025-01-01_2025-12-31_0001652044-26-000018_de50c2e0e06a",
+          "margin_5c6f3fecb46bb991850865bf616ddb98",
+          "f_Revenues_2025-01-01_2025-12-31_0001652044-26-000018_566b60c5266e",
+          "f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8",
+          "margin_c7634ce686600989cfae5f37ad130c26",
+          "f_RevenueFromContractWithCustomerExcludingAssessedTax_2023-07-01_2024-06-30_0001193125-26-323660_4ce714604805",
+          "f_OperatingIncomeLoss_2024-07-01_2025-06-30_0001193125-26-323660_fb0082f0eb75",
+          "margin_734519e58a833d24f5ee16a67d15f32f",
+          "f_RevenueFromContractWithCustomerExcludingAssessedTax_2024-07-01_2025-06-30_0001193125-26-323660_ca99bf1ee91d"
+        ],
+        "issues": []
+      },
+      "risk_diff": {
+        "summary": "Risk comparison was not requested.",
+        "evidence_ids": [],
+        "issues": []
+      },
+      "draft": {
+        "title": "Company operating margin comparison",
+        "paragraphs": [
+          {
+            "text": "Among the available calculations for the earlier requested fiscal period, calculated operating margins rank from higher to lower as MSFT, then GOOGL, at the displayed precision.",
+            "evidence_ids": [
+              "margin_1dcf027449282bcd9d74e5a5fe9db878",
+              "margin_c7634ce686600989cfae5f37ad130c26"
+            ]
+          },
+          {
+            "text": "Among the available calculations for the later requested fiscal period, calculated operating margins rank from higher to lower as MSFT, then GOOGL, at the displayed precision. GOOGL's calculated operating margin decreased from the earlier requested fiscal period to the later requested fiscal period at the displayed precision. MSFT's calculated operating margin increased from the earlier requested fiscal period to the later requested fiscal period at the displayed precision.",
+            "evidence_ids": [
+              "margin_1dcf027449282bcd9d74e5a5fe9db878",
+              "margin_5c6f3fecb46bb991850865bf616ddb98",
+              "margin_734519e58a833d24f5ee16a67d15f32f",
+              "margin_c7634ce686600989cfae5f37ad130c26"
+            ]
+          }
+        ]
+      },
+      "writer_mode": "deterministic_financials",
+      "critique": {
+        "approved": true,
+        "supported": [
+          true,
+          true
+        ],
+        "issues": [],
+        "check_version": "sentence-evidence-v3-source-instructions",
+        "draft_sha256": "00fa599d33dfbaba176ea9f0409c057cb8ba68c6422c26f25634d41c75118517",
+        "paragraph_reviews": [
+          {
+            "sentences": [
+              {
+                "sentence_index": 0,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "margin_1dcf027449282bcd9d74e5a5fe9db878",
+                    "quote": ""
+                  },
+                  {
+                    "evidence_id": "margin_c7634ce686600989cfae5f37ad130c26",
+                    "quote": ""
+                  }
+                ],
+                "reason": "The sentence correctly states that for the earlier requested fiscal period, Microsoft (MSFT) has a higher operating margin than Alphabet (GOOGL), supported by the calculations for MSFT's 2024-06-30 period (44.64%) and GOOGL's 2024-12-31 period (32.11%)."
+              }
+            ],
+            "issues": [],
+            "approved": true,
+            "selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_9dc9a36c4d147574",
+                    "r_492a9c9f9e39459f"
+                  ],
+                  "reason": "The sentence correctly states that for the earlier requested fiscal period, Microsoft (MSFT) has a higher operating margin than Alphabet (GOOGL), supported by the calculations for MSFT's 2024-06-30 period (44.64%) and GOOGL's 2024-12-31 period (32.11%)."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "alias_selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "P1R1",
+                    "P1R2"
+                  ],
+                  "reason": "The sentence correctly states that for the earlier requested fiscal period, Microsoft (MSFT) has a higher operating margin than Alphabet (GOOGL), supported by the calculations for MSFT's 2024-06-30 period (44.64%) and GOOGL's 2024-12-31 period (32.11%)."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "catalog_sha256": "d82305c65e178953cf4a6d80e384ebacd65457feb5a127ff37f6a057e44040a0",
+            "critic_protocol": "critic-short-references-strict-schema-v1",
+            "alias_binding_sha256": "fff998af6e038c07985fcdaed97892b8f6c6e022a7623a042be1058ddb55f4da",
+            "response_format_sha256": "11073714e043fbd5cb9673648eb2e48286ac617aa387da00106b8c49589ea894"
+          },
+          {
+            "sentences": [
+              {
+                "sentence_index": 0,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "margin_734519e58a833d24f5ee16a67d15f32f",
+                    "quote": ""
+                  },
+                  {
+                    "evidence_id": "margin_5c6f3fecb46bb991850865bf616ddb98",
+                    "quote": ""
+                  }
+                ],
+                "reason": "Supported by P2R3 (MSFT 2025 operating margin 45.62%) and P2R2 (GOOGL 2025 operating margin 32.03%) showing MSFT margin higher than GOOGL for the later fiscal period."
+              },
+              {
+                "sentence_index": 1,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "margin_1dcf027449282bcd9d74e5a5fe9db878",
+                    "quote": ""
+                  },
+                  {
+                    "evidence_id": "margin_5c6f3fecb46bb991850865bf616ddb98",
+                    "quote": ""
+                  }
+                ],
+                "reason": "Supported by P2R1 (GOOGL 2024 operating margin 32.11%) and P2R2 (GOOGL 2025 operating margin 32.03%) showing a decrease from 32.11% to 32.03%."
+              },
+              {
+                "sentence_index": 2,
+                "supported": true,
+                "references": [
+                  {
+                    "evidence_id": "margin_c7634ce686600989cfae5f37ad130c26",
+                    "quote": ""
+                  },
+                  {
+                    "evidence_id": "margin_734519e58a833d24f5ee16a67d15f32f",
+                    "quote": ""
+                  }
+                ],
+                "reason": "Supported by P2R4 (MSFT 2024 operating margin 44.64%) and P2R3 (MSFT 2025 operating margin 45.62%) showing an increase from 44.64% to 45.62%."
+              }
+            ],
+            "issues": [],
+            "approved": true,
+            "selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_4c0f2c206c63a087",
+                    "r_81a15e1f4adb6012"
+                  ],
+                  "reason": "Supported by P2R3 (MSFT 2025 operating margin 45.62%) and P2R2 (GOOGL 2025 operating margin 32.03%) showing MSFT margin higher than GOOGL for the later fiscal period."
+                },
+                {
+                  "sentence_index": 1,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_d3a3a2ef0be6c9e2",
+                    "r_81a15e1f4adb6012"
+                  ],
+                  "reason": "Supported by P2R1 (GOOGL 2024 operating margin 32.11%) and P2R2 (GOOGL 2025 operating margin 32.03%) showing a decrease from 32.11% to 32.03%."
+                },
+                {
+                  "sentence_index": 2,
+                  "supported": true,
+                  "reference_ids": [
+                    "r_ac927fe3532a915e",
+                    "r_4c0f2c206c63a087"
+                  ],
+                  "reason": "Supported by P2R4 (MSFT 2024 operating margin 44.64%) and P2R3 (MSFT 2025 operating margin 45.62%) showing an increase from 44.64% to 45.62%."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "alias_selection": {
+              "sentences": [
+                {
+                  "sentence_index": 0,
+                  "supported": true,
+                  "reference_ids": [
+                    "P2R3",
+                    "P2R2"
+                  ],
+                  "reason": "Supported by P2R3 (MSFT 2025 operating margin 45.62%) and P2R2 (GOOGL 2025 operating margin 32.03%) showing MSFT margin higher than GOOGL for the later fiscal period."
+                },
+                {
+                  "sentence_index": 1,
+                  "supported": true,
+                  "reference_ids": [
+                    "P2R1",
+                    "P2R2"
+                  ],
+                  "reason": "Supported by P2R1 (GOOGL 2024 operating margin 32.11%) and P2R2 (GOOGL 2025 operating margin 32.03%) showing a decrease from 32.11% to 32.03%."
+                },
+                {
+                  "sentence_index": 2,
+                  "supported": true,
+                  "reference_ids": [
+                    "P2R4",
+                    "P2R3"
+                  ],
+                  "reason": "Supported by P2R4 (MSFT 2024 operating margin 44.64%) and P2R3 (MSFT 2025 operating margin 45.62%) showing an increase from 44.64% to 45.62%."
+                }
+              ],
+              "issues": [],
+              "approved": true
+            },
+            "catalog_sha256": "9b5abd45caa35a2c46eec535f7fd868232209b00ddfa76dee6aecbbb917a544d",
+            "critic_protocol": "critic-short-references-strict-schema-v1",
+            "alias_binding_sha256": "3ec8a2ba1e84d04a134f024ea61ebb641a262d4bdcfed47ad0ad3a8775e0b2d0",
+            "response_format_sha256": "52cf2638c5d5a9b6210b6974a4afdfd150824b3fbe55c43dacd94704d49a1719"
+          }
+        ]
+      },
+      "note": {
+        "title": "Company operating margin comparison",
+        "body_markdown": "Companies: GOOGL, MSFT. Fiscal years: 2024, 2025.\n\nFiscal years are company reporting periods and may differ from calendar years. Compare the actual start/end dates below.\n\n| Company | FY | Reporting period | Revenue (USD) | Operating income (USD) | Operating margin |\n|---|---|---|---:|---:|---:|\n| GOOGL | 2024 | 2024-01-01 to 2024-12-31 | 350,018,000,000 [f_Revenues_2024-01-01_2024-12-31_0001652044-26-000018_d9293b95d7f2] | 112,390,000,000 [f_OperatingIncomeLoss_2024-01-01_2024-12-31_0001652044-26-000018_6492cfa9e4a7] | 32.11% [margin_1dcf027449282bcd9d74e5a5fe9db878] |\n| GOOGL | 2025 | 2025-01-01 to 2025-12-31 | 402,836,000,000 [f_Revenues_2025-01-01_2025-12-31_0001652044-26-000018_566b60c5266e] | 129,039,000,000 [f_OperatingIncomeLoss_2025-01-01_2025-12-31_0001652044-26-000018_de50c2e0e06a] | 32.03% [margin_5c6f3fecb46bb991850865bf616ddb98] |\n| MSFT | 2024 | 2023-07-01 to 2024-06-30 | 245,122,000,000 [f_RevenueFromContractWithCustomerExcludingAssessedTax_2023-07-01_2024-06-30_0001193125-26-323660_4ce714604805] | 109,433,000,000 [f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8] | 44.64% [margin_c7634ce686600989cfae5f37ad130c26] |\n| MSFT | 2025 | 2024-07-01 to 2025-06-30 | 281,724,000,000 [f_RevenueFromContractWithCustomerExcludingAssessedTax_2024-07-01_2025-06-30_0001193125-26-323660_ca99bf1ee91d] | 128,528,000,000 [f_OperatingIncomeLoss_2024-07-01_2025-06-30_0001193125-26-323660_fb0082f0eb75] | 45.62% [margin_734519e58a833d24f5ee16a67d15f32f] |\n\nFinancial coverage: saved calculations cover every requested company/fiscal-year pair.\n\nMargin formula: operating income divided by revenue, multiplied by one hundred; rounded to two decimal places using Decimal half-even rounding.\n\nAmong the available calculations for the earlier requested fiscal period, calculated operating margins rank from higher to lower as MSFT, then GOOGL, at the displayed precision. [margin_1dcf027449282bcd9d74e5a5fe9db878] [margin_c7634ce686600989cfae5f37ad130c26]\n\nAmong the available calculations for the later requested fiscal period, calculated operating margins rank from higher to lower as MSFT, then GOOGL, at the displayed precision. GOOGL's calculated operating margin decreased from the earlier requested fiscal period to the later requested fiscal period at the displayed precision. MSFT's calculated operating margin increased from the earlier requested fiscal period to the later requested fiscal period at the displayed precision. [margin_1dcf027449282bcd9d74e5a5fe9db878] [margin_5c6f3fecb46bb991850865bf616ddb98] [margin_734519e58a833d24f5ee16a67d15f32f] [margin_c7634ce686600989cfae5f37ad130c26]\n\nSources:\n- [f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)\n- [f_OperatingIncomeLoss_2024-01-01_2024-12-31_0001652044-26-000018_6492cfa9e4a7](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [f_OperatingIncomeLoss_2024-07-01_2025-06-30_0001193125-26-323660_fb0082f0eb75](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)\n- [f_OperatingIncomeLoss_2025-01-01_2025-12-31_0001652044-26-000018_de50c2e0e06a](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [f_RevenueFromContractWithCustomerExcludingAssessedTax_2023-07-01_2024-06-30_0001193125-26-323660_4ce714604805](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)\n- [f_RevenueFromContractWithCustomerExcludingAssessedTax_2024-07-01_2025-06-30_0001193125-26-323660_ca99bf1ee91d](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)\n- [f_Revenues_2024-01-01_2024-12-31_0001652044-26-000018_d9293b95d7f2](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [f_Revenues_2025-01-01_2025-12-31_0001652044-26-000018_566b60c5266e](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [margin_1dcf027449282bcd9d74e5a5fe9db878](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [margin_5c6f3fecb46bb991850865bf616ddb98](https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html)\n- [margin_734519e58a833d24f5ee16a67d15f32f](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)\n- [margin_c7634ce686600989cfae5f37ad130c26](https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html)",
+        "tickers": [
+          "GOOGL",
+          "MSFT"
+        ],
+        "fiscal_years": [
+          2024,
+          2025
+        ],
+        "citations": [
+          {
+            "evidence_id": "f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          },
+          {
+            "evidence_id": "f_OperatingIncomeLoss_2024-01-01_2024-12-31_0001652044-26-000018_6492cfa9e4a7",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "f_OperatingIncomeLoss_2024-07-01_2025-06-30_0001193125-26-323660_fb0082f0eb75",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          },
+          {
+            "evidence_id": "f_OperatingIncomeLoss_2025-01-01_2025-12-31_0001652044-26-000018_de50c2e0e06a",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "f_RevenueFromContractWithCustomerExcludingAssessedTax_2023-07-01_2024-06-30_0001193125-26-323660_4ce714604805",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          },
+          {
+            "evidence_id": "f_RevenueFromContractWithCustomerExcludingAssessedTax_2024-07-01_2025-06-30_0001193125-26-323660_ca99bf1ee91d",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          },
+          {
+            "evidence_id": "f_Revenues_2024-01-01_2024-12-31_0001652044-26-000018_d9293b95d7f2",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "f_Revenues_2025-01-01_2025-12-31_0001652044-26-000018_566b60c5266e",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "margin_1dcf027449282bcd9d74e5a5fe9db878",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "margin_5c6f3fecb46bb991850865bf616ddb98",
+            "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+          },
+          {
+            "evidence_id": "margin_734519e58a833d24f5ee16a67d15f32f",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          },
+          {
+            "evidence_id": "margin_c7634ce686600989cfae5f37ad130c26",
+            "source_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/0001193125-26-323660-index.html"
+          }
+        ]
+      },
+      "verification": {
+        "rendered_financial_figures": 12,
+        "verified_financial_figures": 12,
+        "verified_share": 1.0,
+        "missing_company_years": [],
+        "metric_scope": "Code-rendered financial table values; qualitative support is a separate critic check."
+      },
+      "semantic_critic": "shared_production_validator",
+      "semantic_support_verified": null,
+      "semantic_support": "model_critic_approved_not_human_gold",
+      "publication_calls": 0
+    },
+    "metrics": {
+      "llm_requests_started": 10,
+      "llm_responses_received": 10,
+      "reported_total_tokens": 27826,
+      "reported_cost_usd": "0.0124204",
+      "cost_complete": true,
+      "critic_rejections": 0,
+      "model_response_cache_hits": 0,
+      "development_budget_extensions": 0,
+      "budget_protocol": "original_fixed_limit"
+    },
+    "tool_calls": 24,
+    "policy_violation_attempts": 0,
+    "tool_errors": 0,
+    "model_errors": 0,
+    "evaluation": {
+      "case_id": "F002",
+      "numeric_success": true,
+      "task_success": true,
+      "risk_semantic_success": null,
+      "risk_label_status": "not_applicable",
+      "numeric_errors": [],
+      "numeric_checks": [
+        {
+          "ticker": "GOOGL",
+          "year": 2024
+        },
+        {
+          "ticker": "GOOGL",
+          "year": 2025
+        },
+        {
+          "ticker": "MSFT",
+          "year": 2024
+        },
+        {
+          "ticker": "MSFT",
+          "year": 2025
+        }
+      ],
+      "metric_scope": "Frozen annual SEC fact identities, exact matched periods, Decimal margin, delivered table/citations, missing-input abstention; no narrative semantic judgment"
+    }
+  },
+  {
+    "execution_id": "PILOT_C2_F003_r1",
+    "case_id": "F003",
+    "repeat": 1,
+    "variant": "C2",
+    "split": "dev",
+    "manifest_sha256": "78da202b276d4ebf1ca2182a85d4e169c12790c022d78b5a95381867b3ea4ab7",
+    "status": "blocked",
+    "elapsed_seconds": 49.541218,
+    "evaluation_only": true,
+    "human_reviewed": false,
+    "publication": null,
+    "shared_semantic_validator": true,
+    "independent_model_cache": true,
+    "retrieval_protocol": {
+      "ranking": "operator_production_hybrid_service",
+      "configuration_attestation": "external_preflight_required"
+    },
+    "result": {
+      "request": {
+        "question": "Compare Microsoft's operating margins in FY2023 and FY2024 and examine what the cited risk-factor passages say about cybersecurity and cloud service reliability. Distinguish a difference in retrieved wording from a demonstrated new risk.",
+        "tickers": [
+          "MSFT"
+        ],
+        "years": [
+          2023,
+          2024
+        ],
+        "include_risks": true
+      },
+      "researchers": {
+        "MSFT": {
+          "summary": "For Microsoft in fiscal years 2023 and 2024, Item 7 sections provide revenue growth details by segment but do not directly state operating margins; these must be calculated from revenue and operating income data. Item 1A risk-factor disclosures for both years include cybersecurity risks such as evolving cyberthreats, supply chain attacks, and challenges from new technologies like generative AI. Cloud service reliability risks are implied in operational discussions but not separately highlighted. Wording differences exist between years, reflecting updates in technology and acquisitions (e.g., Activision Blizzard in 2024), but do not clearly indicate new risk categories. Limitations include incomplete section coverage and truncated text previews, restricting definitive conclusions on risk evolution or margin changes.",
+          "evidence_ids": [
+            "p_1867d704d64d42324b0f227eddba0adeec11e87d98910c9edaa39189ab37689b",
+            "p_3dd4d5311833b10ef9aebeb6b98d9fd0495de8fa3c54e46e8b6e92bb0027a803",
+            "p_588af49703eb1fc886d09dfb1078afa7693ca4c41e72238f40e441cd40751a88",
+            "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+            "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+            "p_5175ef77fdd4c57bb6bc546e3a96df443a7580f43258ef3bf3c1870f4d5dc3dd",
+            "p_5f621bc9e131ffa8c8bec3d803cc9ec48a93e42b46b6e235a932f1270a3401c4",
+            "p_34b9b8ae5690e8529dee259e277047447d4a4cf243e7048e26a0c7501dc086c9",
+            "p_561907d55b0b0edf0b62d3ffbac5d49892d7af3d6b3cf5de0d1101876c94cc0e",
+            "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+            "p_f2b061c0efc337ebc00812b4542af2a4f5d7831e4722e055c2780a3608c2dbb1"
+          ],
+          "issues": [
+            "The registered source samples do not guarantee full coverage of all cybersecurity and cloud service reliability risk disclosures for both fiscal years.",
+            "No direct operating margin figures were found; margins must be calculated externally from collected revenue and operating income data in Item 7 sections.",
+            "Risk-factor wording differences between FY2023 and FY2024 are present but do not conclusively demonstrate new or evolving risks without additional company commentary or broader context.",
+            "Fiscal year definitions and reporting conventions appear consistent but should be confirmed for precise year-to-year comparison.",
+            "The available samples include truncated previews; fuller text retrievals may be needed for comprehensive risk analysis."
+          ]
+        }
+      },
+      "revisions": 2,
+      "replans": 1,
+      "evaluation_only": true,
+      "human_reviewed": false,
+      "publication": null,
+      "plan_approved": true,
+      "plan": {
+        "objective": "Compare Microsoft's operating margins for fiscal years 2023 and 2024 and analyze the risk-factor disclosures related to cybersecurity and cloud service reliability, distinguishing changes in wording from actual new risks.",
+        "outline": [
+          "Collect fiscal year 2023 operating income and revenue data for Microsoft.",
+          "Collect fiscal year 2024 operating income and revenue data for Microsoft.",
+          "Calculate and compare operating margins for FY2023 and FY2024.",
+          "Retrieve risk-factor disclosures (Item 1A) for FY2023 related to cybersecurity and cloud service reliability.",
+          "Retrieve risk-factor disclosures (Item 1A) for FY2024 related to cybersecurity and cloud service reliability.",
+          "Compare the wording of cybersecurity risk factors between FY2023 and FY2024.",
+          "Compare the wording of cloud service reliability risk factors between FY2023 and FY2024.",
+          "Assess whether wording differences reflect new risks or restatements of existing risks."
+        ],
+        "research_query": "Retrieve Microsoft's fiscal year 2023 and 2024 operating income and revenue figures to calculate operating margins. Collect risk-factor sections for both years focusing on cybersecurity and cloud service reliability risks. Identify any differences in wording and assess whether these indicate new or evolving risks.",
+        "limitations": [
+          "Only source samples are registered; full-section and topical completeness have not been established for the risk-factor disclosures and financial data.",
+          "No direct margin figures may be available; operating margins must be calculated from collected revenue and operating income data.",
+          "Risk-factor wording differences may not conclusively prove new risks without additional context or company commentary.",
+          "The collection status does not guarantee coverage of all cybersecurity and cloud reliability risk passages in both years.",
+          "Fiscal year definitions and reporting conventions must be confirmed to ensure consistent year-to-year comparison.",
+          "No external or non-SEC sources will be used to supplement risk or financial data.",
+          "The analysis will not infer risk materiality beyond the disclosed text.",
+          "Comparisons are limited to the registered samples and may miss minor wording changes outside those samples."
+        ]
+      },
+      "plan_hash": "fb4eeee1b7cb5c5d3c513d1540f02738483006389c8a6d5971fd45adbe64eadb",
+      "status": "blocked",
+      "quant": {
+        "summary": "Microsoft's operating margin increased from 41.77% in FY2023 to 44.64% in FY2024. The retrieved risk-factor passages mention cybersecurity and cloud service reliability risks but do not show a demonstrated new risk; rather, they reflect ongoing concerns with similar wording across the periods.",
+        "evidence_ids": [
+          "f_OperatingIncomeLoss_2022-07-01_2023-06-30_0000950170-25-100235_9e0733bb2dfc",
+          "margin_ac9a50aa3cf0417c58a1b06c29a0784b",
+          "f_RevenueFromContractWithCustomerExcludingAssessedTax_2022-07-01_2023-06-30_0000950170-25-100235_2bf438dbf9b6",
+          "f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8",
+          "margin_c7634ce686600989cfae5f37ad130c26",
+          "f_RevenueFromContractWithCustomerExcludingAssessedTax_2023-07-01_2024-06-30_0001193125-26-323660_4ce714604805"
+        ],
+        "issues": []
+      },
+      "risk_diff": {
+        "summary": "Microsoft's operating margins for FY2023 and FY2024 are not directly provided in the retrieved Item 1A risk-factor passages, so no comparison can be made from the current evidence. Regarding cybersecurity and cloud service reliability risks, the retrieved Item 1A passages for both years focus primarily on competition and platform risks without explicit mention of cybersecurity or cloud service reliability. Therefore, no demonstrated new risk or difference in wording on these topics can be confirmed from the available evidence. The absence of these topics in the samples does not prove their removal or addition; further retrieval would be needed for a definitive conclusion.",
+        "evidence_ids": [
+          "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+          "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+          "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d",
+          "p_f2b061c0efc337ebc00812b4542af2a4f5d7831e4722e055c2780a3608c2dbb1"
+        ],
+        "issues": [
+          "Operating margin data not found in retrieved risk-factor passages for FY2023 and FY2024.",
+          "No explicit cybersecurity or cloud service reliability risk-factor passages retrieved for either year.",
+          "Cannot determine if cybersecurity or cloud service reliability risks were added, removed, or changed due to incomplete coverage."
+        ]
+      },
+      "draft": {
+        "title": "Microsoft Risk Disclosure Comparison for the Requested Fiscal Periods",
+        "paragraphs": [
+          {
+            "text": "Microsoft's risk factors section for the requested fiscal periods consistently highlights intense competition across all markets for its products and services as a significant risk that could adversely affect its business and financial results. The company describes competitors ranging from large diversified firms to smaller specialized companies, with low barriers to entry and rapidly evolving technologies, emphasizing the need for continuous innovation to remain competitive.",
+            "evidence_ids": [
+              "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+              "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d"
+            ]
+          },
+          {
+            "text": "In both fiscal periods, Microsoft discusses competition related to its Windows operating system licenses on personal computers, noting significant competition from platforms developed for newer devices such as smartphones and tablets. These competing devices challenge Microsoft on price and perceived utility, potentially affecting margins and the ability to attract application developers. This risk theme remains substantively similar across the requested fiscal periods.",
+            "evidence_ids": [
+              "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+              "p_f2b061c0efc337ebc00812b4542af2a4f5d7831e4722e055c2780a3608c2dbb1"
+            ]
+          },
+          {
+            "text": "The disclosure for the later requested fiscal period additionally addresses competition from vertically integrated models where a single firm controls hardware, software, and related services, including integrated marketplaces. Microsoft notes that shifting part of its business toward such a model may increase costs and affect operating margins. This specific risk related to vertically integrated competitors is not explicitly detailed in the earlier period's risk passages provided.",
+            "evidence_ids": [
+              "p_f2b061c0efc337ebc00812b4542af2a4f5d7831e4722e055c2780a3608c2dbb1"
+            ]
+          },
+          {
+            "text": "An operating-margin calculation is available for MSFT for the earlier requested fiscal period.",
+            "evidence_ids": [
+              "margin_ac9a50aa3cf0417c58a1b06c29a0784b"
+            ]
+          },
+          {
+            "text": "An operating-margin calculation is available for MSFT for the later requested fiscal period. MSFT's calculated operating margin increased from the earlier requested fiscal period to the later requested fiscal period at the displayed precision.",
+            "evidence_ids": [
+              "margin_ac9a50aa3cf0417c58a1b06c29a0784b",
+              "margin_c7634ce686600989cfae5f37ad130c26"
+            ]
+          }
+        ]
+      },
+      "risk_draft": {
+        "title": "Microsoft Risk Disclosure Comparison for the Requested Fiscal Periods",
+        "paragraphs": [
+          {
+            "text": "Microsoft's risk factors section for the requested fiscal periods consistently highlights intense competition across all markets for its products and services as a significant risk that could adversely affect its business and financial results. The company describes competitors ranging from large diversified firms to smaller specialized companies, with low barriers to entry and rapidly evolving technologies, emphasizing the need for continuous innovation to remain competitive.",
+            "evidence_ids": [
+              "p_1edd03befdcab552de3d10b42e578a875a5c77f2e19df7e63edb44551788e8b4",
+              "p_bc19d459a70813058582f496d5087041babbb419327d4abacc71f85e6df1511d"
+            ]
+          },
+          {
+            "text": "In both fiscal periods, Microsoft discusses competition related to its Windows operating system licenses on personal computers, noting significant competition from platforms developed for newer devices such as smartphones and tablets. These competing devices challenge Microsoft on price and perceived utility, potentially affecting margins and the ability to attract application developers. This risk theme remains substantively similar across the requested fiscal periods.",
+            "evidence_ids": [
+              "p_3ce9edd1a3fa29be28c0fc82e8f0cd7c265cf364aea75091856b74997e514bd2",
+              "p_f2b061c0efc337ebc00812b4542af2a4f5d7831e4722e055c2780a3608c2dbb1"
+            ]
+          },
+          {
+            "text": "The disclosure for the later requested fiscal period additionally addresses competition from vertically integrated models where a single firm controls hardware, software, and related services, including integrated marketplaces. Microsoft notes that shifting part of its business toward such a model may increase costs and affect operating margins. This specific risk related to vertically integrated competitors is not explicitly detailed in the earlier period's risk passages provided.",
+            "evidence_ids": [
+              "p_f2b061c0efc337ebc00812b4542af2a4f5d7831e4722e055c2780a3608c2dbb1"
+            ]
+          }
+        ]
+      },
+      "writer_mode": "risk_model_with_deterministic_financials",
+      "critique": {
+        "approved": false,
+        "supported": [
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "issues": [
+          "paragraphs[1]: operating-margin claims belong only in the checked financial section.",
+          "paragraphs[2]: operating-margin claims belong only in the checked financial section."
+        ],
+        "check_version": "sentence-evidence-v3-source-instructions",
+        "draft_sha256": "f3defdc3c909f95aa0531104017d99998bced45e5c76c9e10213a78d1c57d2bc",
+        "paragraph_reviews": []
+      },
+      "publication_calls": 0
+    },
+    "metrics": {
+      "llm_requests_started": 14,
+      "llm_responses_received": 14,
+      "reported_total_tokens": 63487,
+      "reported_cost_usd": "0.0276352",
+      "cost_complete": true,
+      "critic_rejections": 3,
+      "model_response_cache_hits": 0,
+      "development_budget_extensions": 0,
+      "budget_protocol": "original_fixed_limit"
+    },
+    "tool_calls": 16,
+    "policy_violation_attempts": 0,
+    "tool_errors": 0,
+    "model_errors": 0,
+    "evaluation": {
+      "case_id": "F003",
+      "numeric_success": false,
+      "task_success": null,
+      "risk_semantic_success": null,
+      "risk_label_status": "pending_human_label",
+      "numeric_errors": [
+        "run_not_completed",
+        "final_note_missing",
+        "MSFT:FY2023:final_table_row_missing_or_wrong",
+        "MSFT:FY2023:f_OperatingIncomeLoss_2022-07-01_2023-06-30_0000950170-25-100235_9e0733bb2dfc:final_citation_missing_or_wrong",
+        "MSFT:FY2023:f_RevenueFromContractWithCustomerExcludingAssessedTax_2022-07-01_2023-06-30_0000950170-25-100235_2bf438dbf9b6:final_citation_missing_or_wrong",
+        "MSFT:FY2023:margin_ac9a50aa3cf0417c58a1b06c29a0784b:final_citation_missing_or_wrong",
+        "MSFT:FY2024:final_table_row_missing_or_wrong",
+        "MSFT:FY2024:f_OperatingIncomeLoss_2023-07-01_2024-06-30_0001193125-26-323660_51e3bf7edee8:final_citation_missing_or_wrong",
+        "MSFT:FY2024:f_RevenueFromContractWithCustomerExcludingAssessedTax_2023-07-01_2024-06-30_0001193125-26-323660_4ce714604805:final_citation_missing_or_wrong",
+        "MSFT:FY2024:margin_c7634ce686600989cfae5f37ad130c26:final_citation_missing_or_wrong"
+      ],
+      "numeric_checks": [
+        {
+          "ticker": "MSFT",
+          "year": 2023
+        },
+        {
+          "ticker": "MSFT",
+          "year": 2024
+        }
+      ],
+      "metric_scope": "Frozen annual SEC fact identities, exact matched periods, Decimal margin, delivered table/citations, missing-input abstention; no narrative semantic judgment"
+    }
+  }
+]

@@ -1,0 +1,297 @@
+{
+  "canonicalization": "exact-decimal-typed-json-tree-v1",
+  "certificate_sha256": "2a429342887848bf1cf786df03d474ce18e6adad269aa1150dd65c247a756362",
+  "files": [
+    {
+      "actual_canonical_sha256": "20f47b8c5f72b0fd8956a86e420ed3430dd08ffc9706a976c609740f387527a2",
+      "actual_raw_sha256": "f085735b4d08fb116ade18d24247ffabe11df8eb52eae6556b165831f15ef1ad",
+      "expected_canonical_sha256": "20f47b8c5f72b0fd8956a86e420ed3430dd08ffc9706a976c609740f387527a2",
+      "frozen_raw_sha256": "f085735b4d08fb116ade18d24247ffabe11df8eb52eae6556b165831f15ef1ad",
+      "kind": "companyfacts",
+      "relative_path": "data/raw/AAPL_companyfacts.json",
+      "status": "exact"
+    },
+    {
+      "actual_canonical_sha256": "a2f88f43b2f4569d958c087d5bdb48c858660f7c97599d93cf51b74d3eed4103",
+      "actual_raw_sha256": "0e4e7a21c62b28ebdcb5b41b33c9ccff20c15c65fd7b1cc73ba005b4fb77305b",
+      "expected_canonical_sha256": "a2f88f43b2f4569d958c087d5bdb48c858660f7c97599d93cf51b74d3eed4103",
+      "frozen_raw_sha256": "cdce4ec6e537df8ad0e22a18aaa6d23811592ae30912b08964ac322f498fbe24",
+      "kind": "filings",
+      "relative_path": "data/raw/AAPL_filings.json",
+      "status": "format_or_timestamp_variant"
+    },
+    {
+      "actual_canonical_sha256": "93d265439675d762a36650c49c137b6b63f30c0a13462be02ee8269222756938",
+      "actual_raw_sha256": "86a5689aa9aa7b0f9e95be21b48b0305376e014c8dbf3b8bb3b4b131f1b6a0c4",
+      "expected_canonical_sha256": "93d265439675d762a36650c49c137b6b63f30c0a13462be02ee8269222756938",
+      "frozen_raw_sha256": "86a5689aa9aa7b0f9e95be21b48b0305376e014c8dbf3b8bb3b4b131f1b6a0c4",
+      "kind": "companyfacts",
+      "relative_path": "data/raw/ADBE_companyfacts.json",
+      "status": "exact"
+    },
+    {
+      "actual_canonical_sha256": "2c68cc5c32da9a47fb061e61c64f42e74ed83a507263ab13d520653d657f448c",
+      "actual_raw_sha256": "bc4e5cf65395f589aa28abf47df5581b12d0f6ca953232e62fed3867dd1a30fa",
+      "expected_canonical_sha256": "2c68cc5c32da9a47fb061e61c64f42e74ed83a507263ab13d520653d657f448c",
+      "frozen_raw_sha256": "2506670f7294e740c1628930e17994eb1223b6a344bbf97708a8320650dd8526",
+      "kind": "filings",
+      "relative_path": "data/raw/ADBE_filings.json",
+      "status": "format_or_timestamp_variant"
+    },
+    {
+      "actual_canonical_sha256": "d11b8ad2219909bf33c9837c257f55b14b9189ef45e25c081abfbbf5e02db5eb",
+      "actual_raw_sha256": "3bdb6644c12addf1e63c4dc861008d7804fbf3d3f5aa6eb9b97f72c0e89a7adf",
+      "expected_canonical_sha256": "d11b8ad2219909bf33c9837c257f55b14b9189ef45e25c081abfbbf5e02db5eb",
+      "frozen_raw_sha256": "3bdb6644c12addf1e63c4dc861008d7804fbf3d3f5aa6eb9b97f72c0e89a7adf",
+      "kind": "companyfacts",
+      "relative_path": "data/raw/AVGO_companyfacts.json",
+      "status": "exact"
+    },
+    {
+      "actual_canonical_sha256": "1585f392ac10878f3b3227f8ef63bd39224c9e9039ff8ef6373be0f9cc0698f4",
+      "actual_raw_sha256": "102f577eed82dd846f6a81712c3b1a98bea4c0da8c36befb90a1cd91a73d1708",
+      "expected_canonical_sha256": "1585f392ac10878f3b3227f8ef63bd39224c9e9039ff8ef6373be0f9cc0698f4",
+      "frozen_raw_sha256": "b4002c1bf646d934699b4671714cca3c9db9cd8e1c8915d64046360f2db9155b",
+      "kind": "filings",
+      "relative_path": "data/raw/AVGO_filings.json",
+      "status": "format_or_timestamp_variant"
+    },
+    {
+      "actual_canonical_sha256": "8152f705dd2477b388f538891f01796fe3e6d2657d88bf17ebf307e7c760e202",
+      "actual_raw_sha256": "15b8f34974b7b4ff6884981e4dceebab446c7db663a5fdfa9ee0075dc3decbb9",
+      "expected_canonical_sha256": "8152f705dd2477b388f538891f01796fe3e6d2657d88bf17ebf307e7c760e202",
+      "frozen_raw_sha256": "15b8f34974b7b4ff6884981e4dceebab446c7db663a5fdfa9ee0075dc3decbb9",
+      "kind": "companyfacts",
+      "relative_path": "data/raw/CMCSA_companyfacts.json",
+      "status": "exact"
+    },
+    {
+      "actual_canonical_sha256": "07a9856390c841571d8f8d2b9f27f2a7658cf24312c946499b05d0ba71a46575",
+      "actual_raw_sha256": "3c3c41e37c731618e3abeb4d6ff9608a7cdc03bc762edec0164c54afb1ed5ef0",
+      "expected_canonical_sha256": "07a9856390c841571d8f8d2b9f27f2a7658cf24312c946499b05d0ba71a46575",
+      "frozen_raw_sha256": "3267746f4718a7a35cc5f401d7403256ada337b38790d16444aa18409f79737d",
+      "kind": "filings",
+      "relative_path": "data/raw/CMCSA_filings.json",
+      "status": "format_or_timestamp_variant"
+    },
+    {
+      "actual_canonical_sha256": "7523b61151f8cdf80d287cf91d1ded09dedda5e78605c5dc4a64f0a971034ab8",
+      "actual_raw_sha256": "a89be8715e056f1cadffdcd9616676ec1949107233b11f430a8183f88ca4ae15",
+      "expected_canonical_sha256": "7523b61151f8cdf80d287cf91d1ded09dedda5e78605c5dc4a64f0a971034ab8",
+      "frozen_raw_sha256": "a89be8715e056f1cadffdcd9616676ec1949107233b11f430a8183f88ca4ae15",
+      "kind": "companyfacts",
+      "relative_path": "data/raw/CRM_companyfacts.json",
+      "status": "exact"
+    },
+    {
+      "actual_canonical_sha256": "7bce876ef85253729234a95cdf36f2728995b5693d888e4f763f9f06c76def64",
+      "actual_raw_sha256": "c152d649af71ae714efaf30977884df468ce56d8f04b7c96c1624f4e0ed77af1",
+      "expected_canonical_sha256": "7bce876ef85253729234a95cdf36f2728995b5693d888e4f763f9f06c76def64",
+      "frozen_raw_sha256": "3645894d245c800aa8bb1c168e93620f0008b12fc4a1b5ad6de2731d0933cc73",
+      "kind": "filings",
+      "relative_path": "data/raw/CRM_filings.json",
+      "status": "format_or_timestamp_variant"
+    },
+    {
+      "actual_canonical_sha256": "74ac6e435b433222f4ba8697ef9f5e4e9513aa243ac58cf4ca01b03d5c34a47e",
+      "actual_raw_sha256": "69ccd0bc491edf4ef2191e8813ebc1766c0daf00c9e3d1aaa182d24b2e39e0df",
+      "expected_canonical_sha256": "74ac6e435b433222f4ba8697ef9f5e4e9513aa243ac58cf4ca01b03d5c34a47e",
+      "frozen_raw_sha256": "69ccd0bc491edf4ef2191e8813ebc1766c0daf00c9e3d1aaa182d24b2e39e0df",
+      "kind": "companyfacts",
+      "relative_path": "data/raw/CSCO_companyfacts.json",
+      "status": "exact"
+    },
+    {
+      "actual_canonical_sha256": "17edb06c0eba8a0d9b0a01a49b5169a41c8f6a927f4b3e987f452beb10903ecf",
+      "actual_raw_sha256": "868d8155f4d03479004c732ad5df40f86d4c8d55e635fc28e9e93b4d645722f3",
+      "expected_canonical_sha256": "17edb06c0eba8a0d9b0a01a49b5169a41c8f6a927f4b3e987f452beb10903ecf",
+      "frozen_raw_sha256": "7e1e70c51bf3f66cfc972c999677e1dc06b8543ed30118a2c1fd8289eb59b2c0",
+      "kind": "filings",
+      "relative_path": "data/raw/CSCO_filings.json",
+      "status": "format_or_timestamp_variant"
+    },
+    {
+      "actual_canonical_sha256": "db0450aa419f266ce8ab724d269cb5541a39793f296bb45505c821b9b6b55ce9",
+      "actual_raw_sha256": "f737e2272b6fb76cda801a8a5d493621a917ad4f73e0752b4ab14ffda694a57b",
+      "expected_canonical_sha256": "db0450aa419f266ce8ab724d269cb5541a39793f296bb45505c821b9b6b55ce9",
+      "frozen_raw_sha256": "f737e2272b6fb76cda801a8a5d493621a917ad4f73e0752b4ab14ffda694a57b",
+      "kind": "companyfacts",
+      "relative_path": "data/raw/DIS_companyfacts.json",
+      "status": "exact"
+    },
+    {
+      "actual_canonical_sha256": "cc75779fb830cd2f8957602c019e650451df62c258987c16145527a2062b2b02",
+      "actual_raw_sha256": "823fe8b1dbec1a4d974794d29ade22f62ed67ce25b1b7cf17ed72a15febf0752",
+      "expected_canonical_sha256": "cc75779fb830cd2f8957602c019e650451df62c258987c16145527a2062b2b02",
+      "frozen_raw_sha256": "1b75db058146e33b9b55e8e75e345cf410714f29e288bbb85d2864ff0734a204",
+      "kind": "filings",
+      "relative_path": "data/raw/DIS_filings.json",
+      "status": "format_or_timestamp_variant"
+    },
+    {
+      "actual_canonical_sha256": "b56fa30dd1cd7e389b53c80333eb920608d695c3e36ca198c063d47569a1ef70",
+      "actual_raw_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+      "expected_canonical_sha256": "b56fa30dd1cd7e389b53c80333eb920608d695c3e36ca198c063d47569a1ef70",
+      "frozen_raw_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+      "kind": "companyfacts",
+      "relative_path": "data/raw/GOOGL_companyfacts.json",
+      "status": "exact"
+    },
+    {
+      "actual_canonical_sha256": "4802b092f503b88ead389179dff9e6ce0e33d196d505c171ad55abf86fba1bd8",
+      "actual_raw_sha256": "af6dbc2ded50fcd0a055a8f1ea03e75916f6950a2cc33cacd7cb176d53adac62",
+      "expected_canonical_sha256": "4802b092f503b88ead389179dff9e6ce0e33d196d505c171ad55abf86fba1bd8",
+      "frozen_raw_sha256": "6463e79e12d708adf4c3ebab98a5a10a5b90d85d313161813342dc5fa6eb847c",
+      "kind": "filings",
+      "relative_path": "data/raw/GOOGL_filings.json",
+      "status": "format_or_timestamp_variant"
+    },
+    {
+      "actual_canonical_sha256": "747a0eb6788765ab300c2cb6e62814873d49dea9ec49e99cced4a31d53cd937e",
+      "actual_raw_sha256": "10fa1fafa25440b2159e2054dfe47628ba4ed353a258f526704cf9beda432bb8",
+      "expected_canonical_sha256": "747a0eb6788765ab300c2cb6e62814873d49dea9ec49e99cced4a31d53cd937e",
+      "frozen_raw_sha256": "10fa1fafa25440b2159e2054dfe47628ba4ed353a258f526704cf9beda432bb8",
+      "kind": "companyfacts",
+      "relative_path": "data/raw/IBM_companyfacts.json",
+      "status": "exact"
+    },
+    {
+      "actual_canonical_sha256": "d2f90e54cc0575f0363b60447ad07afeaebdd6b243f8a0a15b9b73a46a0fb572",
+      "actual_raw_sha256": "ad901067e0e92ed919623ed9c18c01a627cc9b343da37235b1677bb75c7cbec8",
+      "expected_canonical_sha256": "d2f90e54cc0575f0363b60447ad07afeaebdd6b243f8a0a15b9b73a46a0fb572",
+      "frozen_raw_sha256": "151cf68908ae6a2499f7340a94660b748df3615c35c9eeb28752b61e0bbc1731",
+      "kind": "filings",
+      "relative_path": "data/raw/IBM_filings.json",
+      "status": "format_or_timestamp_variant"
+    },
+    {
+      "actual_canonical_sha256": "24bc332bfec8ac1fc189c15373bcccab872d6d12903def528b3c10c3ede8f253",
+      "actual_raw_sha256": "456f89ae1757bb5a6ee0990f8b759e3d694222b0107c33ee4b163ee85a478d8a",
+      "expected_canonical_sha256": "24bc332bfec8ac1fc189c15373bcccab872d6d12903def528b3c10c3ede8f253",
+      "frozen_raw_sha256": "456f89ae1757bb5a6ee0990f8b759e3d694222b0107c33ee4b163ee85a478d8a",
+      "kind": "companyfacts",
+      "relative_path": "data/raw/INTU_companyfacts.json",
+      "status": "exact"
+    },
+    {
+      "actual_canonical_sha256": "3a555c5896f96fb59ea024a8632f25bba3aad33ec066e97b1ba0cc0dea099068",
+      "actual_raw_sha256": "65447c683d0fe0785248604f4c1622c8690d865086c43b585804a6deff21a3ac",
+      "expected_canonical_sha256": "3a555c5896f96fb59ea024a8632f25bba3aad33ec066e97b1ba0cc0dea099068",
+      "frozen_raw_sha256": "64ec3ee4cb1b0b4ef41ec5ddad95314bd004f1f69a7c70026a3d9bc887d6491d",
+      "kind": "filings",
+      "relative_path": "data/raw/INTU_filings.json",
+      "status": "format_or_timestamp_variant"
+    },
+    {
+      "actual_canonical_sha256": "4b5777cab68879a6c17edaab74615b441f5ebfd9ffd73ad924e3cbca5e442bff",
+      "actual_raw_sha256": "f8e539cea9d363752df2f9bb33078c19ae897ff7f34d49fe4d9a732d032b94f7",
+      "expected_canonical_sha256": "4b5777cab68879a6c17edaab74615b441f5ebfd9ffd73ad924e3cbca5e442bff",
+      "frozen_raw_sha256": "f8e539cea9d363752df2f9bb33078c19ae897ff7f34d49fe4d9a732d032b94f7",
+      "kind": "companyfacts",
+      "relative_path": "data/raw/META_companyfacts.json",
+      "status": "exact"
+    },
+    {
+      "actual_canonical_sha256": "294c8c2eb1faafd2993c73264eabb89cea16550078935925bf2d66836529de57",
+      "actual_raw_sha256": "ce05a58de82ca0d958378f229eb52ca8c5c7268efa140ca6b15f6568290f8910",
+      "expected_canonical_sha256": "294c8c2eb1faafd2993c73264eabb89cea16550078935925bf2d66836529de57",
+      "frozen_raw_sha256": "ec372f87112a8ff7c3f6df1a8283cdf29c684f1bb6d15f9479501aedea41960b",
+      "kind": "filings",
+      "relative_path": "data/raw/META_filings.json",
+      "status": "format_or_timestamp_variant"
+    },
+    {
+      "actual_canonical_sha256": "b521ebe4938213662ea2a2cf65d48792bfe4398d4b9914932cff8821b3ba299e",
+      "actual_raw_sha256": "c1f8e61c58a50ebea7924695e14bdd14357d3aca0b0ceb2a7d3bc08b5d1035ab",
+      "expected_canonical_sha256": "b521ebe4938213662ea2a2cf65d48792bfe4398d4b9914932cff8821b3ba299e",
+      "frozen_raw_sha256": "8c1903c041f5c27e86ed15f37debb1f41882b7904bba129ef9edc76478b1e8ea",
+      "kind": "companyfacts",
+      "relative_path": "data/raw/MSFT_companyfacts.json",
+      "status": "format_or_timestamp_variant"
+    },
+    {
+      "actual_canonical_sha256": "1e8ba7ebbb20f46354b5c03d579beebadd2d0f8a8912cef0d1fa92bb14f24395",
+      "actual_raw_sha256": "815fc9650126324d69fb69a313124c6c98a21d83b67c231ffd5d19ea931db978",
+      "expected_canonical_sha256": "1e8ba7ebbb20f46354b5c03d579beebadd2d0f8a8912cef0d1fa92bb14f24395",
+      "frozen_raw_sha256": "aeff2c477bfc28ff729621329ac5f8993a92c7ad1e30e6dfa7a11d694e57ce54",
+      "kind": "filings",
+      "relative_path": "data/raw/MSFT_filings.json",
+      "status": "format_or_timestamp_variant"
+    },
+    {
+      "actual_canonical_sha256": "be2921609846be90316858b7dfe25a0e5dd3aa835d81f99366f4531a5953849d",
+      "actual_raw_sha256": "fd31bc147b36495f6912e063188aea71434077236f4e995268620b47fda99e61",
+      "expected_canonical_sha256": "be2921609846be90316858b7dfe25a0e5dd3aa835d81f99366f4531a5953849d",
+      "frozen_raw_sha256": "fd31bc147b36495f6912e063188aea71434077236f4e995268620b47fda99e61",
+      "kind": "companyfacts",
+      "relative_path": "data/raw/NFLX_companyfacts.json",
+      "status": "exact"
+    },
+    {
+      "actual_canonical_sha256": "2a76a23214ad59bfb5ebcfcb0c29291aeec9a1b8d87b7ccf090e82a82e07a830",
+      "actual_raw_sha256": "f318606e355f6d22e7d803ca5db78bb0b164b830ce5ff6fd1717efc2790f9d3c",
+      "expected_canonical_sha256": "2a76a23214ad59bfb5ebcfcb0c29291aeec9a1b8d87b7ccf090e82a82e07a830",
+      "frozen_raw_sha256": "cc455f38f839b88a1370ca4c8c87a8cff675f5ca9ffc5ad66ed1405a7a71a8ef",
+      "kind": "filings",
+      "relative_path": "data/raw/NFLX_filings.json",
+      "status": "format_or_timestamp_variant"
+    },
+    {
+      "actual_canonical_sha256": "338989b7cee06f7d224a4e7400894eae737911ffbd90dea588ada5045457095c",
+      "actual_raw_sha256": "19ef503a5770f5660964b3c3aea6937579d9b359da344afe6a9adf59c63d26ff",
+      "expected_canonical_sha256": "338989b7cee06f7d224a4e7400894eae737911ffbd90dea588ada5045457095c",
+      "frozen_raw_sha256": "19ef503a5770f5660964b3c3aea6937579d9b359da344afe6a9adf59c63d26ff",
+      "kind": "companyfacts",
+      "relative_path": "data/raw/NVDA_companyfacts.json",
+      "status": "exact"
+    },
+    {
+      "actual_canonical_sha256": "921b66fa42816f8b7f29400d6ca5d9f86bbb12bf7580c72e7675d808d3b58d5b",
+      "actual_raw_sha256": "b3f6bd88431e46172451c61a7a237e915f90738a3727a3e879cd1ad6e4633312",
+      "expected_canonical_sha256": "921b66fa42816f8b7f29400d6ca5d9f86bbb12bf7580c72e7675d808d3b58d5b",
+      "frozen_raw_sha256": "6396e8b1ab9e75ab4b831107580242c15403e63b260928e23be8faefce0a1817",
+      "kind": "filings",
+      "relative_path": "data/raw/NVDA_filings.json",
+      "status": "format_or_timestamp_variant"
+    },
+    {
+      "actual_canonical_sha256": "0d8f6a9af057a939108a07877499e37fa43bd41d9958165212a847235be6f113",
+      "actual_raw_sha256": "fe93b258bc0ba8f3076ddebb5d8bb91c46deaa1f7b06d2ff2e3eaed85fee8a63",
+      "expected_canonical_sha256": "0d8f6a9af057a939108a07877499e37fa43bd41d9958165212a847235be6f113",
+      "frozen_raw_sha256": "fe93b258bc0ba8f3076ddebb5d8bb91c46deaa1f7b06d2ff2e3eaed85fee8a63",
+      "kind": "companyfacts",
+      "relative_path": "data/raw/ORCL_companyfacts.json",
+      "status": "exact"
+    },
+    {
+      "actual_canonical_sha256": "cab48cc5ef4177bc8b849f5188d311526d0c31a07830e81344d36ae4e3928285",
+      "actual_raw_sha256": "54c0f4767e0a295ac48b464e9dd45a9a7d70b4a941bd062d916065d872abc58e",
+      "expected_canonical_sha256": "cab48cc5ef4177bc8b849f5188d311526d0c31a07830e81344d36ae4e3928285",
+      "frozen_raw_sha256": "65227aa9e30ebbfd4abcba58a1182731c2fcaa3e2c0b36db44eafd0d3ca93911",
+      "kind": "filings",
+      "relative_path": "data/raw/ORCL_filings.json",
+      "status": "format_or_timestamp_variant"
+    }
+  ],
+  "mismatch_count": 0,
+  "schema_version": "source-cache-diagnostics-v1",
+  "scope": "Complete JSON equality for every companyfacts and filings file; only root filings prepared_at timestamp value may vary. Original year HTML remains byte exact.",
+  "source_files_modified": false,
+  "sources_checked": 30,
+  "status": "verified",
+  "year_evidence": [
+    {
+      "actual_raw_sha256": "6ca790d30ed6e96c754435a7a46b14dc9529c565ad47549dd1c13678b308ba45",
+      "frozen_raw_sha256": "6ca790d30ed6e96c754435a7a46b14dc9529c565ad47549dd1c13678b308ba45",
+      "relative_path": "data/raw/sec_fiscal_years/6ca790d30ed6e96c754435a7a46b14dc9529c565ad47549dd1c13678b308ba45.html",
+      "status": "exact"
+    },
+    {
+      "actual_raw_sha256": "c6e463f7c8098deb0425a7348d8d035b10e7354762617f2aec6139afe0b61be3",
+      "frozen_raw_sha256": "c6e463f7c8098deb0425a7348d8d035b10e7354762617f2aec6139afe0b61be3",
+      "relative_path": "data/raw/sec_fiscal_years/c6e463f7c8098deb0425a7348d8d035b10e7354762617f2aec6139afe0b61be3.html",
+      "status": "exact"
+    }
+  ],
+  "year_html_checked": 2
+}

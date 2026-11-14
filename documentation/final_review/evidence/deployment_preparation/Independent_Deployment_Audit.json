@@ -1,0 +1,44 @@
+{
+  "schema_version": "independent-deployment-audit-v1",
+  "review_type": "independent_ai_source_and_offline_execution_review",
+  "human_reviewed": false,
+  "status": "no_blocking_source_defects_found_actual_installation_pending",
+  "baseline": "capstone_final40_work/source",
+  "files": {
+    ".github/workflows/clean-install.yml": "597c86888a503e4b6d3e8378c4657523b632a746977f94b676367d655f3482fb",
+    "deployment/ci_clean_install.py": "e5b9630f7d51b5a1587bebb02746bf4364391247b538920a1f00ac1c26edaec9",
+    "deployment/test_ci_clean_install.py": "889ecbc420098cf22f3ee8b680e0c8f51c574c8558bbb2d83a508fb05bf682d2",
+    "documentation/CLEAN_INSTALL_EVIDENCE.md": "671e608dcf4614314fdd4b8f1d88e364e861e759ef0acbedd4e73d45fd2ec10b"
+  },
+  "offline_tests": {
+    "passed": 10,
+    "seconds": 3.124,
+    "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=capstone_completion_work/deployment:capstone_final40_work/source retrieval_work/venv/bin/python -B -m unittest discover -s capstone_completion_work/deployment/deployment -p test_ci_clean_install.py"
+  },
+  "independent_checks": {
+    "all_current_production_named_volumes_overridden": "passed; both production named volumes replaced by unique run/attempt names",
+    "no_external_volumes_or_networks": "passed for frozen production compose",
+    "synthetic_secret_redaction_success_command": "passed",
+    "synthetic_secret_redaction_failed_command": "passed",
+    "scoped_cleanup_command": "passed; recorded command only, Docker not invoked",
+    "modified_volume_override_cleanup_refusal": "passed; no command emitted",
+    "qdrant_authenticated_readiness_before_index": "source checked and owner tests independently rerun",
+    "ui_status_zero_request_and_tool_fields": "checked against production ResearchService.status response",
+    "production_model_bootstrap": "real pinned model revisions and artifact hashes; synthetic source fixtures only",
+    "source_and_result_secret_scope": "no real API keys requested by workflow; generated local credentials masked/redacted; only sanitized report uploaded"
+  },
+  "resolved_finding": {
+    "issue": "Original publication_requested false wording conflicted with deliberate unauthorized negative publication requests.",
+    "resolution": "Now authorized_publication_requested false and explicit negative_publish_tests outcome; actual tests reject unapproved/read-only requests."
+  },
+  "docker_available": false,
+  "actual_container_build_and_installation": "not run here; requires actual GitHub job result",
+  "actual_ci_failure_and_fix_evidence": "not established by local unit or controlled negative fixture alone",
+  "resource_limit_evidence": "Fresh-runner download, build duration, and peak RAM unmeasured; successful job required before declaring reproducible clean install.",
+  "scope_limits": [
+    "Synthetic financial fixtures do not establish financial-answer quality.",
+    "Historic monitoring fixture is not a new research run.",
+    "Idle authenticated UI/SSE checks do not execute paid workflow or authorized publication.",
+    "Reviewed cleanup safety applies to current frozen Compose volume set."
+  ]
+}

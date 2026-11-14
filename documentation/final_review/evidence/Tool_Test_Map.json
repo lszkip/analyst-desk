@@ -1,0 +1,168 @@
+{
+  "tools": 16,
+  "unique_test_methods": 11,
+  "mapped_rows": [
+    {
+      "server": "edgar",
+      "tool": "list_companies",
+      "test": "test_edgar_mcp.EdgarMCPTests.test_company_catalogue_describes_coverage_and_metric_definitions",
+      "source_file": "source_reference/test_edgar_mcp.py",
+      "start_line": 61,
+      "assertion_scope": "Configured company identities and metric definitions.",
+      "execution_status": "passed",
+      "source_sha256": "11f1c5c519af0d1799af16f8308767c370b638e5e07e1b9105a9871a64e79947"
+    },
+    {
+      "server": "edgar",
+      "tool": "list_annual_filings",
+      "test": "test_edgar_mcp.EdgarMCPTests.test_filings_are_bounded_sorted_and_cutoff_filtered",
+      "source_file": "source_reference/test_edgar_mcp.py",
+      "start_line": 84,
+      "assertion_scope": "Bounds, order, date filter and snapshot fingerprint.",
+      "execution_status": "passed",
+      "source_sha256": "11f1c5c519af0d1799af16f8308767c370b638e5e07e1b9105a9871a64e79947"
+    },
+    {
+      "server": "edgar",
+      "tool": "get_annual_financial_fact",
+      "test": "test_edgar_mcp.EdgarMCPTests.test_fact_preserves_all_existing_evidence",
+      "source_file": "source_reference/test_edgar_mcp.py",
+      "start_line": 69,
+      "assertion_scope": "Exact fact value, fiscal period and provenance preserved.",
+      "execution_status": "passed",
+      "source_sha256": "11f1c5c519af0d1799af16f8308767c370b638e5e07e1b9105a9871a64e79947"
+    },
+    {
+      "server": "edgar",
+      "tool": "get_section",
+      "test": "test_filings_kb_mcp.FilingsKBTests.test_edgar_get_section_returns_paginated_source_references",
+      "source_file": "source_reference/test_filings_kb_mcp.py",
+      "start_line": 137,
+      "assertion_scope": "Complete source pagination and exact table cell.",
+      "execution_status": "passed",
+      "source_sha256": "01b70ad8f8baba113a26b7ee2b5e94a281d5d25d82cb398bf9cd50671ce2d6c1"
+    },
+    {
+      "server": "filings_kb",
+      "tool": "plan_search",
+      "test": "test_filings_kb_mcp.FilingsKBTests.test_plan_is_returned_without_search",
+      "source_file": "source_reference/test_filings_kb_mcp.py",
+      "start_line": 45,
+      "assertion_scope": "Plan creation performs no search.",
+      "execution_status": "passed",
+      "source_sha256": "01b70ad8f8baba113a26b7ee2b5e94a281d5d25d82cb398bf9cd50671ce2d6c1"
+    },
+    {
+      "server": "filings_kb",
+      "tool": "search_filings",
+      "test": "test_filings_kb_mcp.FilingsKBTests.test_search_returns_source_linked_evidence",
+      "source_file": "source_reference/test_filings_kb_mcp.py",
+      "start_line": 51,
+      "assertion_scope": "Hits retain source-linked passage IDs and untrusted marker.",
+      "execution_status": "passed",
+      "source_sha256": "01b70ad8f8baba113a26b7ee2b5e94a281d5d25d82cb398bf9cd50671ce2d6c1"
+    },
+    {
+      "server": "filings_kb",
+      "tool": "get_passage",
+      "test": "test_filings_kb_mcp.FilingsKBTests.test_complete_table_passage_is_preserved",
+      "source_file": "source_reference/test_filings_kb_mcp.py",
+      "start_line": 57,
+      "assertion_scope": "Whole original table passage equals fixture.",
+      "execution_status": "passed",
+      "source_sha256": "01b70ad8f8baba113a26b7ee2b5e94a281d5d25d82cb398bf9cd50671ce2d6c1"
+    },
+    {
+      "server": "filings_kb",
+      "tool": "get_table_rows",
+      "test": "test_filings_kb_mcp.FilingsKBTests.test_table_pagination_preserves_exact_cells",
+      "source_file": "source_reference/test_filings_kb_mcp.py",
+      "start_line": 61,
+      "assertion_scope": "Exact requested row and pagination.",
+      "execution_status": "passed",
+      "source_sha256": "01b70ad8f8baba113a26b7ee2b5e94a281d5d25d82cb398bf9cd50671ce2d6c1"
+    },
+    {
+      "server": "filings_kb",
+      "tool": "get_coverage",
+      "test": "test_filings_kb_mcp.FilingsKBTests.test_coverage_reports_actual_pairs",
+      "source_file": "source_reference/test_filings_kb_mcp.py",
+      "start_line": 66,
+      "assertion_scope": "Actual fixture company/year inventory.",
+      "execution_status": "passed",
+      "source_sha256": "01b70ad8f8baba113a26b7ee2b5e94a281d5d25d82cb398bf9cd50671ce2d6c1"
+    },
+    {
+      "server": "python_sandbox",
+      "tool": "execute_python",
+      "test": "test_research_tools_mcp.ResearchToolsMCPTests.test_sandbox_http_auth_execution_and_policy",
+      "source_file": "source_reference/test_research_tools_mcp.py",
+      "start_line": 133,
+      "assertion_scope": "Real loopback authenticated computation; import attack rejected.",
+      "execution_status": "passed",
+      "source_sha256": "e5d2296d2f82378c38b19ecbeed755205906cc24f501d74050478ed37ef6149d"
+    },
+    {
+      "server": "python_sandbox",
+      "tool": "get_sandbox_policy",
+      "test": "test_research_tools_mcp.ResearchToolsMCPTests.test_sandbox_http_auth_execution_and_policy",
+      "source_file": "source_reference/test_research_tools_mcp.py",
+      "start_line": 133,
+      "assertion_scope": "Fixed no-network policy exposed through authenticated HTTP.",
+      "execution_status": "passed",
+      "source_sha256": "e5d2296d2f82378c38b19ecbeed755205906cc24f501d74050478ed37ef6149d"
+    },
+    {
+      "server": "research_portal",
+      "tool": "prepare_note",
+      "test": "test_research_tools_mcp.ResearchToolsMCPTests.test_http_prepare_human_review_publish_and_read",
+      "source_file": "source_reference/test_research_tools_mcp.py",
+      "start_line": 90,
+      "assertion_scope": "Prepare exact disposable proposal through draft credential.",
+      "execution_status": "passed",
+      "source_sha256": "e5d2296d2f82378c38b19ecbeed755205906cc24f501d74050478ed37ef6149d"
+    },
+    {
+      "server": "research_portal",
+      "tool": "publish_note",
+      "test": "test_research_tools_mcp.ResearchToolsMCPTests.test_http_prepare_human_review_publish_and_read",
+      "source_file": "source_reference/test_research_tools_mcp.py",
+      "start_line": 90,
+      "assertion_scope": "Unapproved call blocked; synthetic reviewed proposal publishes once and is idempotent.",
+      "execution_status": "passed",
+      "source_sha256": "e5d2296d2f82378c38b19ecbeed755205906cc24f501d74050478ed37ef6149d"
+    },
+    {
+      "server": "research_portal",
+      "tool": "list_notes",
+      "test": "test_research_tools_mcp.ResearchToolsMCPTests.test_http_prepare_human_review_publish_and_read",
+      "source_file": "source_reference/test_research_tools_mcp.py",
+      "start_line": 90,
+      "assertion_scope": "Published fixture appears once in list.",
+      "execution_status": "passed",
+      "source_sha256": "e5d2296d2f82378c38b19ecbeed755205906cc24f501d74050478ed37ef6149d"
+    },
+    {
+      "server": "research_portal",
+      "tool": "get_note",
+      "test": "test_research_tools_mcp.ResearchToolsMCPTests.test_http_prepare_human_review_publish_and_read",
+      "source_file": "source_reference/test_research_tools_mcp.py",
+      "start_line": 90,
+      "assertion_scope": "Readback equals the exact published fixture.",
+      "execution_status": "passed",
+      "source_sha256": "e5d2296d2f82378c38b19ecbeed755205906cc24f501d74050478ed37ef6149d"
+    },
+    {
+      "server": "research_portal",
+      "tool": "get_proposal",
+      "test": "test_research_tools_mcp.ResearchToolsMCPTests.test_http_prepare_human_review_publish_and_read",
+      "source_file": "source_reference/test_research_tools_mcp.py",
+      "start_line": 90,
+      "assertion_scope": "Proposal readback excludes approval token.",
+      "execution_status": "passed",
+      "source_sha256": "e5d2296d2f82378c38b19ecbeed755205906cc24f501d74050478ed37ef6149d"
+    }
+  ],
+  "execution_report": "Tool_Contract_Test_Report.json",
+  "scope": "One explicit mapping per tool; shared end-to-end contract tests cover multiple portal/sandbox tools. No invented separate tests."
+}

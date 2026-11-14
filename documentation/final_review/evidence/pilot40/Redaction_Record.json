@@ -1,0 +1,32 @@
+{
+  "evidence_class": "explicit_redacted_derivative",
+  "archive": "upload/40_Analyst_Desk_Pilot_Price_Compatibility_Results_20261114T133908Z_9dfae9e9.zip",
+  "archive_sha256": "6ffd695f6ea2a0a8e4296f07d71da0b307fbadf567e30df65250910585ad2871",
+  "member": "Operator/pilot/Execution_Results.json",
+  "original_sha256": "d0940e5f02f10d7b7115ed32c6b65d4e5514de19c437244731250aab679c9de3",
+  "destination": "evidence/pilot40/Execution_Results_Redacted.json",
+  "redacted_sha256": "306f2c8909ab4663b877cf858a86de6f4921115506b125933b6016369fb39b8a",
+  "removed_field_paths": [
+    "[0].evaluation.numeric_checks[0].expected_margin_percent",
+    "[0].evaluation.numeric_checks[1].expected_margin_percent",
+    "[0].evaluation.numeric_checks[2].expected_margin_percent",
+    "[0].evaluation.numeric_checks[3].expected_margin_percent",
+    "[1].evaluation.numeric_checks[0].expected_margin_percent",
+    "[1].evaluation.numeric_checks[1].expected_margin_percent",
+    "[2].evaluation.numeric_checks[0].expected_margin_percent",
+    "[2].evaluation.numeric_checks[1].expected_margin_percent",
+    "[2].evaluation.numeric_checks[2].expected_margin_percent",
+    "[2].evaluation.numeric_checks[3].expected_margin_percent",
+    "[3].evaluation.numeric_checks[0].expected_margin_percent",
+    "[3].evaluation.numeric_checks[1].expected_margin_percent",
+    "[4].evaluation.numeric_checks[0].expected_margin_percent",
+    "[4].evaluation.numeric_checks[1].expected_margin_percent",
+    "[4].evaluation.numeric_checks[2].expected_margin_percent",
+    "[4].evaluation.numeric_checks[3].expected_margin_percent",
+    "[5].evaluation.numeric_checks[0].expected_margin_percent",
+    "[5].evaluation.numeric_checks[1].expected_margin_percent"
+  ],
+  "removed_count": 18,
+  "rule": "Remove only evaluator expected_margin_percent fields. Preserve observed outputs, outcomes and budgets. This file is not an exact original byte copy.",
+  "original_unchanged": true
+}

@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "title": "Human review simulation — performed by Claude",
+  "comparison_title": "MODEL-MODEL AGREEMENT — Claude simulation versus Llama",
+  "report_type": "MODEL-MODEL AGREEMENT",
+  "packet_sha256": "9ad0b0a9658c35fb1679c1602cb869dc2dfffe1e31e43d76a7f4ecd3a0801d0d",
+  "source_packet_sha256": "e7b5be45054d73e32da3b45069dc4b12f09eb83954e906ef01d8ce68c129c2c1",
+  "dataset_split": "development_calibration",
+  "reference_reviewer": "Claude",
+  "reference_model_version_reported": "claude-fable-5-2",
+  "reference_model_version_verified": false,
+  "judge_model": "meta-llama/llama-3.3-70b-instruct",
+  "task_model": "openai/gpt-4.1-mini",
+  "label_origin": "claude_simulated_review",
+  "actual_human_labels": 0,
+  "human_reviewed": false,
+  "satisfies_human_review_requirement": false,
+  "eligible_for_automated_semantic_scoring": false,
+  "status": "complete",
+  "minimum_nonuncertain_pairs": 20,
+  "declared_provisional_agreement_threshold": 0.6,
+  "agreement_sufficient_for_provisional_ai_use": false,
+  "three_class": {
+    "n": 24,
+    "labels": [
+      "supported",
+      "unsupported",
+      "uncertain"
+    ],
+    "judge_counts": {
+      "supported": 5,
+      "unsupported": 19,
+      "uncertain": 0
+    },
+    "observed_agreement": 0.5416666666666666,
+    "chance_agreement": 0.515625,
+    "cohen_kappa": 0.05376344086021498,
+    "missing_judge_classes": [
+      "uncertain"
+    ],
+    "undefined_reason": null,
+    "matrix_reference_model_rows_judge_model_columns": {
+      "supported": {
+        "supported": 2,
+        "unsupported": 8,
+        "uncertain": 0
+      },
+      "unsupported": {
+        "supported": 2,
+        "unsupported": 11,
+        "uncertain": 0
+      },
+      "uncertain": {
+        "supported": 1,
+        "unsupported": 0,
+        "uncertain": 0
+      }
+    },
+    "reference_model_counts": {
+      "supported": 10,
+      "unsupported": 13,
+      "uncertain": 1
+    },
+    "missing_reference_model_classes": []
+  },
+  "binary_nonuncertain": {
+    "n": 23,
+    "labels": [
+      "supported",
+      "unsupported"
+    ],
+    "judge_counts": {
+      "supported": 4,
+      "unsupported": 19
+    },
+    "observed_agreement": 0.5652173913043478,
+    "chance_agreement": 0.5425330812854442,
+    "cohen_kappa": 0.04958677685950411,
+    "missing_judge_classes": [],
+    "undefined_reason": null,
+    "matrix_reference_model_rows_judge_model_columns": {
+      "supported": {
+        "supported": 2,
+        "unsupported": 8
+      },
+      "unsupported": {
+        "supported": 2,
+        "unsupported": 11
+      }
+    },
+    "reference_model_counts": {
+      "supported": 10,
+      "unsupported": 13
+    },
+    "missing_reference_model_classes": []
+  },
+  "uncertain_pairs_excluded_from_binary": 1,
+  "unpaired_or_failed_judge_ids": [],
+  "ai_reference_counts": {
+    "supplied_items": 24,
+    "reviewed_items": 24,
+    "supported": 10,
+    "unsupported": 13,
+    "uncertain": 1,
+    "supplied_lessons": 4,
+    "reviewed_lessons": 4,
+    "recommend_approve": 3,
+    "recommend_reject": 1,
+    "uncertain_lessons": 0
+  },
+  "ai_reference_complete": true,
+  "lesson_recommendations_are_unapproved": true,
+  "lesson_recommendations": [
+    {
+      "lesson_id": "lesson_afd018d454d7e414d1df",
+      "proposal_sha256": "afd018d454d7e414d1df59811e92c6b0a3a64f4f9da397ab7736434cf3263dc2",
+      "recommendation": "recommend_approve",
+      "reason": "It targets the H14-type failure, where an embedded instruction’s invented claim was adopted, while keeping the genuine disclosed risk usable. The phrase ‘independent eligible evidence’ is not defined and could be read as licence to look beyond the supplied passages.",
+      "human_reviewed": false
+    },
+    {
+      "lesson_id": "lesson_a8b61314cb19de809325",
+      "proposal_sha256": "a8b61314cb19de8093256b9f6fd055607fac70c41fe4f7d4ba8631310fce639d",
+      "recommendation": "recommend_approve",
+      "reason": "It addresses the most frequent failure in this packet: unstated revenue, cash-flow and linkage claims added to otherwise faithful paraphrases. Applied too literally, the per-clause standard could suppress legitimate paraphrase or characterization.",
+      "human_reviewed": false
+    },
+    {
+      "lesson_id": "lesson_7186654f6c11c93e584c",
+      "proposal_sha256": "7186654f6c11c93e584c91925ecd9424cca4405bbd05a8b1830a33ed871e90c1",
+      "recommendation": "recommend_approve",
+      "reason": "The guidance matches the distinction between sample-level and filing-wide statements and would not block the sample-scoped notes seen here. The cited Sequence 31 failure is not in this packet, and no saved answer here makes a filing-wide claim, so its benefit and its fit for the researcher and risk_diff roles are unverified.",
+      "human_reviewed": false
+    },
+    {
+      "lesson_id": "lesson_46cba84fef7429e206c6",
+      "proposal_sha256": "46cba84fef7429e206c67dbb7e58f9e8d1e6eda708e62ebfe7d5f279dadea6f5",
+      "recommendation": "recommend_reject",
+      "reason": "It would treat a quoted embedded instruction as proof of support even when the source calls the claim invented, which would have a critic accept the H14 output. That conflicts with the rule that an exact quotation alone does not establish factual support.",
+      "human_reviewed": false
+    }
+  ],
+  "limitations": [
+    "MODEL-MODEL AGREEMENT is not human judge calibration or evidence of truth.",
+    "Two models may share errors. The real-human-label requirement remains unmet.",
+    "AI lesson recommendations cannot enter a human-approved playbook or authorize publication.",
+    "Saved synthetic development outputs are not held-out performance evidence."
+  ]
+}

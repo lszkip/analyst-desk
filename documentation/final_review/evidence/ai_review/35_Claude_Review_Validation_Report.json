@@ -1,0 +1,100 @@
+{
+  "title": "Human review simulation — performed by Claude",
+  "status": "validated_AI_review",
+  "original_response_sha256": "29ce2a25d43b3563e296ec86755b1e2a81fb61d6d219c882acc1addbf36dfc38",
+  "validated_response_sha256": "2bc668ddcb785bea7bae69ec84f7bdb4288228414e9bdc50188cccc4669b0b7a",
+  "packet_sha256": "9ad0b0a9658c35fb1679c1602cb869dc2dfffe1e31e43d76a7f4ecd3a0801d0d",
+  "all_24_item_hashes_match": true,
+  "all_4_proposal_hashes_match": true,
+  "all_excerpts_exact_after_documented_punctuation_restoration": true,
+  "json_parse_repair": "Curly double quotation marks were restored to JSON double quotes; original response retained unchanged.",
+  "excerpt_punctuation_restorations": [
+    {
+      "item_id": "H04",
+      "field": "answer_excerpts",
+      "index": 0,
+      "original_excerpt": "This disclosure focuses on the sensitivity of Meta’s revenue to changes in advertiser spending driven by market demand conditions.",
+      "restored_exact_excerpt": "This disclosure focuses on the sensitivity of Meta's revenue to changes in advertiser spending driven by market demand conditions.",
+      "change": "typographic apostrophe restored to exact saved answer punctuation; no wording change"
+    },
+    {
+      "item_id": "H08",
+      "field": "answer_excerpts",
+      "index": 0,
+      "original_excerpt": "This disclosure focuses on the sensitivity of Meta’s revenue to changes in advertising spending by its customers.",
+      "restored_exact_excerpt": "This disclosure focuses on the sensitivity of Meta's revenue to changes in advertising spending by its customers.",
+      "change": "typographic apostrophe restored to exact saved answer punctuation; no wording change"
+    },
+    {
+      "item_id": "H13",
+      "field": "answer_excerpts",
+      "index": 0,
+      "original_excerpt": "This disclosure focuses on the sensitivity of Meta’s revenue to changes in advertising spending by customers.",
+      "restored_exact_excerpt": "This disclosure focuses on the sensitivity of Meta's revenue to changes in advertising spending by customers.",
+      "change": "typographic apostrophe restored to exact saved answer punctuation; no wording change"
+    },
+    {
+      "item_id": "H17",
+      "field": "answer_excerpts",
+      "index": 0,
+      "original_excerpt": "This disclosure focuses on the sensitivity of Meta’s revenue to changes in advertising spending by its customers.",
+      "restored_exact_excerpt": "This disclosure focuses on the sensitivity of Meta's revenue to changes in advertising spending by its customers.",
+      "change": "typographic apostrophe restored to exact saved answer punctuation; no wording change"
+    },
+    {
+      "item_id": "H18",
+      "field": "answer_excerpts",
+      "index": 0,
+      "original_excerpt": "This risk reflects the company’s exposure to fluctuations in advertising revenue tied to broader economic conditions.",
+      "restored_exact_excerpt": "This risk reflects the company's exposure to fluctuations in advertising revenue tied to broader economic conditions.",
+      "change": "typographic apostrophe restored to exact saved answer punctuation; no wording change"
+    },
+    {
+      "item_id": "H20",
+      "field": "answer_excerpts",
+      "index": 0,
+      "original_excerpt": "This disclosure focuses on the potential impact of changes in advertiser behavior on the company’s revenue streams.",
+      "restored_exact_excerpt": "This disclosure focuses on the potential impact of changes in advertiser behavior on the company's revenue streams.",
+      "change": "typographic apostrophe restored to exact saved answer punctuation; no wording change"
+    },
+    {
+      "item_id": "H22",
+      "field": "answer_excerpts",
+      "index": 0,
+      "original_excerpt": "This risk disclosure focuses on the sensitivity of advertising revenue to economic conditions affecting advertisers’ spending.",
+      "restored_exact_excerpt": "This risk disclosure focuses on the sensitivity of advertising revenue to economic conditions affecting advertisers' spending.",
+      "change": "typographic apostrophe restored to exact saved answer punctuation; no wording change"
+    },
+    {
+      "item_id": "H24",
+      "field": "answer_excerpts",
+      "index": 1,
+      "original_excerpt": "Thus, Alphabet’s advertising revenue could be affected by broader market demand fluctuations and competitive service offerings.",
+      "restored_exact_excerpt": "Thus, Alphabet's advertising revenue could be affected by broader market demand fluctuations and competitive service offerings.",
+      "change": "typographic apostrophe restored to exact saved answer punctuation; no wording change"
+    }
+  ],
+  "labels_and_recommendations_unchanged": true,
+  "counts": {
+    "supplied_items": 24,
+    "reviewed_items": 24,
+    "supported": 10,
+    "unsupported": 13,
+    "uncertain": 1,
+    "supplied_lessons": 4,
+    "reviewed_lessons": 4,
+    "recommend_approve": 3,
+    "recommend_reject": 1,
+    "uncertain_lessons": 0
+  },
+  "model_version_reported_by_Claude": "claude-fable-5-2",
+  "model_version_verified": "unknown",
+  "model_identity_verification_note": "Self-reported in response only; no runtime or user-selected model identifier supplied.",
+  "human_reviewed": false,
+  "satisfies_human_review_requirement": false,
+  "cross_model_agreement": "pending_separate_judge_run",
+  "lesson_activation": "not imported into human-approved production playbook",
+  "unresolved_uncertainties": [
+    "H16: whether ‘can lead to delays’ is a faithful paraphrase of the source’s temporal ‘before delaying’ or an unsupported causal claim."
+  ]
+}

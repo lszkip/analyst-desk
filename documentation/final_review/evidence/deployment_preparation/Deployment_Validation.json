@@ -1,0 +1,37 @@
+{
+  "status": "local_validation_passed_actual_github_pending",
+  "tests": {
+    "count": 10,
+    "passed": 10,
+    "command": "python -m unittest -v deployment.test_ci_clean_install",
+    "log": "review/Deployment_Unit_Tests.log"
+  },
+  "yaml_parse": "passed",
+  "local_negative_control": {
+    "exit_code": 20,
+    "status": "controlled_negative_failure",
+    "performance_claim": false,
+    "report": "review/Local_Negative_Control_Report.json"
+  },
+  "docker_available_here": false,
+  "actual_clean_machine_installation": "pending_github_run",
+  "actual_failed_ci_run": "pending_manual_negative_control_on_github",
+  "source_basis": "frozen Sequence 40; no source changes",
+  "files": {
+    ".github/workflows/clean-install.yml": "597c86888a503e4b6d3e8378c4657523b632a746977f94b676367d655f3482fb",
+    "deployment/ci_clean_install.py": "e5b9630f7d51b5a1587bebb02746bf4364391247b538920a1f00ac1c26edaec9",
+    "deployment/test_ci_clean_install.py": "889ecbc420098cf22f3ee8b680e0c8f51c574c8558bbb2d83a508fb05bf682d2",
+    "documentation/CLEAN_INSTALL_EVIDENCE.md": "671e608dcf4614314fdd4b8f1d88e364e861e759ef0acbedd4e73d45fd2ec10b"
+  },
+  "limits": [
+    "Local unit tests include production parser and saved idle-SSE behavior, not Docker or live MCP network integration.",
+    "Real container image/model downloads and complete Compose startup must run in GitHub.",
+    "Synthetic financial/corpus fixtures and historic monitoring snapshot are installation fixtures, not performance evidence."
+  ],
+  "github_context_validation": "runner.environment is scoped to steps.env, as required by official context availability table",
+  "official_references": [
+    "https://docs.github.com/en/actions/reference/workflows-and-actions/contexts",
+    "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+    "https://github.com/actions/upload-artifact/commit/ea165f8d65b6e75b540449e92b4886f43607fa02"
+  ]
+}

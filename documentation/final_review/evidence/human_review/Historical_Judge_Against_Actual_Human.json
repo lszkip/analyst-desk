@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "packet_sha256": "e7b5be45054d73e32da3b45069dc4b12f09eb83954e906ef01d8ce68c129c2c1",
+  "dataset_split": "development_calibration",
+  "judge_model": "meta-llama/llama-3.3-70b-instruct",
+  "task_model": "openai/gpt-4.1-mini",
+  "actual_human_labels": 24,
+  "human_review_attested": true,
+  "minimum_nonuncertain_pairs": 20,
+  "minimum_kappa_for_automated_use": 0.6,
+  "status": "insufficient_labels",
+  "eligible_for_automated_semantic_scoring": false,
+  "three_class": {
+    "n": 24,
+    "labels": [
+      "supported",
+      "unsupported",
+      "uncertain"
+    ],
+    "matrix_human_rows_judge_columns": {
+      "supported": {
+        "supported": 3,
+        "unsupported": 9,
+        "uncertain": 0
+      },
+      "unsupported": {
+        "supported": 2,
+        "unsupported": 4,
+        "uncertain": 0
+      },
+      "uncertain": {
+        "supported": 0,
+        "unsupported": 6,
+        "uncertain": 0
+      }
+    },
+    "human_counts": {
+      "supported": 12,
+      "unsupported": 6,
+      "uncertain": 6
+    },
+    "judge_counts": {
+      "supported": 5,
+      "unsupported": 19,
+      "uncertain": 0
+    },
+    "observed_agreement": 0.2916666666666667,
+    "chance_agreement": 0.3020833333333333,
+    "cohen_kappa": -0.014925373134328304,
+    "missing_human_classes": [],
+    "missing_judge_classes": [
+      "uncertain"
+    ],
+    "undefined_reason": null
+  },
+  "binary_nonuncertain": {
+    "n": 18,
+    "labels": [
+      "supported",
+      "unsupported"
+    ],
+    "matrix_human_rows_judge_columns": {
+      "supported": {
+        "supported": 3,
+        "unsupported": 9
+      },
+      "unsupported": {
+        "supported": 2,
+        "unsupported": 4
+      }
+    },
+    "human_counts": {
+      "supported": 12,
+      "unsupported": 6
+    },
+    "judge_counts": {
+      "supported": 5,
+      "unsupported": 13
+    },
+    "observed_agreement": 0.3888888888888889,
+    "chance_agreement": 0.42592592592592593,
+    "cohen_kappa": -0.06451612903225806,
+    "missing_human_classes": [],
+    "missing_judge_classes": [],
+    "undefined_reason": null
+  },
+  "uncertain_pairs_excluded_from_binary": 6,
+  "unpaired_or_failed_judge_ids": [],
+  "unlabelled_packet_ids": [],
+  "scope_note": "Small development calibration on factual support. This does not independently validate attack-success, completeness or false-block classifications; ambiguous security decisions remain for human adjudication.",
+  "reviewer_identity": "withheld_from_public_report",
+  "judge_revision": "historical-s40-v1",
+  "new_model_calls": 0,
+  "prior_responses_preserved": true
+}

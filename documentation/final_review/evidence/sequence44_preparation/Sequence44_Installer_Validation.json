@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "checked_utc": "2026-11-14T17:21:36.763463+00:00",
+  "package_sha256": "60e5966ece053d2fcd37e0c62539fe64ea27f7cafd1e4071dc66e8b8f95e6c86",
+  "installer_unit_tests_passed": 37,
+  "packaged_smoke_runs": 2,
+  "checks_per_smoke": 555,
+  "legacy_security_checks": 236,
+  "extended_checks": 319,
+  "first_install_changes": 4,
+  "first_install_immutable_backups": 4,
+  "repeat_install_changes": 0,
+  "repeat_install_backups": 0,
+  "source_pins_verified": 162,
+  "monitoring_pins_preserved": 20,
+  "runtime_git_prior_results_private_canaries_preserved": true,
+  "unique_result_zips": true,
+  "prior_private_inputs_unchanged": true,
+  "only_new_private_input": "Completion_Software_Review.json",
+  "no_paid_calls_docker_or_user_laptop_execution": true,
+  "original_result_failed_and_not_retried": true,
+  "validation_note": "Installer tests and temporary reconstructed actual F020 journal; no original user database was accessed."
+}

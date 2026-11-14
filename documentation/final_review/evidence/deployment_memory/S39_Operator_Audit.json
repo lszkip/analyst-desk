@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "mode": "development_pilot",
+  "started_at": "2026-11-14T13:25:24.449867+00:00",
+  "human_reviewed": false,
+  "satisfies_human_review_requirement": false,
+  "heldout_started": false,
+  "publication_enabled": false,
+  "isolation": "No agent filesystem or arbitrary-code tool; private targets remain evaluator-side. This is not an OS/container isolation claim.",
+  "case_ids": [
+    "F002",
+    "F003"
+  ],
+  "case_bundle_sha256": "af8fa2144ec0a99783dbb54ced1e29b42ae2c5ca2064a951be97d65fac410206",
+  "freeze_manifest_sha256": "fd5cb4c6058f716c6ccfb1afa5cd283ad536840008410d48fb58998973e0533f",
+  "memory_comparison": {
+    "status": "completed",
+    "model_calls": 0,
+    "network_calls": 0,
+    "human_review_performed": false,
+    "scope": "deterministic historical memory comparison; no live model quality claim"
+  },
+  "source_binding": {
+    "binding_sha256": "0173a89b79f6c49c44a3290c1a02a55a0a279fd96054bfbe1e038f74cc176a62",
+    "original_gold_sha256": "4ddad385e9944fdbbb7876355ea408afdbbeccaef25c7a53c51fcd12ac12be9d",
+    "bound_gold_sha256": "426e0ccc6c2c8ad57adb1688747f73412e527ef2682c24f1e3b7d6028f54abad",
+    "expected_answers_unchanged": true,
+    "certificate_sha256": "dcf3cf73161b1631a71a5e868d86483e5d4bade921d5b3158c74fb7ce149b1db"
+  },
+  "status": "failed",
+  "error_code": "price_verification_required",
+  "error_message": "Current exact-model prices could not be verified. No paid work is permitted.",
+  "finished_at": "2026-11-14T13:26:05.450706+00:00"
+}

@@ -1,0 +1,336 @@
+{
+  "title": "Historical Google and Meta note — deterministic memory OFF/ON comparison",
+  "comparison_type": "actual_archived_note_deterministic_memory_comparison",
+  "model_calls": 0,
+  "network_calls": 0,
+  "live_model_quality_comparison": false,
+  "historical_verification": {
+    "content_hash": "1aae0e100911d32c7cac58788f24a93af778ad166848f716e48da968d7923f10",
+    "note_id": "note_1568c9f736b26df80e41bbe82de1b957",
+    "proposal_id": "proposal_8d4e103cfd7fd08e70a16de378768783",
+    "revision": 1,
+    "run_id": "S22_Google_Meta_FY2024_FY2025",
+    "binding_hash_verified": true,
+    "binding_sha256": "fddf090d611ecf1a9ed4e0246cccca7fe8c57c15176ed726f9e8b398ee2e136e",
+    "receipt_sha256": "4c41ed9d2841271f0869cbcb54880e1ebdd0596dc19668b2ebe33b62e132ad71",
+    "status": "historical_publication_confirmed_not_current_source_reverified"
+  },
+  "historical_tickers": [
+    "GOOGL",
+    "META"
+  ],
+  "historical_fiscal_years": [
+    2024,
+    2025
+  ],
+  "historical_citation_count": 18,
+  "request": {
+    "question": "Identify the prior published note for these companies and fiscal periods and compare the supplied source inventory.",
+    "tickers": [
+      "GOOGL",
+      "META"
+    ],
+    "years": [
+      2024,
+      2025
+    ],
+    "include_risks": true
+  },
+  "source_inventory_mode": "exact_historical_citation_replay_not_current_retrieval",
+  "same_request_and_source_inventory_both_arms": true,
+  "comparison": {
+    "comparison_type": "deterministic_offline_memory_on_off",
+    "live_model_quality_comparison": false,
+    "request_sha256": "8f53427d3ed131a30d09925a65c5b3dfa6c79a1225f72bdb4df4a90d50bdd76f",
+    "current_sources_sha256": "ea0704b6c4bff1f7ec9af6ecdcfba0ad64bd6d106148f9d4b867e7e11af2111a",
+    "runs": [
+      {
+        "memory_enabled": false,
+        "context": {
+          "enabled": false,
+          "status": "Memory is prior context, not evidence or new facts.",
+          "preferences": {},
+          "past_notes": [],
+          "truncated": false
+        },
+        "followup": {
+          "status": "no_prior_note",
+          "changes": [],
+          "semantic_change_assessed": false
+        },
+        "context_characters": 131,
+        "model_calls": 0
+      },
+      {
+        "memory_enabled": true,
+        "context": {
+          "enabled": true,
+          "status": "Memory is prior context, not evidence or new facts.",
+          "preferences": {},
+          "past_notes": [
+            {
+              "note_id": "note_1568c9f736b26df80e41bbe82de1b957",
+              "note_link": "/notes/note_1568c9f736b26df80e41bbe82de1b957",
+              "content_hash": "1aae0e100911d32c7cac58788f24a93af778ad166848f716e48da968d7923f10",
+              "title": "Google and Meta operating margins and sampled risk disclosures",
+              "tickers": [
+                "GOOGL",
+                "META"
+              ],
+              "fiscal_years": [
+                2024,
+                2025
+              ],
+              "sources": [
+                {
+                  "evidence_id": "f_OperatingIncomeLoss_2024-01-01_2024-12-31_0001628280-26-003942_77ed847bd781",
+                  "source_sha256": "f8e539cea9d363752df2f9bb33078c19ae897ff7f34d49fe4d9a732d032b94f7",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/0001628280-26-003942-index.html"
+                },
+                {
+                  "evidence_id": "f_OperatingIncomeLoss_2024-01-01_2024-12-31_0001652044-26-000018_6492cfa9e4a7",
+                  "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+                },
+                {
+                  "evidence_id": "f_OperatingIncomeLoss_2025-01-01_2025-12-31_0001628280-26-003942_2c8fe69f0f3c",
+                  "source_sha256": "f8e539cea9d363752df2f9bb33078c19ae897ff7f34d49fe4d9a732d032b94f7",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/0001628280-26-003942-index.html"
+                },
+                {
+                  "evidence_id": "f_OperatingIncomeLoss_2025-01-01_2025-12-31_0001652044-26-000018_de50c2e0e06a",
+                  "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+                },
+                {
+                  "evidence_id": "f_RevenueFromContractWithCustomerExcludingAssessedTax_2024-01-01_2024-12-31_0001628280-26-003942_64b5b7d5e490",
+                  "source_sha256": "f8e539cea9d363752df2f9bb33078c19ae897ff7f34d49fe4d9a732d032b94f7",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/0001628280-26-003942-index.html"
+                },
+                {
+                  "evidence_id": "f_RevenueFromContractWithCustomerExcludingAssessedTax_2025-01-01_2025-12-31_0001628280-26-003942_ada4bb272c70",
+                  "source_sha256": "f8e539cea9d363752df2f9bb33078c19ae897ff7f34d49fe4d9a732d032b94f7",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/0001628280-26-003942-index.html"
+                },
+                {
+                  "evidence_id": "f_Revenues_2024-01-01_2024-12-31_0001652044-26-000018_d9293b95d7f2",
+                  "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+                },
+                {
+                  "evidence_id": "f_Revenues_2025-01-01_2025-12-31_0001652044-26-000018_566b60c5266e",
+                  "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+                },
+                {
+                  "evidence_id": "margin_1dcf027449282bcd9d74e5a5fe9db878",
+                  "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+                },
+                {
+                  "evidence_id": "margin_36d98223a17d09543c2c895a4cfae455",
+                  "source_sha256": "f8e539cea9d363752df2f9bb33078c19ae897ff7f34d49fe4d9a732d032b94f7",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/0001628280-26-003942-index.html"
+                },
+                {
+                  "evidence_id": "margin_5c6f3fecb46bb991850865bf616ddb98",
+                  "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+                },
+                {
+                  "evidence_id": "margin_8541ce9a8732ed8caa3505426b964d5c",
+                  "source_sha256": "f8e539cea9d363752df2f9bb33078c19ae897ff7f34d49fe4d9a732d032b94f7",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/0001628280-26-003942-index.html"
+                },
+                {
+                  "evidence_id": "p_2fa920681fe58b569ff26ced984b7b15a4a8b3aed2223c385b11db1e6236427d",
+                  "source_sha256": "a1e7244352ab0348a0901a83d46a1aa250daf85eedf291c937131a5b84e7e8b1",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/meta-20251231.htm"
+                },
+                {
+                  "evidence_id": "p_33fea0df180e00d775294eac7a51d1edcf9e3376bcc13fdd4a4c28d517184c27",
+                  "source_sha256": "a1e7244352ab0348a0901a83d46a1aa250daf85eedf291c937131a5b84e7e8b1",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/meta-20251231.htm"
+                },
+                {
+                  "evidence_id": "p_5509b0cf6f829bd03f4179674352f5a5aa9ebcc74d3b63fec89da4cb41957b0f",
+                  "source_sha256": "1ac2638bc971cca8b7a2fd0dc92c82d8d3786219ae68c532a6d0d9f4983f7659",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm"
+                },
+                {
+                  "evidence_id": "p_560e3f4e91feafdd3b05a35a4cf1999cea1b63416b868ea154172aab034e222d",
+                  "source_sha256": "db018ccc8b8dda8ccdc136d6fbc5a4e42aa564285da451dc5ef80be0418aeda7",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000132680125000017/meta-20241231.htm"
+                },
+                {
+                  "evidence_id": "p_796dc2051c9666688cb60fdfcf3fccdd90ace839138e54ff8e3ebab3be4fa6ac",
+                  "source_sha256": "db018ccc8b8dda8ccdc136d6fbc5a4e42aa564285da451dc5ef80be0418aeda7",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000132680125000017/meta-20241231.htm"
+                },
+                {
+                  "evidence_id": "p_a16f2948e44fa7ddbe7ffa95241e4b1934567ddc7e6756fd34c616d43d5bbe46",
+                  "source_sha256": "4f0968c944a2645535a02a91eb1321b1535fe0711eea14cd818aea7fb405f8f3",
+                  "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000014/goog-20241231.htm"
+                }
+              ],
+              "status": "historical_publication_confirmed_not_current_source_reverified"
+            }
+          ],
+          "truncated": false
+        },
+        "followup": {
+          "status": "source_inventory_comparison",
+          "previous_note": {
+            "note_id": "note_1568c9f736b26df80e41bbe82de1b957",
+            "note_link": "/notes/note_1568c9f736b26df80e41bbe82de1b957",
+            "content_hash": "1aae0e100911d32c7cac58788f24a93af778ad166848f716e48da968d7923f10",
+            "title": "Google and Meta operating margins and sampled risk disclosures",
+            "tickers": [
+              "GOOGL",
+              "META"
+            ],
+            "fiscal_years": [
+              2024,
+              2025
+            ],
+            "sources": [
+              {
+                "evidence_id": "f_OperatingIncomeLoss_2024-01-01_2024-12-31_0001628280-26-003942_77ed847bd781",
+                "source_sha256": "f8e539cea9d363752df2f9bb33078c19ae897ff7f34d49fe4d9a732d032b94f7",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/0001628280-26-003942-index.html"
+              },
+              {
+                "evidence_id": "f_OperatingIncomeLoss_2024-01-01_2024-12-31_0001652044-26-000018_6492cfa9e4a7",
+                "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+              },
+              {
+                "evidence_id": "f_OperatingIncomeLoss_2025-01-01_2025-12-31_0001628280-26-003942_2c8fe69f0f3c",
+                "source_sha256": "f8e539cea9d363752df2f9bb33078c19ae897ff7f34d49fe4d9a732d032b94f7",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/0001628280-26-003942-index.html"
+              },
+              {
+                "evidence_id": "f_OperatingIncomeLoss_2025-01-01_2025-12-31_0001652044-26-000018_de50c2e0e06a",
+                "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+              },
+              {
+                "evidence_id": "f_RevenueFromContractWithCustomerExcludingAssessedTax_2024-01-01_2024-12-31_0001628280-26-003942_64b5b7d5e490",
+                "source_sha256": "f8e539cea9d363752df2f9bb33078c19ae897ff7f34d49fe4d9a732d032b94f7",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/0001628280-26-003942-index.html"
+              },
+              {
+                "evidence_id": "f_RevenueFromContractWithCustomerExcludingAssessedTax_2025-01-01_2025-12-31_0001628280-26-003942_ada4bb272c70",
+                "source_sha256": "f8e539cea9d363752df2f9bb33078c19ae897ff7f34d49fe4d9a732d032b94f7",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/0001628280-26-003942-index.html"
+              },
+              {
+                "evidence_id": "f_Revenues_2024-01-01_2024-12-31_0001652044-26-000018_d9293b95d7f2",
+                "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+              },
+              {
+                "evidence_id": "f_Revenues_2025-01-01_2025-12-31_0001652044-26-000018_566b60c5266e",
+                "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+              },
+              {
+                "evidence_id": "margin_1dcf027449282bcd9d74e5a5fe9db878",
+                "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+              },
+              {
+                "evidence_id": "margin_36d98223a17d09543c2c895a4cfae455",
+                "source_sha256": "f8e539cea9d363752df2f9bb33078c19ae897ff7f34d49fe4d9a732d032b94f7",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/0001628280-26-003942-index.html"
+              },
+              {
+                "evidence_id": "margin_5c6f3fecb46bb991850865bf616ddb98",
+                "source_sha256": "f87bc183f74b45ecf9a0933e0e0a1b6b97ead51a9d29367a7dae436574e1c1d0",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/0001652044-26-000018-index.html"
+              },
+              {
+                "evidence_id": "margin_8541ce9a8732ed8caa3505426b964d5c",
+                "source_sha256": "f8e539cea9d363752df2f9bb33078c19ae897ff7f34d49fe4d9a732d032b94f7",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/0001628280-26-003942-index.html"
+              },
+              {
+                "evidence_id": "p_2fa920681fe58b569ff26ced984b7b15a4a8b3aed2223c385b11db1e6236427d",
+                "source_sha256": "a1e7244352ab0348a0901a83d46a1aa250daf85eedf291c937131a5b84e7e8b1",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/meta-20251231.htm"
+              },
+              {
+                "evidence_id": "p_33fea0df180e00d775294eac7a51d1edcf9e3376bcc13fdd4a4c28d517184c27",
+                "source_sha256": "a1e7244352ab0348a0901a83d46a1aa250daf85eedf291c937131a5b84e7e8b1",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/meta-20251231.htm"
+              },
+              {
+                "evidence_id": "p_5509b0cf6f829bd03f4179674352f5a5aa9ebcc74d3b63fec89da4cb41957b0f",
+                "source_sha256": "1ac2638bc971cca8b7a2fd0dc92c82d8d3786219ae68c532a6d0d9f4983f7659",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm"
+              },
+              {
+                "evidence_id": "p_560e3f4e91feafdd3b05a35a4cf1999cea1b63416b868ea154172aab034e222d",
+                "source_sha256": "db018ccc8b8dda8ccdc136d6fbc5a4e42aa564285da451dc5ef80be0418aeda7",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000132680125000017/meta-20241231.htm"
+              },
+              {
+                "evidence_id": "p_796dc2051c9666688cb60fdfcf3fccdd90ace839138e54ff8e3ebab3be4fa6ac",
+                "source_sha256": "db018ccc8b8dda8ccdc136d6fbc5a4e42aa564285da451dc5ef80be0418aeda7",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000132680125000017/meta-20241231.htm"
+              },
+              {
+                "evidence_id": "p_a16f2948e44fa7ddbe7ffa95241e4b1934567ddc7e6756fd34c616d43d5bbe46",
+                "source_sha256": "4f0968c944a2645535a02a91eb1321b1535fe0711eea14cd818aea7fb405f8f3",
+                "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000014/goog-20241231.htm"
+              }
+            ],
+            "status": "historical_publication_confirmed_not_current_source_reverified"
+          },
+          "changes": [],
+          "truncated": false,
+          "semantic_change_assessed": false,
+          "limitation": "Source-list differences do not establish that a business risk or filing fact changed. Retrieve and check current sources."
+        },
+        "context_characters": 5549,
+        "model_calls": 0
+      }
+    ]
+  },
+  "memory_off_prior_note_absent": true,
+  "memory_on_prior_note_visible_in_context": true,
+  "memory_on_prior_note_visible_in_inventory_followup": true,
+  "context_limit_characters": 6000,
+  "context_truncated": false,
+  "context_size_limitation": null,
+  "historical_status_preserved": true,
+  "modern_sentence_verification_not_invented": true,
+  "synthetic_privacy_checks": [
+    {
+      "memory_enabled": false,
+      "synthetic_watchlist_literal_blocked": true,
+      "external_dispatches": 0
+    },
+    {
+      "memory_enabled": true,
+      "synthetic_watchlist_literal_blocked": true,
+      "external_dispatches": 0
+    }
+  ],
+  "synthetic_watchlist_not_exposed": true,
+  "temporary_database_deleted": true,
+  "original_binding_and_receipt_unchanged": true,
+  "original_databases_opened_or_modified": false,
+  "human_review_performed_by_this_assay": false,
+  "limitations": [
+    "Archived approval/publication receipts are checked locally; the portal is not queried again.",
+    "The old note and its original receipt are not rewritten or upgraded to current sentence-verification rules.",
+    "Memory restores prior note identity, scope and source inventory. It supplies no new financial evidence or risk-change conclusion.",
+    "Identical replayed citation lists produce no inventory delta; this does not prove current filings or business risks are unchanged.",
+    "The watchlist entry is artificial and tests a literal local privacy guard only. No task-quality or LLM improvement is measured."
+  ],
+  "input_files_sha256": {
+    "25_Publication_Approval_Binding.json": "2c5646483bd2f1e7c3c79bd041a96577df80295a7c4a1663d50c1f8ce002f34d",
+    "25_Publication_Receipt.json": "4c0c301bcf4fac95238d3aa50edfd6eac172839fe32d3e354e86a6eab20e61c1"
+  }
+}

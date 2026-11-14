@@ -1,0 +1,73 @@
+{
+  "batch_id": "FINAL34_PILOT_c0b5b2e1451f5f57121d",
+  "limits": {
+    "max_calls": 3000,
+    "max_calls_per_case": 50,
+    "max_input_bytes": 100000,
+    "max_output_tokens": 2200,
+    "max_reserved_usd": "10.00",
+    "max_runtime_seconds": 10800
+  },
+  "max_reserved_nano_usd": 10000000000,
+  "models": {
+    "meta-llama/llama-3.3-70b-instruct": {
+      "completion_usd_per_million": "0.71000000",
+      "family": "meta-llama",
+      "prompt_usd_per_million": "0.71000000",
+      "request_usd": "0"
+    },
+    "openai/gpt-4.1-mini": {
+      "completion_usd_per_million": "1.6000000",
+      "family": "openai",
+      "prompt_usd_per_million": "0.4000000",
+      "request_usd": "0"
+    }
+  },
+  "schema_version": 34,
+  "reserved_requests": 83,
+  "reserved_nano_usd": 699633060,
+  "reserved_usd": 0.69963306,
+  "known_actual_nano_usd": 94380740,
+  "known_actual_usd": 0.09438074,
+  "requests_without_actual_cost": 0,
+  "in_flight_requests": 0,
+  "poisoned": false,
+  "stop_code": null,
+  "case_states": {
+    "FINAL34_JUDGE_H01": "complete",
+    "FINAL34_JUDGE_H02": "complete",
+    "FINAL34_JUDGE_H03": "complete",
+    "FINAL34_JUDGE_H04": "complete",
+    "FINAL34_JUDGE_H05": "complete",
+    "FINAL34_JUDGE_H06": "complete",
+    "FINAL34_JUDGE_H07": "complete",
+    "FINAL34_JUDGE_H08": "complete",
+    "FINAL34_JUDGE_H09": "complete",
+    "FINAL34_JUDGE_H10": "complete",
+    "FINAL34_JUDGE_H11": "complete",
+    "FINAL34_JUDGE_H12": "complete",
+    "FINAL34_JUDGE_H13": "complete",
+    "FINAL34_JUDGE_H14": "complete",
+    "FINAL34_JUDGE_H15": "complete",
+    "FINAL34_JUDGE_H16": "complete",
+    "FINAL34_JUDGE_H17": "complete",
+    "FINAL34_JUDGE_H18": "complete",
+    "FINAL34_JUDGE_H19": "complete",
+    "FINAL34_JUDGE_H20": "complete",
+    "FINAL34_JUDGE_H21": "complete",
+    "FINAL34_JUDGE_H22": "complete",
+    "FINAL34_JUDGE_H23": "complete",
+    "FINAL34_JUDGE_H24": "complete",
+    "PILOT_C0_F002_r1": "completed",
+    "PILOT_C0_F003_r1": "blocked",
+    "PILOT_C1_F002_r1": "completed",
+    "PILOT_C1_F003_r1": "blocked",
+    "PILOT_C2_F002_r1": "completed",
+    "PILOT_C2_F003_r1": "blocked"
+  },
+  "original_started_at": "1794663648.8437135",
+  "calls_rows_sha256": "6965f9199c64fc9d4bd74ff154bd8da09fa017697dfd8e951566256667f720ae",
+  "case_rows_sha256": "f24348d7db97b9a0495c7b4bb4e66bb9e35da24aef3872e1682c353acb9bb5ab",
+  "call_sequence_sha256": "67d44673049dcbcb1b35273259dc5333c34e24ecafed41260b7699a339a38e69",
+  "prior_state_sha256": "ba20ef0f3e5383a2e562c8e05f4f622a6909163f0cef7fb7afaa7e0133d77cd0"
+}

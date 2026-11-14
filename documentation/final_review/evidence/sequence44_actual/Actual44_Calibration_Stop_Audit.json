@@ -1,0 +1,126 @@
+{
+  "sequence": 44,
+  "source_zip": "44_Analyst_Desk_Local_Budget_Continuation_Results_20261114T173041Z_59d285da.zip",
+  "source_zip_sha256": "279067191fe6322da98f6b9634ecfbcdd24887c87b8c480b8312bb91584901d2",
+  "reported_status": "evaluations_recorded",
+  "interpreted_status": "accounting_stopped_during_support_calibration; no heldout research model calls",
+  "root_cause": {
+    "failed_call_id": 388,
+    "failed_case_id": "FINAL_SUPPORT_V2_H20_f9d6c1ae",
+    "error_code": "model_http_error",
+    "provider_http_status": "not retained in uploaded evidence",
+    "actual_cost_unknown": true,
+    "reserved_upper_usd": "0.00499201",
+    "failed_at_utc": "2026-11-14T17:41:17.495136+00:00",
+    "consequence": "Shared ledger poisoned. Later workflow starts rejected before model creation/calls."
+  },
+  "verified_invariants": {
+    "scope_bytes_unchanged": true,
+    "all_24_original_dev_results_byte_unchanged": true,
+    "original_368_call_records_unchanged": true,
+    "original_started_at_unchanged": true,
+    "cumulative_limits_unchanged": true,
+    "original_budget_amendment_unchanged": true,
+    "software_receipt_matches_review": true
+  },
+  "approved_scope_sha256": "49267c92182e0a88aa92523297c7acc4b16fd565e35f9e05a5eca174b8923c8a",
+  "budget": {
+    "reserved_requests": 388,
+    "known_actual_usd": 0.60246756,
+    "reserved_usd": 3.73199355,
+    "requests_without_actual_cost": 1,
+    "in_flight_requests": 0,
+    "poisoned": true,
+    "stop_code": "model_http_error",
+    "original_started_at": "1794663648.8437135",
+    "limits": {
+      "max_calls": 12000,
+      "max_calls_per_case": 50,
+      "max_input_bytes": 100000,
+      "max_output_tokens": 2200,
+      "max_reserved_usd": "150.00",
+      "max_runtime_seconds": 16200
+    }
+  },
+  "new_since_43": {
+    "reserved_requests": 20,
+    "successful_calibration_responses": 19,
+    "error_requests": 1,
+    "known_actual_usd": "0.00167162",
+    "reserved_usd": "0.09701369",
+    "all_calls_are_support_calibration": true
+  },
+  "matrix": {
+    "planned": 840,
+    "status_counts": {
+      "error": 1,
+      "unrun": 839
+    },
+    "model_calls": 0,
+    "completed_workflows": 0,
+    "failure_examples": [
+      {
+        "execution_id": "COMPLETION_C0_F021_r1",
+        "error": {
+          "code": "live_accounting_error",
+          "message": "The saved ledger is stopped after a provider/accounting failure."
+        }
+      }
+    ]
+  },
+  "memory": {
+    "planned": 12,
+    "status_counts": {
+      "error": 1,
+      "unrun": 11
+    },
+    "model_calls": 0,
+    "completed_workflows": 0,
+    "failure_examples": [
+      {
+        "execution_id": "MEMORY_memory_off_F002_r1",
+        "error": {
+          "code": "live_accounting_error",
+          "message": "The saved ledger is stopped after a provider/accounting failure."
+        }
+      }
+    ]
+  },
+  "security": {
+    "planned": 120,
+    "recorded": 0,
+    "not_run": 120,
+    "stop_code": "live_accounting_error"
+  },
+  "semantics": {
+    "planned": 420,
+    "status_counts": {
+      "unrun": 420
+    },
+    "calibration_eligible": false
+  },
+  "calibration": {
+    "human_label_count": 24,
+    "paired_judge_responses": 19,
+    "three_class_kappa": 0.30366492146596846,
+    "binary_nonuncertain_pairs": 15,
+    "binary_kappa": 0.47058823529411775,
+    "failed_or_unrun_ids": [
+      "H20",
+      "H21",
+      "H22",
+      "H23",
+      "H24"
+    ],
+    "eligible": false
+  },
+  "interpretation": [
+    "The local-budget classification correction succeeded and original F020 failure was retained.",
+    "evaluations_recorded means result documents were produced, not that all planned experiments ran.",
+    "The one matrix and one memory error are immediate pre-model accounting stops; their ~8ms latency is not research latency and their code-scored failure is not a comparison of agent quality.",
+    "No heldout output exists. No experimental effect or three-repeat performance spread can be estimated from this result.",
+    "Do not reset the ledger, zero the failed call cost, retry old executions, or call unknown cost zero. Reconciliation needs real provider billing evidence and a separately reviewed recovery process.",
+    "The provider HTTP status/body was not retained; model_http_error alone cannot identify outage, rate limit, or account issue."
+  ],
+  "paid_calls_by_audit": 0
+}

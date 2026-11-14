@@ -1,0 +1,100 @@
+{
+  "schema_version": "final-experiments-v1",
+  "config": {
+    "schema_version": "final-experiments-v1",
+    "repeats": 1,
+    "concurrency": 2,
+    "case_timeout_seconds": 600,
+    "splits": [
+      "dev"
+    ],
+    "workflow": {
+      "model": "openai/gpt-4.1-mini",
+      "temperature": 0,
+      "token_budget": 650000,
+      "tool_budget": 240,
+      "max_output_tokens": 2200,
+      "max_context_bytes": 50000,
+      "max_agent_steps": 10,
+      "max_revisions": 2
+    },
+    "experiment_id": "PILOT",
+    "case_limit": 2,
+    "variants": [
+      {
+        "id": "C0",
+        "architecture": "fixed_workflow",
+        "critic": true,
+        "lessons": false,
+        "retrieval": "production_hybrid"
+      },
+      {
+        "id": "C1",
+        "architecture": "single_agent",
+        "critic": true,
+        "lessons": false,
+        "retrieval": "production_hybrid"
+      },
+      {
+        "id": "C2",
+        "architecture": "team",
+        "critic": true,
+        "lessons": false,
+        "retrieval": "production_hybrid"
+      }
+    ],
+    "interpretation": "Evaluation only; plan approvals are simulated; no publication. Shared critic is counted separately for all architectures. Stop at the shared approved budget; report unrun rows."
+  },
+  "public_cases_sha256": "295db2a41b38e62f54804eb0c9c01e344e823645b38426a1b5f96e8a957c5d26",
+  "private_gold_sha256": "426e0ccc6c2c8ad57adb1688747f73412e527ef2682c24f1e3b7d6028f54abad",
+  "lesson_manifest_sha256": null,
+  "jobs": [
+    {
+      "execution_id": "PILOT_C0_F002_r1",
+      "case_id": "F002",
+      "repeat": 1,
+      "variant": "C0",
+      "split": "dev"
+    },
+    {
+      "execution_id": "PILOT_C1_F002_r1",
+      "case_id": "F002",
+      "repeat": 1,
+      "variant": "C1",
+      "split": "dev"
+    },
+    {
+      "execution_id": "PILOT_C2_F002_r1",
+      "case_id": "F002",
+      "repeat": 1,
+      "variant": "C2",
+      "split": "dev"
+    },
+    {
+      "execution_id": "PILOT_C1_F003_r1",
+      "case_id": "F003",
+      "repeat": 1,
+      "variant": "C1",
+      "split": "dev"
+    },
+    {
+      "execution_id": "PILOT_C2_F003_r1",
+      "case_id": "F003",
+      "repeat": 1,
+      "variant": "C2",
+      "split": "dev"
+    },
+    {
+      "execution_id": "PILOT_C0_F003_r1",
+      "case_id": "F003",
+      "repeat": 1,
+      "variant": "C0",
+      "split": "dev"
+    }
+  ],
+  "software_test_mode": false,
+  "publication": "disabled",
+  "plan_approval": "simulated_evaluation_only",
+  "human_reviewed": false,
+  "manifest_sha256": "78da202b276d4ebf1ca2182a85d4e169c12790c022d78b5a95381867b3ea4ab7"
+}

@@ -1,0 +1,23 @@
+digraph AnalystDesk {
+  graph [rankdir=TB, bgcolor="white", pad="0.25", nodesep="0.45", ranksep="0.30", fontname="DejaVu Sans"];
+  node [shape=box, style="rounded,filled", fillcolor="#EDF3F5", color="#B7CBD1", fontname="DejaVu Sans", fontsize=12, margin="0.15,0.10"];
+  edge [color="#007D83", fontname="DejaVu Sans", fontsize=9, arrowsize=0.7];
+  p [label="1  Supervisor plan"];
+  pr [label="2  Exact plan review",shape=diamond];
+  r [label="3  Parallel company researchers"];
+  j [label="4  Evidence join",shape=diamond];
+  q [label="5  Quant + sandbox"];
+  d [label="6  Risk comparison"];
+  w [label="7  Writer"];
+  c [label="8  Code checks + critic",shape=diamond];
+  n [label="9  Prepare exact proposal"];
+  nr [label="10  Exact note review",shape=diamond];
+  pub [label="11  Reverify + publish"];
+  done [label="12  Saved portal note",fillcolor="#D8ECE9"];
+  stop [label="Stopped / blocked",fillcolor="#F4E6E3",color="#B9695E"];
+  p->pr;pr->pr [label="edit"];pr->r [label="approve"];pr->stop [label="reject"];
+  r->j;j->p [label="replan"];j->q [label="continue"];
+  q->d;d->w;w->c;c->w [label="bounded revision"];c->stop [label="blocked"];
+  c->n [label="supported"];n->nr;nr->c [label="edit"];nr->stop [label="reject"];
+  nr->pub [label="approve exact hash"];pub->nr [label="capability missing"];pub->done [label="published"];
+}

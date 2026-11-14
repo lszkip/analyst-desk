@@ -1,0 +1,298 @@
+{
+  "sequence": 33,
+  "started_utc": "2026-11-14T10:46:27.025401+00:00",
+  "outcome": "security_checks_passed_and_sources_installed",
+  "external_model_calls": 0,
+  "research_or_real_publication_performed": false,
+  "docker_operations_performed": false,
+  "git_mutations_performed": false,
+  "prior_run_folders_read_or_changed": false,
+  "original_runtime_data_read": false,
+  "secret_content_read": false,
+  "github_ci_status": "pending: security changes have not been pushed or tested on GitHub",
+  "installed_files": [
+    {
+      "file": ".dockerignore",
+      "sha256": "7ac876bdec9ebb6c06d85c18c6182cd02dc98ee665c950b556a177f7a02bc8cd",
+      "new_file": false
+    },
+    {
+      "file": "Dockerfile",
+      "sha256": "ff3b1f62ff615c647643b3d8a5078cd6bbbce39ce4bc04c05cc99696a10cef15",
+      "new_file": false
+    },
+    {
+      "file": "research_workflow.py",
+      "sha256": "c90cf892a28c4b30befa899f3fe04e372a306f4b56df37a1e3fec454ca4aec65",
+      "new_file": false
+    },
+    {
+      "file": "run_research_workflow.py",
+      "sha256": "b6833288e42d0f228faa6bf34f240cb410192a6af4de7554adbe9f5c50246a6b",
+      "new_file": false
+    },
+    {
+      "file": "workflow_support.py",
+      "sha256": "088afc576eb271132daea1424b62016cd5002dcfc04e12777ef59978e1b4da42",
+      "new_file": false
+    },
+    {
+      "file": "workflow_source_safety.py",
+      "sha256": "2adf9b9da2c9fa827887f97e114d6530721df2f87a32c1f59b47d94419382264",
+      "new_file": true
+    },
+    {
+      "file": "test_research_workflow.py",
+      "sha256": "0a86e3906c24e525b3163892ef2f2c29fe79876399256b5828ecde798be215e8",
+      "new_file": false
+    },
+    {
+      "file": "security/run_checks.py",
+      "sha256": "8eff7b42514f780ba1f590e7ccc60af91deff45c76dd434db1febd7f10333854",
+      "new_file": false
+    },
+    {
+      "file": "security/README.md",
+      "sha256": "3bd6009813c311d441c1370062ce6f409f6e2cf3c8b3241ac23abaa05931e1dc",
+      "new_file": false
+    },
+    {
+      "file": "security/THREAT_MODEL.md",
+      "sha256": "86914824003129ed589631b6a92270b1c1dea0c9c26ed6d7d1a73db044f742d1",
+      "new_file": false
+    },
+    {
+      "file": "security/test_source_instruction_detection.py",
+      "sha256": "ca23ab66ced6a158de9d4055b7523c14c6e5bfd783d8b8544466f9e9e44b126a",
+      "new_file": true
+    },
+    {
+      "file": "security/test_source_evidence_enforcement.py",
+      "sha256": "11fd526f6ae465b19a27a6cc06efc577be2906069265516d0060306f94a446e6",
+      "new_file": true
+    },
+    {
+      "file": "security/source_instruction_regressions.json",
+      "sha256": "e57320594e662be6a1fa3089ea1d830c3d5de99defda44221158313fef8b3e26",
+      "new_file": true
+    }
+  ],
+  "source_preflight": {
+    "passed": true,
+    "actual_sha256": {
+      "research_workflow.py": "76adba6e2d29414a73ac27ceab8bb66d7fa68ab532413d22fbba3a64a86fd435",
+      "workflow_agents.py": "25657494a264e5d27fa679d38257fe06d945c1a9fc20d389105228f262baac3c",
+      "workflow_contracts.py": "7d226cadd0be166608a7f8e679bfe35fbbd4a0197f852d22715f3aae278c229c",
+      "workflow_render.py": "788592ec2052d42ff1c53fc3a54145f668da3def6fdc9b78b287800dc3b832c6",
+      "workflow_store.py": "465366ad2d3975c5b0c6f6319415f882e8585eab9278a30b23a307e4906a29ce",
+      "workflow_support.py": "af216558fd2daacf79f5cb6e65cb247e33c2545745000dd4faf6dbaec3fcfa39",
+      "workflow_tools.py": "ea35aa8cf4ffaf65c50bd726b4aa24bb4ecee3e87cb67437c6cd6a8dbdb3d93a",
+      "workflow_config.json": "6df563cef657730e870334dfa4c5acab98f990fd82d5ffe7f9e1522ac25c50fe",
+      "run_research_workflow.py": "7fa3bc8351a95ab8b2344a9902a5d6b02d05b20a9f5e3e5dd0387e00d07f94f7",
+      "check_research_workflow.py": "e32694a8fb8d236f0265e0036006aad2f57c276bf0d2fe7e0b88bc613ed02130",
+      "company_registry.py": "f204309c9d8fac1e1d7368a364f3feebe9752ebab8f12ffa56a714e5f2c9afd1",
+      "companies.json": "e2511c1a11ec0fa531a5779e4f395c27b01513c381a4b3d0cea9b8fb82ccd453",
+      "research_portal.py": "e2c5e6b9d1c15b91eceab364fc935f526ab92522f25976cf7bf446b3b475b9a3",
+      "research_tools_client.py": "3b0a650ec074f5a6c7e73dc06dc408e9e21c4b830037e18d0c3b34c1d02b64f7",
+      "review_portal_note.py": "4737884f6db5f88561c852c1354f9f744db92b0903792fb32f88315c8973f895",
+      "tool_security.py": "cf5b0ad04603018e9583edb07b2807c07a04e101703858d7cc4b10c9737bb67a",
+      "financial_contracts.py": "0710c7c5d973e35b5f8685b612fc6869f2b55d4b76c73a7598b3fc1caadf8c30",
+      "financial_data.py": "a435973731d7eb6dcc5c34a79f5786e72306ce8a85dcf5005737161ea326b746",
+      "financial_metrics.py": "1a6b1928541fb33a8276a0c29506e9e9c781036e41e3441da02615ef4435b273",
+      "sec_periods.py": "68e6b6648e76e90907284b06a4492e7b8d54045207803431887367c4ab751283",
+      "sec_fiscal_years.py": "9f71567256b34eae0e17c00fb563f75eb20d2079a1a67d4d99b4a6406e134f7b",
+      "filing_retrieval.py": "ef6c53f0b05c194a70bf8952ecb2a4c92791913476cf444e7ed43caa7abff959",
+      "retrieval_config.json": "544008638849d72eff77543a0cbaaa3a0b82027700231a8334d8ab12493017c6",
+      "retrieval_models.py": "29eb1fa15052fe42fd1ba3aa34252435fbd98023b7f760ebd95a17488f1ef610",
+      "retrieval_data.py": "6e3b3271b806bfb7bf85bbf78cae886b192ccb5cb554ac1f62570ee1dfdd21b8",
+      "filing_index.py": "cc81b7a598d93e7c23a3e054dd9a7e3a38c8e0d581ff3f26a4c9045435584557",
+      "filings_kb_mcp.py": "2075cfda6be9e5b1b092b214b32bef05ef272699db12d788636ac8fd9710f86e",
+      "requirements-workflow.txt": "9986be6b8461ea353695f0e709729e1924420503de7922e412d1d74e35571519",
+      "test_research_workflow.py": "f064620452e7b443e9c984c13c0939f6d6164f378eb3f7ab54af3500e679ded9",
+      "workflow_financial_narrative.py": "a88bbea019026928950fb727c08a34511c226705e510bb1e76cfb52becd10c61",
+      "test_workflow_financial_narrative.py": "f4d8fad452004fb1fc504fdc913a44d89586521054ee71b632d9ef94b6e7f36a",
+      "Dockerfile": "c6cb8e1aa9fd98022493364129913cbffc44fc1941bff0a92e482728cc296bb5",
+      ".dockerignore": "36818143230b17b0f463022e179c94b85c17b0ea1d6a3c0b4f2a62000d0bad72",
+      ".github/workflows/tests.yml": "4447de1e6205921ca85edc5e164494e6511437c7179f980766843486ff2843c3",
+      "test_workflow_clients.py": "bbca98ad171a6cda46088239d4541f14c48d07b8a862e196a69dcbaafec32aa6",
+      "test_workflow_research_prefetch.py": "5c95ed2fecd6359cb7953350a68e81e9472f95d23d58973b7cd41f4a04d058ce",
+      "workflow_critic_protocol.py": "58f20f3a753d3e60d53d7b13f2fc8c950263afe87bacb8f35a69b33f60b2270a",
+      "test_workflow_critic_protocol.py": "5e1cfc48fd02a6b0781f4091d116eb8a6f58007f3bb8c503560b0508dff23fe5",
+      "test_research_portal.py": "c5d631bbbd65187229844fccf3709cdd3095ecd0cae2d8059f39df9c2e12d47a",
+      "research_portal_mcp.py": "b0d4c76afaac39e4142fa25e054f60c31b88bef5764e4764a731cfa0f18edc93",
+      ".github/workflows/monitoring.yml": "727e7a347944683274d75246925ef833bba9b7b4f0355fa75cec13f2d8077b4a",
+      "monitoring/.dockerignore": "647ea766f04793c2dfe2cd95744d05a7daaffa51de80efd2f62bb3d9e1cadb18",
+      "monitoring/.gitignore": "da5a0e77dfe9d5982730781024e733baae251354aaf6a39d5f9f5746faa5fe30",
+      "monitoring/Dockerfile": "6a87834bf7f065edd4d7d14801beab77c7d6fa7e10769e8139d3998b493e17eb",
+      "monitoring/README.md": "4f2c1bda3c18974ccf15945be95fd1d40b964e960547444c732a7f0faf81d0c2",
+      "monitoring/STACK_CONTRACT.json": "9fc36d17eeff5d6ad146dfb4554364ad1a42ed34277d23b141c42f34eb665f0f",
+      "monitoring/compose.yaml": "64453e537f53170b528e3e5e5159aca48e43a5eec9d594bb6990f7c7dbe0948e",
+      "monitoring/exporter.py": "4ce5fde15cbd30faffe51cb7e5f0c23c939216c81826b1eb1bedf13cb68bf363",
+      "monitoring/gateway.conf": "072f075b193035a890c52f08d2d4670b1729e9ebb40b223005089f6d4f4ca82f",
+      "monitoring/grafana/dashboards/analyst-desk-saved-runs.json": "89a13b08e4a5c806c244a32af683f2925e47363f3a77e60a38edc050328f1534",
+      "monitoring/grafana/provisioning/dashboards/analyst-desk.yaml": "e414dcb43e86da75603c79ed9bd80cb660b9a2355edd10a8a380f68c947ff8ec",
+      "monitoring/grafana/provisioning/datasources/prometheus.yaml": "a95b465bba94f8683069c3e6814776217895fa94b17ed6cb3ddad4a806eacd21",
+      "monitoring/prometheus/alert_tests.yml": "73c69d5829d03e8b788a8687c00ca92ac384760492063590d37aa12ead622adf",
+      "monitoring/prometheus/alerts.yml": "dba847c823e50d25aa4bd085f82464cd1dbb3b72da74588c8599a0577b02f351",
+      "monitoring/prometheus/prometheus.yml": "a2d175530b28ea8f4f68b0e822b3160531e9a071447521893d60a37cac41f52b",
+      "monitoring/run_ci_checks.py": "97128c3d07b41b6838f78d461cb0a7f9c16917baaa6480cd494f0aabe695ef27",
+      "monitoring/tests/fixtures/google_meta_saved_snapshot.json": "c7e9856e997c1d9b6f09329434d3571033467f7bd76343efb99fbddb45f428d5",
+      "monitoring/tests/test_ci_runner.py": "b55790b0f6a62d9dcbb523c68252f1581c93b77546befe4e14464450f2dec179",
+      "monitoring/tests/test_exporter.py": "6e7a6eae1f377e8ca535ebf82ad75594f48eb6c609dba20c891c11e7ff30b52f",
+      "monitoring/tests/test_stack_contract.py": "1a1bac0c0f002609132eae448888f254cbb7398f1d001f8618d95a2074c74a5c",
+      "test_python_sandbox.py": "1678ee2784bd16bb6088ace13028c4658cfedffe6738d010aaf566443162c8dd",
+      "python_sandbox.py": "5547d7d8b7233965bec2b608a58536cf85854b845c593d10b76b50343cce9876",
+      "sandbox_worker.py": "765c7d291e226c10aeffd70357b5ee3e94299202ec46bbf79e727b247c06b712",
+      "security/test_tool_security.py": "b76db22d70f33301e3d6de3b00d9c280d80f889ea4fa7051f763421759f3d7bf",
+      "security/run_checks.py": "5f48c79b306ee307a6e896f89a01d00d724da237608ac7d1f93d9c67a7a5caf3",
+      ".github/workflows/security.yml": "2b304ec550cbac97d20aa03c7814f35e63885f858889f89015873cb181abc626",
+      "security/test_transport_security.py": "e7f2a97b388cfc04ad1c8330d1631d9485ee93231f83285776f089aa3f6a212c",
+      "security/test_publication_security.py": "e32f7fa2c4897cdd712ca1f9189272bdfbde10de184d1893f32246a2514d55ff",
+      "security/README.md": "9983b321c3c268b3a00f5104d724bdc66b343b21dae450060f5fde422e228c7f",
+      "security/THREAT_MODEL.md": "1de04eb19d1c756f34e154d1b24fda7d39768f3b88370f38f3286d69f79bad6f",
+      "security/test_source_instruction_detection.py": null,
+      "security/test_source_evidence_enforcement.py": null,
+      "security/source_instruction_regressions.json": null,
+      "workflow_source_safety.py": null
+    },
+    "failures": []
+  },
+  "test_process": {
+    "exit_code": 0,
+    "seconds": 31.823,
+    "output_bytes": 42748,
+    "output_sha256": "d63fc14baff39800e00a1ca6fb7938ad40a43085b5128917e280f799f60110de",
+    "environment": "allowlisted_no_credentials_or_proxies"
+  },
+  "helper_report_sha256": "d63fc14baff39800e00a1ca6fb7938ad40a43085b5128917e280f799f60110de",
+  "isolated_tests_passed_before_installation": true,
+  "original_source_backups": [
+    {
+      "file": ".dockerignore",
+      "sha256": "36818143230b17b0f463022e179c94b85c17b0ea1d6a3c0b4f2a62000d0bad72",
+      "backup_path": "before/.dockerignore"
+    },
+    {
+      "file": "Dockerfile",
+      "sha256": "c6cb8e1aa9fd98022493364129913cbffc44fc1941bff0a92e482728cc296bb5",
+      "backup_path": "before/Dockerfile"
+    },
+    {
+      "file": "research_workflow.py",
+      "sha256": "76adba6e2d29414a73ac27ceab8bb66d7fa68ab532413d22fbba3a64a86fd435",
+      "backup_path": "before/research_workflow.py"
+    },
+    {
+      "file": "run_research_workflow.py",
+      "sha256": "7fa3bc8351a95ab8b2344a9902a5d6b02d05b20a9f5e3e5dd0387e00d07f94f7",
+      "backup_path": "before/run_research_workflow.py"
+    },
+    {
+      "file": "workflow_support.py",
+      "sha256": "af216558fd2daacf79f5cb6e65cb247e33c2545745000dd4faf6dbaec3fcfa39",
+      "backup_path": "before/workflow_support.py"
+    },
+    {
+      "file": "test_research_workflow.py",
+      "sha256": "f064620452e7b443e9c984c13c0939f6d6164f378eb3f7ab54af3500e679ded9",
+      "backup_path": "before/test_research_workflow.py"
+    },
+    {
+      "file": "security/run_checks.py",
+      "sha256": "5f48c79b306ee307a6e896f89a01d00d724da237608ac7d1f93d9c67a7a5caf3",
+      "backup_path": "before/security/run_checks.py"
+    },
+    {
+      "file": "security/README.md",
+      "sha256": "9983b321c3c268b3a00f5104d724bdc66b343b21dae450060f5fde422e228c7f",
+      "backup_path": "before/security/README.md"
+    },
+    {
+      "file": "security/THREAT_MODEL.md",
+      "sha256": "1de04eb19d1c756f34e154d1b24fda7d39768f3b88370f38f3286d69f79bad6f",
+      "backup_path": "before/security/THREAT_MODEL.md"
+    }
+  ],
+  "source_after": {
+    "actual_sha256": {
+      "research_workflow.py": "c90cf892a28c4b30befa899f3fe04e372a306f4b56df37a1e3fec454ca4aec65",
+      "workflow_agents.py": "25657494a264e5d27fa679d38257fe06d945c1a9fc20d389105228f262baac3c",
+      "workflow_contracts.py": "7d226cadd0be166608a7f8e679bfe35fbbd4a0197f852d22715f3aae278c229c",
+      "workflow_render.py": "788592ec2052d42ff1c53fc3a54145f668da3def6fdc9b78b287800dc3b832c6",
+      "workflow_store.py": "465366ad2d3975c5b0c6f6319415f882e8585eab9278a30b23a307e4906a29ce",
+      "workflow_support.py": "088afc576eb271132daea1424b62016cd5002dcfc04e12777ef59978e1b4da42",
+      "workflow_tools.py": "ea35aa8cf4ffaf65c50bd726b4aa24bb4ecee3e87cb67437c6cd6a8dbdb3d93a",
+      "workflow_config.json": "6df563cef657730e870334dfa4c5acab98f990fd82d5ffe7f9e1522ac25c50fe",
+      "run_research_workflow.py": "b6833288e42d0f228faa6bf34f240cb410192a6af4de7554adbe9f5c50246a6b",
+      "check_research_workflow.py": "e32694a8fb8d236f0265e0036006aad2f57c276bf0d2fe7e0b88bc613ed02130",
+      "company_registry.py": "f204309c9d8fac1e1d7368a364f3feebe9752ebab8f12ffa56a714e5f2c9afd1",
+      "companies.json": "e2511c1a11ec0fa531a5779e4f395c27b01513c381a4b3d0cea9b8fb82ccd453",
+      "research_portal.py": "e2c5e6b9d1c15b91eceab364fc935f526ab92522f25976cf7bf446b3b475b9a3",
+      "research_tools_client.py": "3b0a650ec074f5a6c7e73dc06dc408e9e21c4b830037e18d0c3b34c1d02b64f7",
+      "review_portal_note.py": "4737884f6db5f88561c852c1354f9f744db92b0903792fb32f88315c8973f895",
+      "tool_security.py": "cf5b0ad04603018e9583edb07b2807c07a04e101703858d7cc4b10c9737bb67a",
+      "financial_contracts.py": "0710c7c5d973e35b5f8685b612fc6869f2b55d4b76c73a7598b3fc1caadf8c30",
+      "financial_data.py": "a435973731d7eb6dcc5c34a79f5786e72306ce8a85dcf5005737161ea326b746",
+      "financial_metrics.py": "1a6b1928541fb33a8276a0c29506e9e9c781036e41e3441da02615ef4435b273",
+      "sec_periods.py": "68e6b6648e76e90907284b06a4492e7b8d54045207803431887367c4ab751283",
+      "sec_fiscal_years.py": "9f71567256b34eae0e17c00fb563f75eb20d2079a1a67d4d99b4a6406e134f7b",
+      "filing_retrieval.py": "ef6c53f0b05c194a70bf8952ecb2a4c92791913476cf444e7ed43caa7abff959",
+      "retrieval_config.json": "544008638849d72eff77543a0cbaaa3a0b82027700231a8334d8ab12493017c6",
+      "retrieval_models.py": "29eb1fa15052fe42fd1ba3aa34252435fbd98023b7f760ebd95a17488f1ef610",
+      "retrieval_data.py": "6e3b3271b806bfb7bf85bbf78cae886b192ccb5cb554ac1f62570ee1dfdd21b8",
+      "filing_index.py": "cc81b7a598d93e7c23a3e054dd9a7e3a38c8e0d581ff3f26a4c9045435584557",
+      "filings_kb_mcp.py": "2075cfda6be9e5b1b092b214b32bef05ef272699db12d788636ac8fd9710f86e",
+      "requirements-workflow.txt": "9986be6b8461ea353695f0e709729e1924420503de7922e412d1d74e35571519",
+      "test_research_workflow.py": "0a86e3906c24e525b3163892ef2f2c29fe79876399256b5828ecde798be215e8",
+      "workflow_financial_narrative.py": "a88bbea019026928950fb727c08a34511c226705e510bb1e76cfb52becd10c61",
+      "test_workflow_financial_narrative.py": "f4d8fad452004fb1fc504fdc913a44d89586521054ee71b632d9ef94b6e7f36a",
+      "Dockerfile": "ff3b1f62ff615c647643b3d8a5078cd6bbbce39ce4bc04c05cc99696a10cef15",
+      ".dockerignore": "7ac876bdec9ebb6c06d85c18c6182cd02dc98ee665c950b556a177f7a02bc8cd",
+      ".github/workflows/tests.yml": "4447de1e6205921ca85edc5e164494e6511437c7179f980766843486ff2843c3",
+      "test_workflow_clients.py": "bbca98ad171a6cda46088239d4541f14c48d07b8a862e196a69dcbaafec32aa6",
+      "test_workflow_research_prefetch.py": "5c95ed2fecd6359cb7953350a68e81e9472f95d23d58973b7cd41f4a04d058ce",
+      "workflow_critic_protocol.py": "58f20f3a753d3e60d53d7b13f2fc8c950263afe87bacb8f35a69b33f60b2270a",
+      "test_workflow_critic_protocol.py": "5e1cfc48fd02a6b0781f4091d116eb8a6f58007f3bb8c503560b0508dff23fe5",
+      "test_research_portal.py": "c5d631bbbd65187229844fccf3709cdd3095ecd0cae2d8059f39df9c2e12d47a",
+      "research_portal_mcp.py": "b0d4c76afaac39e4142fa25e054f60c31b88bef5764e4764a731cfa0f18edc93",
+      ".github/workflows/monitoring.yml": "727e7a347944683274d75246925ef833bba9b7b4f0355fa75cec13f2d8077b4a",
+      "monitoring/.dockerignore": "647ea766f04793c2dfe2cd95744d05a7daaffa51de80efd2f62bb3d9e1cadb18",
+      "monitoring/.gitignore": "da5a0e77dfe9d5982730781024e733baae251354aaf6a39d5f9f5746faa5fe30",
+      "monitoring/Dockerfile": "6a87834bf7f065edd4d7d14801beab77c7d6fa7e10769e8139d3998b493e17eb",
+      "monitoring/README.md": "4f2c1bda3c18974ccf15945be95fd1d40b964e960547444c732a7f0faf81d0c2",
+      "monitoring/STACK_CONTRACT.json": "9fc36d17eeff5d6ad146dfb4554364ad1a42ed34277d23b141c42f34eb665f0f",
+      "monitoring/compose.yaml": "64453e537f53170b528e3e5e5159aca48e43a5eec9d594bb6990f7c7dbe0948e",
+      "monitoring/exporter.py": "4ce5fde15cbd30faffe51cb7e5f0c23c939216c81826b1eb1bedf13cb68bf363",
+      "monitoring/gateway.conf": "072f075b193035a890c52f08d2d4670b1729e9ebb40b223005089f6d4f4ca82f",
+      "monitoring/grafana/dashboards/analyst-desk-saved-runs.json": "89a13b08e4a5c806c244a32af683f2925e47363f3a77e60a38edc050328f1534",
+      "monitoring/grafana/provisioning/dashboards/analyst-desk.yaml": "e414dcb43e86da75603c79ed9bd80cb660b9a2355edd10a8a380f68c947ff8ec",
+      "monitoring/grafana/provisioning/datasources/prometheus.yaml": "a95b465bba94f8683069c3e6814776217895fa94b17ed6cb3ddad4a806eacd21",
+      "monitoring/prometheus/alert_tests.yml": "73c69d5829d03e8b788a8687c00ca92ac384760492063590d37aa12ead622adf",
+      "monitoring/prometheus/alerts.yml": "dba847c823e50d25aa4bd085f82464cd1dbb3b72da74588c8599a0577b02f351",
+      "monitoring/prometheus/prometheus.yml": "a2d175530b28ea8f4f68b0e822b3160531e9a071447521893d60a37cac41f52b",
+      "monitoring/run_ci_checks.py": "97128c3d07b41b6838f78d461cb0a7f9c16917baaa6480cd494f0aabe695ef27",
+      "monitoring/tests/fixtures/google_meta_saved_snapshot.json": "c7e9856e997c1d9b6f09329434d3571033467f7bd76343efb99fbddb45f428d5",
+      "monitoring/tests/test_ci_runner.py": "b55790b0f6a62d9dcbb523c68252f1581c93b77546befe4e14464450f2dec179",
+      "monitoring/tests/test_exporter.py": "6e7a6eae1f377e8ca535ebf82ad75594f48eb6c609dba20c891c11e7ff30b52f",
+      "monitoring/tests/test_stack_contract.py": "1a1bac0c0f002609132eae448888f254cbb7398f1d001f8618d95a2074c74a5c",
+      "test_python_sandbox.py": "1678ee2784bd16bb6088ace13028c4658cfedffe6738d010aaf566443162c8dd",
+      "python_sandbox.py": "5547d7d8b7233965bec2b608a58536cf85854b845c593d10b76b50343cce9876",
+      "sandbox_worker.py": "765c7d291e226c10aeffd70357b5ee3e94299202ec46bbf79e727b247c06b712",
+      "security/test_tool_security.py": "b76db22d70f33301e3d6de3b00d9c280d80f889ea4fa7051f763421759f3d7bf",
+      "security/run_checks.py": "8eff7b42514f780ba1f590e7ccc60af91deff45c76dd434db1febd7f10333854",
+      ".github/workflows/security.yml": "2b304ec550cbac97d20aa03c7814f35e63885f858889f89015873cb181abc626",
+      "security/test_transport_security.py": "e7f2a97b388cfc04ad1c8330d1631d9485ee93231f83285776f089aa3f6a212c",
+      "security/test_publication_security.py": "e32f7fa2c4897cdd712ca1f9189272bdfbde10de184d1893f32246a2514d55ff",
+      "security/README.md": "3bd6009813c311d441c1370062ce6f409f6e2cf3c8b3241ac23abaa05931e1dc",
+      "security/THREAT_MODEL.md": "86914824003129ed589631b6a92270b1c1dea0c9c26ed6d7d1a73db044f742d1",
+      "security/test_source_instruction_detection.py": "ca23ab66ced6a158de9d4055b7523c14c6e5bfd783d8b8544466f9e9e44b126a",
+      "security/test_source_evidence_enforcement.py": "11fd526f6ae465b19a27a6cc06efc577be2906069265516d0060306f94a446e6",
+      "security/source_instruction_regressions.json": "e57320594e662be6a1fa3089ea1d830c3d5de99defda44221158313fef8b3e26",
+      "workflow_source_safety.py": "2adf9b9da2c9fa827887f97e114d6530721df2f87a32c1f59b47d94419382264"
+    },
+    "target_matches": true,
+    "unchanged_except_authorized_files": true,
+    "monitoring_source_unchanged": true
+  },
+  "finished_utc": "2026-11-14T10:46:59.305172+00:00"
+}

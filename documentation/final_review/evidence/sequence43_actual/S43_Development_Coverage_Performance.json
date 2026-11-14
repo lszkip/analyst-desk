@@ -1,0 +1,176 @@
+{
+  "schema_version": "independent-repeat-report-v1",
+  "generated_utc": "2026-11-14T17:12:09.320272+00:00",
+  "experiment_manifest_sha256": "235a5a1d28d5fa67c7d376ef0da2178c99db6110c8d5952f45b520422ade785e",
+  "software_test_mode": false,
+  "planned_execution_count": 18,
+  "recorded_execution_count": 18,
+  "missing_result_execution_ids": [],
+  "overall": {
+    "planned": 18,
+    "attempted": 18,
+    "attempt_status_unknown": 0,
+    "status_counts": {
+      "blocked": 9,
+      "completed": 8,
+      "error": 1
+    },
+    "all_planned_jobs_attempted": true,
+    "completed": 8,
+    "numeric_scored": 18,
+    "numeric_passes": 8,
+    "numeric_unknown": 0,
+    "numeric_passes_per_planned": 0.4444444444444444,
+    "task_scored": 9,
+    "task_passes": 6,
+    "task_unknown": 9,
+    "task_passes_per_planned": 0.3333333333333333,
+    "latency_observations": 18,
+    "attempts_without_latency": 0,
+    "median_elapsed_seconds": 51.017813000000004,
+    "p95_elapsed_seconds": 92.250611,
+    "known_reported_cost_usd": "0.4463396",
+    "attempts_with_incomplete_cost": 0,
+    "cost_complete_for_attempted_jobs": true,
+    "known_cost_per_attempt_usd": "0.02479664444444444444444444444",
+    "complete_cost_per_attempt_usd": "0.02479664444444444444444444444",
+    "policy_violation_attempts": 0,
+    "tool_errors": 0,
+    "model_errors": 0,
+    "model_requests_started": 247
+  },
+  "by_variant_repeat": {
+    "C2:r1": {
+      "planned": 18,
+      "attempted": 18,
+      "attempt_status_unknown": 0,
+      "status_counts": {
+        "blocked": 9,
+        "completed": 8,
+        "error": 1
+      },
+      "all_planned_jobs_attempted": true,
+      "completed": 8,
+      "numeric_scored": 18,
+      "numeric_passes": 8,
+      "numeric_unknown": 0,
+      "numeric_passes_per_planned": 0.4444444444444444,
+      "task_scored": 9,
+      "task_passes": 6,
+      "task_unknown": 9,
+      "task_passes_per_planned": 0.3333333333333333,
+      "latency_observations": 18,
+      "attempts_without_latency": 0,
+      "median_elapsed_seconds": 51.017813000000004,
+      "p95_elapsed_seconds": 92.250611,
+      "known_reported_cost_usd": "0.4463396",
+      "attempts_with_incomplete_cost": 0,
+      "cost_complete_for_attempted_jobs": true,
+      "known_cost_per_attempt_usd": "0.02479664444444444444444444444",
+      "complete_cost_per_attempt_usd": "0.02479664444444444444444444444",
+      "policy_violation_attempts": 0,
+      "tool_errors": 0,
+      "model_errors": 0,
+      "model_requests_started": 247
+    }
+  },
+  "repeat_spread": {
+    "C2": {
+      "planned_repeats": [
+        1
+      ],
+      "fully_attempted_repeats": [
+        1
+      ],
+      "all_three_repeats_fully_attempted": false,
+      "spread_including_incomplete_repeats": {
+        "numeric_passes_per_planned": {
+          "repeats_with_value": 1,
+          "mean": 0.4444444444444444,
+          "minimum": 0.4444444444444444,
+          "maximum": 0.4444444444444444,
+          "sample_stddev": null
+        },
+        "task_passes_per_planned": {
+          "repeats_with_value": 1,
+          "mean": 0.3333333333333333,
+          "minimum": 0.3333333333333333,
+          "maximum": 0.3333333333333333,
+          "sample_stddev": null
+        },
+        "median_elapsed_seconds": {
+          "repeats_with_value": 1,
+          "mean": 51.017813000000004,
+          "minimum": 51.017813000000004,
+          "maximum": 51.017813000000004,
+          "sample_stddev": null
+        },
+        "p95_elapsed_seconds": {
+          "repeats_with_value": 1,
+          "mean": 92.250611,
+          "minimum": 92.250611,
+          "maximum": 92.250611,
+          "sample_stddev": null
+        },
+        "known_reported_cost_usd": {
+          "repeats_with_value": 1,
+          "mean": 0.4463396,
+          "minimum": 0.4463396,
+          "maximum": 0.4463396,
+          "sample_stddev": null
+        }
+      },
+      "complete_cost_per_attempt_spread": {
+        "repeats_with_value": 1,
+        "mean": 0.024796644444444446,
+        "minimum": 0.024796644444444446,
+        "maximum": 0.024796644444444446,
+        "sample_stddev": null
+      },
+      "warning": "Spread with incomplete repeats is descriptive only. Unknown semantic outcomes are not false labels; documented passes/planned is not an adjudicated full-task success rate."
+    }
+  },
+  "attempts_without_final_result_or_unknown_attempt_state": [],
+  "cumulative_ledger_snapshot": {
+    "reserved_requests": 368,
+    "known_actual_usd": 0.60079594,
+    "reserved_usd": 3.63497986,
+    "requests_without_actual_cost": 0,
+    "in_flight_requests": 0,
+    "poisoned": false,
+    "stop_code": null,
+    "accounting_unavailable": null
+  },
+  "unsettled_snapshot_note": "An in-flight request or missing final result is unresolved at the snapshot. A single snapshot cannot establish that a running process is stalled. No result is retried or inferred successful.",
+  "measurement_scope": "Same fixed shared concurrency as recorded config. Latency is wall-clock per attempt under shared load, not isolated service latency. Unrun/skipped jobs do not enter latency or cost denominators; all remain in planned counts. Costs are provider-reported model usage only; judge and lesson-generation costs require separate ledger scopes.",
+  "input_labels_modified": false,
+  "new_model_calls": 0,
+  "input_file_sha256": {
+    "Operator/completion/development_coverage/Experiment_Manifest.json": "b7b478b47b7565617c02e8f751f661166814d1d43307fa38aee9c86268bcb506",
+    "Operator/completion/development_coverage/Execution_Results.json": "043b78b8ac3e2269b9410ff576e13b4984370e2db67833a14cb51415af1fc97d",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F001_r1/Result.json": "41f322c2ed4a483b449996352a0a8ea65b7964afdbd28b95e2fc599740561bcc",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F004_r1/Result.json": "c19133aaf992b7f9f8739bb7747e1dbff06e007317fce122959a9cad50c6b294",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F005_r1/Result.json": "8318bd381158fdc0f8b9cc643b4a28c54a1e44c956b7dcacb54c13721f723317",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F006_r1/Result.json": "f884d79c466694e1f192fdd3bccd9753c9afa2eefd1d6325da8da1ab44128d3f",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F007_r1/Result.json": "ba2dac6507353f50c4e02f8698d691d6351bfdf1456d1d509b6923ce85eeeb01",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F008_r1/Result.json": "0843af6686ac6e66ff8abf62c67080c9ece6982e0649453d7718e149c9257ac8",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F009_r1/Result.json": "3c62579fddcdf7a5ee2414c301274ae2e0f34af200c53d54bbec644f7456ecda",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F010_r1/Result.json": "0e68b7c6425155441fd99d4078399a776fde482a5df08a6b3aeef82cad805842",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F011_r1/Result.json": "fa9946585f95ffed67d7e52125b59e6013a529ae742f3b0ce5f3ac2c7d28cc2e",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F012_r1/Result.json": "b34b51842702e041a6fcbaf7ed2e7febbcaa553a2d3378189ccae22a0ef0ddfc",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F013_r1/Result.json": "df6c57db9a004cce8cb70b51273e5efc0d4e3df21bb628f6bed374a9a00ed5bb",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F014_r1/Result.json": "770342798bdbf01c4647985b3d28028cb4de77ba0b1961a26c4268cc23a77a15",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F015_r1/Result.json": "fb5739b1aab35b9eeee4895cce4983f265f9f23afbac5b2b610f2ebce035e192",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F016_r1/Result.json": "01c4aef8f9de8daa22e57e297f7338853df8e0e217b8132db13d7baf451702b5",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F017_r1/Result.json": "7332f6f0918969a99cfe4eaa11094260e4327e7ca19048c6a60e782460ba71fa",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F018_r1/Result.json": "bf9032a166d2f4f1561dbb5248d23b9ce0b18adbb5f2508fab8760868c93f094",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F019_r1/Result.json": "46096a2d543d9e681ddc41a5a87f814eadbc645e76ee1f69c090910f7f43eab7",
+    "Operator/completion/development_coverage/executions/COMPLETION_DEV_COVERAGE_C2_F020_r1/Result.json": "fcef9a2eda1a7dd06118aaf212e659b859e6bdaf70001b1f073ee858ba12d5e6",
+    "Operator/completion/Completion_Budget_Report.json": "6c8962791ef448e0e1757c82083f4ec274daa4727e37bfdf1b2e984da5a7cfb6"
+  },
+  "reconstruction": {
+    "aggregate_results_present": true,
+    "terminal_result_files_checked": 18,
+    "terminal_rows_recovered_or_newer_than_unrun_aggregate": 0
+  }
+}

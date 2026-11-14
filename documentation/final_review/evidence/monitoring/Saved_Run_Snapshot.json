@@ -1,0 +1,2286 @@
+{
+  "schema_version": 1,
+  "dataset": "google_meta_sequence25",
+  "evidence_class": "assisted_development",
+  "telemetry_kind": "saved_snapshot",
+  "source_sequence": 25,
+  "source_archive_sha256": "c63483b042119262a9bebc845b1afb66b521f5f9de3147d24e961d39bb05a719",
+  "case_sha256": "47f8eec5df8d35e26ea0327bd39275f5e354c9863dd977c7dbadba270813fc90",
+  "note_content_sha256": "1aae0e100911d32c7cac58788f24a93af778ad166848f716e48da968d7923f10",
+  "approval_binding_sha256": "fddf090d611ecf1a9ed4e0246cccca7fe8c57c15176ed726f9e8b398ee2e136e",
+  "snapshot_timestamp": 1794625607.0495436,
+  "publication": {
+    "status": "published",
+    "note_id_sha256": "e6406a6d361a95850078f0bb3dd52ab460a26675c9c38a946f2c7e6fb822d8a2",
+    "proposal_id_sha256": "59a7a72681fcfad73f844937e6c6aea95b1b715293982d4d52e4453121600685",
+    "revision": 1,
+    "human_approved": true
+  },
+  "metrics": {
+    "llm_requests": 31,
+    "llm_responses": 31,
+    "reported_tokens": 133710,
+    "reserved_tokens": 638420,
+    "token_limit": 900000,
+    "tool_limit": 240,
+    "tool_calls": 83,
+    "reported_cost_usd": "0.0634176",
+    "cost_complete": true,
+    "critic_rejections": 0,
+    "model_response_cache_hits": 0,
+    "event_errors": {
+      "llm_error": 0,
+      "tool_error": 0,
+      "agent_response_limit": 1,
+      "agent_step_limit": 0
+    },
+    "event_counts": {
+      "agent_correction": 9,
+      "agent_response_limit": 1,
+      "deterministic_financial_narrative": 1,
+      "diagnostic_continuation_fork": 1,
+      "diagnostic_note_edit": 1,
+      "llm_end": 31,
+      "llm_start": 31,
+      "plan_created": 2,
+      "replan": 1,
+      "research_section_prefetch": 8,
+      "tool_end": 83,
+      "tool_start": 83
+    },
+    "financial_figures": 12,
+    "verified_financial_figures": 12,
+    "verified_financial_share": 1.0,
+    "published_notes": 1,
+    "edgar_cache_hits_available": false,
+    "tool_stats": [
+      {
+        "service": "edgar",
+        "tool": "get_annual_financial_fact",
+        "calls": {
+          "ok": 40
+        },
+        "successful_latency_count": 40,
+        "median_seconds": 0.06215,
+        "p95_seconds": 0.1073
+      },
+      {
+        "service": "edgar",
+        "tool": "get_section",
+        "calls": {
+          "ok": 9
+        },
+        "successful_latency_count": 9,
+        "median_seconds": 0.0891,
+        "p95_seconds": 0.1365
+      },
+      {
+        "service": "kb",
+        "tool": "get_passage",
+        "calls": {
+          "ok": 26
+        },
+        "successful_latency_count": 26,
+        "median_seconds": 0.03165,
+        "p95_seconds": 0.042
+      },
+      {
+        "service": "portal",
+        "tool": "get_proposal",
+        "calls": {
+          "ok": 1
+        },
+        "successful_latency_count": 1,
+        "median_seconds": 0.0471,
+        "p95_seconds": 0.0471
+      },
+      {
+        "service": "portal",
+        "tool": "prepare_note",
+        "calls": {
+          "ok": 2
+        },
+        "successful_latency_count": 2,
+        "median_seconds": 0.1454,
+        "p95_seconds": 0.2493
+      },
+      {
+        "service": "portal",
+        "tool": "publish_note",
+        "calls": {
+          "ok": 1
+        },
+        "successful_latency_count": 1,
+        "median_seconds": 0.0842,
+        "p95_seconds": 0.0842
+      },
+      {
+        "service": "sandbox",
+        "tool": "execute_python",
+        "calls": {
+          "ok": 4
+        },
+        "successful_latency_count": 4,
+        "median_seconds": 0.55935,
+        "p95_seconds": 0.7189
+      }
+    ],
+    "unpaired_llm_requests": 0,
+    "unpaired_tool_requests": 0
+  },
+  "events": [
+    {
+      "seq": 1,
+      "kind": "llm_start",
+      "role": "supervisor",
+      "at": 1794616329.1726334,
+      "reserved_tokens": 10073
+    },
+    {
+      "seq": 2,
+      "kind": "llm_end",
+      "role": "supervisor",
+      "at": 1794616333.5800235,
+      "total_tokens": 1541,
+      "elapsed_seconds": 4.4074,
+      "reported_cost_usd": "0.001124"
+    },
+    {
+      "seq": 3,
+      "kind": "plan_created",
+      "role": "supervisor",
+      "at": 1794616333.6001616
+    },
+    {
+      "seq": 4,
+      "kind": "tool_start",
+      "role": "researcher",
+      "at": 1794616341.5308597,
+      "service": "edgar",
+      "tool": "get_section"
+    },
+    {
+      "seq": 5,
+      "kind": "tool_start",
+      "role": "researcher",
+      "at": 1794616341.5764642,
+      "service": "edgar",
+      "tool": "get_section"
+    },
+    {
+      "seq": 6,
+      "kind": "tool_end",
+      "role": "researcher",
+      "at": 1794616341.662821,
+      "service": "edgar",
+      "tool": "get_section",
+      "status": "ok",
+      "elapsed_seconds": 0.1321
+    },
+    {
+      "seq": 7,
+      "kind": "research_section_prefetch",
+      "role": "researcher",
+      "at": 1794616341.6809118
+    },
+    {
+      "seq": 8,
+      "kind": "tool_start",
+      "role": "researcher",
+      "at": 1794616341.6888816,
+      "service": "edgar",
+      "tool": "get_section"
+    },
+    {
+      "seq": 9,
+      "kind": "tool_end",
+      "role": "researcher",
+      "at": 1794616341.6981854,
+      "service": "edgar",
+      "tool": "get_section",
+      "status": "ok",
+      "elapsed_seconds": 0.1219
+    },
+    {
+      "seq": 10,
+      "kind": "research_section_prefetch",
+      "role": "researcher",
+      "at": 1794616341.7116995
+    },
+    {
+      "seq": 11,
+      "kind": "tool_start",
+      "role": "researcher",
+      "at": 1794616341.7199497,
+      "service": "edgar",
+      "tool": "get_section"
+    },
+    {
+      "seq": 12,
+      "kind": "tool_end",
+      "role": "researcher",
+      "at": 1794616341.7639275,
+      "service": "edgar",
+      "tool": "get_section",
+      "status": "ok",
+      "elapsed_seconds": 0.075
+    },
+    {
+      "seq": 13,
+      "kind": "research_section_prefetch",
+      "role": "researcher",
+      "at": 1794616341.7773666
+    },
+    {
+      "seq": 14,
+      "kind": "tool_start",
+      "role": "researcher",
+      "at": 1794616341.7848349,
+      "service": "edgar",
+      "tool": "get_section"
+    },
+    {
+      "seq": 15,
+      "kind": "tool_end",
+      "role": "researcher",
+      "at": 1794616341.7939944,
+      "service": "edgar",
+      "tool": "get_section",
+      "status": "ok",
+      "elapsed_seconds": 0.074
+    },
+    {
+      "seq": 16,
+      "kind": "research_section_prefetch",
+      "role": "researcher",
+      "at": 1794616341.8050601
+    },
+    {
+      "seq": 17,
+      "kind": "tool_start",
+      "role": "researcher",
+      "at": 1794616341.8131528,
+      "service": "edgar",
+      "tool": "get_section"
+    },
+    {
+      "seq": 18,
+      "kind": "tool_end",
+      "role": "researcher",
+      "at": 1794616341.859019,
+      "service": "edgar",
+      "tool": "get_section",
+      "status": "ok",
+      "elapsed_seconds": 0.0458
+    },
+    {
+      "seq": 19,
+      "kind": "research_section_prefetch",
+      "role": "researcher",
+      "at": 1794616341.881252
+    },
+    {
+      "seq": 20,
+      "kind": "tool_start",
+      "role": "researcher",
+      "at": 1794616341.9101775,
+      "service": "edgar",
+      "tool": "get_section"
+    },
+    {
+      "seq": 21,
+      "kind": "tool_end",
+      "role": "researcher",
+      "at": 1794616341.9213357,
+      "service": "edgar",
+      "tool": "get_section",
+      "status": "ok",
+      "elapsed_seconds": 0.1365
+    },
+    {
+      "seq": 22,
+      "kind": "research_section_prefetch",
+      "role": "researcher",
+      "at": 1794616341.942592
+    },
+    {
+      "seq": 23,
+      "kind": "tool_start",
+      "role": "researcher",
+      "at": 1794616341.9514256,
+      "service": "edgar",
+      "tool": "get_section"
+    },
+    {
+      "seq": 24,
+      "kind": "tool_end",
+      "role": "researcher",
+      "at": 1794616341.9944642,
+      "service": "edgar",
+      "tool": "get_section",
+      "status": "ok",
+      "elapsed_seconds": 0.043
+    },
+    {
+      "seq": 25,
+      "kind": "research_section_prefetch",
+      "role": "researcher",
+      "at": 1794616342.0071952
+    },
+    {
+      "seq": 26,
+      "kind": "llm_start",
+      "role": "researcher",
+      "at": 1794616342.0218687,
+      "reserved_tokens": 27444
+    },
+    {
+      "seq": 27,
+      "kind": "tool_end",
+      "role": "researcher",
+      "at": 1794616342.03162,
+      "service": "edgar",
+      "tool": "get_section",
+      "status": "ok",
+      "elapsed_seconds": 0.1215
+    },
+    {
+      "seq": 28,
+      "kind": "research_section_prefetch",
+      "role": "researcher",
+      "at": 1794616342.0549698
+    },
+    {
+      "seq": 29,
+      "kind": "llm_start",
+      "role": "researcher",
+      "at": 1794616342.076408,
+      "reserved_tokens": 28404
+    },
+    {
+      "seq": 30,
+      "kind": "llm_end",
+      "role": "researcher",
+      "at": 1794616343.9105434,
+      "total_tokens": 5699,
+      "elapsed_seconds": 1.8338,
+      "reported_cost_usd": "0.0023156"
+    },
+    {
+      "seq": 31,
+      "kind": "tool_start",
+      "role": "researcher",
+      "at": 1794616343.9766684,
+      "service": "edgar",
+      "tool": "get_section"
+    },
+    {
+      "seq": 32,
+      "kind": "tool_end",
+      "role": "researcher",
+      "at": 1794616344.0657146,
+      "service": "edgar",
+      "tool": "get_section",
+      "status": "ok",
+      "elapsed_seconds": 0.0891
+    },
+    {
+      "seq": 33,
+      "kind": "llm_start",
+      "role": "researcher",
+      "at": 1794616344.145804,
+      "reserved_tokens": 31548
+    },
+    {
+      "seq": 34,
+      "kind": "llm_end",
+      "role": "researcher",
+      "at": 1794616347.7807112,
+      "total_tokens": 6248,
+      "elapsed_seconds": 5.7585,
+      "reported_cost_usd": "0.0033176"
+    },
+    {
+      "seq": 35,
+      "kind": "llm_end",
+      "role": "researcher",
+      "at": 1794616350.3599622,
+      "total_tokens": 7484,
+      "elapsed_seconds": 6.2144,
+      "reported_cost_usd": "0.0038348"
+    },
+    {
+      "seq": 36,
+      "kind": "replan",
+      "role": "supervisor",
+      "at": 1794616350.4005463
+    },
+    {
+      "seq": 37,
+      "kind": "llm_start",
+      "role": "supervisor",
+      "at": 1794616350.4495673,
+      "reserved_tokens": 14333
+    },
+    {
+      "seq": 38,
+      "kind": "llm_end",
+      "role": "supervisor",
+      "at": 1794616354.7513666,
+      "total_tokens": 3222,
+      "elapsed_seconds": 4.304,
+      "reported_cost_usd": "0.0017892"
+    },
+    {
+      "seq": 39,
+      "kind": "agent_correction",
+      "role": "supervisor",
+      "at": 1794616354.7686868
+    },
+    {
+      "seq": 40,
+      "kind": "llm_start",
+      "role": "supervisor",
+      "at": 1794616354.7806878,
+      "reserved_tokens": 15077
+    },
+    {
+      "seq": 41,
+      "kind": "llm_end",
+      "role": "supervisor",
+      "at": 1794616358.492026,
+      "total_tokens": 3390,
+      "elapsed_seconds": 3.7116,
+      "reported_cost_usd": "0.0018972"
+    },
+    {
+      "seq": 42,
+      "kind": "agent_correction",
+      "role": "supervisor",
+      "at": 1794616358.5099518
+    },
+    {
+      "seq": 43,
+      "kind": "llm_start",
+      "role": "supervisor",
+      "at": 1794616358.522776,
+      "reserved_tokens": 15822
+    },
+    {
+      "seq": 44,
+      "kind": "llm_end",
+      "role": "supervisor",
+      "at": 1794616361.8000069,
+      "total_tokens": 3478,
+      "elapsed_seconds": 3.277,
+      "reported_cost_usd": "0.0018784"
+    },
+    {
+      "seq": 45,
+      "kind": "plan_created",
+      "role": "supervisor",
+      "at": 1794616361.8357003
+    },
+    {
+      "seq": 46,
+      "kind": "llm_start",
+      "role": "researcher",
+      "at": 1794616371.9543927,
+      "reserved_tokens": 27381
+    },
+    {
+      "seq": 47,
+      "kind": "llm_start",
+      "role": "researcher",
+      "at": 1794616371.9979727,
+      "reserved_tokens": 28031
+    },
+    {
+      "seq": 48,
+      "kind": "llm_end",
+      "role": "researcher",
+      "at": 1794616377.1168928,
+      "total_tokens": 6178,
+      "elapsed_seconds": 5.1622,
+      "reported_cost_usd": "0.0020356"
+    },
+    {
+      "seq": 49,
+      "kind": "llm_end",
+      "role": "researcher",
+      "at": 1794616377.6554756,
+      "total_tokens": 6474,
+      "elapsed_seconds": 5.6575,
+      "reported_cost_usd": "0.0034368"
+    },
+    {
+      "seq": 50,
+      "kind": "llm_start",
+      "role": "quant",
+      "at": 1794616377.7197485,
+      "reserved_tokens": 7427
+    },
+    {
+      "seq": 51,
+      "kind": "llm_end",
+      "role": "quant",
+      "at": 1794616379.0808218,
+      "total_tokens": 647,
+      "elapsed_seconds": 1.3611,
+      "reported_cost_usd": "0.0002792"
+    },
+    {
+      "seq": 52,
+      "kind": "tool_start",
+      "role": "quant",
+      "at": 1794616379.1103868,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 53,
+      "kind": "tool_end",
+      "role": "quant",
+      "at": 1794616379.1948578,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0845
+    },
+    {
+      "seq": 54,
+      "kind": "tool_start",
+      "role": "quant",
+      "at": 1794616379.207542,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 55,
+      "kind": "tool_end",
+      "role": "quant",
+      "at": 1794616379.2759197,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.068
+    },
+    {
+      "seq": 56,
+      "kind": "tool_start",
+      "role": "quant",
+      "at": 1794616379.2881095,
+      "service": "sandbox",
+      "tool": "execute_python"
+    },
+    {
+      "seq": 57,
+      "kind": "tool_end",
+      "role": "quant",
+      "at": 1794616379.8176987,
+      "service": "sandbox",
+      "tool": "execute_python",
+      "status": "ok",
+      "elapsed_seconds": 0.5296
+    },
+    {
+      "seq": 58,
+      "kind": "tool_start",
+      "role": "quant",
+      "at": 1794616379.8353496,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 59,
+      "kind": "tool_end",
+      "role": "quant",
+      "at": 1794616379.8965962,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0611
+    },
+    {
+      "seq": 60,
+      "kind": "tool_start",
+      "role": "quant",
+      "at": 1794616379.9135964,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 61,
+      "kind": "tool_end",
+      "role": "quant",
+      "at": 1794616379.9813094,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0677
+    },
+    {
+      "seq": 62,
+      "kind": "tool_start",
+      "role": "quant",
+      "at": 1794616379.9944925,
+      "service": "sandbox",
+      "tool": "execute_python"
+    },
+    {
+      "seq": 63,
+      "kind": "tool_end",
+      "role": "quant",
+      "at": 1794616380.5717845,
+      "service": "sandbox",
+      "tool": "execute_python",
+      "status": "ok",
+      "elapsed_seconds": 0.5772
+    },
+    {
+      "seq": 64,
+      "kind": "tool_start",
+      "role": "quant",
+      "at": 1794616380.5917282,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 65,
+      "kind": "tool_end",
+      "role": "quant",
+      "at": 1794616380.676981,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0854
+    },
+    {
+      "seq": 66,
+      "kind": "tool_start",
+      "role": "quant",
+      "at": 1794616380.687782,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 67,
+      "kind": "tool_end",
+      "role": "quant",
+      "at": 1794616380.7441683,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0563
+    },
+    {
+      "seq": 68,
+      "kind": "tool_start",
+      "role": "quant",
+      "at": 1794616380.7554224,
+      "service": "sandbox",
+      "tool": "execute_python"
+    },
+    {
+      "seq": 69,
+      "kind": "tool_end",
+      "role": "quant",
+      "at": 1794616381.4743438,
+      "service": "sandbox",
+      "tool": "execute_python",
+      "status": "ok",
+      "elapsed_seconds": 0.7189
+    },
+    {
+      "seq": 70,
+      "kind": "tool_start",
+      "role": "quant",
+      "at": 1794616381.4880104,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 71,
+      "kind": "tool_end",
+      "role": "quant",
+      "at": 1794616381.5467646,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0588
+    },
+    {
+      "seq": 72,
+      "kind": "tool_start",
+      "role": "quant",
+      "at": 1794616381.5585938,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 73,
+      "kind": "tool_end",
+      "role": "quant",
+      "at": 1794616381.6308124,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0723
+    },
+    {
+      "seq": 74,
+      "kind": "tool_start",
+      "role": "quant",
+      "at": 1794616381.653874,
+      "service": "sandbox",
+      "tool": "execute_python"
+    },
+    {
+      "seq": 75,
+      "kind": "tool_end",
+      "role": "quant",
+      "at": 1794616382.1952522,
+      "service": "sandbox",
+      "tool": "execute_python",
+      "status": "ok",
+      "elapsed_seconds": 0.5415
+    },
+    {
+      "seq": 76,
+      "kind": "llm_start",
+      "role": "quant",
+      "at": 1794616382.2087393,
+      "reserved_tokens": 9300
+    },
+    {
+      "seq": 77,
+      "kind": "llm_end",
+      "role": "quant",
+      "at": 1794616386.8845246,
+      "total_tokens": 1810,
+      "elapsed_seconds": 4.6784,
+      "reported_cost_usd": "0.001108"
+    },
+    {
+      "seq": 78,
+      "kind": "llm_start",
+      "role": "risk_diff",
+      "at": 1794616386.9411085,
+      "reserved_tokens": 21849
+    },
+    {
+      "seq": 79,
+      "kind": "llm_end",
+      "role": "risk_diff",
+      "at": 1794616391.1940866,
+      "total_tokens": 5367,
+      "elapsed_seconds": 4.2533,
+      "reported_cost_usd": "0.0028284"
+    },
+    {
+      "seq": 80,
+      "kind": "llm_start",
+      "role": "writer",
+      "at": 1794616391.2240562,
+      "reserved_tokens": 21663
+    },
+    {
+      "seq": 81,
+      "kind": "llm_end",
+      "role": "writer",
+      "at": 1794616395.8030887,
+      "total_tokens": 4725,
+      "elapsed_seconds": 4.579,
+      "reported_cost_usd": "0.0024984"
+    },
+    {
+      "seq": 82,
+      "kind": "deterministic_financial_narrative",
+      "role": "writer",
+      "at": 1794616395.8543448
+    },
+    {
+      "seq": 83,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794616395.9044693,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 84,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794616396.0074599,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.103
+    },
+    {
+      "seq": 85,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794616396.031737,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 86,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794616396.1389575,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.1073
+    },
+    {
+      "seq": 87,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794616396.1517916,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 88,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794616396.2100852,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0582
+    },
+    {
+      "seq": 89,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794616396.218364,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 90,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794616396.2920585,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0736
+    },
+    {
+      "seq": 91,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794616396.3038957,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 92,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794616396.361889,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0579
+    },
+    {
+      "seq": 93,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794616396.3707118,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 94,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794616396.4279313,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0572
+    },
+    {
+      "seq": 95,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794616396.4390461,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 96,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794616396.5009348,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0621
+    },
+    {
+      "seq": 97,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794616396.5104384,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 98,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794616396.5684748,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.058
+    },
+    {
+      "seq": 99,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794616396.5804935,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 100,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794616396.6224985,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.042
+    },
+    {
+      "seq": 101,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794616396.6320045,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 102,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794616396.6609108,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0289
+    },
+    {
+      "seq": 103,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794616396.668413,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 104,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794616396.700591,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0322
+    },
+    {
+      "seq": 105,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794616396.7096155,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 106,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794616396.740565,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0308
+    },
+    {
+      "seq": 107,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794616396.7485518,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 108,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794616396.7780645,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0295
+    },
+    {
+      "seq": 109,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794616396.7869973,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 110,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794616396.8172133,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0302
+    },
+    {
+      "seq": 111,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794616396.8243852,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 112,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794616396.853243,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0288
+    },
+    {
+      "seq": 113,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794616396.8625445,
+      "reserved_tokens": 24486
+    },
+    {
+      "seq": 114,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794616400.821649,
+      "total_tokens": 5379,
+      "elapsed_seconds": 3.959,
+      "reported_cost_usd": "0.0026136"
+    },
+    {
+      "seq": 115,
+      "kind": "agent_correction",
+      "role": "critic",
+      "at": 1794616400.8820028
+    },
+    {
+      "seq": 116,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794616401.0502844,
+      "reserved_tokens": 25036
+    },
+    {
+      "seq": 117,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794616404.613454,
+      "total_tokens": 5491,
+      "elapsed_seconds": 3.5634,
+      "reported_cost_usd": "0.0026632"
+    },
+    {
+      "seq": 118,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794616404.6651485,
+      "reserved_tokens": 31128
+    },
+    {
+      "seq": 119,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794616407.578152,
+      "total_tokens": 7172,
+      "elapsed_seconds": 2.9133,
+      "reported_cost_usd": "0.0032024"
+    },
+    {
+      "seq": 120,
+      "kind": "agent_correction",
+      "role": "critic",
+      "at": 1794616407.5925007
+    },
+    {
+      "seq": 121,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794616407.605715,
+      "reserved_tokens": 31663
+    },
+    {
+      "seq": 122,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794616410.1044028,
+      "total_tokens": 7232,
+      "elapsed_seconds": 2.4987,
+      "reported_cost_usd": "0.0031796"
+    },
+    {
+      "seq": 123,
+      "kind": "agent_correction",
+      "role": "critic",
+      "at": 1794616410.1391463
+    },
+    {
+      "seq": 124,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794616410.1669018,
+      "reserved_tokens": 32214
+    },
+    {
+      "seq": 125,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794616412.8083146,
+      "total_tokens": 7334,
+      "elapsed_seconds": 2.6442,
+      "reported_cost_usd": "0.0032144"
+    },
+    {
+      "seq": 126,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794616412.870076,
+      "reserved_tokens": 11333
+    },
+    {
+      "seq": 127,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794616415.4612298,
+      "total_tokens": 1700,
+      "elapsed_seconds": 2.5913,
+      "reported_cost_usd": "0.0009356"
+    },
+    {
+      "seq": 128,
+      "kind": "agent_correction",
+      "role": "critic",
+      "at": 1794616415.4748733
+    },
+    {
+      "seq": 129,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794616415.4852438,
+      "reserved_tokens": 11868
+    },
+    {
+      "seq": 130,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794616417.1010022,
+      "total_tokens": 1685,
+      "elapsed_seconds": 1.6155,
+      "reported_cost_usd": "0.0007928"
+    },
+    {
+      "seq": 131,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794616417.1250396,
+      "reserved_tokens": 13193
+    },
+    {
+      "seq": 132,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794616420.1390557,
+      "total_tokens": 2243,
+      "elapsed_seconds": 3.0135,
+      "reported_cost_usd": "0.0012428"
+    },
+    {
+      "seq": 133,
+      "kind": "agent_correction",
+      "role": "critic",
+      "at": 1794616420.1793566
+    },
+    {
+      "seq": 134,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794616420.2164378,
+      "reserved_tokens": 14064
+    },
+    {
+      "seq": 135,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794616423.506818,
+      "total_tokens": 2393,
+      "elapsed_seconds": 3.2906,
+      "reported_cost_usd": "0.001292"
+    },
+    {
+      "seq": 136,
+      "kind": "agent_correction",
+      "role": "critic",
+      "at": 1794616423.5223927
+    },
+    {
+      "seq": 137,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794616423.536883,
+      "reserved_tokens": 14936
+    },
+    {
+      "seq": 138,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794616426.7259326,
+      "total_tokens": 2560,
+      "elapsed_seconds": 3.1884,
+      "reported_cost_usd": "0.0013696"
+    },
+    {
+      "seq": 139,
+      "kind": "agent_correction",
+      "role": "critic",
+      "at": 1794616426.7562068
+    },
+    {
+      "seq": 140,
+      "kind": "agent_response_limit",
+      "role": "critic",
+      "at": 1794616426.768884
+    },
+    {
+      "seq": 141,
+      "kind": "diagnostic_continuation_fork",
+      "role": "operator",
+      "at": 1794619378.1604705
+    },
+    {
+      "seq": 142,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794619378.209109,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 143,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794619378.5516043,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.3426
+    },
+    {
+      "seq": 144,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794619378.5631013,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 145,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794619378.6688526,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.1057
+    },
+    {
+      "seq": 146,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794619378.6765344,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 147,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794619378.736733,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0602
+    },
+    {
+      "seq": 148,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794619378.74327,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 149,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794619378.8036664,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0604
+    },
+    {
+      "seq": 150,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794619378.813967,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 151,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794619378.8762186,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0623
+    },
+    {
+      "seq": 152,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794619378.8849452,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 153,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794619378.9464343,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0615
+    },
+    {
+      "seq": 154,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794619378.955511,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 155,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794619379.0159187,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0604
+    },
+    {
+      "seq": 156,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794619379.029388,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 157,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794619379.096563,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0672
+    },
+    {
+      "seq": 158,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794619379.1048338,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 159,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794619379.184622,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0798
+    },
+    {
+      "seq": 160,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794619379.1939554,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 161,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794619379.2254245,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0315
+    },
+    {
+      "seq": 162,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794619379.2353866,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 163,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794619379.2658844,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0305
+    },
+    {
+      "seq": 164,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794619379.2747366,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 165,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794619379.3045304,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0298
+    },
+    {
+      "seq": 166,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794619379.311566,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 167,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794619379.3433177,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0318
+    },
+    {
+      "seq": 168,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794619379.3518033,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 169,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794619379.3825123,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0307
+    },
+    {
+      "seq": 170,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794619379.3912518,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 171,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794619379.4225245,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0313
+    },
+    {
+      "seq": 172,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794619379.4353907,
+      "reserved_tokens": 26644
+    },
+    {
+      "seq": 173,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794619382.5253074,
+      "total_tokens": 5789,
+      "elapsed_seconds": 3.0898,
+      "reported_cost_usd": "0.0026264"
+    },
+    {
+      "seq": 174,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794619382.5829816,
+      "reserved_tokens": 33425
+    },
+    {
+      "seq": 175,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794619385.0774443,
+      "total_tokens": 7715,
+      "elapsed_seconds": 2.4972,
+      "reported_cost_usd": "0.0033404"
+    },
+    {
+      "seq": 176,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794619385.1184862,
+      "reserved_tokens": 13033
+    },
+    {
+      "seq": 177,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794619386.6508327,
+      "total_tokens": 1915,
+      "elapsed_seconds": 1.5323,
+      "reported_cost_usd": "0.0009004"
+    },
+    {
+      "seq": 178,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794619386.708245,
+      "reserved_tokens": 14897
+    },
+    {
+      "seq": 179,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794619389.0751207,
+      "total_tokens": 2499,
+      "elapsed_seconds": 2.3668,
+      "reported_cost_usd": "0.0012624"
+    },
+    {
+      "seq": 180,
+      "kind": "tool_start",
+      "role": "publisher",
+      "at": 1794619389.1340709,
+      "service": "portal",
+      "tool": "prepare_note"
+    },
+    {
+      "seq": 181,
+      "kind": "tool_end",
+      "role": "publisher",
+      "at": 1794619389.3832512,
+      "service": "portal",
+      "tool": "prepare_note",
+      "status": "ok",
+      "elapsed_seconds": 0.2493
+    },
+    {
+      "seq": 182,
+      "kind": "diagnostic_note_edit",
+      "role": "operator",
+      "at": 1794620862.3701015
+    },
+    {
+      "seq": 183,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794620862.422193,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 184,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794620862.5763412,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.1544
+    },
+    {
+      "seq": 185,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794620862.5885959,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 186,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794620862.6613474,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0727
+    },
+    {
+      "seq": 187,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794620862.6706662,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 188,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794620862.7309566,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0603
+    },
+    {
+      "seq": 189,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794620862.7395144,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 190,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794620862.8093586,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0698
+    },
+    {
+      "seq": 191,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794620862.830888,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 192,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794620862.8907082,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0598
+    },
+    {
+      "seq": 193,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794620862.9012983,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 194,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794620862.9603336,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0589
+    },
+    {
+      "seq": 195,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794620862.9709024,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 196,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794620863.0310388,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0601
+    },
+    {
+      "seq": 197,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794620863.0411835,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 198,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794620863.1324866,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0913
+    },
+    {
+      "seq": 199,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794620863.1459155,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 200,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794620863.1869137,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0411
+    },
+    {
+      "seq": 201,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794620863.1971982,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 202,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794620863.2296858,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0325
+    },
+    {
+      "seq": 203,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794620863.2382605,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 204,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794620863.2693105,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.031
+    },
+    {
+      "seq": 205,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794620863.278077,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 206,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794620863.3085694,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0305
+    },
+    {
+      "seq": 207,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794620863.3177524,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 208,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794620863.3492477,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0315
+    },
+    {
+      "seq": 209,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794620863.3620396,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 210,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794620863.3954391,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0336
+    },
+    {
+      "seq": 211,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794620863.4110055,
+      "reserved_tokens": 20681
+    },
+    {
+      "seq": 212,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794620866.4048629,
+      "total_tokens": 4091,
+      "elapsed_seconds": 2.9939,
+      "reported_cost_usd": "0.001886"
+    },
+    {
+      "seq": 213,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794620866.4584424,
+      "reserved_tokens": 33537
+    },
+    {
+      "seq": 214,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794620869.6823924,
+      "total_tokens": 7838,
+      "elapsed_seconds": 3.2242,
+      "reported_cost_usd": "0.0035084"
+    },
+    {
+      "seq": 215,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794620869.7350893,
+      "reserved_tokens": 13033
+    },
+    {
+      "seq": 216,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794620871.1753755,
+      "total_tokens": 1899,
+      "elapsed_seconds": 1.4404,
+      "reported_cost_usd": "0.0003756"
+    },
+    {
+      "seq": 217,
+      "kind": "llm_start",
+      "role": "critic",
+      "at": 1794620871.1944087,
+      "reserved_tokens": 14897
+    },
+    {
+      "seq": 218,
+      "kind": "llm_end",
+      "role": "critic",
+      "at": 1794620874.5537214,
+      "total_tokens": 2512,
+      "elapsed_seconds": 3.3592,
+      "reported_cost_usd": "0.0006688"
+    },
+    {
+      "seq": 219,
+      "kind": "tool_start",
+      "role": "publisher",
+      "at": 1794620874.5743616,
+      "service": "portal",
+      "tool": "prepare_note"
+    },
+    {
+      "seq": 220,
+      "kind": "tool_end",
+      "role": "publisher",
+      "at": 1794620874.615852,
+      "service": "portal",
+      "tool": "prepare_note",
+      "status": "ok",
+      "elapsed_seconds": 0.0415
+    },
+    {
+      "seq": 221,
+      "kind": "tool_start",
+      "role": "publisher",
+      "at": 1794625606.049396,
+      "service": "portal",
+      "tool": "get_proposal"
+    },
+    {
+      "seq": 222,
+      "kind": "tool_end",
+      "role": "publisher",
+      "at": 1794625606.0965202,
+      "service": "portal",
+      "tool": "get_proposal",
+      "status": "ok",
+      "elapsed_seconds": 0.0471
+    },
+    {
+      "seq": 223,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794625606.1096883,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 224,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794625606.1695938,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0599
+    },
+    {
+      "seq": 225,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794625606.1788962,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 226,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794625606.244379,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0655
+    },
+    {
+      "seq": 227,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794625606.2532167,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 228,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794625606.3154166,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0622
+    },
+    {
+      "seq": 229,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794625606.323296,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 230,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794625606.3993118,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.076
+    },
+    {
+      "seq": 231,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794625606.408484,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 232,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794625606.470404,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0619
+    },
+    {
+      "seq": 233,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794625606.4814007,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 234,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794625606.5410125,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0594
+    },
+    {
+      "seq": 235,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794625606.5521097,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 236,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794625606.6197581,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0677
+    },
+    {
+      "seq": 237,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794625606.6320388,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact"
+    },
+    {
+      "seq": 238,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794625606.6936638,
+      "service": "edgar",
+      "tool": "get_annual_financial_fact",
+      "status": "ok",
+      "elapsed_seconds": 0.0616
+    },
+    {
+      "seq": 239,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794625606.7034545,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 240,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794625606.7440631,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0406
+    },
+    {
+      "seq": 241,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794625606.7558098,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 242,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794625606.794783,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.039
+    },
+    {
+      "seq": 243,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794625606.8057086,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 244,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794625606.8431582,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0376
+    },
+    {
+      "seq": 245,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794625606.852442,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 246,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794625606.8881133,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0357
+    },
+    {
+      "seq": 247,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794625606.8970103,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 248,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794625606.9329343,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.0359
+    },
+    {
+      "seq": 249,
+      "kind": "tool_start",
+      "role": "critic",
+      "at": 1794625606.9408174,
+      "service": "kb",
+      "tool": "get_passage"
+    },
+    {
+      "seq": 250,
+      "kind": "tool_end",
+      "role": "critic",
+      "at": 1794625606.9761393,
+      "service": "kb",
+      "tool": "get_passage",
+      "status": "ok",
+      "elapsed_seconds": 0.035
+    },
+    {
+      "seq": 251,
+      "kind": "tool_start",
+      "role": "publisher",
+      "at": 1794625606.9869418,
+      "service": "portal",
+      "tool": "publish_note"
+    },
+    {
+      "seq": 252,
+      "kind": "tool_end",
+      "role": "publisher",
+      "at": 1794625607.071088,
+      "service": "portal",
+      "tool": "publish_note",
+      "status": "ok",
+      "elapsed_seconds": 0.0842
+    }
+  ],
+  "limitations": [
+    "Saved-run evidence, not live agent telemetry. Snapshot age is shown explicitly.",
+    "Real-data, AI-assisted development note with recorded human approval; not held-out or autonomous quality evidence.",
+    "Verified-number share covers code-rendered financial table values only; qualitative correctness and numbers in prose are not measured by this metric.",
+    "Some critic sentence receipts remain incomplete. Zero critic rejections does not establish semantic accuracy.",
+    "Tool latency covers successful broker-observed calls only. Failed-call latency and direct operator reads are not fully instrumented.",
+    "EDGAR cache-hit telemetry is unavailable. Model-response cache hits are a separate measure.",
+    "Events are an ordered allowlisted timeline. Tool spans are not reconstructed where the source lacks unique operation IDs.",
+    "Cumulative S22–S25 history is counted once. Predecessor archive totals are not added together.",
+    "Publication and source checks are validated from the uploaded records; this importer does not independently query the live portal or re-read SEC files."
+  ],
+  "lineage": {
+    "prior_events": 220,
+    "total_events": 252,
+    "new_native_tools": 16,
+    "new_llm_requests": 0,
+    "preserved_prior_records": 60
+  },
+  "integrity_sha256": "84a75521bb58628eefa69063cd80a00a132e05231db3c93636b172e88980f159"
+}

@@ -1,0 +1,75 @@
+{
+  "source_zip_sha256": "6ffd695f6ea2a0a8e4296f07d71da0b307fbadf567e30df65250910585ad2871",
+  "traces": [
+    {
+      "execution_id": "PILOT_C2_F002_r1",
+      "source_member": "Operator/pilot/executions/PILOT_C2_F002_r1/Journal_Report.json",
+      "events": [
+        {
+          "seq": 3,
+          "kind": "plan_created",
+          "role": "supervisor",
+          "details": {
+            "plan_sha256": "ddfd16bde15718b70f9338e4ade5df6962ec8dce2f4c9f8438f9f988df2f0a7c",
+            "replans": 0
+          },
+          "at": 1794663661.0718958
+        },
+        {
+          "seq": 21,
+          "kind": "replan",
+          "role": "supervisor",
+          "details": {
+            "reason": "company_evidence_limit_or_contradiction"
+          },
+          "at": 1794663665.1456478
+        },
+        {
+          "seq": 24,
+          "kind": "plan_created",
+          "role": "supervisor",
+          "details": {
+            "plan_sha256": "17d827d7803cc50d38559e1eca5e2450d06fb2dad04b7ea42384fec0623a3d71",
+            "replans": 1
+          },
+          "at": 1794663668.873021
+        }
+      ]
+    },
+    {
+      "execution_id": "PILOT_C2_F003_r1",
+      "source_member": "Operator/pilot/executions/PILOT_C2_F003_r1/Journal_Report.json",
+      "events": [
+        {
+          "seq": 3,
+          "kind": "plan_created",
+          "role": "supervisor",
+          "details": {
+            "plan_sha256": "982e71052016bab6401d2818f9db49e74e02c230d5496f7878366f6b6f2f4091",
+            "replans": 0
+          },
+          "at": 1794663689.8576868
+        },
+        {
+          "seq": 19,
+          "kind": "replan",
+          "role": "supervisor",
+          "details": {
+            "reason": "company_evidence_limit_or_contradiction"
+          },
+          "at": 1794663694.8270147
+        },
+        {
+          "seq": 22,
+          "kind": "plan_created",
+          "role": "supervisor",
+          "details": {
+            "plan_sha256": "519851f252a8d39fc8a0c1d5d576797095452e467f6eab7ea97943ffd7e34fd5",
+            "replans": 1
+          },
+          "at": 1794663699.2444353
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "audit": "Sequence43 scheduling and unapproved-preview handoff",
+  "generated_utc": "2026-11-14T16:42:45.848890+00:00",
+  "source_changes": [
+    "evaluation/final/completion_operator.py",
+    "evaluation/final/completion_runner.py",
+    "evaluation/final/configs/completion_matrix.json",
+    "evaluation/final/test_completion_operator.py"
+  ],
+  "source_hashes": {
+    "evaluation/final/completion_operator.py": "6039599203892502d920efbed75bd8137da21e4566c8996b7cbb5e1be457578d",
+    "evaluation/final/completion_runner.py": "cbad0cb28f2a11ef6cfa68073f3dc9d898ee115e3f61b8630d66c91686de1ddd",
+    "evaluation/final/configs/completion_matrix.json": "cd4da7ebc8ce02ed4d9a472925be67523a451eebfc1ab29d2240363785f27133",
+    "evaluation/final/test_completion_operator.py": "3bfb97171b53237158600e933174bb73fb1ee07169d73e17f415864e325167ad"
+  },
+  "real_frozen_case_count": 40,
+  "same840execution_records_as_S42": true,
+  "same_model_budget_cases_variants_repeats": true,
+  "contiguous_case_blocks": 40,
+  "jobs_per_case_block": 21,
+  "numeric_risk_alternation": [
+    false,
+    true
+  ],
+  "input_order_and_irrelevant_outcome_invariance": true,
+  "historical_memory_schedule_preserved": true,
+  "tested_preview_handoff_cases": 6,
+  "preview_tests_passed": true,
+  "phase_order": "DEV6+18 -> calibration -> matrix -> memory -> isolated serial security -> semantics",
+  "scope_handoff": "Only unapproved preview; checked original budget state; approved or attempted scopes rejected; old bytes archived, no new allowance or start reset",
+  "limitations": [
+    "Six workers may overlap the tail of one case with the beginning of the next; queue grouping is not a completion barrier.",
+    "Partial execution is not evidence of40fullyrepeatedheldoutcases.",
+    "Semanticgold/calibration/E2scope limitations remain unchanged."
+  ],
+  "new_model_calls": 0,
+  "production_files_modified_by_auditor": false,
+  "actual_S42_preview_handoff": {
+    "zip": "42_Analyst_Desk_All_Company_Source_Compatibility_Results_20261114T163708Z_0e9c95df.zip",
+    "zip_sha256": "23b69f468e9be41c03642b83edde4d999b960084b691ca9ad63bb4b62ca3878e",
+    "input_report_sha256": {
+      "Completion_Scope.json": "07329feaaf2c83ba1a4c64008a536a7d44e4d5ee41a87d39903541103c98709b",
+      "Completion_Plan.json": "b88c64d8a1731fd5c3493f0d7b7db70c065c661a9367869b614b9f546e2150f5",
+      "Completion_Budget_Report.json": "e96bd3a300636dfcb083013835260f98c0991d32042eea53474dfedf3c633b63"
+    },
+    "prior_scope_sha256": "14b1ae7838b607d2d702c826c6fcaff675c9041d3657d9be2c7b3b96eacefccd",
+    "new_scope_sha256": "49267c92182e0a88aa92523297c7acc4b16fd565e35f9e05a5eca174b8923c8a",
+    "passed": true,
+    "actual_pilot_files_validate_against_S43_review": true,
+    "actual30_original_case_ids_only": true,
+    "reserved_requests_unchanged": 83,
+    "reported_actual_usd_unchanged": 0.09438074,
+    "reserved_usd_unchanged": 0.69963306,
+    "original_started_at_unchanged": "1794663648.8437135",
+    "new_deadline_utc_unchanged": "2026-11-14T18:10:48.843714+00:00",
+    "old_scope_and_plan_archived_byte_exact": true,
+    "old_budget_report_unchanged": true,
+    "cases_counts_limits_preserved": true,
+    "negative_checks": [
+      "approved_scope_rejected",
+      "completion_attempt_rejected",
+      "unsettled_rejected"
+    ],
+    "scope_reconstruction_note": "Productionprepare_scope usesexactuploadedidentities andnewreviewpins; lessonmembershipcountcomesfromactual3approvalreceipt andexactrecordedfrozenhash. No liveplaybook recreated or modified."
+  }
+}

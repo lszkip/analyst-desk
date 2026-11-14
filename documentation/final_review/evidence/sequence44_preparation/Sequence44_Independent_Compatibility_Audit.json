@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "paid_calls": 0,
+  "source_result_archive_sha256": "0bb92afee402ee19bad8c769f9a97f87e7183cad73b2bf28636dc0e31e0a0b36",
+  "software_review_sha256": "9e33a0373e7d8252fb8fc648a93c45ca5811004a5d9dabd3343582dd775110bf",
+  "scope_sha256": "49267c92182e0a88aa92523297c7acc4b16fd565e35f9e05a5eca174b8923c8a",
+  "checks": [
+    "all29actualuploadedrecordhashesmatch",
+    "original43reviewbytespreserved",
+    "originalderivedreviewpreserved",
+    "exactfourreviewedsourcechanges",
+    "alloriginalrecordsscopeapprovalamendmentandbudgetbytesunchanged",
+    "byteexactarchived_Development_Readiness.json",
+    "byteexactarchived_Development_Coverage_Readiness.json",
+    "allfrozenrequestsarealreadynormalized",
+    "fullreconstructedscopematchesoriginal49267c",
+    "aiassistanceidentifiedandnohumanapprovalclaim",
+    "idempotentresumeafternewreadinessandlaterphase",
+    "changedfailedresultrejected",
+    "changedapprovalscoperejected",
+    "firsttransitionafterlaterphaseattemptrejected",
+    "settledactualledgeracceptable",
+    "otheractiveworkerreservationallowed",
+    "orphanedreservationrejected",
+    "unknownsettlementrejected"
+  ],
+  "original_records_verified": 29,
+  "changed_source_sha256": {
+    "evaluation/final/completion_operator.py": "b6437cbe25876017f28324f45ab4ebc31230a1474a11e07d5c442daa59bd5fbf",
+    "evaluation/final/completion_runner.py": "7fc925e3de7ef0fa5f63cc07b2334ffdaf59405b04b5fd6808430d16d08cc1e8",
+    "evaluation/final/test_completion_operator.py": "56c437814964b1ca27f6a4647c62c50deeb99f5cee7d85da02b58ac5af83ed1f",
+    "evaluation/final/test_experiment_runner.py": "be1c5fec9f8f4e313d34b7faaf39f377a8cd30b31f5885e77e5dc7f752de82e7"
+  },
+  "original_actual_usd": 0.60079594,
+  "original_reserved_usd": 3.63497986,
+  "original_requests": 368,
+  "original_started_at": "1794663648.8437135",
+  "limitations": [
+    "Actual exported files and scope used. Private approval was reconstructed only in disposable fixture from the public budget amendment, not represented as a separately recovered actual approval file.",
+    "Full _operate path and real private SQLite not executed; source inspection confirms original ledger is reopened and immutable runtime pins guard each paid call."
+  ]
+}

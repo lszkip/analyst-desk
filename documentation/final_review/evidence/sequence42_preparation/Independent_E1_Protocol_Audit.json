@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "review_kind": "independent_ai_software_review",
+  "human_review": false,
+  "paid_calls": 0,
+  "overall_passed": true,
+  "package_sha256": "ddb51ee4cbc19a60296c896ca31832e024f5305c52b53bf38c6f165f48e3aa10",
+  "source_sha256": {
+    "evaluation/final/adapters.py": "357206ce4f5261b5c6883497d3e398c228a8446e7922a5bda509672583f8c697",
+    "evaluation/final/configs/completion_matrix.json": "e0c78fe3d87ab7e2dd2d8ae4d748333ebcbf66f4351f551e6e97e7652f281baf",
+    "evaluation/final/completion_operator.py": "d8ee93b2427bd7cd03e7bd768c9212c5275ca04b7451a41ad716493d8adb4750",
+    "evaluation/final/test_experiment_runner.py": "81ccf8e4308f506a1b8df9fa5a97dd2733cd2be01d8830bf8a320264f9457d78",
+    "evaluation/final/test_completion_operator.py": "6cc7e8bebe58f5bb682722728f06d2fe0b9c3c48004659e8dd8aabac0d510bf7",
+    "evaluation/final/run_offline_checks.py": "ce73b0e43a69cc277cc86deb1eb17c2cb83798937f5e442bf4e7bc64401ebc3f"
+  },
+  "focused_tests": {
+    "executed": 34,
+    "passed": 34
+  },
+  "guarded_suite": {
+    "executed": 304,
+    "passed": 304,
+    "source_unchanged": true
+  },
+  "independent_synthetic_executions": [
+    {
+      "arm": "C0",
+      "risk_requested": false,
+      "model_roles": [],
+      "completed": true,
+      "publication_calls": 0,
+      "config_unchanged": true
+    },
+    {
+      "arm": "C0",
+      "risk_requested": true,
+      "model_roles": [
+        "writer"
+      ],
+      "completed": true,
+      "publication_calls": 0,
+      "config_unchanged": true
+    },
+    {
+      "arm": "C1",
+      "risk_requested": false,
+      "model_roles": [
+        "researcher",
+        "researcher",
+        "researcher"
+      ],
+      "completed": true,
+      "publication_calls": 0,
+      "config_unchanged": true
+    },
+    {
+      "arm": "C1",
+      "risk_requested": true,
+      "model_roles": [
+        "researcher",
+        "researcher",
+        "researcher"
+      ],
+      "completed": true,
+      "publication_calls": 0,
+      "config_unchanged": true
+    }
+  ],
+  "direct_writer_dispatch_rejected": true,
+  "limitations": [
+    "Synthetic software checks are not task-quality or paid-model results.",
+    "C0 numeric-only generation uses no model; risk generation uses at most one tool-free response.",
+    "C1 is one model-worker conversation; deterministic tool adapters and validators are not additional model roles.",
+    "Completion scope disables C0/C1 model critic; historical configurations remain unchanged.",
+    "Actual operator cache equivalence and held-out results remain unverified until local execution."
+  ]
+}

@@ -1,0 +1,24 @@
+# Tool schemas and one-test-per-tool map
+
+The [actual S40 catalog](evidence/Tool_Schemas_Actual_Source.json) contains 16 tools across four servers, with exact input/output JSON schemas and annotations. Catalog discovery invokes no tool operation. [Fourteen selected contract tests](evidence/Tool_Contract_Test_Report.json) passed on synthetic data, including authenticated loopback HTTP and a disposable portal. Eleven unique operation tests cover all 16 tools; three additional catalog tests check schema/annotation contracts. Shared portal/sandbox methods exercise several named tools. This is implementation evidence, not research accuracy or a human publication. No model or external-network calls were made.
+
+| Server / tool | Executed test (source line) | Checked behavior |
+|---|---|---|
+| `edgar.list_companies` | [test_edgar_mcp.EdgarMCPTests.test_company_catalogue_describes_coverage_and_metric_definitions](source_reference/test_edgar_mcp.py) (line 61) | Configured company identities and metric definitions. |
+| `edgar.list_annual_filings` | [test_edgar_mcp.EdgarMCPTests.test_filings_are_bounded_sorted_and_cutoff_filtered](source_reference/test_edgar_mcp.py) (line 84) | Bounds, order, date filter and snapshot fingerprint. |
+| `edgar.get_annual_financial_fact` | [test_edgar_mcp.EdgarMCPTests.test_fact_preserves_all_existing_evidence](source_reference/test_edgar_mcp.py) (line 69) | Exact fact value, fiscal period and provenance preserved. |
+| `edgar.get_section` | [test_filings_kb_mcp.FilingsKBTests.test_edgar_get_section_returns_paginated_source_references](source_reference/test_filings_kb_mcp.py) (line 137) | Complete source pagination and exact table cell. |
+| `filings_kb.plan_search` | [test_filings_kb_mcp.FilingsKBTests.test_plan_is_returned_without_search](source_reference/test_filings_kb_mcp.py) (line 45) | Plan creation performs no search. |
+| `filings_kb.search_filings` | [test_filings_kb_mcp.FilingsKBTests.test_search_returns_source_linked_evidence](source_reference/test_filings_kb_mcp.py) (line 51) | Hits retain source-linked passage IDs and untrusted marker. |
+| `filings_kb.get_passage` | [test_filings_kb_mcp.FilingsKBTests.test_complete_table_passage_is_preserved](source_reference/test_filings_kb_mcp.py) (line 57) | Whole original table passage equals fixture. |
+| `filings_kb.get_table_rows` | [test_filings_kb_mcp.FilingsKBTests.test_table_pagination_preserves_exact_cells](source_reference/test_filings_kb_mcp.py) (line 61) | Exact requested row and pagination. |
+| `filings_kb.get_coverage` | [test_filings_kb_mcp.FilingsKBTests.test_coverage_reports_actual_pairs](source_reference/test_filings_kb_mcp.py) (line 66) | Actual fixture company/year inventory. |
+| `python_sandbox.execute_python` | [test_research_tools_mcp.ResearchToolsMCPTests.test_sandbox_http_auth_execution_and_policy](source_reference/test_research_tools_mcp.py) (line 133) | Real loopback authenticated computation; import attack rejected. |
+| `python_sandbox.get_sandbox_policy` | [test_research_tools_mcp.ResearchToolsMCPTests.test_sandbox_http_auth_execution_and_policy](source_reference/test_research_tools_mcp.py) (line 133) | Fixed no-network policy exposed through authenticated HTTP. |
+| `research_portal.prepare_note` | [test_research_tools_mcp.ResearchToolsMCPTests.test_http_prepare_human_review_publish_and_read](source_reference/test_research_tools_mcp.py) (line 90) | Prepare exact disposable proposal through draft credential. |
+| `research_portal.publish_note` | [test_research_tools_mcp.ResearchToolsMCPTests.test_http_prepare_human_review_publish_and_read](source_reference/test_research_tools_mcp.py) (line 90) | Unapproved call blocked; synthetic reviewed proposal publishes once and is idempotent. |
+| `research_portal.list_notes` | [test_research_tools_mcp.ResearchToolsMCPTests.test_http_prepare_human_review_publish_and_read](source_reference/test_research_tools_mcp.py) (line 90) | Published fixture appears once in list. |
+| `research_portal.get_note` | [test_research_tools_mcp.ResearchToolsMCPTests.test_http_prepare_human_review_publish_and_read](source_reference/test_research_tools_mcp.py) (line 90) | Readback equals the exact published fixture. |
+| `research_portal.get_proposal` | [test_research_tools_mcp.ResearchToolsMCPTests.test_http_prepare_human_review_publish_and_read](source_reference/test_research_tools_mcp.py) (line 90) | Proposal readback excludes approval token. |
+
+The full [test execution log](evidence/Tool_Contract_Test_Execution.log) and [machine-readable map](evidence/Tool_Test_Map.json) are retained. Server and test source copies are exact S40 files; their hashes are recorded in the [evidence manifest](evidence/Evidence_Manifest.json). Portal approval is an authenticated operator route, not an agent-visible MCP tool. `prepare_note` and `publish_note` are the two portal write tools.
