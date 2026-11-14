@@ -35,9 +35,9 @@ class MCPBackend:
         if token_key and not token:
             raise WorkflowError("missing_credential", "A required MCP service credential is missing.")
         headers = {"Authorization": "Bearer "+token} if token else {}
-        transport = StreamableHttpTransport(self.urls[service]+"/mcp", headers=headers,
-                    httpx_client_factory=direct_client, max_sse_event_size=2*1024*1024)
         try:
+            transport = StreamableHttpTransport(self.urls[service]+"/mcp", headers=headers,
+                        httpx_client_factory=direct_client, max_sse_event_size=2*1024*1024)
             async with asyncio.timeout(90):
                 async with Client(transport, timeout=80, init_timeout=10) as client:
                     result = await client.call_tool(tool, arguments, raise_on_error=False)
@@ -280,6 +280,14 @@ class ToolBroker:
         self.store.save_evidence(self.run, p["passage_id"], record)
         return p["passage_id"]
 
+    def validate_passage_response(self, passage, expected, company=None):
+        """Bind source identity to the requested lookup before saving evidence."""
+        if not isinstance(passage, dict):
+            raise WorkflowError("invalid_passage_response", "A source lookup did not return its requested passage.")
+        self.scope(passage.get("ticker"), passage.get("fiscal_year"), company)
+        if any(passage.get(key) != value for key, value in expected.items()):
+            raise WorkflowError("invalid_passage_response", "A source passage does not match its requested lookup.")
+
     async def agent_call(self, role, name, args, company=None):
         if name not in ROLE_TOOLS.get(role, ()) or name not in SPECS:
             raise WorkflowError("permission_denied", "This role cannot call the requested tool.")
@@ -302,6 +310,8 @@ class ToolBroker:
             if result.get("status") == "error":
                 return result
             p = result.get("passage")
+            if name == "get_passage" or p:
+                self.validate_passage_response(p, {"passage_id": pid}, company)
             if p:
                 self.register_passage(p, company)
             elif result.get("source_sha256") != previous["source_sha256"]:
@@ -314,7 +324,12 @@ class ToolBroker:
             if type(args["offset"]) is not int or args["offset"] < 0:
                 raise WorkflowError("invalid_tool_arguments", "Invalid section page.")
             result = await self.invoke(role, "edgar", name, {**args, "limit": 2})
-            for p in result.get("passages", []):
+            passages = result.get("passages", [])
+            # Validate the whole page before saving its first receipt.
+            for p in passages:
+                self.validate_passage_response(p, {"ticker": args["ticker"],
+                    "fiscal_year": args["year"], "item": args["item"]}, company)
+            for p in passages:
                 self.register_passage(p, company)
             return result
         query = args["query"]
@@ -327,11 +342,16 @@ class ToolBroker:
         if result.get("status") == "error":
             return result
         # Read full source records before making IDs available to the writer.
+        passages = []
         for hit in result.get("hits", []):
             full = await self.invoke(role, "kb", "get_passage", {"passage_id": hit["passage_id"]})
             if "passage" not in full:
                 raise WorkflowError("missing_passage", "Search result cannot be resolved to its source passage.")
-            self.register_passage(full["passage"], company)
+            self.validate_passage_response(full["passage"], {"passage_id": hit["passage_id"],
+                "ticker": args["ticker"], "fiscal_year": args["year"], "item": args["item"]}, company)
+            passages.append(full["passage"])
+        for p in passages:
+            self.register_passage(p, company)
         return result
 
     async def financials(self):
