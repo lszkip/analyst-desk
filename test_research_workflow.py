@@ -542,7 +542,7 @@ class ScopeRecoveryTests(unittest.IsolatedAsyncioTestCase):
                 role = json.loads(messages[0]["content"])["role"]
                 if role == "researcher" and context["company_scope"] == "GOOGL":
                     observations = context["recent_observations"]
-                    if not observations:
+                    if context["progress"]["step"] == 1:
                         return model.response(ScopeRecoveryTests.search("MSFT"))
                     if observations[-1].get("error") == "invalid_tool_scope":
                         return model.response(ScopeRecoveryTests.search())
@@ -705,6 +705,20 @@ class ResearchProgressTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.backend.portal.list_notes()["total"], 0)
 
     async def test_resume_after_loop_keeps_completed_branch_plan_and_reservations(self):
+        original_call = self.backend.call
+        extra_passage = {**self.backend.passage("MSFT"), "passage_id": "p_MSFT_extra"}
+
+        async def paged_call(service, tool, args, access=None):
+            if (tool == "get_section" and args["ticker"] == "MSFT" and args["offset"] == 2):
+                self.backend.calls.append((service, tool, copy.deepcopy(args), access))
+                return {"passages": [extra_passage]}
+            if tool == "get_passage" and args["passage_id"] == extra_passage["passage_id"]:
+                self.backend.calls.append((service, tool, copy.deepcopy(args), access))
+                return {"passage": extra_passage}
+            return await original_call(service, tool, args, access)
+
+        self.backend.call = paged_call
+
         class LoopModel(FixtureModel):
             def __init__(model, fixed=False):
                 super().__init__()
@@ -725,7 +739,7 @@ class ResearchProgressTests(unittest.IsolatedAsyncioTestCase):
                         # Let the other branch finish so its pending write is saved.
                         await asyncio.sleep(.05)
                         return model.response({"tool": "get_section", "arguments": {
-                            "ticker": "MSFT", "year": 2025, "item": "1A", "offset": 0}, "final": None})
+                            "ticker": "MSFT", "year": 2025, "item": "1A", "offset": 2}, "final": None})
                 return await super().complete(messages, config)
 
         folder = self.folder / "loop_resume"
@@ -736,12 +750,20 @@ class ResearchProgressTests(unittest.IsolatedAsyncioTestCase):
             with self.assertRaises(WorkflowError) as caught:
                 await g.ainvoke(Command(resume={"action": "approve", "expected_hash": gate["expected_hash"], "replacement": None}), o)
             self.assertEqual(caught.exception.code, "agent_step_limit")
+            self.assertEqual(w.broker.store.evidence("loop", [extra_passage["passage_id"]])[extra_passage["passage_id"]]["passage"], extra_passage)
+            replayed = await w.broker.agent_call("researcher", "get_passage", {"passage_id": extra_passage["passage_id"]}, "MSFT")
+            self.assertEqual(replayed["passage"], extra_passage)
             before = w.broker.store.report("loop")["budget"]
+            prefetched_sections = [c for c in self.backend.calls if c[1] == "get_section"]
         model = LoopModel(fixed=True)
         async with open_workflow(folder, "loop", REQUEST, config, model, self.backend) as (w,g,o):
             await g.ainvoke(None, o)
             snapshot = await g.aget_state(o)
-            self.assertEqual(model.research_branches, ["MSFT", "MSFT"])
+            self.assertEqual(model.research_branches, ["MSFT"])
+            # The resumed branch can finish from its saved sections. Neither
+            # the completed peer branch nor required page fetches are repeated.
+            self.assertEqual([c for c in self.backend.calls if c[1] == "get_section"], prefetched_sections)
+            self.assertEqual({c[2]["item"] for c in prefetched_sections if c[2]["ticker"] == "MSFT"}, {"7", "1A"})
             self.assertEqual(snapshot.values["plan_hash"], gate["expected_hash"])
             self.assertTrue(snapshot.values["plan_approved"])
             self.assertEqual(pending_gate(snapshot)["gate"], "note")
@@ -901,7 +923,8 @@ class WriterGroundingTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(len(writers), 2)
             self.assertNotIn("quant", writers[0])
             self.assertNotIn("researchers", writers[0])
-            self.assertEqual(writers[0]["evidence"]["missing_margin_pairs"], [])
+            self.assertNotIn("missing_margin_pairs", writers[0]["evidence"])
+            self.assertNotIn("verified_margins", writers[0]["evidence"])
             self.assertTrue(writers[0]["evidence"]["source_samples"])
             feedback = writers[1]["critic_feedback"]["issues"]
             self.assertEqual(len(feedback), 2)
@@ -1004,7 +1027,7 @@ class EvidenceSupportTests(unittest.IsolatedAsyncioTestCase):
                 if json.loads(messages[0]["content"])["role"] == "writer":
                     context = json.loads(messages[1]["content"])
                     final = {"title":"Research comparison","paragraphs":[{"text":"Operating margin data is incomplete.",
-                        "evidence_ids":[r["id"] for r in context["task"]["evidence"]["verified_margins"]]}]}
+                        "evidence_ids":[r["id"] for r in context["task"]["evidence"]["source_samples"]][:2]}]}
                     return model.response({"tool":"finish","arguments":{},"final":final})
                 return response
         model = BadCoverageModel()
@@ -1035,9 +1058,11 @@ class EvidenceSupportTests(unittest.IsolatedAsyncioTestCase):
             await g.ainvoke(Command(resume={"action":"approve","expected_hash":gate["expected_hash"],"replacement":None}),o)
             state = (await g.aget_state(o)).values
             reviews = [c["task"] for r,c in model.calls if r == "critic"]
-            self.assertEqual([set(c["reference_catalog"]["sources"]) for c in reviews],[{"p_GOOGL"},{"p_MSFT"}])
+            self.assertEqual([set(c["reference_catalog"]["sources"]) for c in reviews[:2]],[{"p_GOOGL"},{"p_MSFT"}])
+            self.assertEqual(len(reviews), 3)
+            self.assertTrue(all(row["kind"] == "calculation" for row in reviews[2]["reference_catalog"]["sources"].values()))
             self.assertEqual(state["critique"]["check_version"], SUPPORT_VERSION)
-            self.assertEqual(len(state["critique"]["paragraph_reviews"]), 2)
+            self.assertEqual(len(state["critique"]["paragraph_reviews"]), 3)
             self.assertEqual(state["status"],"awaiting_note")
 
     async def test_model_rejection_of_unsupported_acquisition_claim_uses_revision_loop(self):
@@ -1225,7 +1250,7 @@ class ResponseRepairTests(unittest.IsolatedAsyncioTestCase):
             state=(await g.aget_state(o)).values
             self.assertEqual(state["status"],"awaiting_note")
             self.assertEqual(state["revisions"],0)
-            self.assertEqual(sum(role=="critic" for role,_ in model.calls),2)
+            self.assertEqual(sum(role=="critic" for role,_ in model.calls),4)
             self.assertEqual(self.backend.portal.list_notes()["total"],0)
 
 
@@ -1450,6 +1475,504 @@ class StoreAndGuardTests(unittest.TestCase):
                 store.save_evidence("r","p",{"source":"changed"})
             with self.assertRaises(WorkflowError):
                 store.evidence("r",["unknown"])
+
+
+class ScopedResearchPlanningTests(unittest.IsolatedAsyncioTestCase):
+    """Regressions for observed sequence-15 branch/planner scope confusion."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.folder = Path(self.tmp.name)
+        self.backend = FixtureBackend(self.folder)
+        self.config = load_config()
+        self.original_config = copy.deepcopy(self.config)
+
+    def opened(self, model=None):
+        return open_workflow(self.folder / "workflow", "scoped_research_test", REQUEST,
+                             self.config, model or FixtureModel(), self.backend)
+
+    def register_complete_samples(self, workflow):
+        handoffs = {}
+        for ticker in REQUEST["tickers"]:
+            risk = self.backend.passage(ticker)
+            discussion = {**risk, "passage_id": risk["passage_id"] + "_7", "item": "7"}
+            keys = [workflow.broker.register_passage(p, ticker) for p in (risk, discussion)]
+            handoffs[ticker] = {"summary": "PEER_ABSENCE_SENTINEL: peer filings are unavailable.",
+                               "issues": ["PEER_ABSENCE_SENTINEL: the peer has missing disclosures."],
+                               "evidence_ids": keys}
+        return handoffs
+
+    async def test_branch_request_is_company_only_with_shared_question_background(self):
+        model = FixtureModel()
+        async with self.opened(model) as (workflow, graph, options):
+            await graph.ainvoke({"request": REQUEST, "researchers": {}, "revisions": 0, "replans": 0}, options)
+            gate = pending_gate(await graph.aget_state(options))
+            await graph.ainvoke(Command(resume={"action": "approve", "expected_hash": gate["expected_hash"],
+                                               "replacement": None}), options)
+            state = (await graph.aget_state(options)).values
+            self.assertEqual(state["request"], REQUEST)
+            self.assertEqual(state["status"], "awaiting_note")
+            branches = [context for role, context in model.calls if role == "researcher"]
+            self.assertTrue(branches)
+            for context in branches:
+                ticker = context["company_scope"]
+                self.assertEqual(context["request"]["tickers"], [ticker])
+                self.assertIn(ticker, context["request"]["question"])
+                for peer in set(REQUEST["tickers"]) - {ticker}:
+                    self.assertNotIn(peer, context["request"]["question"])
+                self.assertEqual(context["branch_assignment"]["shared_question_background_only"], REQUEST["question"])
+                self.assertIn("shared_plan_background_only", context["task"])
+                self.assertNotIn("plan", context["task"])
+                self.assertIn("Quant", context["branch_assignment"]["financial_stage"])
+            self.assertEqual(self.config, self.original_config)
+            self.assertEqual(workflow.broker.store.report("scoped_research_test")["budget"]["token_limit"], 900000)
+            self.assertEqual(workflow.broker.store.report("scoped_research_test")["budget"]["tool_limit"], 240)
+            self.assertEqual(self.config["max_revisions"], 2)
+
+    async def test_planner_uses_receipt_coverage_and_stage_without_copying_raw_handoff_claims(self):
+        model = FixtureModel()
+        async with self.opened(model) as (workflow, graph, options):
+            handoffs = self.register_complete_samples(workflow)
+            state = {"request": REQUEST, "researchers": handoffs, "replans": 1}
+            before = copy.deepcopy(state)
+            result = await workflow.planner(state)
+            self.assertEqual(state, before)
+            self.assertEqual(result["status"], "awaiting_plan")
+            context = next(context for role, context in model.calls if role == "supervisor")
+            self.assertNotIn("PEER_ABSENCE_SENTINEL", canonical(context))
+            self.assertNotIn("contradictions", context["task"])
+            signals = context["task"]["unverified_issue_signals"]
+            self.assertEqual({row["ticker"]: row["issue_count"] for row in signals}, {t: 1 for t in REQUEST["tickers"]})
+            coverage = context["task"]["source_status_from_registered_receipts"]
+            self.assertEqual(len(coverage), 4)
+            self.assertTrue(all(row["registered_sample_count"] == 1 and row["sample_status"] == "samples_registered" for row in coverage))
+            self.assertEqual(context["task"]["financial_stage"], "financial_collection_not_started")
+            self.assertIn("completeness", context["task"]["section_review_status"])
+            self.assertFalse(any(r["kind"] == "fact" for r in workflow.broker.store.evidence("scoped_research_test").values()))
+
+    async def test_risk_context_uses_original_samples_and_ids_not_raw_branch_prose(self):
+        model = FixtureModel()
+        async with self.opened(model) as (workflow, graph, options):
+            handoffs = self.register_complete_samples(workflow)
+            state = {"request": REQUEST, "researchers": handoffs}
+            before = copy.deepcopy(state)
+            result = await workflow.risk(state)
+            context = next(context for role, context in model.calls if role == "risk_diff")
+            self.assertNotIn("PEER_ABSENCE_SENTINEL", canonical(context))
+            self.assertEqual(context["task"]["researchers"],
+                {ticker: {"evidence_ids": h["evidence_ids"]} for ticker, h in handoffs.items()})
+            self.assertTrue(context["task"]["source_samples"])
+            self.assertTrue(all(s["item"] == "1A" and s["untrusted_data"] for s in context["task"]["source_samples"]))
+            self.assertIs(context["task"]["registered_source_coverage"]["complete_section_coverage"], False)
+            self.assertEqual(state, before)
+            self.assertIn("risk_diff", result)
+
+    def test_captured_sequence15_bad_plan_is_rejected_by_source_and_financial_stage_checks(self):
+        from research_workflow import plan_availability_issues
+        # Qualified captured limitations alone do not prove source absence.
+        # Explicit global assertions test actual receipt/stage contradictions.
+        bad_plan = {**PLAN, "outline": [*PLAN["outline"], "Meta filings are missing.",
+                    "The requested operating margins cannot be calculated."], "limitations": [
+            "No complete Item 1A (Risk Factors) filings available for Alphabet or Meta for FY2024 and FY2025, limiting full risk disclosure comparison.",
+            "No complete Item 7 (Management's Discussion and Analysis) filings available for Alphabet or Meta for FY2024 and FY2025, restricting operating margin data extraction.",
+            "Operating margin figures for both companies for FY2024 and FY2025 are not explicitly available in retrieved sections, limiting quantitative comparison.",
+            "Risk disclosures for Meta for FY2024 and FY2025 are incomplete or missing, preventing direct comparison with Alphabet.",
+            "Partial coverage of Alphabet's Item 7 and Item 1A sections may omit relevant details on margins and risks.",
+            "No evidence on changes in competition and customer-demand risks beyond the retrieved excerpts for these years.",
+            "Unable to verify completeness or updates in risk disclosures without full filings.",
+            "Comparisons rely solely on cached SEC annual reports; no external or forward-looking data included.",
+        ]}
+        coverage = {"slots": [{"passage_count": 2}], "missing_slots": []}
+        problems = plan_availability_issues(bad_plan, coverage, False)
+        self.assertTrue(any("registered source samples" in item for item in problems))
+        self.assertTrue(any("quant collection has not run" in item for item in problems))
+
+    def test_sample_uncertainty_and_conditional_availability_plans_remain_allowed(self):
+        from research_workflow import plan_availability_issues
+        coverage = {"slots": [{"passage_count": 2}], "missing_slots": []}
+        valid = [
+            "Only sampled source text has been reviewed; full-section and topical completeness remain unestablished.",
+            "If a required financial fact is unavailable, report the missing calculation without substituting another measure.",
+            "Check whether any requested filings or disclosures are unavailable before drawing a conclusion.",
+            "Operating margin figures have not been collected yet; obtain revenue and operating income in the quant step.",
+            "No full filing review has been performed; only registered source samples have been inspected.",
+            "No conclusion about risk changes can be established from the sampled disclosures.",
+            "No assurance of completeness can be given for the sampled disclosures.",
+            "Operating margin figures are not explicitly available in these narrative excerpts; quant will calculate them from revenue and operating income.",
+        ]
+        for limitation in valid:
+            with self.subTest(limitation=limitation):
+                self.assertEqual(plan_availability_issues({**PLAN, "limitations": [limitation]}, coverage, False), [])
+
+    def test_conditional_or_negated_quant_does_not_exempt_a_false_absence_claim(self):
+        from research_workflow import plan_availability_issues
+        coverage = {"slots": [{"passage_count": 2}], "missing_slots": []}
+        for limitation in ["Meta filings are missing. Search again if needed.",
+                           "Check whether further detail exists. The requested operating margins cannot be calculated.",
+                           "Operating margin figures are unavailable in retrieved passages; quant cannot calculate them."]:
+            with self.subTest(limitation=limitation):
+                self.assertTrue(plan_availability_issues({**PLAN, "limitations": [limitation]}, coverage, False))
+
+    async def test_invalid_plan_gets_bounded_feedback_without_rewrite_or_automatic_approval(self):
+        class PlannerRepair(FixtureModel):
+            def __init__(model):
+                super().__init__()
+                model.planning_calls = 0
+                model.valid = {**copy.deepcopy(PLAN), "limitations": ["Only source samples are reviewed; full-section completeness is unknown."]}
+
+            async def complete(model, messages, config):
+                context = json.loads(messages[1]["content"])
+                model.calls.append(("supervisor", context))
+                model.planning_calls += 1
+                plan = {**PLAN, "limitations": ["The requested operating margins are unavailable."]} if model.planning_calls == 1 else model.valid
+                return model.response({"tool": "finish", "arguments": {}, "final": plan})
+
+        model = PlannerRepair()
+        async with self.opened(model) as (workflow, graph, options):
+            await graph.ainvoke({"request": REQUEST, "researchers": {}, "revisions": 0, "replans": 0}, options)
+            snapshot = await graph.aget_state(options)
+            gate = pending_gate(snapshot)
+            self.assertEqual(model.planning_calls, 2)
+            self.assertEqual(snapshot.values["plan"], model.valid)
+            self.assertEqual(gate["plan"], model.valid)
+            self.assertEqual(gate["expected_hash"], digest({"request": REQUEST, "plan": model.valid}))
+            self.assertFalse(snapshot.values["plan_approved"])
+            self.assertEqual(snapshot.values["status"], "awaiting_plan")
+            self.assertEqual(self.backend.calls, [])
+            self.assertFalse(snapshot.values.get("publication"))
+            self.assertIn("invalid_evidence_receipt", canonical(model.calls[1][1]["recent_observations"]))
+            self.assertEqual(self.config, self.original_config)
+
+    async def test_persistently_invalid_plan_stops_at_existing_repair_bound(self):
+        class NeverRepair(FixtureModel):
+            async def complete(model, messages, config):
+                context = json.loads(messages[1]["content"])
+                model.calls.append(("supervisor", context))
+                return model.response({"tool": "finish", "arguments": {},
+                    "final": {**PLAN, "limitations": ["Operating margins cannot be calculated."]}})
+
+        model = NeverRepair()
+        async with self.opened(model) as (workflow, graph, options):
+            with self.assertRaises(WorkflowError) as stopped:
+                await graph.ainvoke({"request": REQUEST, "researchers": {}, "revisions": 0, "replans": 0}, options)
+            self.assertEqual(stopped.exception.code, "agent_response_limit")
+            self.assertEqual(len(model.calls), 3)
+            self.assertEqual(self.backend.calls, [])
+            snapshot = await graph.aget_state(options)
+            self.assertIsNone(pending_gate(snapshot))
+            self.assertFalse(snapshot.values.get("plan_approved", False))
+            report = workflow.broker.store.report("scoped_research_test")
+            self.assertGreater(report["budget"]["reserved_tokens"], 0)
+            self.assertEqual(report["budget"]["token_limit"], 900000)
+            self.assertEqual(self.config, self.original_config)
+
+
+class Sequence16PromptRecoveryTests(unittest.IsolatedAsyncioTestCase):
+    """Observed failure regressions; scripted fixtures are not live quality scores."""
+
+    setUp = ScopedResearchPlanningTests.setUp
+    opened = ScopedResearchPlanningTests.opened
+    register_complete_samples = ScopedResearchPlanningTests.register_complete_samples
+
+    async def test_replanner_keeps_intent_and_receipts_without_old_absence_limitations(self):
+        class CapturePrompts(FixtureModel):
+            async def complete(model, messages, config):
+                model.prompt = json.loads(messages[0]["content"])
+                return await super().complete(messages, config)
+
+        model = CapturePrompts()
+        async with self.opened(model) as (workflow, graph, options):
+            state = {"request": REQUEST, "researchers": self.register_complete_samples(workflow),
+                     "plan": {**PLAN, "limitations": ["OLD_PLAN_SENTINEL: no filings are registered."]},
+                     "replans": 1}
+            before = copy.deepcopy(state)
+            result = await workflow.planner(state)
+            context = model.calls[0][1]
+            self.assertNotIn("OLD_PLAN_SENTINEL", canonical(context))
+            self.assertNotIn("PEER_ABSENCE_SENTINEL", canonical(context))
+            self.assertEqual(context["task"]["previous_plan"],
+                             {key: PLAN[key] for key in ("objective", "outline", "research_query")})
+            self.assertTrue(all(row["registered_sample_count"] for row in
+                                context["task"]["source_status_from_registered_receipts"]))
+            self.assertIn("Not collected or not reviewed does not mean unavailable", model.prompt["constraints"])
+            self.assertEqual(set(model.prompt), set(self.config["prompts"]["supervisor"]))
+            self.assertEqual(state, before)
+            self.assertEqual(self.config, self.original_config)
+            self.assertFalse(result["plan_approved"])
+
+    async def test_writer_uses_original_sources_and_complete_ledger_without_stale_handoff_prose(self):
+        class CapturePrompts(FixtureModel):
+            async def complete(model, messages, config):
+                model.prompt = json.loads(messages[0]["content"])
+                return await super().complete(messages, config)
+
+        model = CapturePrompts()
+        async with self.opened(model) as (workflow, graph, options):
+            handoffs = self.register_complete_samples(workflow)
+            await workflow.broker.financials()
+            ids = [key for handoff in handoffs.values() for key in handoff["evidence_ids"]]
+            state = {"request": REQUEST,
+                     "plan": {**PLAN, "limitations": ["OLD_PLAN_SENTINEL: financial data is absent."]},
+                     "risk_diff": {"summary": "RISK_SUMMARY_SENTINEL: quantitative comparison is impossible.",
+                                   "issues": ["RISK_ISSUE_SENTINEL: margin data are incomplete."],
+                                   "evidence_ids": ids}}
+            before = copy.deepcopy(state)
+            await workflow.writer(state)
+            context = model.calls[0][1]
+            for sentinel in ("OLD_PLAN_SENTINEL", "RISK_SUMMARY_SENTINEL", "RISK_ISSUE_SENTINEL"):
+                self.assertNotIn(sentinel, canonical(context))
+            self.assertEqual(context["task"]["untrusted_risk_handoff"], {"evidence_ids": [key for key in ids if not key.endswith("_7")]})
+            self.assertNotIn("missing_margin_pairs", context["task"]["evidence"])
+            self.assertNotIn("verified_margins", context["task"]["evidence"])
+            self.assertTrue(context["task"]["evidence"]["source_samples"])
+            self.assertIn("NO number words", model.prompt["constraints"])
+            self.assertIn("Spelling a number is not a repair", model.prompt["constraints"])
+            self.assertNotIn("thirty percent", canonical(model.prompt["examples"]))
+            self.assertEqual(set(model.prompt), set(self.config["prompts"]["writer"]))
+            self.assertEqual(state, before)
+            self.assertEqual(self.config, self.original_config)
+
+    async def test_observed_spelled_percentages_still_block_after_original_revision_limit(self):
+        class SpelledPercentages(FixtureModel):
+            async def complete(model, messages, config):
+                response = await super().complete(messages, config)
+                if json.loads(messages[0]["content"])["role"] == "writer":
+                    action = json.loads(response["content"])
+                    action["final"]["paragraphs"][0]["text"] = (
+                        "Alphabet's operating margin was around thirty-two percent. "
+                        "Advertising provides over seventy percent of revenue.")
+                    return model.response(action)
+                return response
+
+        model = SpelledPercentages()
+        async with self.opened(model) as (workflow, graph, options):
+            await graph.ainvoke({"request": REQUEST, "researchers": {}, "revisions": 0, "replans": 0}, options)
+            gate = pending_gate(await graph.aget_state(options))
+            await graph.ainvoke(Command(resume={"action": "approve", "expected_hash": gate["expected_hash"],
+                                               "replacement": None}), options)
+            state = (await graph.aget_state(options)).values
+            self.assertEqual(state["status"], "blocked")
+            self.assertEqual(state["revisions"], 2)
+            self.assertEqual(sum(role == "writer" for role, context in model.calls), 3)
+            self.assertFalse(any(role == "critic" for role, context in model.calls))
+            self.assertIn("'thirty'", state["critique"]["issues"][0])
+            report = workflow.broker.store.report("scoped_research_test")
+            self.assertFalse(any(event["kind"] == "agent_correction" for event in report["events"]))
+            self.assertEqual(report["budget"]["token_limit"], 900000)
+            self.assertFalse(state.get("publication"))
+            self.assertEqual(self.config, self.original_config)
+
+    async def test_operator_edited_plan_limitations_remain_in_planner_and_writer_context(self):
+        model = FixtureModel()
+        async with self.opened(model) as (workflow, graph, options):
+            handoffs = self.register_complete_samples(workflow)
+            await workflow.broker.financials()
+            edited = {**PLAN, "limitations": ["Do not infer business causes of any margin difference."]}
+            state = {"request": REQUEST, "plan": edited, "plan_edits": 1,
+                     "researchers": handoffs,
+                     "risk_diff": {"summary": "Source review summary.", "issues": [],
+                                   "evidence_ids": [key for h in handoffs.values() for key in h["evidence_ids"]]}}
+            before = copy.deepcopy(state)
+            await workflow.planner(state)
+            await workflow.writer(state)
+            planning = next(context for role, context in model.calls if role == "supervisor")
+            writing = next(context for role, context in model.calls if role == "writer")
+            self.assertEqual(planning["task"]["previous_plan"], edited)
+            self.assertEqual(writing["task"]["operator_edited_plan_constraints"], edited["limitations"])
+            self.assertNotIn("plan", writing["task"])
+            self.assertEqual(state, before)
+            self.assertEqual(self.config, self.original_config)
+
+    def test_plan_rejections_include_named_exact_text_and_mark_long_diagnostics(self):
+        from research_workflow import plan_availability_issues
+        coverage = {"slots": [{"passage_count": 2}], "missing_slots": []}
+        offending = "The requested filings are unavailable."
+        problems = plan_availability_issues({**PLAN, "limitations": [offending]}, coverage, False)
+        self.assertEqual(len(problems), 1)
+        self.assertIn("limitations[0]", problems[0])
+        self.assertIn(repr(offending), problems[0])
+        long_field = offending + " Additional background." * 100
+        long_problems = plan_availability_issues({**PLAN, "limitations": [long_field]}, coverage, False)
+        self.assertEqual(len(long_problems), 1)
+        self.assertIn("[truncated]", long_problems[0])
+        self.assertLess(len(long_problems[0]), 1500)
+        allowed = "Only source samples have been reviewed; full-section completeness remains unestablished."
+        self.assertEqual(plan_availability_issues({**PLAN, "limitations": [allowed]}, coverage, False), [])
+
+
+class WriterSeparationTests(unittest.IsolatedAsyncioTestCase):
+    setUp = WorkflowTests.setUp
+
+    async def advance(self, graph, options, request):
+        await graph.ainvoke({"request": request, "researchers": {}, "revisions": 0, "replans": 0}, options)
+        gate = pending_gate(await graph.aget_state(options))
+        await graph.ainvoke(Command(resume={"action": "approve", "expected_hash": gate["expected_hash"],
+                                           "replacement": None}), options)
+        return (await graph.aget_state(options)).values
+
+    async def test_finance_only_writer_is_deterministic_and_still_receives_semantic_critique(self):
+        class NoFinancialModelWriter(FixtureModel):
+            async def complete(model, messages, config):
+                if json.loads(messages[0]["content"])["role"] == "writer":
+                    raise AssertionError("A finance-only request must not call the model writer.")
+                return await super().complete(messages, config)
+        request = {**REQUEST, "include_risks": False,
+                   "question": "Compare Microsoft and Alphabet operating margins without explaining business causes."}
+        model = NoFinancialModelWriter()
+        async with open_workflow(self.folder / "finance_only", "finance_only", request,
+                                 self.config, model, self.backend) as (workflow, graph, options):
+            state = await self.advance(graph, options, request)
+            from workflow_financial_narrative import financial_paragraphs
+            financial = financial_paragraphs(workflow.broker.store.evidence("finance_only"), request)
+            self.assertEqual(state["status"], "awaiting_note")
+            self.assertEqual(state["writer_mode"], "deterministic_financials")
+            self.assertEqual(state["draft"]["paragraphs"], financial)
+            self.assertEqual(state["request"], request)
+            roles = [role for role, context in model.calls]
+            self.assertNotIn("writer", roles)
+            self.assertNotIn("risk_diff", roles)
+            self.assertIn("critic", roles)
+            events = workflow.broker.store.report("finance_only")["events"]
+            receipt = next(e for e in events if e["kind"] == "deterministic_writer")
+            self.assertEqual(receipt["details"]["financial_paragraphs_sha256"], digest(financial))
+            self.assertEqual(receipt["details"]["draft_sha256"], digest(state["draft"]))
+            self.assertFalse(state.get("publication"))
+
+    async def test_risk_writer_receives_only_passages_and_previous_risk_contribution(self):
+        model = FixtureModel(bad_number=True)
+        async with open_workflow(self.folder / "risk_only", "risk_only", REQUEST,
+                                 self.config, model, self.backend) as (workflow, graph, options):
+            state = await self.advance(graph, options, REQUEST)
+            writers = [context for role, context in model.calls if role == "writer"]
+            self.assertEqual(len(writers), 2)
+            self.assertEqual(state["writer_mode"], "risk_model_with_deterministic_financials")
+            self.assertEqual(state["request"], REQUEST)
+            self.assertEqual(state["status"], "awaiting_note")
+            for context in writers:
+                self.assertNotEqual(context["request"]["question"], REQUEST["question"])
+                for key in ("tickers", "years", "include_risks"):
+                    self.assertEqual(context["request"][key], REQUEST[key])
+                task = context["task"]
+                self.assertNotIn("plan", task)
+                self.assertNotIn("verified_margins", task["evidence"])
+                self.assertNotIn("missing_margin_pairs", task["evidence"])
+                self.assertTrue(all(row["kind"] == "passage" and row["item"] == "1A"
+                                    for row in task["evidence_catalogue"]))
+                self.assertTrue(all(row["item"] == "1A" for row in task["evidence"]["source_samples"]))
+            self.assertEqual(len(writers[1]["task"]["previous_draft"]["paragraphs"]), 1)
+            self.assertEqual(writers[1]["task"]["critic_feedback"]["scope"], "risk_contribution_only")
+            self.assertNotIn("paragraph_reviews", writers[1]["task"]["critic_feedback"])
+            self.assertEqual(len(state["risk_draft"]["paragraphs"]), 1)
+            self.assertEqual(state["draft"]["paragraphs"][:1], state["risk_draft"]["paragraphs"])
+            self.assertGreater(len(state["draft"]["paragraphs"]), 1)
+            events = workflow.broker.store.report("risk_only")["events"]
+            self.assertEqual(sum(e["kind"] == "deterministic_financial_narrative" for e in events), 2)
+            self.assertFalse(any(e["kind"] == "deterministic_writer" for e in events))
+
+    async def test_tampered_finance_suffix_and_dropped_risks_stop_before_model_critique(self):
+        model = FixtureModel()
+        async with open_workflow(self.folder / "tampering", "tampering", REQUEST,
+                                 self.config, model, self.backend) as (workflow, graph, options):
+            state = await self.advance(graph, options, REQUEST)
+            before = len(model.calls)
+            changed = copy.deepcopy(state)
+            changed["draft"]["paragraphs"][-1]["text"] = "Alphabet has a higher operating margin than Microsoft."
+            result = await workflow.critic(changed)
+            self.assertFalse(result["critique"]["approved"])
+            self.assertNotIn("note", result)
+            self.assertEqual(len(model.calls), before)
+            changed = copy.deepcopy(state)
+            changed["draft"]["paragraphs"] = changed["draft"]["paragraphs"][1:]
+            result = await workflow.critic(changed)
+            self.assertFalse(result["critique"]["approved"])
+            self.assertNotIn("note", result)
+            self.assertEqual(len(model.calls), before)
+
+
+class PlanAssertionScopeTests(unittest.TestCase):
+    coverage = {"slots": [{"ticker": "GOOGL", "year": 2024, "passage_count": 2},
+                          {"ticker": "META", "year": 2025, "passage_count": 2}], "missing_slots": []}
+
+    def issues(self, text, coverage=None, started=False):
+        from research_workflow import plan_availability_issues
+        return plan_availability_issues({**PLAN, "limitations": [text]},
+                                        self.coverage if coverage is None else coverage, started)
+
+    def test_all_exact_sequence18_rejections_are_not_blanket_absence(self):
+        observed = [
+            "Identify and document any limitations due to lack of registered samples or incomplete topical coverage in the source filings.",
+            "No registered samples yet for any FY2025 filings beyond those noted; completeness of those samples is uncertain.",
+            "No assertion is made that filings or disclosures are absent; only that completeness of topical coverage is unconfirmed.",
+            "No future or unregistered filings are included in this analysis.",
+            "Netflix 2025 filings have limited registered samples, possibly missing some revenue or operating income disclosures.",
+            "The registered samples do not guarantee absence of additional relevant disclosures outside sampled documents.",
+            "No inference about missing data or disclosures beyond reviewed samples is made.",
+            "Limitations reflect sample review status, not absence of filings or disclosures.",
+        ]
+        for text in observed:
+            with self.subTest(text=text):
+                # No metadata: this tests wording independently of source scope.
+                self.assertEqual(self.issues(text, {"slots": [{"passage_count": 2}], "missing_slots": []}), [])
+
+    def test_negated_quoted_conditional_and_sample_only_claims_are_allowed(self):
+        for text in [
+            "Do not claim that Meta filings are missing.",
+            "No assertion is made that operating margins are unavailable.",
+            "It is not true that Meta filings are unavailable.",
+            "It is not the case that Meta filings are unavailable.",
+            "It is false that Meta filings are missing.",
+            "It is incorrect that operating margins are unavailable.",
+            "Not all Meta filings are missing.",
+            "Not every requested report is unavailable.",
+            "There is no evidence establishing absence of Meta filings.",
+            "Check whether Meta filings are unavailable before concluding anything.",
+            "If Meta filings are missing, report the failed retrieval.",
+            "No complete filings are available in the current source preview.",
+            "Full filings are unavailable in these excerpts.",
+            "Operating margin figures are unavailable in narrative excerpts.",
+            "Operating margins cannot be calculated from these partial passages.",
+            "The requested filings are not unavailable.",
+            "No future filings are included in this analysis.",
+        ]:
+            with self.subTest(text=text):
+                self.assertEqual(self.issues(text), [])
+
+    def test_clear_affirmative_absence_remains_rejected(self):
+        for text in [
+            "Meta filings are missing.", "No filings are available.",
+            "None of the requested filings are available.",
+            "There are no requested filings available for Meta.",
+            "The requested filings for Meta are unavailable.",
+            "Absence of Meta filings prevents comparison.",
+            "The requested operating margins cannot be calculated.",
+            "Operating margin figures for both companies are unavailable.",
+            "Operating margin figures are unavailable in retrieved passages; quant cannot calculate them.",
+        ]:
+            with self.subTest(text=text):
+                self.assertTrue(self.issues(text))
+
+    def test_negation_or_condition_does_not_exempt_an_independent_assertion(self):
+        for text in [
+            "No assertion is made about source completeness. Meta filings are missing.",
+            "No assurance is given, but Meta filings are unavailable.",
+            "Check whether the details are incomplete; Meta filings are missing.",
+            "No inference about missing data is made; however, requested operating margins cannot be calculated.",
+            "Do not claim that Meta filings are missing, but Meta filings are unavailable.",
+            "It is not true that Meta filings are missing; Meta filings are unavailable.",
+            "Not all Meta filings are missing, but Meta filings are unavailable.",
+            "Not all Meta filings are missing, Meta filings are unavailable.",
+            "If more detail is needed, search again. No requested filings are available.",
+        ]:
+            with self.subTest(text=text):
+                self.assertTrue(self.issues(text))
+
+    def test_receipts_do_not_refute_other_scope_or_unperformed_collection(self):
+        for text in ["Netflix filings are unavailable.", "Meta filings for FY2026 are unavailable."]:
+            with self.subTest(text=text):
+                self.assertEqual(self.issues(text), [])
+        self.assertEqual(self.issues("Meta filings are missing.", {"slots": [], "missing_slots": []}), [])
+        self.assertEqual(self.issues("Operating margins are unavailable.", started=True), [])
 
 
 if __name__ == "__main__":
